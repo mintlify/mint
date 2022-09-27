@@ -11,7 +11,12 @@ config?.anchors?.forEach((anchor, i) => {
 });
 
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,mdx,html}', './remark/**/*.js', './rehype/**/*.js', './src/config.json'],
+  content: [
+    './src/**/*.{js,jsx,ts,tsx,mdx,html}',
+    './remark/**/*.js',
+    './rehype/**/*.js',
+    './src/config.json',
+  ],
   darkMode: 'class',
   theme: {
     screens: {
@@ -229,7 +234,7 @@ module.exports = {
             },
             a: {
               color: theme('colors.white'),
-              borderBottomColor: theme('colors.primary'),
+              borderBottomColor: theme('colors.primary-light'),
             },
             strong: {
               color: theme('colors.slate.200'),
@@ -314,9 +319,5 @@ module.exports = {
       );
     },
   ],
-  safelist: [
-    'ml-8',
-    'ml-12',
-    'ml-16',
-  ]
+  safelist: ['ml-8', 'ml-12', 'ml-16'],
 };

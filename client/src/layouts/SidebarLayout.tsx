@@ -208,7 +208,9 @@ function Nav({ nav, children, mobile = false }: any) {
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
       <div className="sticky top-0 -ml-0.5 pointer-events-none">
-        {!mobile && <div className="h-8 bg-gradient-to-b from-white dark:from-background-dark" />}
+        {!mobile && (
+          <div className="h-8 bg-gradient-to-b from-background-light dark:from-background-dark" />
+        )}
       </div>
       <ul>
         {config?.anchors != null && config.anchors.length > 0 && <TopLevelNav mobile={mobile} />}
@@ -261,7 +263,6 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
         isActive={isRootAnchorActive}
         className="mb-4"
         shadow="group-hover:shadow-primary-ultralight dark:group-hover:bg-primary"
-        activeBackground="bg-primary"
         icon={
           <FontAwesomeIcon
             className={clsx(

@@ -87,6 +87,7 @@ export type Config = {
   classes?: {
     anchors?: string;
     activeAnchors?: string;
+    topbarCtaButton?: string;
   };
   analytics?: Analytics;
   __injected?: {

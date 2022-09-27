@@ -86,7 +86,7 @@ function TableOfContents({ tableOfContents, currentSection }: any) {
                 );
               })}
             </Fragment>
-          )
+          );
         })}
       </ul>
     </>
@@ -172,12 +172,14 @@ export function ContentsLayout({ children, meta, tableOfContents, section, apiCo
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
   let { prev, next } = usePrevNext();
 
-  const hasAPIComponents = apiComponents.length > 0;
+  const hasApiSupplementalComponents = apiComponents.some(
+    (component: any) => component.type === 'ResponseExample' || component.type === 'RequestExample'
+  );
   return (
     <div
       className={clsx(
         'relative max-w-3xl mx-auto pt-10 xl:max-w-none xl:ml-0',
-        hasAPIComponents ? 'xl:pr-12 xl:mr-[28rem]' : 'xl:pr-20 xl:mr-[18rem]'
+        hasApiSupplementalComponents ? 'xl:pr-12 xl:mr-[28rem]' : 'xl:pr-20 xl:mr-[18rem]'
       )}
     >
       <PageHeader
@@ -198,18 +200,19 @@ export function ContentsLayout({ children, meta, tableOfContents, section, apiCo
 
       {meta.openapi && <OpenApiContent openapi={meta.openapi} auth={meta.auth} />}
 
-      <Footer previous={prev} next={next} hasBottomPadding={!hasAPIComponents} />
+      <Footer previous={prev} next={next} hasBottomPadding={!hasApiSupplementalComponents} />
       <div
-        className={clsx('z-10 hidden xl:block pr-8', {
-          'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto':
-            !hasAPIComponents,
-          'w-[30rem] absolute top-[7.6rem] left-full h-full': hasAPIComponents,
-        })}
+        className={clsx(
+          'z-10 hidden xl:block pr-8',
+          hasApiSupplementalComponents
+            ? 'w-[30rem] absolute top-[7.6rem] left-full h-full'
+            : 'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto'
+        )}
       >
-        {!hasAPIComponents && toc.length > 0 && (
+        {!hasApiSupplementalComponents && toc.length > 0 && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         )}
-        {hasAPIComponents && (
+        {hasApiSupplementalComponents && (
           <div className="sticky top-[6rem] left-0">
             <ApiSupplemental openapi={meta.openapi} apiComponents={apiComponents} />
           </div>
