@@ -1,7 +1,9 @@
-import { useEffect, useContext, useRef } from 'react';
-import { ContentsContext } from '@/layouts/ContentsLayout';
-import { useTop } from '@/hooks/useTop';
 import clsx from 'clsx';
+import { useEffect, useContext, useState } from 'react';
+import { Rect, useRect } from 'react-use-rect';
+
+import { useTop } from '@/hooks/useTop';
+import { ContentsContext } from '@/layouts/ContentsLayout';
 
 export function Heading({
   level,
@@ -16,9 +18,9 @@ export function Heading({
 }: any) {
   let Component = `h${level}`;
   const context: any = useContext(ContentsContext);
-
-  let ref = useRef();
-  let top = useTop(ref);
+  const [rect, setRect] = useState<Rect | null>(null);
+  const [rectRef] = useRect(setRect);
+  let top = useTop(rect);
 
   // We cannot include context in the dependency array because it changes every render.
   const hasContext = Boolean(context);
@@ -42,7 +44,7 @@ export function Heading({
           level === '2' && nextElementDepth > level,
       })}
       id={id}
-      ref={ref}
+      ref={rectRef}
       style={{ ...(hidden ? { marginBottom: 0 } : {}), ...style }}
       {...props}
     >

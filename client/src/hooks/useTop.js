@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react'
-import { useRect } from '@reach/rect'
+import { useState, useEffect } from 'react';
 
-export function useTop(ref) {
-  let [top, setTop] = useState()
-  let rect = useRect(ref)
-  let rectTop = rect ? rect.top : undefined
+export function useTop(rect) {
+  let [top, setTop] = useState();
+  let rectTop = rect ? rect.top : undefined;
   useEffect(() => {
-    if (typeof rectTop === 'undefined') return
-    let newTop = rectTop + window.pageYOffset
+    if (typeof rectTop === 'undefined') return;
+    let newTop = rectTop + window.pageYOffset;
     if (newTop !== top) {
-      setTop(newTop)
+      setTop(newTop);
     }
-  }, [rectTop, top])
-  return top
+  }, [rectTop, top]);
+  return top;
 }
