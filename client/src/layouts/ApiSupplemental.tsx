@@ -1,14 +1,12 @@
-import React from 'react';
 import axios from 'axios';
+import parse from 'html-react-parser';
+import React from 'react';
 import { useState, useEffect } from 'react';
-import {
-  RequestExample,
-  ResponseExample,
-} from '@/components/ApiExample';
-import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
-import ReactHtmlParser from 'react-html-parser';
-import { CopyToClipboard } from '@/icons/CopyToClipboard';
+
+import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Editor } from '@/components/Editor';
+import { CopyToClipboard } from '@/icons/CopyToClipboard';
+import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 
 const responseHasExample = (response: any) => {
   return (
@@ -22,43 +20,54 @@ const responseHasExample = (response: any) => {
 
 type ApiComponent = {
   type: string;
-  children: {filename: string, html: string}[];
+  children: { filename: string; html: string }[];
 };
 
-export function ApiSupplemental({ apiComponents, openapi }: { apiComponents: ApiComponent[]; openapi: string }) {
+export function ApiSupplemental({
+  apiComponents,
+  openapi,
+}: {
+  apiComponents: ApiComponent[];
+  openapi: string;
+}) {
   // Response and Request Examples from MDX
-  const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element|undefined>(undefined);
-  const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element|undefined>(undefined);
+  const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
+  const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
   useEffect(() => {
     const requestComponentSkeleton = apiComponents.find((apiComponent) => {
       return apiComponent.type === 'RequestExample';
     });
-  
+
     const responseComponentSkeleton = apiComponents.find((apiComponent) => {
       return apiComponent.type === 'ResponseExample';
     });
-  
+
     const htmlToReactComponent = (html: string) => {
       // Convert newlines to breaks to be properly parsed
-      return ReactHtmlParser(html.replaceAll('\n', '<br />'))[0];
-    }
-  
-    const request: JSX.Element | undefined = requestComponentSkeleton && (<RequestExample
-      children={requestComponentSkeleton.children.map((child) => {
-        return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
-      })}
-    />)
+      // return parse(html.replaceAll('\n', '<br />'));
+      return parse(html);
+    };
+
+    const request: JSX.Element | undefined = requestComponentSkeleton && (
+      <RequestExample
+        children={requestComponentSkeleton.children.map((child) => {
+          return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
+        })}
+      />
+    );
 
     setMdxRequestExample(request);
-  
-    const response : JSX.Element | undefined = responseComponentSkeleton && (<ResponseExample
-      children={responseComponentSkeleton.children.map((child) => {
-        return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
-      })}
-    />)
+
+    const response: JSX.Element | undefined = responseComponentSkeleton && (
+      <ResponseExample
+        children={responseComponentSkeleton.children.map((child) => {
+          return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
+        })}
+      />
+    );
 
     setMdxResponseExample(response);
-  }, [apiComponents])
+  }, [apiComponents]);
   // Open API generated response examples
   const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
   const [highlightedExamples, setHighlightedExamples] = useState<string[]>([]);
@@ -111,9 +120,9 @@ export function ApiSupplemental({ apiComponents, openapi }: { apiComponents: Api
           range.selectNodeContents(codeElement);
           selection?.removeAllRanges();
           selection?.addRange(range);
-  
+
           navigator.clipboard.writeText(selection?.toString() || '');
-  
+
           const tooltip = item.getElementsByClassName('tooltip')[0];
           tooltip.classList.remove('hidden');
           setTimeout(() => {
@@ -122,7 +131,7 @@ export function ApiSupplemental({ apiComponents, openapi }: { apiComponents: Api
         });
       });
     }, 1);
-  }, [])
+  }, []);
 
   const ResponseExampleChild = ({ code }: { code: any }) => (
     <pre className="language-json">
