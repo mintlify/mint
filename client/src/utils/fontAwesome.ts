@@ -50,6 +50,7 @@ import {
   faAws,
   faYoutube,
   faMedium,
+  faReddit,
 } from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -105,7 +106,8 @@ library.add(
   faAws,
   faYoutube,
   faMedium,
-  faHackerNews
+  faHackerNews,
+  faReddit
 );
 
 export const isBrandFontAwesomeIcon = (icon?: string): boolean => {
