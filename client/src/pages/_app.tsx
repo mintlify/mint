@@ -99,12 +99,13 @@ export default function App(props: any) {
     <AnalyticsContext.Provider value={analyticsMediator}>
       <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
       <Head>
-        {Object.entries(config?.metaData).map(([key, value]) => {
-          if (!value) {
-            return null;
-          }
-          return <meta key={key} name={key} content={value as any} />;
-        })}
+        {config?.metaData &&
+          Object.entries(config?.metaData).map(([key, value]) => {
+            if (!value) {
+              return null;
+            }
+            return <meta key={key} name={key} content={value as any} />;
+          })}
         {Object.entries(metaTags).map(([key, value]) => (
           <meta key={key} name={key} content={value} />
         ))}
