@@ -1,12 +1,14 @@
-import Link from 'next/link';
-import { SearchButton } from '@/ui/Search';
-import Router from 'next/router';
-import { Logo } from '@/ui/Logo';
 import { Dialog } from '@headlessui/react';
-import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { ThemeSelect, ThemeToggle } from './ThemeToggle';
+import Link from 'next/link';
+import Router from 'next/router';
+import { useEffect, useState } from 'react';
+
+import { Logo } from '@/ui/Logo';
+import { SearchButton } from '@/ui/Search';
+
 import { config } from '../config';
+import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 
 export function NavPopover({
   display = 'md:hidden',
@@ -134,7 +136,7 @@ export function Header({
   hasNav: boolean;
   navIsOpen: boolean;
   onNavToggle: (toggle: boolean) => void;
-  title: string;
+  title?: string;
   section?: string;
 }) {
   let [isOpaque, setIsOpaque] = useState(false);

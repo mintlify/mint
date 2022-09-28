@@ -1,11 +1,13 @@
+import { MDXProvider } from '@mdx-js/react';
+import clsx from 'clsx';
 import { useState, useEffect, createContext, Fragment, useCallback, useContext } from 'react';
+
+import { Heading } from '@/components/Heading';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { SidebarContext } from '@/layouts/SidebarLayout';
-import { PageHeader } from '@/ui/PageHeader';
-import clsx from 'clsx';
 import { Footer } from '@/ui/Footer';
-import { Heading } from '@/components/Heading';
-import { MDXProvider } from '@mdx-js/react';
+import { PageHeader } from '@/ui/PageHeader';
+
 import { ApiSupplemental } from './ApiSupplemental';
 import { OpenApiContent } from './OpenApiContent';
 
@@ -166,7 +168,8 @@ function useTableOfContents(tableOfContents: Section[]) {
   return { currentSection, registerHeading, unregisterHeading };
 }
 
-export function ContentsLayout({ children, meta, tableOfContents, section, apiComponents }: any) {
+export function ContentsLayout(props: any) {
+  const { children, meta, tableOfContents, section, apiComponents } = props;
   const toc = [...tableOfContents];
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);

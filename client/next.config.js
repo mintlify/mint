@@ -128,7 +128,6 @@ export default withSentryConfig(
                 [
                   withStaticProps,
                   `{
-                    meta,
                     isMdx: true
                   }`,
                 ],
@@ -136,39 +135,20 @@ export default withSentryConfig(
             },
           },
           createLoader(function (source) {
-            // Get meta fields from query
-            const query =
-              new URLSearchParams(this.resourceQuery.substr(1)).get('meta') ?? undefined;
-            const { attributes: meta, body } = frontMatter(source);
-            if (query) {
-              for (let field in meta) {
-                if (!query.split(',').includes(field)) {
-                  delete meta[field];
-                }
-              }
-            }
+            const { body } = frontMatter(source);
 
             let extra = [];
 
             if (!/^\s*export\s+default\s+/m.test(source.replace(/```(.*?)```/gs, ''))) {
               extra.push(
                 `import { ContentsLayout as _Default } from '@/layouts/ContentsLayout'`,
-                `export default (props) => <_Default meta={${JSON.stringify(
-                  meta
-                )}} {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</_Default>`
+                `export default (props) => <_Default {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</_Default>`
               );
             }
 
-            let metaExport;
-            if (!/export\s+(const|let|var)\s+meta\s*=/.test(source)) {
-              metaExport = `export const meta = ${JSON.stringify(meta)}`;
-            }
             return [
-              ...(typeof query === 'undefined' ? extra : []),
-              typeof query === 'undefined'
-                ? body.replace(/<!--excerpt-->.*<!--\/excerpt-->/s, '')
-                : '',
-              metaExport,
+              ...extra,
+              body.replace(/<!--excerpt-->.*<!--\/excerpt-->/s, '')
             ]
               .filter(Boolean)
               .join('\n\n');

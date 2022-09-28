@@ -1,24 +1,26 @@
-import '../css/fonts.css';
-import '../css/main.css';
-import 'focus-visible';
-import { useState, useEffect } from 'react';
-import { Header } from '@/ui/Header';
-import { Title } from '@/ui/Title';
-import Router from 'next/router';
 import ProgressBar from '@badrap/bar-of-progress';
-import Head from 'next/head';
 import { ResizeObserver } from '@juggle/resize-observer';
+import 'focus-visible';
 import 'intersection-observer';
-import { SearchProvider } from '@/ui/Search';
+import Head from 'next/head';
+import Router from 'next/router';
+import { useState, useEffect } from 'react';
+
+import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImplementation';
+import AnalyticsContext from '@/analytics/AnalyticsContext';
+import AnalyticsMediator from '@/analytics/AnalyticsMediator';
+import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import { config } from '@/config';
+import { DocumentationLayout } from '@/layouts/DocumentationLayout';
+import { documentationNav, findPageInGroup, PageContext } from '@/nav';
+import { Header } from '@/ui/Header';
+import { SearchProvider } from '@/ui/Search';
+import { Title } from '@/ui/Title';
 import '@/utils/fontAwesome';
 import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
-import AnalyticsMediator from '@/analytics/AnalyticsMediator';
-import AnalyticsContext from '@/analytics/AnalyticsContext';
-import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
-import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImplementation';
-import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { documentationNav, findPageInGroup } from '@/nav';
+
+import '../css/fonts.css';
+import '../css/main.css';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -79,22 +81,21 @@ export default function App(props: any) {
   }, [navIsOpen]);
 
   let section = undefined;
-  let page = {};
+  let meta: PageContext = {};
   documentationNav.forEach((group) => {
     const foundPage = findPageInGroup(group, router.pathname);
     if (foundPage) {
       section = foundPage.group;
-      page = foundPage.page;
+      meta = foundPage.page;
       return false;
     }
     return true;
   });
-  const meta = { ...pageProps.meta, ...page };
-  const description = meta.description || `Documentation for ${config.name}`;
+  const description = meta?.description || `Documentation for ${config.name}`;
 
   return (
     <AnalyticsContext.Provider value={analyticsMediator}>
-      <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
+      <Title suffix={config.name}>{meta?.sidebarTitle || meta?.title}</Title>
       <Head>
         <meta name="description" content={description} />
         <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
@@ -125,7 +126,7 @@ export default function App(props: any) {
           hasNav={Boolean(config.navigation?.length)}
           navIsOpen={navIsOpen}
           onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-          title={meta.title}
+          title={meta?.title}
           section={section}
         />
         <DocumentationLayout
