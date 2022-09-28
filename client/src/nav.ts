@@ -1,6 +1,7 @@
 import navJSON from './nav.json';
 
 export const documentationNav: Groups = navJSON;
+export const nonMetaTags = ['api', 'openapi'];
 
 export type PageContext = {
   title?: string;

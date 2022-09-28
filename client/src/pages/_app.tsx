@@ -12,7 +12,7 @@ import AnalyticsMediator from '@/analytics/AnalyticsMediator';
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import { config } from '@/config';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { documentationNav, findPageInGroup, PageContext } from '@/nav';
+import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/nav';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
@@ -91,35 +91,17 @@ export default function App(props: any) {
     }
     return true;
   });
-  const description = meta?.description || `Documentation for ${config.name}`;
-
+  const metaTags = meta;
+  nonMetaTags.forEach((nonMetaTag) => {
+    delete metaTags[nonMetaTag as keyof PageContext];
+  });
   return (
     <AnalyticsContext.Provider value={analyticsMediator}>
-      <Title suffix={config.name}>{meta?.sidebarTitle || meta?.title}</Title>
+      <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
       <Head>
-        <meta name="description" content={description} />
-        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
-        <meta key="twitter:site" name="twitter:site" content="@mintlify" />
-        <meta key="twitter:description" name="twitter:description" content={description} />
-        {/* TODO: Add config data */}
-        {/* <meta
-          key="twitter:image"
-          name="twitter:image"
-          content="https://hbdev-vids.hyperbeam.com/meta-image.png"
-        />
-        <meta key="twitter:creator" name="twitter:creator" content="@hyperbeamapi" />
-        <meta
-          key="og:url"
-          property="og:url"
-          content={`https://hyperbeam.dev`}
-        /> */}
-        {/* <meta
-          key="og:image"
-          property="og:image"
-          content="https://hbdev-vids.hyperbeam.com/meta-image.png"
-        /> */}
-        <meta key="og:type" property="og:type" content="article" />
-        <meta key="og:description" property="og:description" content={description} />
+        {Object.entries(metaTags).map(([key, value]) => (
+          <meta key={key} name={key} content={value} />
+        ))}
       </Head>
       <SearchProvider>
         <Header
