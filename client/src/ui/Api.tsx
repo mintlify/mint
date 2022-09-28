@@ -1,12 +1,8 @@
-import clsx from 'clsx';
-import {
-  getMethodBgColor,
-  getMethodBgColorWithHover,
-  getMethodBorderColor,
-  getMethodTextColor,
-} from '@/utils/brands';
 import axios from 'axios';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+
+import { config } from '@/config';
 import {
   extractBaseAndPath,
   extractMethodAndEndpoint,
@@ -16,7 +12,12 @@ import {
   Param,
   ParamGroup,
 } from '@/utils/api';
-import { config } from '@/config';
+import {
+  getMethodBgColor,
+  getMethodBgColorWithHover,
+  getMethodBorderColor,
+  getMethodTextColor,
+} from '@/utils/brands';
 
 export type ApiComponent = {
   type: string;
@@ -25,8 +26,8 @@ export type ApiComponent = {
     type: string;
     name: string;
     value: string;
-  }[]
-}
+  }[];
+};
 
 export const APIBASE_CONFIG_STORAGE = 'apiBaseIndex';
 
@@ -35,7 +36,7 @@ export function Api({
   media = 'json',
   auth,
   children,
-  apiComponents
+  apiComponents,
 }: {
   api: string;
   media?: MediaType;
@@ -47,25 +48,23 @@ export function Api({
   const { method, endpoint } = extractMethodAndEndpoint(api);
   const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex);
 
-  const [currentActiveParamGroup, setCurrentActiveParamGroup] = useState<ParamGroup>();
+  const paramGroups = getParamGroupsFromAPIComponents(apiComponents, auth);
+  const [currentActiveParamGroup, setCurrentActiveParamGroup] = useState<ParamGroup>(
+    paramGroups[0]
+  );
   const [isSendingRequest, setIsSendingResponse] = useState<boolean>(false);
   const [apiBase, setApiBase] = useState<string>(base);
   const [hasConfiguredApiBase, setHasConfiguredApiBase] = useState(false);
   const [inputData, setInputData] = useState<Record<string, any>>({});
   const [apiResponse, setApiResponse] = useState<string>();
 
-  const paramGroups = getParamGroupsFromAPIComponents(apiComponents, auth);
-
   useEffect(() => {
-    setCurrentActiveParamGroup(paramGroups[0]);
-    setApiBase(base);
     setHasConfiguredApiBase(window.localStorage.getItem(APIBASE_CONFIG_STORAGE) != null);
 
     const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
     if (configuredApiBaseIndex != null) {
       setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
     }
-    // DO NOT ADD base and paramGroups to the dependency array. FOR SOME REASON it causes an infinite loop.
   }, [api, children]);
 
   const onChangeApiBaseSelection = (base: string) => {
@@ -247,7 +246,9 @@ export function Api({
               >
                 <option disabled>Select API base</option>
                 {config.api.baseUrl.map((base) => (
-                  <option key={base} selected={base === apiBase}>{base}</option>
+                  <option key={base} selected={base === apiBase}>
+                    {base}
+                  </option>
                 ))}
               </select>
               <svg
