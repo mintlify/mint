@@ -69,7 +69,7 @@ if (command === "init") {
     .then((answers) => {
       const { name, color, ctaName, ctaUrl, title } = answers;
       writeFileSync(
-        "mint.config.json",
+        "mint.json",
         JSON.stringify(
           MintConfig(name, color, ctaName, ctaUrl, toFilename(title)),
           null,

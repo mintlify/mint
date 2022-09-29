@@ -44,7 +44,7 @@ export async function scrapeDocusaurusSection(
         .filter((i, link) => link !== "#")
         .toArray();
 
-      // Follows the same structure as mint.config.json
+      // Follows the same structure as mint.json
       return {
         group: sectionTitle,
         pages: linkPaths,

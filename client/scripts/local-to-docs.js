@@ -26,8 +26,8 @@ const moveConfig = async () => {
     const configPath = resolve('./src/config.json');
     if (existsSync(configPath)) {
       console.log('⚙️ Config file detected');
-      await copyFile(configPath, resolve(`${pathToMoveTo}/mint.config.json`));
-      console.log('🌿 Config file moved to mint.config.json');
+      await copyFile(configPath, resolve(`${pathToMoveTo}/mint.json`));
+      console.log('🌿 Config file moved to mint.json');
     }
   } catch (err) {
     console.log(err);

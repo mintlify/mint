@@ -42,7 +42,7 @@ const getFiles = async () => {
     promises.push(
       (async () => {
         const content = await readFile(resolve(filename));
-        if (filename.endsWith('mint.config.json')) {
+        if (filename.endsWith('mint.config.json') || filename.endsWith('mint.json')) {
           config = content;
           return;
         }

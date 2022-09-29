@@ -11,6 +11,6 @@ export async function scrapeSection(
   );
   const groupsConfig = await scrapeFunc(html, origin, process.cwd(), overwrite);
   console.log("Finished scraping.");
-  console.log("Add the following to your navigation in mint.config.json:");
+  console.log("Add the following to your navigation in mint.json:");
   console.log(objToReadableString(groupsConfig));
 }

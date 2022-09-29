@@ -48,7 +48,7 @@ export async function scrapeReadMeSection(
           (value: string, index: number, self) => self.indexOf(value) === index
         );
 
-      // Follows the same structure as mint.config.json
+      // Follows the same structure as mint.json
       return {
         group: sectionTitle,
         pages: linkPaths,
