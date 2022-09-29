@@ -101,7 +101,7 @@ export default withSentryConfig(
       });
 
       config.module.rules.push({
-        test: { and: [/\.mdx$/], not: [/snippets/] },
+        test: { and: [/\.mdx?$/], not: [/snippets/] },
         use: [
           options.defaultLoaders.babel,
           {
