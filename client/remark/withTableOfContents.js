@@ -1,5 +1,6 @@
-import { addImport, addExport, createMdxJsxAttribute } from './utils.js';
 import slugify from '@sindresorhus/slugify';
+
+import { addImport, addExport, createMdxJsxAttribute } from './utils.js';
 
 const withTableOfContents = () => {
   return (tree) => {
@@ -15,7 +16,8 @@ const withTableOfContents = () => {
           .filter(
             (node, i, a) =>
               (node.type === 'text' &&
-                (a[i - 1]?.type !== 'mdxJsxFlowElement' || !a[i - 1]?.value.startsWith('<small'))) ||
+                (a[i - 1]?.type !== 'mdxJsxFlowElement' ||
+                  !a[i - 1]?.value.startsWith('<small'))) ||
               node.type === 'inlineCode'
           )
           .map((node) => node.value)
@@ -35,7 +37,7 @@ const withTableOfContents = () => {
 
         let mdxJsxAttributes = [
           createMdxJsxAttribute('level', level),
-          createMdxJsxAttribute('id', slug)
+          createMdxJsxAttribute('id', slug),
         ];
 
         if (tree.children[nodeIndex + 1]) {

@@ -14,6 +14,7 @@ import withStaticProps from './rehype/withStaticProps.js';
 import withApiComponents from './rehype/withApiComponents.js';
 import mintConfig from './src/config.json' assert { type: 'json' };
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
+import withLayouts from './rehype/withLayouts.js';
 
 const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -32,7 +33,7 @@ const sentryWebpackPluginOptions = {
 export default withSentryConfig(
   withBundleAnalyzer({
     swcMinify: true,
-    pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+    pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx', 'md'],
     images: {
       disableStaticImages: true,
     },
@@ -40,7 +41,7 @@ export default withSentryConfig(
     webpack(config, options) {
       config.module.rules.push({
         test: /\.(png|jpe?g|gif|webp|avif|mp4)$/i,
-        issuer: /\.(jsx?|tsx?|mdx)$/,
+        issuer: /\.(jsx?|tsx?|mdx?)$/,
         use: [
           {
             loader: 'file-loader',
@@ -131,27 +132,13 @@ export default withSentryConfig(
                     isMdx: true
                   }`,
                 ],
+                withLayouts
               ],
             },
           },
           createLoader(function (source) {
             const { body } = frontMatter(source);
-
-            let extra = [];
-
-            if (!/^\s*export\s+default\s+/m.test(source.replace(/```(.*?)```/gs, ''))) {
-              extra.push(
-                `import { ContentsLayout as _Default } from '@/layouts/ContentsLayout'`,
-                `export default (props) => <_Default {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</_Default>`
-              );
-            }
-
-            return [
-              ...extra,
-              body.replace(/<!--excerpt-->.*<!--\/excerpt-->/s, '')
-            ]
-              .filter(Boolean)
-              .join('\n\n');
+            return body;
           }),
         ],
       });

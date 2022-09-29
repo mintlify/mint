@@ -1,12 +1,13 @@
+import * as acorn from 'acorn';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { mdxJsxFromMarkdown } from 'mdast-util-mdx-jsx';
+import { mdxjsEsmFromMarkdown } from 'mdast-util-mdxjs-esm';
+import { mdxJsx } from 'micromark-extension-mdx-jsx';
+import { mdxjsEsm } from 'micromark-extension-mdxjs-esm';
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 import redent from 'redent';
-import * as acorn from 'acorn';
-import {fromMarkdown} from 'mdast-util-from-markdown';
-import {mdxjsEsm} from 'micromark-extension-mdxjs-esm';
-import {mdxjsEsmFromMarkdown} from 'mdast-util-mdxjs-esm';
-import {mdxJsx} from 'micromark-extension-mdx-jsx';
-import {mdxJsxFromMarkdown} from 'mdast-util-mdx-jsx';
+
 loadLanguages();
 
 const HTML_TAG =
@@ -112,22 +113,22 @@ export const createMdxJsxAttribute = (key, value) => {
   return {
     type: 'mdxJsxAttribute',
     name: key,
-    value
-  }
+    value,
+  };
 };
 
 export const tomdxJsxFlowElement = (input) => {
   const tree = fromMarkdown(input, {
-    extensions: [mdxJsx({acorn: acorn, addResult: true})],
-    mdastExtensions: [mdxJsxFromMarkdown()]
+    extensions: [mdxJsx({ acorn: acorn, addResult: true })],
+    mdastExtensions: [mdxJsxFromMarkdown()],
   });
   return tree.children[0];
 };
 
 export const getEsmNode = (input) => {
   const tree = fromMarkdown(input, {
-    extensions: [mdxjsEsm({acorn, addResult: true})],
-    mdastExtensions: [mdxjsEsmFromMarkdown]
+    extensions: [mdxjsEsm({ acorn, addResult: true })],
+    mdastExtensions: [mdxjsEsmFromMarkdown],
   });
   return tree.children[0];
 };
