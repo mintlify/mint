@@ -5,7 +5,7 @@ export async function scrapePage(
   scrapeFunc: (
     html: string,
     origin: string,
-    imageBaseDir?: string
+    imageBaseDir: string
   ) => Promise<any>,
   href: string,
   html: string,

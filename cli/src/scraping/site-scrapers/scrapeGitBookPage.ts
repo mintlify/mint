@@ -5,7 +5,7 @@ import downloadAllImages from "../downloadAllImages.js";
 export async function scrapeGitBookPage(
   html: string,
   origin: string,
-  imageBaseDir?: string
+  imageBaseDir: string
 ) {
   const $ = cheerio.load(html);
 

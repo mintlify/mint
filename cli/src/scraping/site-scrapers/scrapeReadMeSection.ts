@@ -1,7 +1,5 @@
-import axios from "axios";
 import cheerio from "cheerio";
 import { scrapeReadMePage } from "./scrapeReadMePage.js";
-import { getOrigin } from "../../util.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 
 export async function scrapeReadMeSection(

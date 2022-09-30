@@ -11,7 +11,7 @@ export async function scrapeGettingFileNameFromUrl(
   scrapePageFunc: (
     html: string,
     origin: string,
-    imageBaseDir?: string
+    imageBaseDir: string
   ) => Promise<{
     title?: string;
     description?: string;

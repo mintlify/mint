@@ -1,4 +1,3 @@
-import axios from "axios";
 import cheerio from "cheerio";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import downloadAllImages from "../downloadAllImages.js";
@@ -6,7 +5,7 @@ import downloadAllImages from "../downloadAllImages.js";
 export async function scrapeDocusaurusPage(
   html: string,
   origin: string,
-  imageBaseDir?: string
+  imageBaseDir: string
 ) {
   const $ = cheerio.load(html);
 

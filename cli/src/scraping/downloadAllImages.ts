@@ -6,7 +6,7 @@ export default async function downloadAllImages(
   $: any,
   content: any,
   origin: string,
-  baseDir?: string
+  baseDir: string
 ) {
   if (!baseDir) {
     console.debug("Skipping image downloading");

@@ -1,9 +1,7 @@
-import axios from "axios";
 import cheerio from "cheerio";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import { getSitemapLinks } from "../getSitemapLinks.js";
 import { scrapeGitBookPage } from "./scrapeGitBookPage.js";
-import { getOrigin } from "../../util.js";
 
 export async function scrapeGitBookSection(
   html: string,
