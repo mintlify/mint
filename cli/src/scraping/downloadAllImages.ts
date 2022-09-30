@@ -33,7 +33,7 @@ export default async function downloadAllImages(
         ? origImageSrc
         : new URL(origImageSrc, origin).href;
 
-      let fileName = removeFromExtension(path.basename(imageHref), ["?", "#"]);
+      let fileName = removeMetadataFromExtension(path.basename(imageHref));
       if (modifyFileName) {
         fileName = modifyFileName(fileName);
       }
@@ -67,16 +67,13 @@ export default async function downloadAllImages(
   );
 }
 
-function removeFromExtension(src: string, dividerSymbols: string[]) {
-  dividerSymbols.forEach((dividerSymbol) => {
-    // Some frameworks add metadata after the file extension with
-    // a question mark before it, we need to remove that.
-    const srcSplit = src.split(".");
-    const fileExtension = srcSplit[srcSplit.length - 1];
-    src =
-      srcSplit.slice(0, -1).join(".") +
-      "." +
-      fileExtension.split(dividerSymbol)[0];
+function removeMetadataFromExtension(src: string) {
+  // Part of the URL standard
+  const metadataSymbols = ["?", "#"];
+
+  metadataSymbols.forEach((dividerSymbol) => {
+    // Some frameworks add metadata after the file extension, we need to remove that.
+    src = src.split(dividerSymbol)[0];
   });
   return src;
 }
