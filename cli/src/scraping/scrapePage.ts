@@ -5,6 +5,7 @@ export async function scrapePage(
   scrapeFunc: (
     html: string,
     origin: string,
+    cliDir: string,
     imageBaseDir: string
   ) => Promise<any>,
   href: string,
@@ -16,6 +17,7 @@ export async function scrapePage(
   const { title, description, markdown } = await scrapeFunc(
     html,
     origin,
+    process.cwd(),
     imageBaseDir
   );
   createPage(title, description, markdown, overwrite, process.cwd());

@@ -1,10 +1,12 @@
 import cheerio from "cheerio";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import downloadAllImages from "../downloadAllImages.js";
+import replaceImagePaths from "../replaceImagePaths.js";
 
 export async function scrapeDocusaurusPage(
   html: string,
   origin: string,
+  cliDir: string,
   imageBaseDir: string
 ) {
   const $ = cheerio.load(html);
@@ -22,7 +24,12 @@ export async function scrapeDocusaurusPage(
   // Do not include title in the content when we insert it in our metadata
   titleComponent.remove();
 
-  await downloadAllImages($, content, origin, imageBaseDir);
+  const origToWritePath = await downloadAllImages(
+    $,
+    content,
+    origin,
+    imageBaseDir
+  );
 
   const contentHtml = content.html();
 
@@ -53,6 +60,8 @@ export async function scrapeDocusaurusPage(
 
   // Mintlify doesn't support bolded headers, remove the asterisks
   markdown = markdown.replace(/(\n#+) \*\*(.*)\*\*\n/g, "$1 $2\n");
+
+  markdown = replaceImagePaths(origToWritePath, cliDir, markdown);
 
   return { title, description, markdown };
 }

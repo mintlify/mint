@@ -3,7 +3,7 @@
     "module": "node16",
     "moduleResolution": "node16",
     "target": "es2017",
-    "lib": ["es2016", "dom"],
+    "lib": ["es2016", "dom", "ES2021.String"],
     "sourceMap": true,
     "outDir": "bin",
     "baseUrl": ".",
