@@ -81,7 +81,7 @@
     {
       "group": "Analytics",
       "pages": [
-        "analytics/overview",
+        "analytics/setup",
         "analytics/amplitude",
         "analytics/mixpanel",
         "analytics/posthog"

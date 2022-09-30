@@ -1,0 +1,58 @@
+---
+title: "Setup"
+description: "Mintlify integrates with a variety of analytics platforms."
+---
+
+## Supported Analytics Providers
+
+- Amplitude
+- Fathom
+- HotJar
+- Mixpanel
+- PostHog
+
+When possible, we send custom documentation events in addition to the ones built-in to your analytics platform. For example, we send an event when a user opens or closes an [Accordion](../components/accordion).
+
+## Enabling Analytics
+
+Set your analytics keys in `mint.json`.
+
+The syntax for `mint.json` is below. You only need to include entries for the platforms you want to connect.
+
+<CodeGroup>
+
+```json All mint.json Options
+"analytics": {
+    "amplitude": {
+        "apiKey": "required"
+    },
+    "fathom": {
+        "siteId": "required"
+    },
+    "hotjar": {
+        "hjid": "required",
+        "hjsv": "required"
+    },
+    "mixpanel": {
+        "projectToken": "required"
+    },
+    "posthog": {
+        "apiKey": "required",
+        "apiHost": "optional"
+    }
+}
+```
+
+```json PostHog Example
+"analytics": {
+    "posthog": {
+        "apiKey": "YOUR_POSTHOG_API_KEY"
+    }
+}
+```
+
+</CodeGroup>
+
+## Mintlify Analytics
+
+We are working on an analytics platform that will help you write better documentation. [Contact us](mailto:hi@mintlify.com) if you are interested.

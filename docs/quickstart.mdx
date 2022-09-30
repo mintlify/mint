@@ -5,23 +5,17 @@ description: "Get up and running with your existing workflow"
 
 <Note>
 
-Mintlify is currently in private beta. [Sign up](https://1tc7vihvbit.typeform.com/to/pZJ31XZB) on our waitlist to get access.
+Mintlify is in a private beta. [Sign up](https://1tc7vihvbit.typeform.com/to/pZJ31XZB) on our waitlist to get access.
 
 </Note>
 
 ## Setup
 
-### Create Basic Configuration
+### Basic Configuration
 
-Every Mintlify deployment must have a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at the [customization guide](/settings/customization).
+Every Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at the [customization guide](/settings/customization).
 
-### Using the Mintlify CLI
-
-To create a starter configuration file, use the following command.
-
-```bash Terminal
-npx mintlify init
-```
+### Automatic Deployments
 
 Once the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.
 
@@ -41,7 +35,8 @@ Once the files are ready for deployment, you can choose to host your docs from y
 Create a public repo where you would like to host the documentation.
 
 <Tip>
-  You can also use a private repo, but it would disable user edit suggestions.
+  You can also use a private repo but it prevents users from suggesting changes
+  and raising issues.
 </Tip>
 
 ### Add Files

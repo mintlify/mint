@@ -1,19 +1,13 @@
 ---
-title: "Global Settings"
-description: "Adjust your global branding, theme, navigation, and everything else"
+title: "Global Settings (mint.json)"
+description: "Mintlify gives you complete control over the look and feel of your documentation."
 ---
 
-Mintlify allows you to have complete control over the look and feel of your documentation. Everything can be controlled in a `mint.json` file.
+The `mint.json` file defines your documentation's navigation, colors, logos, favicon, footer socials, and more.
 
-Get setup with a starter file using the [Mintlify CLI](/quickstart).
+All `mint.json` properties are optional except for `name` and `navigation`.
 
-## Customization
-
-### What goes into a 'mint.json'?
-
-Your `mint.json` file defines you documentation's navigation, colors, logos & favicon, topbar navigation and footer socials.
-
-### Properties
+## Properties
 
 <ResponseField name="name" type="string">
 
@@ -23,7 +17,7 @@ Example: `mintlify`
 
 </ResponseField>
 
-<ResponseField name="logo" type="string or Logo">
+<ResponseField name="logo" type="string or object">
 
 Path to logo image or object with path to "light" and "dark" mode logo images
 
@@ -37,12 +31,12 @@ Path to logo image or object with path to "light" and "dark" mode logo images
   Path to the logo in dark mode
 </ResponseField>
 
-</Expandable>
-
+<ResponseField name="href" type="string" default="/">
+  Where clicking on the logo links you to
 </ResponseField>
 
-<ResponseField name="logoHref" type="string" default="/">
-  Where clicking on the logo redirects you to
+</Expandable>
+
 </ResponseField>
 
 <ResponseField name="favicon" type="string">
@@ -77,7 +71,7 @@ Hex color codes for your global theme
   Used primarily as the hover state color for content already in darkmode
 </ResponseField>
 
-<ResponseField name="background" type="Object">
+<ResponseField name="background" type="object">
 
 The color of the background in both light and dark mode
 
@@ -266,15 +260,7 @@ Example: `https://twitter.com/mintlify`
 
 </ResponseField>
 
-<Tip>
-
-By default, all properties are optional. However, it is highly recommended that you configure the `name` and `navigation`.
-
-</Tip>
-
-### Example
-
-Here is the [mint.json](#what-goes-into-a-mint-config-json) for the documentation instance you are looking at.
+## Example
 
 ```json mint.json
 {
@@ -303,10 +289,10 @@ Here is the [mint.json](#what-goes-into-a-mint-config-json) for the documentatio
   },
   "anchors": [
     {
-      "name": "Writer",
-      "icon": "pen-nib",
+      "name": "API Components",
+      "icon": "rectangle-terminal",
       "color": "#f59f0b",
-      "url": "writer"
+      "url": "api-components"
     },
     {
       "name": "Community",
@@ -319,21 +305,6 @@ Here is the [mint.json](#what-goes-into-a-mint-config-json) for the documentatio
     {
       "group": "Getting Started",
       "pages": ["introduction", "quickstart"]
-    },
-    {
-      "group": "Components",
-      "pages": [
-        "components/overview",
-        "components/accordion",
-        "components/callout",
-        "components/code",
-        "components/embed",
-        "components/frame",
-        "components/image",
-        "components/list",
-        "components/table",
-        "components/text"
-      ]
     },
     {
       "group": "API Components",

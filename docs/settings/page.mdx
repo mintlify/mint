@@ -1,66 +1,73 @@
 ---
-title: "Page Settings"
-description: "Set the title, description, and other metadata of each page"
+title: "Page Titles and Metadata"
+description: "Metadata is important for API pages and SEO optimization."
 ---
 
-## Page
+## The Basics
 
-### Metadata
-
-Each page is an MDX file that should begin with the following metadata
+Each page is an MDX file that should begin with the following metadata syntax:
 
 <CodeGroup>
 
 ```md Schema
 ---
 title: [title of the page]
-description: [description]
 ---
 ```
 
 ```md Example
 ---
 title: "Page"
-description: "Set the title, description, and mode of each page"
 ---
 ```
 
 </CodeGroup>
 
-<br />
+We will use the name of the file if you forget to include a title.
 
-<Note>
+Other metadata goes in between the same `---` lines. For example, this page uses this metadata:
 
-Both `title` and `description` are optional.
+```md This page's metadata
+---
+title: "Page Titles and Metadata"
+description: "Metadata is important for API pages and SEO optimization"
+---
+```
 
-If `title` is empty, the name of the file is used instead. If `description` is empty, no description will be displayed. However, we recommend adding a description for better SEO!
-
-</Note>
-
-<Note>
-
-The `sidebarTitle` attribute can also be used to override the name of the sidebar navigation button when it exists.
-
-</Note>
-
-### API metadata
+## API Pages
 
 API pages lets you build an interactive API playground. To create an API page, you must set an `api` or `openapi` property in the page metadata.
 
+Learn more about setting up a page for the API playground in [API components](/api-components/overview).
+
 <CodeGroup>
 
-```md API
----
+```md Schema
 api or openapi: [method] [endpoint]
----
 ```
 
 ```md API Example
----
-api or openapi: "GET /users"
----
+api: "GET /users"
+```
+
+```md OpenAPI Example
+openapi: "GET /users"
 ```
 
 </CodeGroup>
 
-Learn more about setting up a page for the API playground in [API components](/api-components/overview).
+## Descriptions
+
+You can show a description that shows directly under the title with the `description` metadata.
+
+## Sidebar Title
+
+You can show a different title in the navigation with the `sidebarTitle` metadata. This is useful if your title is long and you want something shorter in the navigation links.
+
+## Search Engine Optimization
+
+You can set meta tags like the image set when shared on social media by passing them into your page's metadata. Meta tags with colons need to be wrapped in quotes.
+
+```md Example
+"twitter:image": "/images/your-photo.jpg"
+```

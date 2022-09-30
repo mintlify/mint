@@ -23,7 +23,7 @@ See our [analytics](/analytics/posthog) endpoint for a real use case of the API 
 
 ## Setting the API metadata
 
-In order to configure a page for the API playground, the `api` field in the metadata must be configured using the following format
+The `api` field in the page's metadata must be set to enable the API playground.
 
 <CodeGroup>
 
@@ -65,10 +65,10 @@ https://api.example.com/v1/endpoint
 
 <Note>
 
-If you have `apiBase` configured in the [configuration file](/configuration), you can use relative paths (example: `/v1/endpoint`)
+If you have `apiBase` configured in [mint.json](/settings/customization), you can use relative paths like `/v1/endpoint`.
 
 </Note>
 
 ## OpenAPI
 
-Mintlify also supports OpenAPI/Swagger files. Learn more at the [OpenAPI guide](/api-components/openapi).
+Mintlify also supports OpenAPI and Swagger files. Learn more at the [OpenAPI guide](/api-components/openapi).
