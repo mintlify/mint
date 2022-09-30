@@ -110,3 +110,27 @@ class HelloWorld {
 }
 ```
 ````
+
+### Importing from another file
+
+If you want to show the same code snippet in multiple pages you can create it in a separate file and import it where you need it. Importing works for all MDX files, not just code blocks.
+
+For example, you could make `code-snippet.mdx` with the following content:
+
+````md code-snippet.mdx
+```java HelloWorld.java
+class HelloWorld { }
+```
+````
+
+To import and use the snippet, you would write:
+
+```md other-file.mdx
+import CodeSnippet from "../../snippets/code-snippet.mdx";
+
+Here is my code snippet:
+
+<CodeSnippet />
+```
+
+Where `../../snippets/code-snippet.mdx` is the path to your code snippet.
