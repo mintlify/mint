@@ -15,6 +15,7 @@ import withApiComponents from './rehype/withApiComponents.js';
 import mintConfig from './src/config.json' assert { type: 'json' };
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withLayouts from './rehype/withLayouts.js';
+import { potentiallyRemoveEndMatter } from './prebuild/injectNav.js';
 
 const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -138,7 +139,7 @@ export default withSentryConfig(
           },
           createLoader(function (source) {
             const { body } = frontMatter(source);
-            return body;
+            return potentiallyRemoveEndMatter(body);
           }),
         ],
       });

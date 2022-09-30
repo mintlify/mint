@@ -37,3 +37,7 @@
 .changing-theme * {
   transition: none !important;
 }
+
+input[type='checkbox'] {
+  margin: 0 !important;
+}
