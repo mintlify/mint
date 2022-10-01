@@ -67,7 +67,7 @@ export const getAnchorHoverBackgroundColor = (i: number, color?: string) => {
 
 export const getAnchorTextColor = (i: number, color?: string) => {
   if (!color) {
-    return 'text-primary';
+    return 'text-primary dark:text-primary-light';
   }
 
   switch (i) {
@@ -94,7 +94,7 @@ export const getAnchorTextColor = (i: number, color?: string) => {
     case 10:
       return 'text-anchor-10';
     default:
-      return 'text-primary';
+      return 'text-primary dark:text-primary-light';
   }
 };
 
