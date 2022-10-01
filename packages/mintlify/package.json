@@ -6,7 +6,8 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "local": "tsc && npm uninstall -g mintlify && npm i -g ."
   },
   "author": "Mintlify, Inc.",
   "license": "ISC",
