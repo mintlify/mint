@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 
-import { config, GitHubLink, TopbarCta } from '../config';
+import { config, TopbarCta } from '../config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 
 export function NavPopover({
@@ -89,7 +89,7 @@ export function NavPopover({
   );
 }
 
-function GitHubCta({ button }: { button: GitHubLink }) {
+function GitHubCta({ button }: { button: TopbarCta }) {
   const [repoData, setRepoData] = useState<{ stargazers_count: number; forks_count: number }>();
 
   const github = gh(button.url);
@@ -102,7 +102,7 @@ function GitHubCta({ button }: { button: GitHubLink }) {
     axios.get(`https://api.github.com/repos/${github.user}/${github.repo}`).then(({ data }) => {
       setRepoData(data);
     });
-  }, []);
+  }, [github]);
 
   if (github == null) {
     return null;

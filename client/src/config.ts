@@ -19,17 +19,12 @@ export type Navigation = {
 type Logo = string | { light: string; dark: string };
 
 type NavbarLink = {
-  type?: 'link';
-  name: string;
   url: string;
+  type?: 'github' | 'link' | string;
+  name?: string;
 };
 
-export type GitHubLink = {
-  type: 'github';
-  url: string;
-};
-
-export type TopbarCta = NavbarLink | GitHubLink;
+export type TopbarCta = NavbarLink;
 
 type Anchor = {
   name: string;
