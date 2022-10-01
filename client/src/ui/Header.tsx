@@ -111,14 +111,14 @@ function GitHubCta({ button }: { button: GitHubLink }) {
   return (
     <li className="cursor-pointer">
       <Link href={button.url}>
-        <div className="flex items-center space-x-3">
+        <div className="group flex items-center space-x-3">
           <FontAwesomeIcon className="h-6 w-6" icon={brands('github-square')} />
           <div className="font-normal">
-            <div className="text-sm font-medium">
+            <div className="text-sm font-medium text-slate-700 group-hover:text-slate-900 dark:text-slate-300 dark:group-hover:text-slate-200">
               {github.user}/{github.repo}
             </div>
-            {repoData && (
-              <div className="text-xs flex items-center space-x-2 text-slate-600 dark:text-slate-400">
+            {repoData ? (
+              <div className="text-xs flex items-center space-x-2 text-slate-600 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">
                 <span className="flex items-center space-x-1">
                   <FontAwesomeIcon className="h-3 w-3" icon={regular('star')} />
                   <span>{repoData.stargazers_count}</span>
@@ -128,6 +128,8 @@ function GitHubCta({ button }: { button: GitHubLink }) {
                   <span>{repoData.forks_count}</span>
                 </span>
               </div>
+            ) : (
+              <div className="h-4" />
             )}
           </div>
         </div>
