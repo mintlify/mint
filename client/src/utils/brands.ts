@@ -1,7 +1,7 @@
 // For PostCSS parsers
 export const getAnchorBackgroundColor = (i: number, color?: string) => {
   if (!color) {
-    return 'bg-primary dark:bg-primary-light';
+    return 'bg-primary';
   }
 
   switch (i) {
@@ -28,13 +28,13 @@ export const getAnchorBackgroundColor = (i: number, color?: string) => {
     case 10:
       return 'bg-anchor-10';
     default:
-      return 'bg-primary dark:bg-primary-light';
+      return 'bg-primary';
   }
 };
 
 export const getAnchorHoverBackgroundColor = (i: number, color?: string) => {
   if (!color) {
-    return 'group-hover:bg-primary dark:group-hover:bg-primary-light';
+    return 'group-hover:bg-primary';
   }
 
   switch (i) {
@@ -61,13 +61,13 @@ export const getAnchorHoverBackgroundColor = (i: number, color?: string) => {
     case 10:
       return 'group-hover:bg-anchor-10';
     default:
-      return 'group-hover:bg-primary dark:group-hover:bg-primary-light';
+      return 'group-hover:bg-primary';
   }
 };
 
 export const getAnchorTextColor = (i: number, color?: string) => {
   if (!color) {
-    return 'text-primary dark:text-primary-light';
+    return 'text-primary';
   }
 
   switch (i) {
@@ -94,7 +94,7 @@ export const getAnchorTextColor = (i: number, color?: string) => {
     case 10:
       return 'text-anchor-10';
     default:
-      return 'text-primary dark:text-primary-light';
+      return 'text-primary';
   }
 };
 
