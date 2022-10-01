@@ -1,5 +1,9 @@
+import { brands, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@headlessui/react';
+import axios from 'axios';
 import clsx from 'clsx';
+import gh from 'github-url-to-object';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
@@ -7,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 
-import { config } from '../config';
+import { config, GitHubLink, TopbarCta } from '../config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 
 export function NavPopover({
@@ -85,6 +89,85 @@ export function NavPopover({
   );
 }
 
+function GitHubCta({ button }: { button: GitHubLink }) {
+  const [repoData, setRepoData] = useState<{ stargazers_count: number; forks_count: number }>();
+
+  const github = gh(button.url);
+
+  useEffect(() => {
+    if (github == null) {
+      return;
+    }
+
+    axios.get(`https://api.github.com/repos/${github.user}/${github.repo}`).then(({ data }) => {
+      setRepoData(data);
+    });
+  }, []);
+
+  if (github == null) {
+    return null;
+  }
+
+  return (
+    <li className="cursor-pointer">
+      <Link href={button.url}>
+        <div className="flex items-center space-x-3">
+          <FontAwesomeIcon className="h-6 w-6" icon={brands('github-square')} />
+          <div className="font-normal">
+            <div className="text-sm font-medium">
+              {github.user}/{github.repo}
+            </div>
+            {repoData && (
+              <div className="text-xs flex items-center space-x-2 text-slate-600 dark:text-slate-400">
+                <span className="flex items-center space-x-1">
+                  <FontAwesomeIcon className="h-3 w-3" icon={regular('star')} />
+                  <span>{repoData.stargazers_count}</span>
+                </span>
+                <span className="flex items-center space-x-1">
+                  <FontAwesomeIcon className="h-3 w-3" icon={regular('code-fork')} />
+                  <span>{repoData.forks_count}</span>
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </Link>
+    </li>
+  );
+}
+
+function TopBarCtaButton({ button }: { button: TopbarCta }) {
+  if (button.type === 'github') {
+    return <GitHubCta button={button} />;
+  }
+
+  return (
+    <li>
+      <Link href={button.url}>
+        <a
+          target="_blank"
+          className={clsx(
+            config.classes?.topbarCtaButton ||
+              'relative inline-flex items-center space-x-1 px-4 py-1 border border-transparent shadow-sm text-sm font-medium rounded-[0.3rem] text-white bg-primary-dark hover:bg-primary-ultradark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-primary-light'
+          )}
+        >
+          <span>{button.name}</span>
+          {!config.classes?.topbarCtaButton && (
+            <svg
+              className="h-2.5 text-white"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 320 512"
+            >
+              <path d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z" />
+            </svg>
+          )}
+        </a>
+      </Link>
+    </li>
+  );
+}
+
 export function NavItems() {
   return (
     <>
@@ -97,31 +180,7 @@ export function NavItems() {
           </Link>
         </li>
       ))}
-      {config?.topbarCtaButton && (
-        <li>
-          <Link href={config.topbarCtaButton.url}>
-            <a
-              target="_blank"
-              className={clsx(
-                config.classes?.topbarCtaButton ||
-                  'relative inline-flex items-center space-x-1 px-4 py-1 border border-transparent shadow-sm text-sm font-medium rounded-[0.3rem] text-white bg-primary-dark hover:bg-primary-ultradark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-primary-light'
-              )}
-            >
-              <span>{config.topbarCtaButton.name}</span>
-              {!config.classes?.topbarCtaButton && (
-                <svg
-                  className="h-2.5 text-white"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                >
-                  <path d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z" />
-                </svg>
-              )}
-            </a>
-          </Link>
-        </li>
-      )}
+      {config?.topbarCtaButton && <TopBarCtaButton button={config.topbarCtaButton} />}
     </>
   );
 }
