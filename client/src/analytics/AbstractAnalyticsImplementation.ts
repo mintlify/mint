@@ -6,6 +6,10 @@ export type FathomConfigInterface = {
   siteId?: string;
 };
 
+export type GoogleAnalyticsConfigInterface = {
+  measurementId?: string;
+};
+
 export type HotjarConfigInterface = {
   hjid?: string;
   hjsv?: string;
@@ -23,6 +27,7 @@ export type PostHogConfigInterface = {
 // We can use & instead of | because all keys are optional
 export type ConfigInterface = AmplitudeConfigInterface &
   FathomConfigInterface &
+  GoogleAnalyticsConfigInterface &
   HotjarConfigInterface &
   MixpanelConfigInterface &
   PostHogConfigInterface;

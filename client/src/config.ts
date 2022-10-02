@@ -1,6 +1,7 @@
 import {
   AmplitudeConfigInterface,
   FathomConfigInterface,
+  GoogleAnalyticsConfigInterface,
   HotjarConfigInterface,
   MixpanelConfigInterface,
   PostHogConfigInterface,
@@ -43,6 +44,7 @@ type FooterSocial = {
 type Analytics = {
   amplitude?: AmplitudeConfigInterface;
   fathom?: FathomConfigInterface;
+  ga4?: GoogleAnalyticsConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;
   posthog?: PostHogConfigInterface;

@@ -10,6 +10,7 @@ import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImpleme
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import AnalyticsMediator from '@/analytics/AnalyticsMediator';
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
+import GA4Script from '@/analytics/ga4Script';
 import { config } from '@/config';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/nav';
@@ -51,15 +52,17 @@ export default function App(props: any) {
     new FakeAnalyticsMediator()
   );
 
+  const analytics = getAnalyticsConfig(config);
+
   // AnalyticsMediator can only run in the browser
   // We use useEffect because it only runs on render
   useEffect(() => {
     if (!initializedAnalyticsMediator) {
-      const newMediator = new AnalyticsMediator(getAnalyticsConfig(config));
+      const newMediator = new AnalyticsMediator(analytics);
       setAnalyticsMediator(newMediator);
       setInitializedAnalyticsMediator(true);
     }
-  }, [initializedAnalyticsMediator]);
+  }, [initializedAnalyticsMediator, analytics]);
 
   let [navIsOpen, setNavIsOpen] = useState(false);
 
@@ -111,6 +114,7 @@ export default function App(props: any) {
           <meta key={key} name={key} content={value} />
         ))}
       </Head>
+      <GA4Script ga4={analytics.ga4} />
       <SearchProvider>
         <Header
           hasNav={Boolean(config.navigation?.length)}

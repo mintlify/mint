@@ -6,6 +6,7 @@ export default function getAnalyticsConfig(config: Config) {
   return {
     amplitude: config.analytics?.amplitude || config.__injected?.analytics?.amplitude,
     fathom: config.analytics?.fathom || config.__injected?.analytics?.fathom,
+    ga4: config.analytics?.ga4 || config.__injected?.analytics?.ga4,
     hotjar: config.analytics?.hotjar || config.__injected?.analytics?.hotjar,
     mixpanel: config.analytics?.mixpanel || config.__injected?.analytics?.mixpanel,
     posthog: config.analytics?.posthog || config.__injected?.analytics?.posthog,

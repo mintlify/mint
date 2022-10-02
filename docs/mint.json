@@ -82,6 +82,7 @@
       "group": "Analytics",
       "pages": [
         "analytics/setup",
+        "analytics/google-analytics",
         "analytics/amplitude",
         "analytics/mixpanel",
         "analytics/posthog"
@@ -102,11 +103,11 @@
     "twitter": "https://twitter.com/mintlify"
   },
   "analytics": {
-    "posthog": {
-      "apiKey": "phc_TXdpocbGVeZVm5VJmAsHTMrCofBQu3e0kN8HGMNGTVW"
-    },
     "fathom": {
       "siteId": "YSVUHCAK"
+    },
+    "ga4": {
+      "measurementId": "G-J5ZSEPV7HC"
     }
   }
 }

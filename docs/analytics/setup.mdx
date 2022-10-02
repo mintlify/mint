@@ -7,6 +7,7 @@ description: "Mintlify integrates with a variety of analytics platforms."
 
 - Amplitude
 - Fathom
+- Google Analytics 4 (GA4)
 - HotJar
 - Mixpanel
 - PostHog
@@ -21,7 +22,7 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
 
 <CodeGroup>
 
-```json All mint.json Options
+```json Analytics options in mint.json
 "analytics": {
     "amplitude": {
         "apiKey": "required"
@@ -29,6 +30,9 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
     "fathom": {
         "siteId": "required"
     },
+    "ga4": {
+        "measurementId": "required"
+    }
     "hotjar": {
         "hjid": "required",
         "hjsv": "required"
@@ -43,10 +47,10 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
 }
 ```
 
-```json PostHog Example
+```json Google Analytics 4 Example
 "analytics": {
-    "posthog": {
-        "apiKey": "YOUR_POSTHOG_API_KEY"
+    "ga4": {
+        "measurementId": "G-XXXXXXX"
     }
 }
 ```

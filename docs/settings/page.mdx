@@ -5,19 +5,19 @@ description: "Metadata is important for API pages and SEO optimization."
 
 ## The Basics
 
-Each page is an MDX file that should begin with the following metadata syntax:
+Each page is an MDX file that should begin with the following metadata syntax with `---` at the start and end:
 
 <CodeGroup>
 
 ```md Schema
 ---
-title: [title of the page]
+> title: [title of the page]
 ---
 ```
 
 ```md Example
 ---
-title: "Page"
+> title: "Page"
 ---
 ```
 
@@ -29,8 +29,8 @@ Other metadata goes in between the same `---` lines. For example, this page uses
 
 ```md This page's metadata
 ---
-title: "Page Titles and Metadata"
-description: "Metadata is important for API pages and SEO optimization"
+> title: "Page Titles and Metadata"
+> description: "Metadata is important for API pages and SEO optimization"
 ---
 ```
 
