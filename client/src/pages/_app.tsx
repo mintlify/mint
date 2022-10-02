@@ -10,7 +10,7 @@ import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImpleme
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import AnalyticsMediator from '@/analytics/AnalyticsMediator';
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
-import GA4Script from '@/analytics/ga4Script';
+import GA4Script from '@/analytics/GA4Script';
 import { config } from '@/config';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/nav';
