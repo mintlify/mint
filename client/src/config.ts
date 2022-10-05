@@ -17,7 +17,7 @@ export type Navigation = {
   pages: Page[];
 };
 
-type Logo = string | { light: string; dark: string };
+type Logo = string | { light: string; dark: string; href?: string };
 
 type NavbarLink = {
   url: string;
@@ -57,7 +57,6 @@ export type Config = {
   name: string;
   basePath?: string;
   logo?: Logo;
-  logoHref?: string;
   favicon?: string;
   openApi?: string;
   api?: {

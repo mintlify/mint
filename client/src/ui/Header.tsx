@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
+import getLogoHref from '@/utils/getLogoHref';
 
 import { config, TopbarCta } from '../config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
@@ -237,11 +238,11 @@ export function Header({
           >
             <div className="relative flex items-center">
               <div className="flex-1">
-                <Link href={config?.logoHref ?? '/'}>
+                <Link href={getLogoHref(config)}>
                   <a
                     onContextMenu={(e) => {
                       e.preventDefault();
-                      Router.push(config?.logoHref ?? '/');
+                      Router.push(getLogoHref(config));
                     }}
                   >
                     <span className="sr-only">{config.name} home page</span>
