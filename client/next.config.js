@@ -12,6 +12,7 @@ import BundleAnalyzer from '@next/bundle-analyzer';
 import remarkGfm from 'remark-gfm';
 import withStaticProps from './rehype/withStaticProps.js';
 import withApiComponents from './rehype/withApiComponents.js';
+import withRawComponents from './rehype/withRawComponents.js';
 import mintConfig from './src/config.json' assert { type: 'json' };
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withLayouts from './rehype/withLayouts.js';
@@ -127,6 +128,7 @@ export default withSentryConfig(
                 withCodeBlocks,
                 withLinkRoles,
                 withApiComponents,
+                withRawComponents,
                 [
                   withStaticProps,
                   `{
