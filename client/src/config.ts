@@ -57,7 +57,6 @@ export type Config = {
   name: string;
   basePath?: string;
   logo?: Logo;
-  logoHref?: string;
   favicon?: string;
   openApi?: string;
   api?: {
