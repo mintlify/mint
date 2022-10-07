@@ -23,10 +23,12 @@
     "inquirer": "^9.1.0",
     "minimist-lite": "^2.2.1",
     "node-html-markdown": "^1.2.0",
+    "open": "^8.4.0",
     "puppeteer": "^17.1.3",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/inquirer": "^9.0.1",
     "@types/node": "^18.7.13",
     "@types/shelljs": "^0.8.11",
