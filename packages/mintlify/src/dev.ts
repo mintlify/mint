@@ -1,3 +1,4 @@
+import fs from "fs";
 import { promises as _promises } from "fs";
 import fse from "fs-extra";
 import path from "path";
@@ -52,10 +53,16 @@ const copyFiles = async () => {
     console.error(e);
   }
 
-  const configSourcePath = path.join(CMD_EXEC_PATH, "mint.config.json");
   const configTargetPath = path.join(CLIENT_PATH, "src", "config.json");
   fse.removeSync(configTargetPath);
-  fse.copy(configSourcePath, configTargetPath);
+
+  if (fs.existsSync(path.join(CMD_EXEC_PATH, "mint.config.json"))) {
+    fse.copy(path.join(CMD_EXEC_PATH, "mint.config.json"), configTargetPath);
+  }
+
+  if (fs.existsSync(path.join(CMD_EXEC_PATH, "mint.json"))) {
+    fse.copy(path.join(CMD_EXEC_PATH, "mint.json"), configTargetPath);
+  }
   markdownFiles.forEach(async (filename) => {
     const sourcePath = path.join(CMD_EXEC_PATH, filename);
     const dotMintlifyPagesDir = path.join(CLIENT_PATH, "src", "pages");
