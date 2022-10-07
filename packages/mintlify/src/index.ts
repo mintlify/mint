@@ -16,6 +16,7 @@ import { scrapeReadMePage } from "./scraping/site-scrapers/scrapeReadMePage.js";
 import { scrapeReadMeSection } from "./scraping/site-scrapers/scrapeReadMeSection.js";
 import { detectFramework, Frameworks } from "./scraping/detectFramework.js";
 import { startBrowser, getHtmlWithPuppeteer } from "./browser.js";
+import stopIfInvalidLink from "./validation/stopIfInvalidLink.js";
 
 const argv = minimistLite(process.argv.slice(2), {
   boolean: ["overwrite"],
@@ -26,7 +27,7 @@ const argv = minimistLite(process.argv.slice(2), {
 
 if (argv._.length === 0) {
   console.error(
-    `No command specified. Here are is the list that you can use:\ninit: initialize a Mintlify documentation instance`
+    `No command specified. Here are is the list that you can use:\ninit: initialize a Mintlify documentation instance\nscrape-section: scrapes a Docusaurus, ReadMe, or GitBook website\nscrape-page: scrapes a Docusaurus, ReadMe, or GitBook page`
   );
   process.exit(1); //an error occurred
 }
@@ -78,7 +79,7 @@ if (command === "init") {
       );
       createPage(title);
       console.log("🌱 Created initial files for Mintlify docs");
-      process.exit(1);
+      process.exit(0);
     })
     .catch((error) => {
       console.error(error);
@@ -106,7 +107,7 @@ if (command === "page") {
 
       createPage(title, description);
       console.log("🌱 Created initial files for Mintlify docs");
-      process.exit(1);
+      process.exit(0);
     })
     .catch((error) => {
       console.error(error);
@@ -126,8 +127,14 @@ function validateFramework(framework) {
   }
 }
 
-async function scrapePageAutomatically() {
+function getHrefFromArgs() {
   const href = argv._[1];
+  stopIfInvalidLink(href);
+  return href;
+}
+
+async function scrapePageAutomatically() {
+  const href = getHrefFromArgs();
   const res = await axios.default.get(href);
   const html = res.data;
   const framework = detectFramework(html);
@@ -146,8 +153,8 @@ async function scrapePageAutomatically() {
 }
 
 async function scrapePageWrapper(scrapeFunc, puppeteer = false) {
-  const href = argv._[1];
-  let html;
+  const href = getHrefFromArgs();
+  let html: string;
   if (puppeteer) {
     html = await getHtmlWithPuppeteer(href);
   } else {
@@ -155,7 +162,7 @@ async function scrapePageWrapper(scrapeFunc, puppeteer = false) {
     html = res.data;
   }
   await scrapePage(scrapeFunc, href, html, argv.overwrite);
-  process.exit(1);
+  process.exit(0);
 }
 
 if (command === "scrape-page") {
@@ -175,7 +182,7 @@ if (command === "scrape-readme-page") {
 }
 
 async function scrapeSectionAutomatically() {
-  const href = argv._[1];
+  const href = getHrefFromArgs();
   const res = await axios.default.get(href);
   const html = res.data;
   const framework = detectFramework(html);
@@ -194,15 +201,15 @@ async function scrapeSectionAutomatically() {
 }
 
 async function scrapeSectionAxiosWrapper(scrapeFunc: any) {
-  const href = argv._[1];
+  const href = getHrefFromArgs();
   const res = await axios.default.get(href);
   const html = res.data;
   await scrapeSection(scrapeFunc, html, getOrigin(href), argv.overwrite);
-  process.exit(1);
+  process.exit(0);
 }
 
 async function scrapeSectionGitBookWrapper(scrapeFunc: any) {
-  const href = argv._[1];
+  const href = getHrefFromArgs();
 
   const browser = await startBrowser();
   const page = await browser.newPage();
@@ -256,7 +263,7 @@ async function scrapeSectionGitBookWrapper(scrapeFunc: any) {
   const html = await page.content();
   browser.close();
   await scrapeSection(scrapeFunc, html, getOrigin(href), argv.overwrite);
-  process.exit(1);
+  process.exit(0);
 }
 
 if (command === "scrape-section") {
