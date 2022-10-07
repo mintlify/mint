@@ -4,6 +4,10 @@ import axios from "axios";
 import { writeFileSync } from "fs";
 import inquirer from "inquirer";
 import minimistLite from "minimist-lite";
+import open from "open";
+import path from "path";
+import shell from "shelljs";
+import * as url from "url";
 import { MintConfig } from "./templates.js";
 import { scrapePage } from "./scraping/scrapePage.js";
 import { scrapeSection } from "./scraping/scrapeSection.js";
@@ -280,4 +284,16 @@ if (command === "scrape-gitbook-section") {
 
 if (command === "scrape-readme-section") {
   await scrapeSectionAxiosWrapper(scrapeReadMeSection);
+}
+
+if (command === "init-dev") {
+  const __dirname = url.fileURLToPath(new URL(".", import.meta.url)); // package location
+  shell.cd(__dirname);
+  shell.exec("git clone https://github.com/mintlify/mint.git", {
+    silent: true,
+  });
+  shell.cd(path.join(__dirname, "mint", "client"));
+  shell.exec("npm install", { silent: true });
+  shell.exec("npm run dev");
+  open("https://localhost:3000");
 }
