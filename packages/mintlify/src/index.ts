@@ -7,7 +7,7 @@ import minimistLite from "minimist-lite";
 import open from "open";
 import shell from "shelljs";
 import { CLIENT_PATH, INSTALL_PATH } from "./constants.js";
-import dev from "./dev.js";
+import dev from "./dev/index.js";
 import { MintConfig } from "./templates.js";
 import { scrapePage } from "./scraping/scrapePage.js";
 import { scrapeSection } from "./scraping/scrapeSection.js";
@@ -300,4 +300,6 @@ if (command === "init-dev") {
 
 if (command === "dev") {
   await dev();
+  shell.cd(CLIENT_PATH);
+  shell.exec("npm run dev");
 }
