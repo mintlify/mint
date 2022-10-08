@@ -71,7 +71,7 @@ const copyFiles = async () => {
   });
   await Promise.all(promises);
 
-  const configTargetPath = path.join(CLIENT_PATH, "src", "config.json");
+  const configTargetPath = path.join(CLIENT_PATH, "src", "mint.json");
   fse.removeSync(configTargetPath);
   let configObj = null;
   let configPath = null;
