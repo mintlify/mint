@@ -24,6 +24,7 @@ openapi
 /src/pages/api/*.mdx
 !/src/pages/*.tsx
 !/src/pages/*.ts
+/src/mint.json
 /src/config.json
 /src/openapi.json
 /src/nav.json

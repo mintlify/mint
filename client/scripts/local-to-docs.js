@@ -23,7 +23,7 @@ const getFileList = async (dirName, og = dirName) => {
 
 const moveConfig = async () => {
   try {
-    const configPath = resolve('./src/config.json');
+    const configPath = resolve('./src/mint.json');
     if (existsSync(configPath)) {
       console.log('⚙️ Config file detected');
       await copyFile(configPath, resolve(`${pathToMoveTo}/mint.json`));

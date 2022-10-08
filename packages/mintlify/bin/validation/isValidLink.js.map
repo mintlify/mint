@@ -1,0 +1,1 @@
+{"version":3,"file":"isValidLink.js","sourceRoot":"","sources":["../../src/validation/isValidLink.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,UAAU,WAAW,CAAC,IAAY;IAC9C,uEAAuE;IACvE,IAAI;QACF,IAAI,GAAG,CAAC,IAAI,CAAC,CAAC;QACd,OAAO,IAAI,CAAC;KACb;IAAC,OAAO,CAAC,EAAE;QACV,OAAO,KAAK,CAAC;KACd;AACH,CAAC"}
