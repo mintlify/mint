@@ -65,6 +65,18 @@ export function Api({
     if (configuredApiBaseIndex != null) {
       setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
     }
+
+    // Configure api auth prefix
+    // TODO: Standardize to work without auth name and reliable for different methods
+    if (config.api?.auth?.inputPrefix && config.api.auth.name) {
+      setInputData({
+        ...inputData,
+        Authorization: {
+          ...inputData.Authorization,
+          [config.api.auth.name]: config.api.auth.inputPrefix,
+        },
+      });
+    }
   }, [api, children]);
 
   const onChangeApiBaseSelection = (base: string) => {
@@ -77,7 +89,11 @@ export function Api({
     setHasConfiguredApiBase(true);
   };
 
-  const onChangeParam = (paramGroup: string, param: string, value: string | boolean | File) => {
+  const onChangeParam = (
+    paramGroup: string,
+    param: string,
+    value: string | number | boolean | File
+  ) => {
     setInputData({ ...inputData, [paramGroup]: { ...inputData[paramGroup], [param]: value } });
   };
 
@@ -136,13 +152,16 @@ export function Api({
           </div>
         );
       case 'integer':
+      case 'number':
         return (
           <input
             className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
             type="number"
             placeholder={param.placeholder}
             value={inputData[paramGroup.name] ? inputData[paramGroup.name][param.name] : ''}
-            onChange={(e) => onChangeParam(paramGroup.name, param.name, e.target.value)}
+            onChange={(e) =>
+              onChangeParam(paramGroup.name, param.name, parseInt(e.target.value, 10))
+            }
           />
         );
       case 'file':

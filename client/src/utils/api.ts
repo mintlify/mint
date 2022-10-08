@@ -1,9 +1,10 @@
+import { AxiosRequestHeaders } from 'axios';
+import isAbsoluteUrl from 'is-absolute-url';
+
 import { ParamProps } from '@/components/Param';
 import { config } from '@/config';
 import { openApi } from '@/openapi';
 import { ApiComponent } from '@/ui/Api';
-import { AxiosRequestHeaders } from 'axios';
-import isAbsoluteUrl from 'is-absolute-url';
 
 export type MediaType = 'json' | 'form';
 
@@ -32,6 +33,10 @@ const paramTypeToNameMap: Record<string, string> = {
   query: 'Query',
   path: 'Path',
   body: 'Body',
+};
+
+const getPlaceholderFromObjectOrString = (value: any): undefined => {
+  return (typeof value === 'string' && value) || value?.value?.toString();
 };
 
 const removeEmpty = (obj?: Object) => {
@@ -124,7 +129,8 @@ export const extractMethodAndEndpoint = (api: string) => {
 
 export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
   let fullEndpoint;
-  const baseUrl = config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url)
+  const baseUrl =
+    config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
   if (isAbsoluteUrl(endpoint)) {
     fullEndpoint = endpoint;
   } else if (baseUrl) {
@@ -144,7 +150,10 @@ export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
   };
 };
 
-export const getParamGroupsFromAPIComponents = (apiComponents?: ApiComponent[], auth?: string): ParamGroup[] => {
+export const getParamGroupsFromAPIComponents = (
+  apiComponents?: ApiComponent[],
+  auth?: string
+): ParamGroup[] => {
   const groups: Record<string, Param[]> = {};
 
   // Add auth if configured
@@ -178,7 +187,8 @@ export const getParamGroupsFromAPIComponents = (apiComponents?: ApiComponent[], 
     }
   }
 
-  const paramFields = apiComponents?.filter((apiComponent) => apiComponent.type === 'ParamField')
+  const paramFields = apiComponents
+    ?.filter((apiComponent) => apiComponent.type === 'ParamField')
     .map((apiComponent) => {
       const attributesMap: Record<any, any> = {};
       apiComponent?.attributes?.forEach((attribute: any) => {
@@ -217,7 +227,9 @@ export const getParamGroupsFromAPIComponents = (apiComponents?: ApiComponent[], 
 
     const param = {
       name,
-      placeholder: placeholder?.toString() || defaultValue?.toString(),
+      placeholder:
+        getPlaceholderFromObjectOrString(placeholder) ||
+        getPlaceholderFromObjectOrString(defaultValue),
       required: required === null || required === true, // intentionally check for just null or true
       type,
       enum: enumValues,

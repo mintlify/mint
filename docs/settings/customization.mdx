@@ -1,6 +1,6 @@
 ---
-title: 'Global Settings (mint.json)'
-description: 'Mintlify gives you complete control over the look and feel of your documentation.'
+title: "Global Settings (mint.json)"
+description: "Mintlify gives you complete control over the look and feel of your documentation."
 ---
 
 The `mint.json` file defines your documentation's navigation, colors, logos, favicon, footer socials, and more.
@@ -221,6 +221,14 @@ The authentication strategy used for all API endpoints.
 The name of the authentication parameter used in the API playground.
 
 If method is `basic`, the format should be `[usernameName]:[passwordName]`
+
+</ResponseField>
+
+<ResponseField name="inputPrefix" type="string">
+
+The default value that's designed to be a prefix for the authentication input field.
+
+E.g. If an `inputPrefix` of `AuthKey` would inherit the default input result of the authentication field as `AuthKey`.
 
 </ResponseField>
 

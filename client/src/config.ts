@@ -6,7 +6,7 @@ import {
   MixpanelConfigInterface,
   PostHogConfigInterface,
 } from './analytics/AbstractAnalyticsImplementation';
-import configJSON from './config.json';
+import configJSON from './mint.json';
 
 export const config: Config = configJSON;
 
@@ -64,6 +64,7 @@ export type Config = {
     auth?: {
       method: string; // 'key', 'bearer', or 'basic'
       name?: string;
+      inputPrefix?: string;
     };
   };
   metadata?: any;

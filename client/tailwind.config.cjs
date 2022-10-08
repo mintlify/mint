@@ -1,7 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const svgToDataUri = require('mini-svg-data-uri');
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
-const config = require('./src/config.json');
+const config = require('./src/mint.json');
 
 const ctaColors = {};
 config?.anchors?.forEach((anchor, i) => {
@@ -15,7 +15,7 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx,mdx,html}',
     './remark/**/*.js',
     './rehype/**/*.js',
-    './src/config.json',
+    './src/mint.json',
   ],
   darkMode: 'class',
   theme: {
