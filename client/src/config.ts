@@ -6,7 +6,7 @@ import {
   MixpanelConfigInterface,
   PostHogConfigInterface,
 } from './analytics/AbstractAnalyticsImplementation';
-import configJSON from './config.json';
+import configJSON from './mint.json';
 
 export const config: Config = configJSON;
 

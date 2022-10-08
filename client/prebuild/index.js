@@ -43,10 +43,10 @@ const injectStaticFiles = (staticFiles) => {
 };
 
 const injectConfig = (config) => {
-  const path = __dirname + `/../src/config.json`;
+  const path = __dirname + `/../src/mint.json`;
   const buffer = Buffer.from(config);
   fs.outputFileSync(path, buffer, { flag: 'w' });
-  console.log('⚙️  Config file set properly as config.json');
+  console.log('⚙️  Config file set properly as mint.json');
   return JSON.parse(buffer.toString());
 };
 

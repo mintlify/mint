@@ -107,7 +107,7 @@ const injectStaticFiles = (staticFiles) => {
 };
 
 const injectConfig = (config) => {
-  const path = __dirname + `/../src/config.json`;
+  const path = __dirname + `/../src/mint.json`;
   outputFileSync(path, Buffer.from(config), { flag: 'w' });
   console.log('⚙️  Config file set properly');
 };
