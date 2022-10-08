@@ -51,7 +51,7 @@ export const createPage = (
   content: string,
   openApiObj: object | null
 ) => {
-  const slug = path.replace(/\.mdx?$/, "");
+  const slug = path.replace(/\.mdx?$/, "").substring(1);
   let defaultTitle = slugToTitle(slug);
   const metadata = getMetadata(content);
   // Append data from OpenAPI if it exists

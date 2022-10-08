@@ -101,22 +101,28 @@ const copyFiles = async () => {
     fse.outputFileSync(openApiTargetPath, "{}", { flag: "w" });
   }
   let pages = {};
+  const mdPromises = [];
   markdownFiles.forEach(async (filename) => {
-    const sourcePath = path.join(CMD_EXEC_PATH, filename);
-    const pagesDir = path.join(CLIENT_PATH, "src", "pages");
-    const targetPath = path.join(pagesDir, filename);
+    mdPromises.push(
+      (async () => {
+        const sourcePath = path.join(CMD_EXEC_PATH, filename);
+        const pagesDir = path.join(CLIENT_PATH, "src", "pages");
+        const targetPath = path.join(pagesDir, filename);
 
-    await fse.remove(targetPath);
-    await fse.copy(sourcePath, targetPath);
+        await fse.remove(targetPath);
+        await fse.copy(sourcePath, targetPath);
 
-    const fileContent = await readFile(sourcePath);
-    const contentStr = fileContent.toString();
-    const page = createPage(filename, contentStr, openApiObj);
-    pages = {
-      ...pages,
-      ...page,
-    };
+        const fileContent = await readFile(sourcePath);
+        const contentStr = fileContent.toString();
+        const page = createPage(filename, contentStr, openApiObj);
+        pages = {
+          ...pages,
+          ...page,
+        };
+      })()
+    );
   });
+  await Promise.all(mdPromises);
   injectNav(pages, configObj);
 
   staticFiles.forEach(async (filename) => {

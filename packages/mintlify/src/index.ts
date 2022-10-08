@@ -294,12 +294,11 @@ if (command === "init-dev") {
   });
   shell.cd(CLIENT_PATH);
   shell.exec("npm install", { silent: true });
-  shell.exec("npm run dev");
-  open("https://localhost:3000");
 }
 
 if (command === "dev") {
   await dev();
   shell.cd(CLIENT_PATH);
   shell.exec("npm run dev");
+  open("https://localhost:3000");
 }
