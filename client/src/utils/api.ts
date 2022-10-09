@@ -3,6 +3,7 @@ import isAbsoluteUrl from 'is-absolute-url';
 
 import { ParamProps } from '@/components/Param';
 import { config } from '@/config';
+import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { ApiComponent } from '@/ui/Api';
 
@@ -188,12 +189,16 @@ export const getParamGroupsFromAPIComponents = (
   }
 
   const paramFields = apiComponents
-    ?.filter((apiComponent) => apiComponent.type === 'ParamField')
+    ?.filter((apiComponent) => apiComponent.type === Component.ParamField)
     .map((apiComponent) => {
       const attributesMap: Record<any, any> = {};
       apiComponent?.attributes?.forEach((attribute: any) => {
         attributesMap[attribute.name] = attribute.value;
       });
+
+      // if (apiComponent.children && apiComponent.children[0]?.name === Component.Expandable) {
+      //   console.log('Hey there');
+      // }
 
       return attributesMap;
     });
