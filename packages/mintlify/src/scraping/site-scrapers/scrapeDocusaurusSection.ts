@@ -59,9 +59,9 @@ export async function scrapeDocusaurusSection(
             // Docusaurus requires a directory on all sections wheras we use root.
             // /docs is their default directory so we remove it
             scrapeGettingFileNameFromUrl(
+              pathname,
               cliDir,
               origin,
-              pathname,
               overwrite,
               scrapeDocusaurusPage,
               false,

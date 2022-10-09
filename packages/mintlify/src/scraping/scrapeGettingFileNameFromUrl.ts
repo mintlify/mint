@@ -1,12 +1,10 @@
-import path from "path";
-import axios from "axios";
-import { getHtmlWithPuppeteer } from "../browser.js";
-import { createPage } from "../util.js";
+import { NavigationEntry, isNavigation } from "../navigation.js";
+import { scrapeFileGettingFileNameFromUrl } from "./scrapeFileGettingFileNameFromUrl.js";
 
 export async function scrapeGettingFileNameFromUrl(
+  navEntry: NavigationEntry,
   cliDir: string,
   origin: string,
-  pathname: string,
   overwrite: boolean,
   scrapePageFunc: (
     html: string,
@@ -20,62 +18,33 @@ export async function scrapeGettingFileNameFromUrl(
   }>,
   puppeteer = false,
   baseToRemove?: string
-) {
-  // Skip scraping external links
-  if (pathname.startsWith("https://") || pathname.startsWith("http://")) {
-    return pathname;
+): Promise<NavigationEntry> {
+  if (isNavigation(navEntry)) {
+    const newPages = [];
+    for (const nestedNavEntry of navEntry.pages) {
+      newPages.push(
+        await scrapeGettingFileNameFromUrl(
+          nestedNavEntry,
+          cliDir,
+          origin,
+          overwrite,
+          scrapePageFunc,
+          puppeteer,
+          baseToRemove
+        )
+      );
+    }
+    navEntry.pages = newPages;
+    return navEntry;
   }
 
-  // Removes file name from the end
-  const splitSubpath = pathname.split("/");
-  let folders = splitSubpath.slice(0, splitSubpath.length - 1).join("/");
-
-  // Remove base dir if passed in
-  if (baseToRemove && folders.startsWith(baseToRemove)) {
-    folders = folders.replace(baseToRemove, "");
-  }
-
-  // TO DO: Improve this by putting each page's images in a separate
-  // folder named after the title of the page.
-  const imageBaseDir = path.join(cliDir, "images", folders);
-
-  // Scrape each page separately
-  const href = new URL(pathname, origin).href;
-  let html: string;
-  if (puppeteer) {
-    html = await getHtmlWithPuppeteer(href);
-  } else {
-    const res = await axios.default.get(href);
-    html = res.data;
-  }
-
-  const { title, description, markdown } = await scrapePageFunc(
-    html,
-    origin,
+  return await scrapeFileGettingFileNameFromUrl(
+    navEntry,
     cliDir,
-    imageBaseDir
-  );
-
-  // Check if page didn't have content
-  if (!title && !markdown) {
-    return undefined;
-  }
-
-  const newFileLocation = folders ? path.join(cliDir, folders) : cliDir;
-
-  // Default to introduction.mdx if we encountered index.html
-  const fileName = splitSubpath[splitSubpath.length - 1] || "introduction";
-
-  // Will create subfolders as needed
-  createPage(
-    title,
-    description,
-    markdown,
+    origin,
     overwrite,
-    newFileLocation,
-    fileName
+    scrapePageFunc,
+    puppeteer,
+    baseToRemove
   );
-
-  // Removes first slash if we are in a folder, Mintlify doesn't need it
-  return folders ? path.join(folders, fileName).substring(1) : fileName;
 }

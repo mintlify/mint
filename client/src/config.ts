@@ -10,11 +10,11 @@ import configJSON from './config.json';
 
 export const config: Config = configJSON;
 
-export type Page = string | Navigation;
+export type NavigationEntry = string | Navigation;
 
 export type Navigation = {
   group: string;
-  pages: Page[];
+  pages: NavigationEntry[];
 };
 
 type Logo = string | { light: string; dark: string; href?: string };

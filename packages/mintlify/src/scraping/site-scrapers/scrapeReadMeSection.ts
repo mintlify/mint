@@ -1,6 +1,8 @@
 import cheerio from "cheerio";
 import { scrapeReadMePage } from "./scrapeReadMePage.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
+import getLinksRecursively from "./getLinksRecursively.js";
+import { NavigationEntry } from "../../navigation.js";
 
 export async function scrapeReadMeSection(
   html: string,
@@ -18,60 +20,41 @@ export async function scrapeReadMeSection(
     .find(".rm-Sidebar-section");
 
   const groupsConfig = navigationSections
-    .map((i, section) => {
-      const sectionTitle = $(section).find("h3").first().text();
+    .map((i, s) => {
+      const section = $(s);
+      const sectionTitle = section.find("h3").first().text();
 
       // Get all links, then use filter to remove duplicates.
       // There are duplicates because of nested navigation, eg:
       // subgroupTitle -> /first-page
       // -- First Page -> /first-page   ** DUPLICATE **
       // -- Second Page -> /second-page
-      const linkPaths = $(section)
-        .find("a[href]")
-        .map((i, link) => {
-          const linkHref = $(link).attr("href");
-
-          // Skip external links until Mintlify supports them
-          if (
-            linkHref.startsWith("https://") ||
-            linkHref.startsWith("http://")
-          ) {
-            return undefined;
-          }
-
-          return linkHref;
-        })
-        .toArray()
-        .filter(
-          (value: string, index: number, self) => self.indexOf(value) === index
-        );
+      const linkSections = section.find(".rm-Sidebar-list").first().children();
+      const pages = getLinksRecursively(linkSections, $).filter(
+        (value: string, index: number, self) => self.indexOf(value) === index
+      );
 
       // Follows the same structure as mint.json
       return {
         group: sectionTitle,
-        pages: linkPaths,
+        pages: pages,
       };
     })
     .toArray();
 
   return await Promise.all(
-    groupsConfig.map(async (groupConfig) => {
-      groupConfig.pages = await Promise.all(
-        groupConfig.pages.map(async (pathname: string) =>
-          // ReadMe requires a directory on all sections wheras we use root.
-          // /docs is their default directory so we remove it
-          scrapeGettingFileNameFromUrl(
-            cliDir,
-            origin,
-            pathname,
-            overwrite,
-            scrapeReadMePage,
-            false,
-            "/docs"
-          )
-        )
+    groupsConfig.map(async (navEntry: NavigationEntry) => {
+      return await scrapeGettingFileNameFromUrl(
+        // ReadMe requires a directory on all sections wheras we use root.
+        // /docs is their default directory so we remove it
+        navEntry,
+        cliDir,
+        origin,
+        overwrite,
+        scrapeReadMePage,
+        false,
+        "/docs"
       );
-      return groupConfig;
     })
   );
 }

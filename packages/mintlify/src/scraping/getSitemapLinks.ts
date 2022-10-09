@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// Not in use.
+// Gets all links in a sitemap.
 export const getSitemapLinks = async (url: URL) => {
   const hostname = url.hostname.replace(".", "\\.");
   const regex = new RegExp(`https?:\/\/${hostname}.+?(?=<\/loc>)`, "gmi");
