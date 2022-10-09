@@ -4,7 +4,7 @@ import axios from "axios";
 import { writeFileSync } from "fs";
 import inquirer from "inquirer";
 import minimistLite from "minimist-lite";
-import dev from "./dev/index.js";
+import dev from "./local-preview/index.js";
 import { MintConfig } from "./templates.js";
 import { scrapePage } from "./scraping/scrapePage.js";
 import { scrapeSection } from "./scraping/scrapeSection.js";
