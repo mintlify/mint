@@ -304,6 +304,8 @@ if (command === "init-dev") {
     shell.exec('echo "client/" >> .git/info/sparse-checkout', { silent: true });
   }
   shell.exec("git pull origin main", { silent: true });
+  shell.exec("git config core.sparseCheckout false", { silent: true });
+  shell.exec("rm .git/info/sparse-checkout");
   shell.cd(CLIENT_PATH);
   shell.exec("yarn", { silent: true });
 }
