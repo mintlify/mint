@@ -1,10 +1,11 @@
 #! /usr/bin/env node
 
 import axios from "axios";
-import { writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import inquirer from "inquirer";
 import minimistLite from "minimist-lite";
 import open from "open";
+import path from "path";
 import shell from "shelljs";
 import { CLIENT_PATH, INSTALL_PATH } from "./constants.js";
 import dev from "./dev/index.js";
@@ -289,11 +290,22 @@ if (command === "scrape-readme-section") {
 if (command === "init-dev") {
   shell.cd(INSTALL_PATH);
   // TODO error handling, check if git is installed
-  shell.exec("git clone https://github.com/mintlify/mint.git", {
-    silent: true,
-  });
+  if (!existsSync(path.join(INSTALL_PATH, "mint"))) {
+    shell.exec("mkdir mint");
+  }
+  shell.cd("mint");
+  if (!existsSync(path.join(INSTALL_PATH, ".git"))) {
+    shell.exec("git init", { silent: true });
+    shell.exec(
+      "git remote add -f origin https://github.com/mintlify/mint.git",
+      { silent: true }
+    );
+    shell.exec("git config core.sparseCheckout true", { silent: true });
+    shell.exec('echo "client/" >> .git/info/sparse-checkout', { silent: true });
+  }
+  shell.exec("git pull origin main", { silent: true });
   shell.cd(CLIENT_PATH);
-  shell.exec("npm install", { silent: true });
+  shell.exec("yarn", { silent: true });
 }
 
 if (command === "dev") {
