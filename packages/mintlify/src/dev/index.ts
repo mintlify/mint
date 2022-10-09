@@ -1,11 +1,12 @@
-import fs from "fs";
+import { existsSync } from "fs";
 import { promises as _promises } from "fs";
 import fse from "fs-extra";
+import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
 import SwaggerParser from "@apidevtools/swagger-parser";
 import { createPage, injectNav } from "./injectNav.js";
-import { CMD_EXEC_PATH, CLIENT_PATH } from "../constants.js";
+import { CMD_EXEC_PATH, CLIENT_PATH, INSTALL_PATH } from "../constants.js";
 
 const { readdir, readFile } = _promises;
 
@@ -70,25 +71,26 @@ const copyFiles = async () => {
     );
   });
   await Promise.all(promises);
+  fse.removeSync("openapi");
 
   const configTargetPath = path.join(CLIENT_PATH, "src", "mint.json");
   fse.removeSync(configTargetPath);
   let configObj = null;
   let configPath = null;
-  if (fs.existsSync(path.join(CMD_EXEC_PATH, "mint.config.json"))) {
+  if (existsSync(path.join(CMD_EXEC_PATH, "mint.config.json"))) {
     configPath = path.join(CMD_EXEC_PATH, "mint.config.json");
   }
 
-  if (fs.existsSync(path.join(CMD_EXEC_PATH, "mint.json"))) {
+  if (existsSync(path.join(CMD_EXEC_PATH, "mint.json"))) {
     configPath = path.join(CMD_EXEC_PATH, "mint.json");
   }
 
-  if (configPath) {
+  while (configPath && !existsSync(configTargetPath)) {
     await fse.remove(configTargetPath);
     await fse.copy(configPath, configTargetPath);
-    const configContents = await readFile(configPath);
-    configObj = JSON.parse(configContents.toString());
   }
+  const configContents = await readFile(configPath);
+  configObj = JSON.parse(configContents.toString());
 
   const openApiTargetPath = path.join(CLIENT_PATH, "src", "openapi.json");
   let openApiObj = null;
@@ -134,10 +136,60 @@ const copyFiles = async () => {
     await fse.copy(sourcePath, targetPath);
   });
 };
+const gitExists = () => {
+  let doesGitExist = true;
+  try {
+    shell.exec("git --version", { silent: true });
+  } catch (e) {
+    doesGitExist = false;
+  }
+  return doesGitExist;
+};
 
 const dev = async () => {
-  // check for mint.json before copying over files
+  shell.cd(INSTALL_PATH);
+  // TODO error messages
+  if (!existsSync(path.join(INSTALL_PATH, "mint"))) {
+    shell.exec("mkdir mint");
+  }
+  shell.cd("mint");
+  let runYarn = true;
+  const gitInstalled = gitExists();
+  if (!existsSync(path.join(INSTALL_PATH, "mint", ".git")) && gitInstalled) {
+    shell.exec("git init", { silent: true });
+    shell.exec(
+      "git remote add -f mint-origin https://github.com/mintlify/mint.git",
+      { silent: true }
+    );
+  }
+
+  const internet = await isInternetAvailable();
+  let pullOutput = null;
+  if (internet && gitInstalled) {
+    shell.exec("git config core.sparseCheckout true", { silent: true });
+    shell.exec('echo "client/" >> .git/info/sparse-checkout', { silent: true });
+    pullOutput = shell.exec("git pull mint-origin main", {
+      silent: true,
+    }).stdout;
+    shell.exec("git config core.sparseCheckout false", { silent: true });
+    shell.exec("rm .git/info/sparse-checkout", { silent: true });
+  }
+  if (pullOutput === "Already up to date.\n") {
+    runYarn = false;
+  }
+  shell.cd(CLIENT_PATH);
+  if (runYarn) {
+    shell.exec("yarn", { silent: true });
+  }
+  // TODO check for mint.json before copying over files
   await copyFiles();
+  run();
+};
+
+const run = () => {
+  shell.cd(CLIENT_PATH);
+  shell.exec("npm run dev");
+  open("https://localhost:3000");
 };
 
 export default dev;

@@ -1,13 +1,9 @@
 #! /usr/bin/env node
 
 import axios from "axios";
-import { existsSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import inquirer from "inquirer";
 import minimistLite from "minimist-lite";
-import open from "open";
-import path from "path";
-import shell from "shelljs";
-import { CLIENT_PATH, INSTALL_PATH } from "./constants.js";
 import dev from "./dev/index.js";
 import { MintConfig } from "./templates.js";
 import { scrapePage } from "./scraping/scrapePage.js";
@@ -287,32 +283,6 @@ if (command === "scrape-readme-section") {
   await scrapeSectionAxiosWrapper(scrapeReadMeSection);
 }
 
-if (command === "init-dev") {
-  shell.cd(INSTALL_PATH);
-  // TODO error handling, check if git is installed
-  if (!existsSync(path.join(INSTALL_PATH, "mint"))) {
-    shell.exec("mkdir mint");
-  }
-  shell.cd("mint");
-  if (!existsSync(path.join(INSTALL_PATH, ".git"))) {
-    shell.exec("git init", { silent: true });
-    shell.exec(
-      "git remote add -f origin https://github.com/mintlify/mint.git",
-      { silent: true }
-    );
-    shell.exec("git config core.sparseCheckout true", { silent: true });
-    shell.exec('echo "client/" >> .git/info/sparse-checkout', { silent: true });
-  }
-  shell.exec("git pull origin main", { silent: true });
-  shell.exec("git config core.sparseCheckout false", { silent: true });
-  shell.exec("rm .git/info/sparse-checkout");
-  shell.cd(CLIENT_PATH);
-  shell.exec("yarn", { silent: true });
-}
-
 if (command === "dev") {
   await dev();
-  shell.cd(CLIENT_PATH);
-  shell.exec("npm run dev");
-  open("https://localhost:3000");
 }
