@@ -13,7 +13,7 @@ import { PageContext, Group, Groups, GroupPage, isGroup } from '@/nav';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
 
-import { config, findFirstPage } from '../config';
+import { config, findFirstNavigationEntry } from '../config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
 import isPathInGroupPages from './isPathInGroupPages';
 
@@ -301,7 +301,7 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
               href = anchor.url;
             } else {
               config.navigation?.every((nav) => {
-                const page = findFirstPage(nav, `${anchor.url}/`);
+                const page = findFirstNavigationEntry(nav, `${anchor.url}/`);
                 if (page) {
                   if (typeof page === 'string') {
                     href = `/${page}`;

@@ -5,6 +5,7 @@ import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import { config } from '@/config';
+import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { MediaType } from '@/utils/api';
@@ -159,7 +160,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
     const paramName = { [paramType]: name };
     const type = getType(schema);
     apiComponents.push({
-      type: 'ParamField',
+      type: Component.ParamField,
       attributes: [
         {
           type: 'mdx',
@@ -216,7 +217,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
         : undefined;
       const last = i + 1 === operation.parameters?.length;
       apiComponents.push({
-        type: 'ParamField',
+        type: Component.ParamField,
         attributes: [
           {
             type: 'mdx',

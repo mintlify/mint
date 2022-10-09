@@ -10,11 +10,11 @@ import configJSON from './mint.json';
 
 export const config: Config = configJSON;
 
-export type Page = string | Navigation;
+export type NavigationEntry = string | Navigation;
 
 export type Navigation = {
   group: string;
-  pages: Page[];
+  pages: NavigationEntry[];
 };
 
 type Logo = string | { light: string; dark: string; href?: string };
@@ -101,12 +101,15 @@ export type Config = {
   };
 };
 
-export const findFirstPage = (group: Navigation, target: string): Page | undefined => {
+export const findFirstNavigationEntry = (
+  group: Navigation,
+  target: string
+): NavigationEntry | undefined => {
   return group.pages.find((page) => {
     if (typeof page === 'string') {
       return page.includes(target);
     } else {
-      return findFirstPage(page, target);
+      return findFirstNavigationEntry(page, target);
     }
   });
 };

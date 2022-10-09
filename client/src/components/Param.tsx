@@ -1,4 +1,4 @@
-import { Param as GenericParam } from "@mintlify/components";
+import { Param as GenericParam } from '@mintlify/components';
 
 export type ParamProps = {
   query?: string;
@@ -18,7 +18,7 @@ export type ParamProps = {
 
 // 9/8/2022 - Migrate everyone off Param
 export function Param(props: ParamProps) {
-  return <ParamField {...props} />
+  return <ParamField {...props} />;
 }
 
 // Also props: query, body, path
@@ -33,7 +33,7 @@ export function ParamField({
   hidden = false,
   last,
   placeholder,
-  enum: enumValues
+  enum: enumValues,
 }: ParamProps) {
   if (!query && !path && !body) {
     return null;
@@ -48,7 +48,8 @@ export function ParamField({
       type={type}
       required={required}
       hidden={hidden}
-      nameClasses="text-primary dark:text-primary-light">
+      nameClasses="text-primary dark:text-primary-light"
+    >
       {children}
     </GenericParam>
   );

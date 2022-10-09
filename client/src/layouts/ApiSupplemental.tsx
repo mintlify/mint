@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Editor } from '@/components/Editor';
+import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 
@@ -35,11 +36,11 @@ export function ApiSupplemental({
   const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
   useEffect(() => {
     const requestComponentSkeleton = apiComponents.find((apiComponent) => {
-      return apiComponent.type === 'RequestExample';
+      return apiComponent.type === Component.RequestExample;
     });
 
     const responseComponentSkeleton = apiComponents.find((apiComponent) => {
-      return apiComponent.type === 'ResponseExample';
+      return apiComponent.type === Component.ResponseExample;
     });
 
     const htmlToReactComponent = (html: string) => {
