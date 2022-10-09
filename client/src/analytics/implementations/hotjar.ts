@@ -38,7 +38,7 @@ export default class HotjarAnalytics extends AbstractAnalyticsImplementation {
 
           return this.hotjar;
         })
-        .catch((e: any) => {
+        .catch((e) => {
           Sentry.captureException(e);
         });
     }

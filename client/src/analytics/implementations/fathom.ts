@@ -24,13 +24,13 @@ export default class FathomAnalytics extends AbstractAnalyticsImplementation {
             this.initialized = true;
           }
         })
-        .catch((e: any) => {
+        .catch((e) => {
           Sentry.captureException(e);
         });
     }
   }
 
-  onRouteChange(url: string, routeProps: any) {
+  onRouteChange(_: string, routeProps: any) {
     if (this.trackPageview && !routeProps.shallow) {
       this.trackPageview();
     }

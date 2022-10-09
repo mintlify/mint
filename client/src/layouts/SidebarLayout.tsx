@@ -267,6 +267,7 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
   return (
     <>
       <TopLevelLink
+        i={0}
         mobile={mobile}
         href="/"
         isActive={isRootAnchorActive}

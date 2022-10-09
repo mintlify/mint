@@ -23,7 +23,7 @@ export default class GA4Analytics extends AbstractAnalyticsImplementation {
     return async function doNothing(_: object) {};
   }
 
-  onRouteChange(url: string, routeProps: any): void {
+  onRouteChange(url: string): void {
     if (this.measurementId && (window as any).gtag) {
       (window as any).gtag('config', this.measurementId, {
         page_path: url,

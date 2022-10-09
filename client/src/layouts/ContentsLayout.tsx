@@ -168,8 +168,31 @@ function useTableOfContents(tableOfContents: Section[]) {
   return { currentSection, registerHeading, unregisterHeading };
 }
 
-export function ContentsLayout(props: any) {
-  const { children, meta, tableOfContents, section, apiComponents } = props;
+export type Meta = {
+  title?: string;
+  description?: string;
+  sidebarTitle?: string;
+  auth?: string;
+  api?: string;
+  openapi?: string;
+  size?: 'wide';
+};
+
+type ContentsLayoutProps = {
+  children: any;
+  meta: Meta;
+  tableOfContents: any;
+  section: string;
+  apiComponents: any;
+};
+
+export function ContentsLayout({
+  children,
+  meta,
+  tableOfContents,
+  section,
+  apiComponents,
+}: ContentsLayoutProps) {
   const toc = [...tableOfContents];
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);

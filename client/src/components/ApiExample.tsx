@@ -1,9 +1,9 @@
-import { CodeGroup } from './CodeGroup';
+import { CodeGroup, CodeGroupProps } from './CodeGroup';
 
-export function RequestExample({ ...props }: any) {
+export function RequestExample({ ...props }: CodeGroupProps) {
   return <CodeGroup {...props} isSmallText />;
 }
 
-export function ResponseExample({ ...props }: any) {
+export function ResponseExample({ ...props }: CodeGroupProps) {
   return <CodeGroup {...props} isSmallText />;
 }

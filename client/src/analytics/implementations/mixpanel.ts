@@ -34,7 +34,7 @@ export default class MixpanelAnalytics extends AbstractAnalyticsImplementation {
             });
           }
         })
-        .catch((e: any) => {
+        .catch((e) => {
           Sentry.captureException(e);
         });
     } else {

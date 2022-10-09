@@ -20,7 +20,7 @@ const langFilename = (className) => {
 const withApiComponents = () => {
   return (tree) => {
     let apiComponents = [];
-    visit(tree, 'mdxJsxFlowElement', (node) => {
+    visit(tree, 'mdxJsxFlowElement', (node, _, parent) => {
       if (['ResponseExample', 'RequestExample'].includes(node.name)) {
         // remove all jsx components to convert to html (removes <ResponseExample> and <Editor>)
         const children = node.children.map((child, i) => {
@@ -44,7 +44,7 @@ const withApiComponents = () => {
         });
       }
 
-      if (node.name === 'Param' || node.name === 'ParamField') {
+      if (parent.type === 'root' && (node.name === 'Param' || node.name === 'ParamField')) {
         apiComponents.push({
           type: 'ParamField',
           children: node.children,

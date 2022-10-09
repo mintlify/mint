@@ -12,6 +12,7 @@ import AnalyticsMediator from '@/analytics/AnalyticsMediator';
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import GA4Script from '@/analytics/GA4Script';
 import { config } from '@/config';
+import { Meta } from '@/layouts/ContentsLayout';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/nav';
 import { Header } from '@/ui/Header';
@@ -84,7 +85,7 @@ export default function App(props: any) {
   }, [navIsOpen]);
 
   let section = undefined;
-  let meta: PageContext = {};
+  let meta: Meta = {};
   documentationNav.forEach((group) => {
     const foundPage = findPageInGroup(group, router.pathname);
     if (foundPage) {

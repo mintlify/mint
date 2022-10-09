@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
@@ -7,7 +9,6 @@ import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { MediaType } from '@/utils/api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
-import { useEffect, useState } from 'react';
 
 type OpenApiContentProps = {
   openapi: string;
@@ -34,8 +35,18 @@ const getEnumDescription = (enumArray?: string[]): React.ReactNode | null => {
   if (enumArray == null || enumArray.length === 0) {
     return null;
   }
-  return <>Allowed values: {enumArray.map((val, i) => <><code>{val}</code>{i !== enumArray.length - 1 && ', '}</>)}</>
-}
+  return (
+    <>
+      Allowed values:{' '}
+      {enumArray.map((val, i) => (
+        <>
+          <code>{val}</code>
+          {i !== enumArray.length - 1 && ', '}
+        </>
+      ))}
+    </>
+  );
+};
 
 function ExpandableFields({ schema }: any) {
   const [expandedFields, setExpandedFields] = useState<Record<string, boolean>>({});
@@ -69,7 +80,7 @@ function ExpandableFields({ schema }: any) {
     <>
       {schema.properties &&
         Object.entries(schema.properties)
-          ?.sort(([propertyLeft]: any, [propertyRight]: any) => {
+          ?.sort(([propertyLeft], [propertyRight]) => {
             // Brings all required to the top
             return schema.required?.includes(propertyLeft)
               ? -1
@@ -79,7 +90,8 @@ function ExpandableFields({ schema }: any) {
           })
           .map(([property, value]: any) => {
             const isArrayExpandable = Boolean(value.items && value.items.properties == null);
-            const type = isArrayExpandable && value.items.type ? `${value.items.type}[]` : value.type;
+            const type =
+              isArrayExpandable && value.items.type ? `${value.items.type}[]` : value.type;
             return (
               <ResponseField
                 key={property}
@@ -92,7 +104,7 @@ function ExpandableFields({ schema }: any) {
                   <div className="mt-2">
                     {value.description}
                     <Expandable
-                      title={value.items.type || "properties"}
+                      title={value.items.type || 'properties'}
                       onChange={(open) => {
                         setExpandedFields({ ...expandedFields, [property]: open });
                         return;
@@ -103,11 +115,11 @@ function ExpandableFields({ schema }: any) {
                   </div>
                 ) : (
                   <>
-                    { value.description || value.title || getEnumDescription(value.enum) }
-                    { value.properties &&
+                    {value.description || value.title || getEnumDescription(value.enum)}
+                    {value.properties && (
                       <div className="mt-2">
                         <Expandable
-                          title={value.type || "properties"}
+                          title={value.type || 'properties'}
                           onChange={(open) => {
                             setExpandedFields({ ...expandedFields, [property]: open });
                             return;
@@ -116,7 +128,7 @@ function ExpandableFields({ schema }: any) {
                           <ExpandableFields schema={value}></ExpandableFields>
                         </Expandable>
                       </div>
-                    }
+                    )}
                   </>
                 )}
               </ResponseField>
@@ -173,9 +185,9 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
           type: 'mdx',
           name: 'enum',
           value: schema.enum,
-        }
-      ]
-    })
+        },
+      ],
+    });
     return (
       <ParamField
         key={i}
@@ -199,7 +211,9 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
     Object.entries(bodySchema.properties)?.map(([property, value]: any, i: number) => {
       const required = bodySchema.required?.includes(property);
       const type = getType(value);
-      const bodyDefault = bodySchema.example ? JSON.stringify(bodySchema.example[property]) : undefined;
+      const bodyDefault = bodySchema.example
+        ? JSON.stringify(bodySchema.example[property])
+        : undefined;
       const last = i + 1 === operation.parameters?.length;
       apiComponents.push({
         type: 'ParamField',
@@ -233,9 +247,9 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
             type: 'mdx',
             name: 'last',
             value: last,
-          }
-        ]
-      })
+          },
+        ],
+      });
       return (
         <ParamField
           body={property}
@@ -252,13 +266,12 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   let responseSchema = operation.responses?.['200']?.content?.['application/json']?.schema;
   // endpoint in OpenAPI refers to the path
-  const configBaseUrl = config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
+  const configBaseUrl =
+    config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
   const baseUrl =
-    configBaseUrl && Array.isArray(configBaseUrl)
-      ? configBaseUrl[apiBaseIndex]
-      : configBaseUrl;
+    configBaseUrl && Array.isArray(configBaseUrl) ? configBaseUrl[apiBaseIndex] : configBaseUrl;
   const api = `${method} ${baseUrl}${endpoint}`;
-  
+
   return (
     <div className="prose prose-slate dark:prose-dark">
       <Api api={api} media={getMedia(contentMedia)} auth={auth} apiComponents={apiComponents} />

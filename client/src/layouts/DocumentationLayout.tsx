@@ -7,18 +7,19 @@ import { documentationNav } from '@/nav';
 import { Title } from '@/ui/Title';
 import { slugToTitle } from '@/utils/slugToTitle';
 
+import { Meta } from './ContentsLayout';
+
 export function DocumentationLayout({
   isMdx,
   navIsOpen,
   setNavIsOpen,
   meta,
-  slug,
   children,
 }: {
   isMdx: boolean;
   navIsOpen: boolean;
   setNavIsOpen: any;
-  meta: any;
+  meta: Meta;
   slug?: string;
   children: ReactNode;
 }) {

@@ -5,6 +5,17 @@ import { Rect, useRect } from 'react-use-rect';
 import { useTop } from '@/hooks/useTop';
 import { ContentsContext } from '@/layouts/ContentsLayout';
 
+type HeadingProps = {
+  level: string;
+  id: string;
+  children: any;
+  className?: string;
+  hidden?: boolean;
+  ignore?: boolean;
+  style?: Object;
+  nextElementDepth?: number | string;
+};
+
 export function Heading({
   level,
   id,
@@ -15,7 +26,7 @@ export function Heading({
   style = {},
   nextElementDepth = -1,
   ...props
-}: any) {
+}: HeadingProps | any) {
   let Component = `h${level}`;
   const context: any = useContext(ContentsContext);
   const [rect, setRect] = useState<Rect | null>(null);

@@ -28,7 +28,7 @@ export function ApiSupplemental({
   openapi,
 }: {
   apiComponents: ApiComponent[];
-  openapi: string;
+  openapi?: string;
 }) {
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);

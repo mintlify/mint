@@ -2,11 +2,21 @@ import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import { useState } from 'react';
 
-function TabAdornment({ className }) {
+function TabAdornment({ className }: { className: string }) {
   return <div className={clsx('pointer-events-none absolute inset-0', className)} />;
 }
 
-function TabItem({ children, selectedIndex, myIndex, marker }) {
+function TabItem({
+  children,
+  selectedIndex,
+  myIndex,
+  marker,
+}: {
+  children: any;
+  selectedIndex: number;
+  myIndex: number;
+  marker?: string;
+}) {
   const isSelected = selectedIndex === myIndex;
   const isBeforeSelected = selectedIndex === myIndex + 1;
   const isAfterSelected = selectedIndex === myIndex - 1;
@@ -62,14 +72,16 @@ function TabItem({ children, selectedIndex, myIndex, marker }) {
   );
 }
 
+export type CodeGroupProps = { children: any; isSmallText?: boolean };
+
 /**
  * Group multiple code blocks into a tabbed UI
  *
  * @param {object} props
  * @param {CodeBlock[]} props.children
  */
-export function CodeGroup({ children, actions, isSmallText }) {
-  let [selectedIndex, setSelectedIndex] = useState(0);
+export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
+  let [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   if (!Array.isArray(children)) {
     children = [children];
@@ -78,12 +90,12 @@ export function CodeGroup({ children, actions, isSmallText }) {
   return (
     <Tab.Group
       as="div"
-      onChange={setSelectedIndex}
+      onChange={setSelectedIndex as any}
       className="not-prose bg-slate-800 rounded-xl shadow-md"
     >
       <div className="flex">
         <Tab.List className="flex text-slate-400 text-xs leading-6 overflow-hidden rounded-tl-xl pt-2">
-          {children.map((child, tabIndex) => (
+          {children.map((child: any, tabIndex: number) => (
             <TabItem key={child.props.filename} myIndex={tabIndex} selectedIndex={selectedIndex}>
               {child.props.filename}
             </TabItem>
@@ -97,12 +109,9 @@ export function CodeGroup({ children, actions, isSmallText }) {
             )}
           />
         </div>
-        {actions ? (
-          <div className="absolute top-2 right-4 h-8 flex">{actions({ selectedIndex })}</div>
-        ) : null}
       </div>
       <Tab.Panels className="flex overflow-auto">
-        {children.map((child) => (
+        {children.map((child: any) => (
           <Tab.Panel
             key={child.props.filename}
             className={clsx(
@@ -118,6 +127,6 @@ export function CodeGroup({ children, actions, isSmallText }) {
   );
 }
 
-export function SnippetGroup(props) {
+export function SnippetGroup(props: CodeGroupProps) {
   return <CodeGroup {...props} />;
 }

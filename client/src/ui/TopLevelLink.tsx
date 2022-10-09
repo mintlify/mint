@@ -1,7 +1,9 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import Link from 'next/link';
 import { forwardRef } from 'react';
-import clsx from 'clsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { config } from '@/config';
 import {
   getAnchorBackgroundColor,
   getAnchorHoverBackgroundColor,
@@ -9,11 +11,26 @@ import {
   getAnchorTextColor,
 } from '@/utils/brands';
 import { isBrandFontAwesomeIcon } from '@/utils/fontAwesome';
-import { config } from '@/config';
+
+type TopLevelProps = {
+  href: string;
+  i: number;
+  isActive: boolean;
+  children?: any;
+  className?: string;
+  color?: string;
+  onClick?: (el: any) => void;
+  icon?: any;
+  shadow?: string;
+  mobile?: boolean;
+  name?: string;
+  as?: string;
+};
 
 const TopLevelAnchor = forwardRef(
-  ({ children, href, className, icon, isActive, onClick, color, i }: any, ref: any) => {
-    const activeBackgroundColor = config.classes?.activeAnchors ?? getAnchorBackgroundColor(i, color);
+  ({ children, href, className, icon, isActive, onClick, color, i }: TopLevelProps, ref: any) => {
+    const activeBackgroundColor =
+      config.classes?.activeAnchors ?? getAnchorBackgroundColor(i, color);
     const hoverBackgroundColor = config.classes?.anchors ?? getAnchorHoverBackgroundColor(i, color);
     const shadowColor = getAnchorShadowColor(i, color);
     return (
@@ -49,9 +66,10 @@ const TopLevelAnchor = forwardRef(
   }
 );
 
-export function TopLevelLink({ href, as, mobile, name, ...props }: any) {
+export function TopLevelLink({ ...props }: TopLevelProps) {
+  const { href, as } = props;
   if (/^https?:\/\//.test(href)) {
-    return <TopLevelAnchor href={href} {...props} />;
+    return <TopLevelAnchor {...props} />;
   }
 
   return (
@@ -64,14 +82,13 @@ export function TopLevelLink({ href, as, mobile, name, ...props }: any) {
 export function StyledTopLevelLink({
   href,
   as,
-  mobile,
   name,
   icon,
   color,
   isActive,
   i,
   ...props
-}: any) {
+}: TopLevelProps) {
   const isBrandIcon = isBrandFontAwesomeIcon(icon);
   const iconPrefix = isBrandIcon ? 'fab' : 'fad';
   const Icon =
@@ -90,7 +107,7 @@ export function StyledTopLevelLink({
     );
   return (
     <TopLevelLink
-      mobile={mobile}
+      {...props}
       as={as}
       href={href}
       className="mb-4"
@@ -98,7 +115,6 @@ export function StyledTopLevelLink({
       isActive={isActive}
       color={color}
       i={i}
-      {...props}
     >
       {name ?? href}
     </TopLevelLink>
