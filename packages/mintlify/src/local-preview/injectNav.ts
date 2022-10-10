@@ -68,7 +68,7 @@ export const createPage = (
 };
 
 export const injectNav = (pages: any, configObj: any) => {
-  const targetPath = path.join(CLIENT_PATH, "src", "nav.json");
+  const targetPath = path.join(CLIENT_PATH, "src", "metadata.json");
   const createNav = (nav) => {
     return {
       group: nav.group,
