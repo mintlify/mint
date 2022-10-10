@@ -1,19 +1,63 @@
-<p align="center">
-  <img width="60" alt="posthoglogo" src="https://res.cloudinary.com/mintlify/image/upload/v1665199103/mintlify_tmtvpd.svg">
-</p>
-<p align="center">
-  <a href="https://github.com/mintlify/mint"><img src="https://img.shields.io/github/stars/mintlify/mint?style=social" alt="GitHub Stars" /></a>
-  <a href="https://makeapullrequest.com/"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="Make a pull request" /></a>
-  <a href="https://discord.com/invite/b499CK8P9g"><img src="https://img.shields.io/discord/911693009253466123" alt="Join Discord" /></a>
-  <a href="https://twitter.com/mintlify"><img src="https://img.shields.io/twitter/follow/mintlify.svg?style=social" alt="Twitter Follow" /></a>
-</p>
+<div align="center">
+  <a href="https://mintlify.com">
+    <img
+      src="https://res.cloudinary.com/mintlify/image/upload/v1665385627/logo-rounded_zuk7q1.svg"
+      alt="Mintlify Logo"
+      height="64"
+    />
+  </a>
+  <br />
+  <p>
+    <h3>
+      <b>
+        Mint
+      </b>
+    </h3>
+  </p>
+  <p>
+    <b>
+      Open source docs builder that's beautiful, fast, and easy to work
+    </b>
+  </p>
+  <p>
 
-## Mint is documentation builder that's beautiful, fast, and easy to work
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen?logo=github)](/) [![Website](https://img.shields.io/website?url=https%3A%2F%2Fmintlify.com&logo=mintlify)](https://mintlify.com) [![Tests](https://github.com/mintlify/mint/actions/workflows/manual.yml/badge.svg)](https://github.com/mintlify/mint/actions) [![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fmintlify.com%2F)](https://twitter.com/intent/tweet?url=&text=Check%20out%20%40mintlify)
 
-- Powered by MDX and lives alongside the codebase
-- Opionated when you're lazy, but infinitely flexible when you need it to be
-- Analytics is built in and tailored to help you understand how your users
+  </p>
+  <p>
+    <sub>
+      Built with ❤︎ by
+      <a href="https://mintlify.com">
+        Mintlify
+      </a>
+    </sub>
+  </p>
+  <br />
+  <p>
+    <a href="https://mintlify.com" target="_blank">
+      <img
+        src="https://res.cloudinary.com/mintlify/image/upload/v1665198043/hero_miudcf.svg"
+        alt="Mintlify"
+        width="100%"
+      />
+    </a>
+  </p>
+</div>
 
-## Get started for free
+#### **Support**
 
-Self setup guides are currently under construction. Sign up at [Mintlify](https://mintlify.com/start) for access in the meantime
+[![Chat on Discord](https://img.shields.io/badge/chat-Discord-7289DA?logo=discord)](https://discord.gg/MPNgtSZkgK) [![Discuss on GitHub](https://img.shields.io/badge/discussions-GitHub-333333?logo=github)](https://github.com/mintlify/mint/discussions)
+
+### **Features**
+
+❤️ **Developer-First:** Powered by MDX and lives alongside the codebase
+
+💪 **Flexible:** Opionated when you're lazy, but infinitely flexible when you need it to be
+
+📊 **Analytical:** Logging is built in to help you understand how users interact with your docs
+
+⚡️ **Fast:** Interactions are <100ms and deployments are instanteous
+
+#### 🌈 Make it yours
+
+Customizable the content, navigation, branding, and more for your documentation — [get started](https://mintlify.com/start).

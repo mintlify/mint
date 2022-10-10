@@ -1,4 +1,5 @@
 import Chalk from "chalk";
+import open from "open";
 import { promises as _promises } from "fs";
 import fse, { pathExists } from "fs-extra";
 import { isInternetAvailable } from "is-internet-available";
@@ -8,6 +9,7 @@ import SwaggerParser from "@apidevtools/swagger-parser";
 import { createPage, injectNav } from "./injectNav.js";
 import { CMD_EXEC_PATH, CLIENT_PATH, INSTALL_PATH } from "../constants.js";
 import { buildLogger } from "../util.js";
+import listener from "./listener.js";
 
 const { readdir, readFile } = _promises;
 
@@ -161,7 +163,7 @@ const gitExists = () => {
 
 const dev = async () => {
   shell.cd(INSTALL_PATH);
-  const logger = buildLogger("Starting local Mintlify...");
+  const logger = buildLogger("Starting a local Mintlify instance...");
   if (!(await pathExists(path.join(INSTALL_PATH, "mint")))) {
     shell.exec("mkdir mint");
   }
@@ -227,7 +229,9 @@ const run = () => {
       "Navigate to your local preview at https://localhost:3000"
     )}`
   );
-  shell.exec("npm run dev");
+  shell.exec("npm run dev", { async: true });
+  open("http://localhost:3000");
+  listener();
 };
 
 export default dev;
