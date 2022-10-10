@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import path from "path";
-import { Page } from "./templates.js";
+import { Page } from "./init-command/templates.js";
+import stopIfInvalidLink from "./validation/stopIfInvalidLink.js";
 
 export function getOrigin(url: string) {
   // eg. https://google.com -> https://google.com
@@ -64,3 +65,9 @@ export const createPage = (
     }
   }
 };
+
+export function getHrefFromArgs(argv: string) {
+  const href = argv._[1];
+  stopIfInvalidLink(href);
+  return href;
+}
