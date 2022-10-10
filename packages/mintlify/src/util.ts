@@ -66,8 +66,8 @@ export const createPage = (
   }
 };
 
-export function getHrefFromArgs(argv: string) {
-  const href = argv._[1];
+export function getHrefFromArgs(argv: any) {
+  const href = argv.url;
   stopIfInvalidLink(href);
   return href;
 }

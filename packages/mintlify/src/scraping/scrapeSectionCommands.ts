@@ -1,6 +1,6 @@
 import axios from "axios";
 import { detectFramework, Frameworks } from "./detectFramework.js";
-import { getHrefFromUrl, getOrigin } from "../util.js";
+import { getHrefFromArgs, getOrigin } from "../util.js";
 import { scrapeSection } from "./scrapeSection.js";
 import { scrapeDocusaurusSection } from "./site-scrapers/scrapeDocusaurusSection.js";
 import { scrapeGitBookSection } from "./site-scrapers/scrapeGitBookSection.js";
@@ -20,7 +20,7 @@ function validateFramework(framework: Frameworks | undefined) {
 }
 
 export async function scrapeSectionAxiosWrapper(argv: any, scrapeFunc: any) {
-  const href = getHrefFromUrl(argv);
+  const href = getHrefFromArgs(argv);
   const res = await axios.default.get(href);
   const html = res.data;
   await scrapeSection(scrapeFunc, html, getOrigin(href), argv.overwrite);
@@ -32,7 +32,7 @@ export async function scrapeGitbookSectionCommand(argv: any) {
 }
 
 async function scrapeSectionGitBookWrapper(argv: any, scrapeFunc: any) {
-  const href = getHrefFromUrl(argv);
+  const href = getHrefFromArgs(argv);
 
   const browser = await startBrowser();
   const page = await browser.newPage();

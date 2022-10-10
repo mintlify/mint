@@ -39,15 +39,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "test [url]",
-    "testt",
-    () => {},
-    (argv) => {
-      console.log({ argv });
-    }
-  )
-  .command(
-    "scrape-page",
+    "scrape-page [url]",
     "Scrapes a page",
     () => {},
     async (argv) => {
@@ -55,7 +47,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-docusaurus-page",
+    "scrape-docusaurus-page [url]",
     "Scrapes a Docusaurus page",
     () => {},
     async (argv) => {
@@ -63,7 +55,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-gitbook-page",
+    "scrape-gitbook-page [url]",
     "Scrapes a GitBook page",
     () => {},
     async (argv) => {
@@ -71,7 +63,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-readme-page",
+    "scrape-readme-page [url]",
     "Scrapes a ReadMe page",
     () => {},
     async (argv) => {
@@ -79,7 +71,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-section",
+    "scrape-section [url]",
     "Scrapes the docs in the section",
     () => {},
     async (argv) => {
@@ -87,7 +79,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-docusaurus-section",
+    "scrape-docusaurus-section [url]",
     "Scrapes the Docusaurus section",
     () => {},
     async (argv) => {
@@ -95,7 +87,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-gitbook-section",
+    "scrape-gitbook-section [url]",
     "Scrapes the Gitbook section",
     () => {},
     async (argv) => {
@@ -103,7 +95,7 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-readme-section",
+    "scrape-readme-section [url]",
     "Scrapes the ReadMe section",
     () => {},
     async (argv) => {
