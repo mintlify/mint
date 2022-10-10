@@ -75,8 +75,8 @@ export type Config = {
     ultraLight?: string;
     ultraDark?: string;
     background?: {
-      light: string;
-      dark: string;
+      light?: string;
+      dark?: string;
     };
   };
   topbarCtaButton?: NavbarLink;
