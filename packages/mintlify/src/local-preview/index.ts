@@ -1,4 +1,5 @@
 import Chalk from "chalk";
+import open from "open";
 import { promises as _promises } from "fs";
 import fse, { pathExists } from "fs-extra";
 import { isInternetAvailable } from "is-internet-available";
@@ -227,7 +228,8 @@ const run = () => {
       "Navigate to your local preview at https://localhost:3000"
     )}`
   );
-  shell.exec("npm run dev");
+  shell.exec("npm run dev", { async: true });
+  open("http://localhost:3000");
 };
 
 export default dev;
