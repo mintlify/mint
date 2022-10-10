@@ -193,7 +193,7 @@ export function SearchProvider({ children }: any) {
   const [hits, setHits] = useState<Hit[]>([]);
 
   useEffect(() => {
-    axios.get(`${config.basePath?.toString()}/api/name`).then(({ data }) => {
+    axios.get(`${config.basePath ?? ''}/api/name`).then(({ data }) => {
       setSearchId(data);
     });
   }, []);
