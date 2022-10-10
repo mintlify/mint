@@ -196,10 +196,6 @@ export const getParamGroupsFromAPIComponents = (
         attributesMap[attribute.name] = attribute.value;
       });
 
-      // if (apiComponent.children && apiComponent.children[0]?.name === Component.Expandable) {
-      //   console.log('Hey there');
-      // }
-
       return attributesMap;
     });
 

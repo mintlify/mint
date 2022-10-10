@@ -1,4 +1,4 @@
-import { GroupPage, isGroup } from '@/nav';
+import { GroupPage, isGroup } from '@/metadata';
 
 export default function isPathInGroupPages(pathname: string, groupPages: GroupPage[]): boolean {
   return groupPages.some((groupPage) => {

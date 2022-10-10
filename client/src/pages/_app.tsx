@@ -14,7 +14,7 @@ import GA4Script from '@/analytics/GA4Script';
 import { config } from '@/config';
 import { Meta } from '@/layouts/ContentsLayout';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/nav';
+import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/metadata';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';

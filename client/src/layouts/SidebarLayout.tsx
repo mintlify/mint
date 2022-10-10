@@ -9,7 +9,7 @@ import { createContext, forwardRef, useRef, useState } from 'react';
 
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { getGroupsInDivision, getGroupsNotInDivision } from '@/layouts/getGroupsInDivision';
-import { PageContext, Group, Groups, GroupPage, isGroup } from '@/nav';
+import { PageContext, Group, Groups, GroupPage, isGroup } from '@/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
 

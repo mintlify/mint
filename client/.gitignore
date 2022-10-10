@@ -27,7 +27,7 @@ openapi
 /src/mint.json
 /src/config.json
 /src/openapi.json
-/src/nav.json
+/src/metadata.json
 
 # misc
 .DS_Store

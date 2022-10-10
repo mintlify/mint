@@ -1,6 +1,6 @@
-import navJSON from './nav.json';
+import metadataJson from './metadata.json';
 
-export const documentationNav: Groups = navJSON;
+export const documentationNav: Groups = metadataJson;
 export const nonMetaTags = ['api', 'openapi', 'sidebarTitle'];
 
 export type PageContext = {

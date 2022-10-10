@@ -1,7 +1,8 @@
-import { useContext } from 'react';
-import { SidebarContext } from '@/layouts/SidebarLayout';
 import { useRouter } from 'next/router';
-import { PageContext, GroupPage, isGroup, flattenGroupPages } from '@/nav';
+import { useContext } from 'react';
+
+import { SidebarContext } from '@/layouts/SidebarLayout';
+import { PageContext, GroupPage, isGroup, flattenGroupPages } from '@/metadata';
 
 const getFirstNonGroupPage = (groupPage?: GroupPage): PageContext | null => {
   if (groupPage == null) {
