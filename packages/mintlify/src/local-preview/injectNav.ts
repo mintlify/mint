@@ -114,10 +114,7 @@ export const injectNav = (pages: any, configObj: any) => {
   const newNavFile = navFile.map((group) => {
     return filterOutNullInGroup(group);
   });
-  console.log({ targetPath });
-  console.log({ newNavFile });
   fs.outputFileSync(targetPath, JSON.stringify(newNavFile, null, 2), {
     flag: "w",
   });
-  console.log(`⛵️ Navigation generated and injected`);
 };

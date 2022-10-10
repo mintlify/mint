@@ -23,6 +23,14 @@ import dev from "./local-preview/index.js";
 // TODO - add descriptions to the command options https://github.com/yargs/yargs/blob/HEAD/docs/api.md#commandmodule
 yargs(hideBin(process.argv))
   .command(
+    ["dev", "$0"],
+    "Runs Mintlify locally (Must run in directory with mint.json)",
+    () => {},
+    async () => {
+      await dev();
+    }
+  )
+  .command(
     "init",
     "Generate a mintlify template",
     () => {},
@@ -102,12 +110,5 @@ yargs(hideBin(process.argv))
       await scrapeSectionAxiosWrapper(argv, scrapeReadMeSection);
     }
   )
-  .command(
-    ["dev", "$0"],
-    "Runs Mintlify locally (Must run in directory with mint.json)",
-    () => {},
-    async () => {
-      await dev();
-    }
-  )
+
   .parse();

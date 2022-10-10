@@ -1,12 +1,12 @@
-import { existsSync } from "fs";
 import { promises as _promises } from "fs";
-import fse from "fs-extra";
+import fse, { pathExists } from "fs-extra";
 import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
 import SwaggerParser from "@apidevtools/swagger-parser";
 import { createPage, injectNav } from "./injectNav.js";
 import { CMD_EXEC_PATH, CLIENT_PATH, INSTALL_PATH } from "../constants.js";
+import { buildLogger } from "../util.js";
 
 const { readdir, readFile } = _promises;
 
@@ -27,7 +27,8 @@ const getFileList = async (dirName: string, og = dirName) => {
   return files;
 };
 
-const copyFiles = async () => {
+const copyFiles = async (logger: any) => {
+  logger.start("Syncing doc files...");
   shell.cd(CMD_EXEC_PATH);
   const markdownFiles = [];
   const staticFiles = [];
@@ -42,6 +43,7 @@ const copyFiles = async () => {
             file.name.lastIndexOf(".") + 1,
             file.name.length
           ) || file.name;
+        let isOpenApi = false;
         if (
           extension &&
           (extension === "mdx" || extension === "md" || extension === "tsx")
@@ -56,13 +58,14 @@ const copyFiles = async () => {
             fse.outputFileSync("openapi", fileContent.toString("utf-8"));
             const api = await SwaggerParser.validate("openapi");
             openApi = Buffer.from(JSON.stringify(api, null, 2), "utf-8");
+            isOpenApi = true;
           } catch {
             // not valid openApi
           }
-        }
-        if (
-          !file.name.endsWith("mint.config.json") ||
-          !file.name.endsWith("mint.json")
+        } else if (
+          (!file.name.endsWith("mint.config.json") ||
+            !file.name.endsWith("mint.json")) &&
+          !isOpenApi
         ) {
           // all other files
           staticFiles.push(file.name);
@@ -71,26 +74,29 @@ const copyFiles = async () => {
     );
   });
   await Promise.all(promises);
-  fse.removeSync("openapi");
+  await fse.remove("openapi");
 
   const configTargetPath = path.join(CLIENT_PATH, "src", "mint.json");
-  fse.removeSync(configTargetPath);
+  await fse.remove(configTargetPath);
   let configObj = null;
   let configPath = null;
-  if (existsSync(path.join(CMD_EXEC_PATH, "mint.config.json"))) {
+  if (await pathExists(path.join(CMD_EXEC_PATH, "mint.config.json"))) {
     configPath = path.join(CMD_EXEC_PATH, "mint.config.json");
   }
 
-  if (existsSync(path.join(CMD_EXEC_PATH, "mint.json"))) {
+  if (await pathExists(path.join(CMD_EXEC_PATH, "mint.json"))) {
     configPath = path.join(CMD_EXEC_PATH, "mint.json");
   }
 
-  while (configPath && !existsSync(configTargetPath)) {
+  if (configPath) {
     await fse.remove(configTargetPath);
     await fse.copy(configPath, configTargetPath);
+    const configContents = await readFile(configPath);
+    configObj = JSON.parse(configContents.toString());
+  } else {
+    logger.fail("Must be ran in a directory where a mint.json file exists.");
+    process.exit(1);
   }
-  const configContents = await readFile(configPath);
-  configObj = JSON.parse(configContents.toString());
 
   const openApiTargetPath = path.join(CLIENT_PATH, "src", "openapi.json");
   let openApiObj = null;
@@ -124,18 +130,24 @@ const copyFiles = async () => {
       })()
     );
   });
-  await Promise.all(mdPromises);
-  injectNav(pages, configObj);
-
+  const staticFilePromises = [];
   staticFiles.forEach(async (filename) => {
-    const sourcePath = path.join(CMD_EXEC_PATH, filename);
-    const publicDir = path.join(CLIENT_PATH, "public");
-    const targetPath = path.join(publicDir, filename);
+    staticFilePromises.push(
+      (async () => {
+        const sourcePath = path.join(CMD_EXEC_PATH, filename);
+        const publicDir = path.join(CLIENT_PATH, "public");
+        const targetPath = path.join(publicDir, filename);
 
-    await fse.remove(targetPath);
-    await fse.copy(sourcePath, targetPath);
+        await fse.remove(targetPath);
+        await fse.copy(sourcePath, targetPath);
+      })()
+    );
   });
+  await Promise.all([...mdPromises, ...staticFilePromises]);
+  injectNav(pages, configObj);
+  logger.succeed("Files synced");
 };
+
 const gitExists = () => {
   let doesGitExist = true;
   try {
@@ -148,19 +160,29 @@ const gitExists = () => {
 
 const dev = async () => {
   shell.cd(INSTALL_PATH);
-  // TODO error messages
-  if (!existsSync(path.join(INSTALL_PATH, "mint"))) {
+  const logger = buildLogger("Starting local Mintlify...");
+  if (!(await pathExists(path.join(INSTALL_PATH, "mint")))) {
     shell.exec("mkdir mint");
   }
   shell.cd("mint");
   let runYarn = true;
   const gitInstalled = gitExists();
-  if (!existsSync(path.join(INSTALL_PATH, "mint", ".git")) && gitInstalled) {
-    shell.exec("git init", { silent: true });
-    shell.exec(
-      "git remote add -f mint-origin https://github.com/mintlify/mint.git",
-      { silent: true }
-    );
+  let firstInstallation = false;
+  if (!(await pathExists(path.join(INSTALL_PATH, "mint", ".git")))) {
+    firstInstallation = true;
+    if (gitInstalled) {
+      logger.start("Initializing local Mintlify instance...");
+      shell.exec("git init", { silent: true });
+      shell.exec(
+        "git remote add -f mint-origin https://github.com/mintlify/mint.git",
+        { silent: true }
+      );
+    } else {
+      logger.fail(
+        "git must be installed (https://github.com/git-guides/install-git)"
+      );
+      process.exit(1);
+    }
   }
 
   const internet = await isInternetAvailable();
@@ -178,18 +200,28 @@ const dev = async () => {
     runYarn = false;
   }
   shell.cd(CLIENT_PATH);
-  if (runYarn) {
+  if (internet && runYarn) {
+    if (firstInstallation) {
+      logger.succeed("Local Mintlify instance initialized");
+    }
+    logger.start("Updating dependencies...");
+
     shell.exec("yarn", { silent: true });
+    if (firstInstallation) {
+      logger.succeed("Installation complete");
+    } else {
+      logger.succeed("Dependencies updated");
+    }
   }
+
   // TODO check for mint.json before copying over files
-  await copyFiles();
+  await copyFiles(logger);
   run();
 };
 
 const run = () => {
   shell.cd(CLIENT_PATH);
   shell.exec("npm run dev");
-  open("https://localhost:3000");
 };
 
 export default dev;

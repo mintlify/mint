@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from "fs";
+import Ora from "ora";
 import path from "path";
 import { Page } from "./init-command/templates.js";
 import stopIfInvalidLink from "./validation/stopIfInvalidLink.js";
@@ -71,3 +72,8 @@ export function getHrefFromArgs(argv: any) {
   stopIfInvalidLink(href);
   return href;
 }
+
+export const buildLogger = (startText: string = "") => {
+  const logger = Ora().start(startText);
+  return logger;
+};
