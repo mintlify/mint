@@ -23,7 +23,7 @@ import dev from "./local-preview/index.js";
 // TODO - add descriptions to the command options https://github.com/yargs/yargs/blob/HEAD/docs/api.md#commandmodule
 yargs(hideBin(process.argv))
   .command(
-    ["dev", "$0"],
+    "dev",
     "Runs Mintlify locally (Must run in directory with mint.json)",
     () => {},
     async () => {
