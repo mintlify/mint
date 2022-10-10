@@ -1,3 +1,4 @@
+import Chalk from "chalk";
 import { promises as _promises } from "fs";
 import fse, { pathExists } from "fs-extra";
 import { isInternetAvailable } from "is-internet-available";
@@ -221,6 +222,11 @@ const dev = async () => {
 
 const run = () => {
   shell.cd(CLIENT_PATH);
+  console.log(
+    `🌿 ${Chalk.green(
+      "Navigate to your local preview at https://localhost:3000"
+    )}`
+  );
   shell.exec("npm run dev");
 };
 
