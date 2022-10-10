@@ -64,7 +64,7 @@ export const createPage = (path, content, openApiObj) => {
 };
 
 export const injectNav = (pages, configObj) => {
-  const path = __dirname + `/../src/nav.json`;
+  const path = __dirname + `/../src/metadata.json`;
   const createNav = (nav) => {
     return {
       group: nav.group,

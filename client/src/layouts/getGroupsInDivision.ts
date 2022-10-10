@@ -1,4 +1,4 @@
-import { Group, Groups, GroupPage, isGroup } from '@/nav';
+import { Group, Groups, GroupPage, isGroup } from '@/metadata';
 
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
   return nav.filter((group: Group) => isGroupInDivision(group, divisionUrls));

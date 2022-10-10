@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import { config } from '@/config';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
-import { documentationNav } from '@/nav';
+import { documentationNav } from '@/metadata';
 import { Title } from '@/ui/Title';
 import { slugToTitle } from '@/utils/slugToTitle';
 

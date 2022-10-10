@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from '@heroicons/react/solid';
-import { documentationNav, isGroup } from '@/nav';
 import Link from 'next/link';
+
+import { documentationNav, isGroup } from '@/metadata';
 
 export default function Error() {
   return (
