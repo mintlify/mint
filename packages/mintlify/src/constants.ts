@@ -13,3 +13,8 @@ export const CLIENT_PATH = path.join(DOT_MINTLIFY, "mint", "client");
 
 // command execution location
 export const CMD_EXEC_PATH = process.cwd();
+
+export const LAST_INVOCATION_PATH_FILE_LOCATION = path.join(
+  CLIENT_PATH,
+  "last-invocation-path"
+);

@@ -11,6 +11,7 @@ import {
   CLIENT_PATH,
   HOME_DIR,
   DOT_MINTLIFY,
+  LAST_INVOCATION_PATH_FILE_LOCATION,
 } from "../constants.js";
 import { injectFavicons } from "./injectFavicons.js";
 import listener from "./listener.js";
@@ -19,6 +20,24 @@ import { updateConfigFile } from "./mintConfigFile.js";
 import { buildLogger } from "../util.js";
 
 const { readFile } = _promises;
+
+const saveInvocationPath = async () => {
+  await fse.outputFile(LAST_INVOCATION_PATH_FILE_LOCATION, CMD_EXEC_PATH);
+};
+
+const cleanOldFiles = async () => {
+  const lastInvocationPathExists = await pathExists(
+    LAST_INVOCATION_PATH_FILE_LOCATION
+  );
+  if (!lastInvocationPathExists) return;
+  const lastInvocationPath = (
+    await readFile(LAST_INVOCATION_PATH_FILE_LOCATION)
+  ).toString();
+  if (lastInvocationPath !== CMD_EXEC_PATH) {
+    // clean if invoked in new location
+    shellExec("git clean -d -x -e node_modules -e last-invocation-path -f");
+  }
+};
 
 const copyFiles = async (logger: any) => {
   logger.start("Syncing doc files...");
@@ -149,8 +168,10 @@ const dev = async () => {
       logger.succeed("Dependencies updated");
     }
   }
-
-  // TODO check for mint.json before copying over files
+  if (!firstInstallation) {
+    await cleanOldFiles();
+  }
+  await saveInvocationPath();
   await copyFiles(logger);
   run();
 };
