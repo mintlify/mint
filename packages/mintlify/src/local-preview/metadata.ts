@@ -1,11 +1,16 @@
 // TODO - add types
-import fs from "fs-extra";
+import fse from "fs-extra";
+import { promises as _promises } from "fs";
 import matter from "gray-matter";
 import path from "path";
 
+import categorizeFiles from "./categorizeFiles.js";
+import { getConfigObj } from "./mintConfigFile.js";
 import { getOpenApiTitleAndDescription } from "./getOpenApiContext.js";
 import { slugToTitle } from "./slugToTitle.js";
-import { CLIENT_PATH } from "../constants.js";
+import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
+
+const { readFile } = _promises;
 
 // End matter is front matter, but at the end
 const getIndexOfEndMatter = (fileContents: string) => {
@@ -67,7 +72,7 @@ export const createPage = (
   };
 };
 
-export const injectNav = (pages: any, configObj: any) => {
+export const createMetadataFileFromPages = (pages: any, configObj: any) => {
   const targetPath = path.join(CLIENT_PATH, "src", "metadata.json");
   const createNav = (nav) => {
     return {
@@ -114,7 +119,36 @@ export const injectNav = (pages: any, configObj: any) => {
   const newNavFile = navFile.map((group) => {
     return filterOutNullInGroup(group);
   });
-  fs.outputFileSync(targetPath, JSON.stringify(newNavFile, null, 2), {
+  fse.outputFileSync(targetPath, JSON.stringify(newNavFile, null, 2), {
     flag: "w",
   });
+};
+
+export const createMetadataFile = async () => {
+  // create pages
+  const { markdownFiles, openApiBuffer } = await categorizeFiles();
+  let openApiObj = null;
+  if (openApiBuffer) {
+    openApiObj = JSON.parse(openApiBuffer.toString());
+  }
+  // create config object
+  const configObj = await getConfigObj();
+  let pages = {};
+  const mdPromises = [];
+  markdownFiles.forEach(async (filename) => {
+    mdPromises.push(
+      (async () => {
+        const sourcePath = path.join(CMD_EXEC_PATH, filename);
+        const fileContent = await readFile(sourcePath);
+        const contentStr = fileContent.toString();
+        const page = createPage(filename, contentStr, openApiObj);
+        pages = {
+          ...pages,
+          ...page,
+        };
+      })()
+    );
+  });
+  await Promise.all(mdPromises);
+  createMetadataFileFromPages(pages, configObj);
 };

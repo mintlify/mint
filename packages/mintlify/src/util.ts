@@ -77,3 +77,18 @@ export const buildLogger = (startText: string = "") => {
   const logger = Ora().start(startText);
   return logger;
 };
+
+export const getFileExtension = (filename: string) => {
+  return (
+    filename.substring(filename.lastIndexOf(".") + 1, filename.length) ||
+    filename
+  );
+};
+
+export const fileBelongsInPagesFolder = (filename: string) => {
+  const extension = getFileExtension(filename);
+  return (
+    extension &&
+    (extension === "mdx" || extension === "md" || extension === "tsx")
+  );
+};

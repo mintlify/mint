@@ -2,16 +2,9 @@ import chokidar from "chokidar";
 import fse from "fs-extra";
 import path from "path";
 import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
-
-const fileBelongsInPagesFolder = (filename: string) => {
-  const extension =
-    filename.substring(filename.lastIndexOf(".") + 1, filename.length) ||
-    filename;
-  return (
-    extension &&
-    (extension === "mdx" || extension === "md" || extension === "tsx")
-  );
-};
+import { fileBelongsInPagesFolder, getFileExtension } from "../util.js";
+import { createMetadataFile } from "./metadata.js";
+import openApiCheck from "./openApiCheck.js";
 
 const listener = () => {
   chokidar
@@ -42,11 +35,11 @@ const listener = () => {
           await fse.remove(targetPath);
           console.log("Static file deleted: ", filename);
         }
-        // TODO - add case for openapi
-        // TODO - edit nav.json
       } else {
         const filePath = path.join(CMD_EXEC_PATH, filename);
+        let updateMetadata = false;
         if (fileBelongsInPagesFolder(filename)) {
+          updateMetadata = true;
           const targetPath = path.join(CLIENT_PATH, "src", "pages", filename);
           await fse.copy(filePath, targetPath);
           switch (event) {
@@ -62,6 +55,7 @@ const listener = () => {
           filename === "mint.config.json" ||
           filename === "mint.json"
         ) {
+          updateMetadata = true;
           const targetPath = path.join(CLIENT_PATH, "src", "mint.json");
           await fse.copy(filePath, targetPath);
           switch (event) {
@@ -74,18 +68,46 @@ const listener = () => {
               break;
           }
         } else {
+          const extension = getFileExtension(filename);
+          let isOpenApi = false;
+          if (
+            extension &&
+            (extension === "json" ||
+              extension === "yaml" ||
+              extension === "yml")
+          ) {
+            const openApiInfo = await openApiCheck(
+              path.join(CMD_EXEC_PATH, filename)
+            );
+            isOpenApi = openApiInfo.isOpenApi;
+          }
+          let targetPath = path.join(CLIENT_PATH, "public", filename);
+          if (isOpenApi) {
+            targetPath = path.join(CLIENT_PATH, "src", "openapi.json");
+            updateMetadata = true;
+          }
           // all other files
-          const targetPath = path.join(CLIENT_PATH, "public", filename);
           await fse.copy(filePath, targetPath);
           switch (event) {
             case "add":
             case "addDir":
-              console.log("Static file added: ", filename);
+              if (isOpenApi) {
+                console.log("OpenApi file added: ", filename);
+              } else {
+                console.log("Static file added: ", filename);
+              }
               break;
             default:
-              console.log("Static file edited: ", filename);
+              if (isOpenApi) {
+                console.log("OpenApi file edited: ", filename);
+              } else {
+                console.log("Static file edited: ", filename);
+              }
               break;
           }
+        }
+        if (updateMetadata) {
+          await createMetadataFile();
         }
       }
     });
