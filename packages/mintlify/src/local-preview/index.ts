@@ -8,6 +8,7 @@ import shell from "shelljs";
 import categorizeFiles from "./categorizeFiles.js";
 
 import { CMD_EXEC_PATH, CLIENT_PATH, INSTALL_PATH } from "../constants.js";
+import { injectFavicons } from "./injectFavicons.js";
 import listener from "./listener.js";
 import { createPage, createMetadataFileFromPages } from "./metadata.js";
 import { updateConfigFile } from "./mintConfigFile.js";
@@ -31,11 +32,11 @@ const copyFiles = async (logger: any) => {
     });
     openApiObj = JSON.parse(openApiBuffer.toString());
   } else {
-    fse.outputFileSync(openApiTargetPath, "{}", { flag: "w" });
+    await fse.outputFile(openApiTargetPath, "{}", { flag: "w" });
   }
   let pages = {};
   const mdPromises = [];
-  markdownFiles.forEach(async (filename) => {
+  markdownFiles.forEach((filename) => {
     mdPromises.push(
       (async () => {
         const sourcePath = path.join(CMD_EXEC_PATH, filename);
@@ -56,7 +57,7 @@ const copyFiles = async (logger: any) => {
     );
   });
   const staticFilePromises = [];
-  staticFiles.forEach(async (filename) => {
+  staticFiles.forEach((filename) => {
     staticFilePromises.push(
       (async () => {
         const sourcePath = path.join(CMD_EXEC_PATH, filename);
@@ -68,7 +69,11 @@ const copyFiles = async (logger: any) => {
       })()
     );
   });
-  await Promise.all([...mdPromises, ...staticFilePromises]);
+  await Promise.all([
+    ...mdPromises,
+    ...staticFilePromises,
+    await injectFavicons(configObj, logger),
+  ]);
   createMetadataFileFromPages(pages, configObj);
   logger.succeed("All files synced");
 };

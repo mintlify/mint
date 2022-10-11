@@ -135,7 +135,7 @@ export const createMetadataFile = async () => {
   const configObj = await getConfigObj();
   let pages = {};
   const mdPromises = [];
-  markdownFiles.forEach(async (filename) => {
+  markdownFiles.forEach((filename) => {
     mdPromises.push(
       (async () => {
         const sourcePath = path.join(CMD_EXEC_PATH, filename);

@@ -22,6 +22,7 @@
     "chalk": "^5.1.0",
     "cheerio": "^0.22.0",
     "chokidar": "^3.5.3",
+    "favicons": "^7.0.0-beta.4",
     "fs-extra": "^10.1.0",
     "gray-matter": "^4.0.3",
     "inquirer": "^9.1.0",
