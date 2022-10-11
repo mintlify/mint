@@ -6,8 +6,12 @@ import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
 import categorizeFiles from "./categorizeFiles.js";
-
-import { CMD_EXEC_PATH, CLIENT_PATH, INSTALL_PATH } from "../constants.js";
+import {
+  CMD_EXEC_PATH,
+  CLIENT_PATH,
+  HOME_DIR,
+  DOT_MINTLIFY,
+} from "../constants.js";
 import { injectFavicons } from "./injectFavicons.js";
 import listener from "./listener.js";
 import { createPage, createMetadataFileFromPages } from "./metadata.js";
@@ -88,24 +92,28 @@ const gitExists = () => {
   return doesGitExist;
 };
 
+const shellExec = (cmd: string) => {
+  return shell.exec(cmd, { silent: true });
+};
+
 const dev = async () => {
-  shell.cd(INSTALL_PATH);
+  shell.cd(HOME_DIR);
   const logger = buildLogger("Starting a local Mintlify instance...");
-  if (!(await pathExists(path.join(INSTALL_PATH, "mint")))) {
-    shell.exec("mkdir mint");
-  }
-  shell.cd("mint");
+  await fse.ensureDir(path.join(DOT_MINTLIFY, "mint"));
+  shell.cd(path.join(HOME_DIR, ".mintlify", "mint"));
   let runYarn = true;
   const gitInstalled = gitExists();
   let firstInstallation = false;
-  if (!(await pathExists(path.join(INSTALL_PATH, "mint", ".git")))) {
+  const gitRepoInitialized = await pathExists(
+    path.join(DOT_MINTLIFY, "mint", ".git")
+  );
+  if (!gitRepoInitialized) {
     firstInstallation = true;
     if (gitInstalled) {
       logger.start("Initializing local Mintlify instance...");
-      shell.exec("git init", { silent: true });
-      shell.exec(
-        "git remote add -f mint-origin https://github.com/mintlify/mint.git",
-        { silent: true }
+      shellExec("git init");
+      shellExec(
+        "git remote add -f mint-origin https://github.com/mintlify/mint.git"
       );
     } else {
       logger.fail(
@@ -118,13 +126,11 @@ const dev = async () => {
   const internet = await isInternetAvailable();
   let pullOutput = null;
   if (internet && gitInstalled) {
-    shell.exec("git config core.sparseCheckout true", { silent: true });
-    shell.exec('echo "client/" >> .git/info/sparse-checkout', { silent: true });
-    pullOutput = shell.exec("git pull mint-origin main", {
-      silent: true,
-    }).stdout;
-    shell.exec("git config core.sparseCheckout false", { silent: true });
-    shell.exec("rm .git/info/sparse-checkout", { silent: true });
+    shellExec("git config core.sparseCheckout true");
+    shellExec('echo "client/" >> .git/info/sparse-checkout');
+    pullOutput = shellExec("git pull mint-origin main").stdout;
+    shellExec("git config core.sparseCheckout false");
+    shellExec("rm .git/info/sparse-checkout");
   }
   if (pullOutput === "Already up to date.\n") {
     runYarn = false;
@@ -136,7 +142,7 @@ const dev = async () => {
     }
     logger.start("Updating dependencies...");
 
-    shell.exec("yarn", { silent: true });
+    shellExec("yarn");
     if (firstInstallation) {
       logger.succeed("Installation complete");
     } else {
