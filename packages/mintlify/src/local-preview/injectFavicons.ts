@@ -14,11 +14,8 @@ export const injectFavicons = async (configObj, logger) => {
   if (favicon == null) return;
   logger.start("Generating favicons...");
   const promises = [];
-  await favicons(favicon, faviconConfig(configObj?.name), (err, response) => {
-    if (err) {
-      console.log(err.message); // Error description e.g. "An unknown error has occurred"
-      return;
-    }
+  try {
+    const response = await favicons(favicon, faviconConfig(configObj?.name));
     response.images.forEach((img) => {
       promises.push(
         (async () => {
@@ -37,9 +34,11 @@ export const injectFavicons = async (configObj, logger) => {
         })()
       );
     });
-  });
-  await Promise.all(promises);
-  logger.succeed("Favicons generated");
+    await Promise.all(promises);
+    logger.succeed("Favicons generated");
+  } catch (err) {
+    console.log(err.message); // Error description e.g. "An unknown error has occurred"
+  }
 };
 
 const faviconConfig = (name) => ({
