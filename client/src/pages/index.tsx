@@ -1,5 +1,13 @@
+import { config, Navigation } from '@/config';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { config } from '@/config';
+
+const getFirstPage = (nav: Navigation | string): string | void => {
+  if (typeof nav === 'string') {
+    return nav;
+  } else if (typeof nav !== 'string' && nav.group && nav.pages) {
+    return getFirstPage(nav.pages[0]);
+  }
+};
 
 export default function Index() {
   return null;
@@ -8,9 +16,7 @@ export default function Index() {
 export async function getServerSideProps() {
   return {
     redirect: {
-      destination: `/${
-        (config?.navigation && config.navigation?.length > 0 && config.navigation[0].pages[0]) || ''
-      }`,
+      destination: `/${(config?.navigation && getFirstPage(config.navigation[0])) || ''}`,
       permanent: false,
     },
   };

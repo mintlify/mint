@@ -1,4 +1,21 @@
 import { config as fontawesomeConfig } from '@fortawesome/fontawesome-svg-core';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faDiscord,
+  faFacebook,
+  faGithub,
+  faLinkedin,
+  faSlack,
+  faTwitter,
+  faInstagram,
+  faHackerNews,
+  faGoogle,
+  faMicrosoft,
+  faAws,
+  faYoutube,
+  faMedium,
+  faReddit,
+} from '@fortawesome/free-brands-svg-icons';
 import {
   faBookBookmark,
   faBookOpen,
@@ -34,25 +51,9 @@ import {
   faCreditCard,
   faFileShield,
   faTags,
+  faGraduationCap,
 } from '@fortawesome/pro-duotone-svg-icons';
 import { faEarthAmericas } from '@fortawesome/pro-solid-svg-icons';
-import {
-  faDiscord,
-  faFacebook,
-  faGithub,
-  faLinkedin,
-  faSlack,
-  faTwitter,
-  faInstagram,
-  faHackerNews,
-  faGoogle,
-  faMicrosoft,
-  faAws,
-  faYoutube,
-  faMedium,
-  faReddit,
-} from '@fortawesome/free-brands-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core';
 
 fontawesomeConfig.replacementClass = '';
 library.add(
@@ -91,6 +92,7 @@ library.add(
   faCreditCard,
   faFileShield,
   faTags,
+  faGraduationCap,
   // Solids
   faEarthAmericas,
   // Brands
