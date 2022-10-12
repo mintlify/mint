@@ -15,6 +15,10 @@ export type HotjarConfigInterface = {
   hjsv?: string;
 };
 
+export type LogrocketConfigInterface = {
+  appId?: string;
+};
+
 export type MixpanelConfigInterface = {
   projectToken?: string;
 };
@@ -29,6 +33,7 @@ export type ConfigInterface = AmplitudeConfigInterface &
   FathomConfigInterface &
   GoogleAnalyticsConfigInterface &
   HotjarConfigInterface &
+  LogrocketConfigInterface &
   MixpanelConfigInterface &
   PostHogConfigInterface;
 

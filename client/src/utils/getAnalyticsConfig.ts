@@ -8,6 +8,7 @@ export default function getAnalyticsConfig(config: Config) {
     fathom: config.analytics?.fathom || config.__injected?.analytics?.fathom,
     ga4: config.analytics?.ga4 || config.__injected?.analytics?.ga4,
     hotjar: config.analytics?.hotjar || config.__injected?.analytics?.hotjar,
+    logrocket: config.analytics?.logrocket || config.__injected?.analytics?.logrocket,
     mixpanel: config.analytics?.mixpanel || config.__injected?.analytics?.mixpanel,
     posthog: config.analytics?.posthog || config.__injected?.analytics?.posthog,
   };

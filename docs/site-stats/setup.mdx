@@ -9,6 +9,7 @@ description: "Mintlify integrates with a variety of analytics platforms."
 - Fathom
 - Google Analytics 4 (GA4)
 - HotJar
+- Logrocket
 - Mixpanel
 - PostHog
 
@@ -36,6 +37,9 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
     "hotjar": {
         "hjid": "required",
         "hjsv": "required"
+    },
+    "logrocket": {
+        "appId": "required"
     },
     "mixpanel": {
         "projectToken": "required"

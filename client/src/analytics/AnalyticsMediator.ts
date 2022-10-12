@@ -9,6 +9,7 @@ import {
   MixpanelConfigInterface,
   PostHogConfigInterface,
   GoogleAnalyticsConfigInterface,
+  LogrocketConfigInterface,
 } from '@/analytics/AbstractAnalyticsImplementation';
 import PostHogAnalytics from '@/analytics/implementations/posthog';
 
@@ -16,12 +17,14 @@ import AmplitudeAnalytics from './implementations/amplitude';
 import FathomAnalytics from './implementations/fathom';
 import GA4Analytics from './implementations/ga4';
 import HotjarAnalytics from './implementations/hotjar';
+import LogrocketAnalytics from './implementations/logrocket';
 import MixpanelAnalytics from './implementations/mixpanel';
 
 export type AnalyticsMediatorConstructorInterface = {
   amplitude?: AmplitudeConfigInterface;
   fathom?: FathomConfigInterface;
   ga4?: GoogleAnalyticsConfigInterface;
+  logrocket?: LogrocketConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;
   posthog?: PostHogConfigInterface;
@@ -36,12 +39,14 @@ export default class AnalyticsMediator implements AnalyticsMediatorInterface {
     const fathomEnabled = Boolean(analytics?.fathom?.siteId);
     const ga4Enabled = Boolean(analytics?.ga4?.measurementId);
     const hotjarEnabled = Boolean(analytics?.hotjar?.hjid && analytics?.hotjar?.hjsv);
+    const logrocketEnabled = Boolean(analytics?.logrocket?.appId);
     const mixpanelEnabled = Boolean(analytics?.mixpanel?.projectToken);
     const posthogEnabled = Boolean(analytics?.posthog?.apiKey);
     Sentry.setTag('amplitude_enabled', `${amplitudeEnabled}`);
     Sentry.setTag('fathom_enabled', `${fathomEnabled}`);
     Sentry.setTag('ga4_enabled', `${ga4Enabled}`);
     Sentry.setTag('hotjar_enabled', `${hotjarEnabled}`);
+    Sentry.setTag('logrocket_enabled', `${logrocketEnabled}`);
     Sentry.setTag('mixpanel_enabled', `${mixpanelEnabled}`);
     Sentry.setTag('posthog_enabled', `${posthogEnabled}`);
 
@@ -71,6 +76,12 @@ export default class AnalyticsMediator implements AnalyticsMediatorInterface {
       const hotjar = new HotjarAnalytics();
       hotjar.init(analytics.hotjar!);
       this.analyticsIntegrations.push(hotjar);
+    }
+
+    if (logrocketEnabled) {
+      const logrocket = new LogrocketAnalytics();
+      logrocket.init(analytics.logrocket!);
+      this.analyticsIntegrations.push(logrocket);
     }
 
     if (posthogEnabled) {
