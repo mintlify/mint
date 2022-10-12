@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import Ora from "ora";
 import path from "path";
+import shell from "shelljs";
 import { Page } from "./init-command/templates.js";
 import stopIfInvalidLink from "./validation/stopIfInvalidLink.js";
 
@@ -91,4 +92,16 @@ export const fileBelongsInPagesFolder = (filename: string) => {
     extension &&
     (extension === "mdx" || extension === "md" || extension === "tsx")
   );
+};
+
+export const ensureYarn = (logger: any) => {
+  const yarnInstalled = shell.which("yarn");
+  if (!yarnInstalled) {
+    logger.fail(`yarn must be installed, run
+
+    npm install --global yarn
+
+    `);
+    process.exit(1);
+  }
 };

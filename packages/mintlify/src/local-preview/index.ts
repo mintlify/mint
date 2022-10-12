@@ -17,13 +17,9 @@ import { injectFavicons } from "./utils/injectFavicons.js";
 import listener from "./utils/listener.js";
 import { createPage, createMetadataFileFromPages } from "./utils/metadata.js";
 import { updateConfigFile } from "./utils/mintConfigFile.js";
-import { buildLogger } from "../util.js";
+import { buildLogger, ensureYarn } from "../util.js";
 
 const { readFile } = _promises;
-
-const saveInvocationPath = async () => {
-  await fse.outputFile(LAST_INVOCATION_PATH_FILE_LOCATION, CMD_EXEC_PATH);
-};
 
 const cleanOldFiles = async () => {
   const lastInvocationPathExists = await pathExists(
@@ -105,6 +101,9 @@ const shellExec = (cmd: string) => {
   return shell.exec(cmd, { silent: true });
 };
 
+const nodeModulesExists = async () => {
+  return pathExists(path.join(DOT_MINTLIFY, "mint", "client", "node_modules"));
+};
 const dev = async () => {
   shell.cd(HOME_DIR);
   const logger = buildLogger("Starting a local Mintlify instance...");
@@ -144,18 +143,14 @@ const dev = async () => {
   if (pullOutput === "Already up to date.\n") {
     runYarn = false;
   }
-  const yarnInstalled = shell.which("yarn");
-  if (!yarnInstalled) {
-    logger.fail('yarn must be installed. Run "npm install --global yarn"');
-    process.exit(1);
-  }
   shell.cd(CLIENT_PATH);
+  runYarn = !(await nodeModulesExists());
   if (internet && runYarn) {
     if (firstInstallation) {
       logger.succeed("Local Mintlify instance initialized");
     }
     logger.start("Updating dependencies...");
-
+    ensureYarn(logger);
     shellExec("yarn");
     if (firstInstallation) {
       logger.succeed("Installation complete");
@@ -163,10 +158,18 @@ const dev = async () => {
       logger.succeed("Dependencies updated");
     }
   }
+
+  if (!(await nodeModulesExists())) {
+    logger.fail(`Dependencies weren\'t installed, run
+    
+    mintlify install
+    
+    `);
+    process.exit(1);
+  }
   if (!firstInstallation) {
     await cleanOldFiles();
   }
-  await saveInvocationPath();
   await copyFiles(logger);
   run();
 };
