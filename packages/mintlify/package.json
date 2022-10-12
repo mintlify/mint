@@ -8,7 +8,7 @@
   "scripts": {
     "prepare": "tsc",
     "build": "tsc",
-    "local": "npm uninstall -g mintlify && npm i -g ."
+    "local": "tsc && npm uninstall -g mintlify && npm i -g ."
   },
   "author": "Mintlify, Inc.",
   "license": "ISC",

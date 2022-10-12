@@ -101,16 +101,6 @@ const copyFiles = async (logger: any) => {
   logger.succeed("All files synced");
 };
 
-const gitExists = () => {
-  let doesGitExist = true;
-  try {
-    shell.exec("git --version", { silent: true });
-  } catch (e) {
-    doesGitExist = false;
-  }
-  return doesGitExist;
-};
-
 const shellExec = (cmd: string) => {
   return shell.exec(cmd, { silent: true });
 };
@@ -121,7 +111,7 @@ const dev = async () => {
   await fse.ensureDir(path.join(DOT_MINTLIFY, "mint"));
   shell.cd(path.join(HOME_DIR, ".mintlify", "mint"));
   let runYarn = true;
-  const gitInstalled = gitExists();
+  const gitInstalled = shell.which("git");
   let firstInstallation = false;
   const gitRepoInitialized = await pathExists(
     path.join(DOT_MINTLIFY, "mint", ".git")
@@ -153,6 +143,11 @@ const dev = async () => {
   }
   if (pullOutput === "Already up to date.\n") {
     runYarn = false;
+  }
+  const yarnInstalled = shell.which("yarn");
+  if (!yarnInstalled) {
+    logger.fail('yarn must be installed. Run "npm install --global yarn"');
+    process.exit(1);
   }
   shell.cd(CLIENT_PATH);
   if (internet && runYarn) {
