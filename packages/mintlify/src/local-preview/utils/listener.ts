@@ -1,8 +1,8 @@
 import chokidar from "chokidar";
 import fse from "fs-extra";
 import path from "path";
-import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
-import { fileBelongsInPagesFolder, getFileExtension } from "../util.js";
+import { CLIENT_PATH, CMD_EXEC_PATH } from "../../constants.js";
+import { fileBelongsInPagesFolder, getFileExtension } from "../../util.js";
 import { createMetadataFile } from "./metadata.js";
 import openApiCheck from "./openApiCheck.js";
 

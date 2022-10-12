@@ -8,7 +8,7 @@ import categorizeFiles from "./categorizeFiles.js";
 import { getConfigObj } from "./mintConfigFile.js";
 import { getOpenApiTitleAndDescription } from "./getOpenApiContext.js";
 import { slugToTitle } from "./slugToTitle.js";
-import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
+import { CLIENT_PATH, CMD_EXEC_PATH } from "../../constants.js";
 
 const { readFile } = _promises;
 

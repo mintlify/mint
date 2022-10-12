@@ -5,7 +5,7 @@ import fse, { pathExists } from "fs-extra";
 import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
-import categorizeFiles from "./categorizeFiles.js";
+import categorizeFiles from "./utils/categorizeFiles.js";
 import {
   CMD_EXEC_PATH,
   CLIENT_PATH,
@@ -13,10 +13,10 @@ import {
   DOT_MINTLIFY,
   LAST_INVOCATION_PATH_FILE_LOCATION,
 } from "../constants.js";
-import { injectFavicons } from "./injectFavicons.js";
-import listener from "./listener.js";
-import { createPage, createMetadataFileFromPages } from "./metadata.js";
-import { updateConfigFile } from "./mintConfigFile.js";
+import { injectFavicons } from "./utils/injectFavicons.js";
+import listener from "./utils/listener.js";
+import { createPage, createMetadataFileFromPages } from "./utils/metadata.js";
+import { updateConfigFile } from "./utils/mintConfigFile.js";
 import { buildLogger } from "../util.js";
 
 const { readFile } = _promises;

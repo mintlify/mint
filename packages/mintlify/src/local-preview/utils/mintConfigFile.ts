@@ -2,7 +2,7 @@ import { promises as _promises } from "fs";
 import fse, { pathExists } from "fs-extra";
 import path from "path";
 
-import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
+import { CLIENT_PATH, CMD_EXEC_PATH } from "../../constants.js";
 
 const { readFile } = _promises;
 

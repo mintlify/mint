@@ -1,9 +1,9 @@
 import { promises as _promises } from "fs";
 import path from "path";
 
-import { CMD_EXEC_PATH } from "../constants.js";
+import { CMD_EXEC_PATH } from "../../constants.js";
 import openApiCheck from "./openApiCheck.js";
-import { getFileExtension } from "../util.js";
+import { getFileExtension } from "../../util.js";
 
 const { readdir } = _promises;
 

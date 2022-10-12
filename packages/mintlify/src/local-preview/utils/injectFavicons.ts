@@ -2,7 +2,7 @@ import favicons from "favicons";
 import { promises as _promises } from "fs";
 import { outputFile } from "fs-extra";
 import { join } from "path";
-import { CLIENT_PATH, CMD_EXEC_PATH } from "../constants.js";
+import { CLIENT_PATH, CMD_EXEC_PATH } from "../../constants.js";
 
 const { readFile } = _promises;
 
