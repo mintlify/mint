@@ -20,6 +20,7 @@ import { scrapeDocusaurusSection } from "./scraping/site-scrapers/scrapeDocusaur
 import { scrapeReadMeSection } from "./scraping/site-scrapers/scrapeReadMeSection.js";
 import dev from "./local-preview/index.js";
 import installDepsCommand from "./local-preview/helper-commands/installDepsCommand.js";
+import clearCommand from "./local-preview/helper-commands/clearCommand.js";
 
 // TODO - add descriptions to the command options https://github.com/yargs/yargs/blob/HEAD/docs/api.md#commandmodule
 yargs(hideBin(process.argv))
@@ -37,6 +38,7 @@ yargs(hideBin(process.argv))
     () => {},
     installDepsCommand
   )
+  .command("clear", "Clear cache", () => {}, clearCommand)
   .command("init", "Generate a mintlify template", () => {}, initCommand)
   .command("page", "Generate a new page", () => {}, generatePageTemplate)
   .command(

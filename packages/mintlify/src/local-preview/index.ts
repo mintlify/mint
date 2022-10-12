@@ -21,20 +21,6 @@ import { buildLogger, ensureYarn } from "../util.js";
 
 const { readFile } = _promises;
 
-const cleanOldFiles = async () => {
-  const lastInvocationPathExists = await pathExists(
-    LAST_INVOCATION_PATH_FILE_LOCATION
-  );
-  if (!lastInvocationPathExists) return;
-  const lastInvocationPath = (
-    await readFile(LAST_INVOCATION_PATH_FILE_LOCATION)
-  ).toString();
-  if (lastInvocationPath !== CMD_EXEC_PATH) {
-    // clean if invoked in new location
-    shellExec("git clean -d -x -e node_modules -e last-invocation-path -f");
-  }
-};
-
 const copyFiles = async (logger: any) => {
   logger.start("Syncing doc files...");
   shell.cd(CMD_EXEC_PATH);
@@ -166,9 +152,6 @@ const dev = async () => {
     
     `);
     process.exit(1);
-  }
-  if (!firstInstallation) {
-    await cleanOldFiles();
   }
   await copyFiles(logger);
   run();
