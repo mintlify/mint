@@ -15,8 +15,8 @@ import {
   scrapeSectionAutomatically,
   scrapeSectionAxiosWrapper,
   scrapeGitbookSectionCommand,
+  scrapeDocusaurusSectionCommand,
 } from "./scraping/scrapeSectionCommands.js";
-import { scrapeDocusaurusSection } from "./scraping/site-scrapers/scrapeDocusaurusSection.js";
 import { scrapeReadMeSection } from "./scraping/site-scrapers/scrapeReadMeSection.js";
 import dev from "./local-preview/index.js";
 
@@ -91,7 +91,7 @@ yargs(hideBin(process.argv))
     "Scrapes the Docusaurus section",
     () => {},
     async (argv) => {
-      await scrapeSectionAxiosWrapper(argv, scrapeDocusaurusSection);
+      await scrapeDocusaurusSectionCommand(argv);
     }
   )
   .command(
