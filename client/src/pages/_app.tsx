@@ -12,6 +12,7 @@ import AnalyticsMediator from '@/analytics/AnalyticsMediator';
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import GA4Script from '@/analytics/GA4Script';
 import { config } from '@/config';
+import Intercom from '@/integrations/Intercom';
 import { Meta } from '@/layouts/ContentsLayout';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/metadata';
@@ -101,38 +102,40 @@ export default function App(props: any) {
     metaTags[key as keyof PageContext] = value;
   });
   return (
-    <AnalyticsContext.Provider value={analyticsMediator}>
-      <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
-      <Head>
-        {config?.metadata &&
-          Object.entries(config?.metadata).map(([key, value]) => {
-            if (!value) {
-              return null;
-            }
-            return <meta key={key} name={key} content={value as any} />;
-          })}
-        {Object.entries(metaTags).map(([key, value]) => (
-          <meta key={key} name={key} content={value} />
-        ))}
-      </Head>
-      <GA4Script ga4={analytics.ga4} />
-      <SearchProvider>
-        <Header
-          hasNav={Boolean(config.navigation?.length)}
-          navIsOpen={navIsOpen}
-          onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-          title={meta?.title}
-          section={section}
-        />
-        <DocumentationLayout
-          isMdx={pageProps?.isMdx}
-          navIsOpen={navIsOpen}
-          setNavIsOpen={setNavIsOpen}
-          meta={meta}
-        >
-          <Component section={section} meta={meta} />
-        </DocumentationLayout>
-      </SearchProvider>
-    </AnalyticsContext.Provider>
+    <Intercom appId={config.integrations?.intercom} autoBoot>
+      <AnalyticsContext.Provider value={analyticsMediator}>
+        <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
+        <Head>
+          {config?.metadata &&
+            Object.entries(config?.metadata).map(([key, value]) => {
+              if (!value) {
+                return null;
+              }
+              return <meta key={key} name={key} content={value as any} />;
+            })}
+          {Object.entries(metaTags).map(([key, value]) => (
+            <meta key={key} name={key} content={value} />
+          ))}
+        </Head>
+        <GA4Script ga4={analytics.ga4} />
+        <SearchProvider>
+          <Header
+            hasNav={Boolean(config.navigation?.length)}
+            navIsOpen={navIsOpen}
+            onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+            title={meta?.title}
+            section={section}
+          />
+          <DocumentationLayout
+            isMdx={pageProps?.isMdx}
+            navIsOpen={navIsOpen}
+            setNavIsOpen={setNavIsOpen}
+            meta={meta}
+          >
+            <Component section={section} meta={meta} />
+          </DocumentationLayout>
+        </SearchProvider>
+      </AnalyticsContext.Provider>
+    </Intercom>
   );
 }

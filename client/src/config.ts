@@ -52,6 +52,10 @@ type Analytics = {
   posthog?: PostHogConfigInterface;
 };
 
+type Integrations = {
+  intercom?: string;
+};
+
 type FooterSocials = Record<string, string>;
 
 export type Config = {
@@ -98,6 +102,7 @@ export type Config = {
   };
   backgroundImage?: string;
   analytics?: Analytics;
+  integrations?: Integrations;
   __injected?: {
     analytics?: Analytics;
   };
