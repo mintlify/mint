@@ -48,6 +48,8 @@ Run the following command at the root of your Mintlify application to preview ch
 mintlify dev
 ```
 
+Note - `mintlify dev` requires `yarn` and it's recommended you install it as a global installation. If you don't have yarn installed already run `npm install --global yarn` in your terminal.
+
 #### Troubleshooting
 
 - Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
