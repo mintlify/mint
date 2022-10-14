@@ -28,24 +28,27 @@ export function Card({
 
   const activeConfigColor = isDarkMode ? config.colors?.light : config.colors?.primary;
 
-  const card = (
+  const Card = ({ forwardHref, onClick }: { forwardHref?: string; onClick?: any }) => (
     <GenericCard
       title={title}
       icon={icon}
       iconColor={color || activeConfigColor}
       hoverHighlightColour={href ? color || activeConfigColor : undefined}
+      href={forwardHref}
+      onClick={onClick}
     >
       {children}
     </GenericCard>
   );
 
-  if (href) {
+  // next/link is used for internal links to avoid extra network calls
+  if (href?.startsWith('/')) {
     return (
-      <Link href={href}>
-        <div>{card}</div>
+      <Link href={href} passHref={true}>
+        <Card />
       </Link>
     );
   }
 
-  return card;
+  return <Card forwardHref={href} />;
 }
