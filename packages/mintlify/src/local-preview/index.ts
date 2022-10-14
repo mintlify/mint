@@ -2,6 +2,7 @@ import Chalk from "chalk";
 import open from "open";
 import { promises as _promises } from "fs";
 import fse, { pathExists } from "fs-extra";
+import inquirer from "inquirer";
 import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
@@ -109,9 +110,33 @@ const shellExec = (cmd: string) => {
 const nodeModulesExists = async () => {
   return pathExists(path.join(DOT_MINTLIFY, "mint", "client", "node_modules"));
 };
+
+const promptForYarn = async () => {
+  const yarnInstalled = shell.which("yarn");
+  if (!yarnInstalled) {
+    await inquirer
+      .prompt([
+        {
+          type: "confirm",
+          name: "confirm",
+          message: "yarn must be globally installed. Install yarn?",
+          default: true,
+        },
+      ])
+      .then(({ confirm }) => {
+        if (confirm) {
+          shell.exec("npm install --global yarn");
+        } else {
+          console.log("Installation cancelled.");
+        }
+      });
+  }
+};
+
 const dev = async () => {
   shell.cd(HOME_DIR);
   await cleanOldFiles();
+  await promptForYarn();
   const logger = buildLogger("Starting a local Mintlify instance...");
   await fse.ensureDir(path.join(DOT_MINTLIFY, "mint"));
   shell.cd(path.join(HOME_DIR, ".mintlify", "mint"));
