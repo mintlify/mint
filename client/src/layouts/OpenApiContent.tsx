@@ -158,7 +158,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   const Parameters = operation.parameters?.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType } = parameter;
     const paramName = { [paramType]: name };
-    const type = getType(schema);
+    const type = schema == null ? parameter.type : getType(schema);
     apiComponents.push({
       type: Component.ParamField,
       attributes: [
@@ -180,12 +180,12 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
         {
           type: 'mdx',
           name: 'default',
-          value: schema.default,
+          value: schema?.default,
         },
         {
           type: 'mdx',
           name: 'enum',
-          value: schema.enum,
+          value: schema?.enum,
         },
       ],
     });
@@ -195,10 +195,10 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
         {...paramName}
         required={required}
         type={type}
-        default={schema.default}
-        enum={schema.enum}
+        default={schema?.default}
+        enum={schema?.enum}
       >
-        {description || schema.description || schema.title}
+        {description || schema?.description || schema?.title}
       </ParamField>
     );
   });
