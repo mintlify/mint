@@ -26,22 +26,24 @@ export default function middleware(req: NextRequest) {
       still need to add "*.platformize.vercel.app" as a wildcard domain on your Vercel dashboard. */
   const currentHost =
     process.env.NODE_ENV === 'production' && process.env.VERCEL === '1'
-      ? hostname.replace(`.vercel.pub`, '').replace(`.platformize.vercel.app`, '')
+      ? hostname.replace(`.mintlify.com`, '').replace(`.platformize.vercel.app`, '')
       : hostname.replace(`.localhost:3000`, '');
-  // rewrites for app pages
-  if (currentHost == 'app') {
-    if (
-      url.pathname === '/login' &&
-      (req.cookies.get('next-auth.session-token') ||
-        req.cookies.get('__Secure-next-auth.session-token'))
-    ) {
-      url.pathname = '/';
-      return NextResponse.redirect(url);
-    }
 
-    url.pathname = `/app${url.pathname}`;
-    return NextResponse.rewrite(url);
-  }
+  // may need this for self hosting one day:
+  // rewrites for app pages
+  // if (currentHost == 'app') {
+  //   if (
+  //     url.pathname === '/login' &&
+  //     (req.cookies.get('next-auth.session-token') ||
+  //       req.cookies.get('__Secure-next-auth.session-token'))
+  //   ) {
+  //     url.pathname = '/';
+  //     return NextResponse.redirect(url);
+  //   }
+
+  //   url.pathname = `/app${url.pathname}`;
+  //   return NextResponse.rewrite(url);
+  // }
 
   // rewrite root application to `/home` folder
   if (hostname === 'localhost:3000' || hostname === 'platformize.vercel.app') {
