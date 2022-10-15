@@ -158,7 +158,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   const Parameters = operation.parameters?.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType } = parameter;
     const paramName = { [paramType]: name };
-    const type = schema == null ? parameter.type : getType(schema);
+    const type = schema == null ? parameter?.type : getType(schema);
     apiComponents.push({
       type: Component.ParamField,
       attributes: [
