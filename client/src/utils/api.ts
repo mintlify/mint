@@ -59,7 +59,7 @@ const potentiallAddPathParams = (inputUrl: string, inputData: Record<string, any
   return url;
 };
 
-const getApiBody = (obj: Object, contentType: string) => {
+const getBody = (obj: Object, contentType: string) => {
   if (contentType === 'multipart/form-data') {
     let cleanedObj = removeEmpty(obj);
     const bodyFormData = new FormData();
@@ -72,6 +72,13 @@ const getApiBody = (obj: Object, contentType: string) => {
   return removeEmpty(obj);
 };
 
+const getHeaders = (obj: AxiosRequestHeaders, contentType: string): AxiosRequestHeaders => {
+  return {
+    ...obj,
+    'Content-Type': contentType,
+  };
+};
+
 export const getApiContext = (
   apiBase: string,
   path: string,
@@ -80,9 +87,11 @@ export const getApiContext = (
 ): { url: string; body?: Object; params?: Object; headers?: AxiosRequestHeaders } => {
   const endpoint = `${apiBase}${path}`;
   const url = potentiallAddPathParams(endpoint, inputData);
-  const body = getApiBody(inputData.Body, contentType);
+  const body = getBody(inputData.Body, contentType);
   const params = removeEmpty(inputData.Query);
-  const headers: AxiosRequestHeaders = inputData.Header || {};
+  const headers = getHeaders(inputData.Header || {}, contentType);
+
+  console.log(headers);
 
   if (inputData.Authorization) {
     const authEntires = Object.entries(inputData.Authorization);
