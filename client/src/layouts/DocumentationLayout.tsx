@@ -27,11 +27,11 @@ export function DocumentationLayout({
     return <>{children}</>;
   }
 
+  const title = meta.sidebarTitle || meta.title;
+
   return (
     <>
-      <Title suffix={router.pathname === '/' ? '' : config.name}>
-        {meta.sidebarTitle || meta.title}
-      </Title>
+      <Title suffix={router.pathname === '/' ? '' : config.name}>{title}</Title>
       <SidebarLayout nav={documentationNav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen}>
         {children}
       </SidebarLayout>

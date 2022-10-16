@@ -87,6 +87,8 @@ export default function App(props: any) {
 
   let section = undefined;
   let meta: Meta = {};
+
+  const title = meta.sidebarTitle || meta.title;
   documentationNav.forEach((group) => {
     const foundPage = findPageInGroup(group, router.pathname);
     if (foundPage) {
@@ -101,10 +103,11 @@ export default function App(props: any) {
     if (nonMetaTags.includes(key)) return;
     metaTags[key as keyof PageContext] = value;
   });
+
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <AnalyticsContext.Provider value={analyticsMediator}>
-        <Title suffix={config.name}>{meta.sidebarTitle || meta.title}</Title>
+        <Title suffix={config.name}>{title}</Title>
         <Head>
           {config?.metadata &&
             Object.entries(config?.metadata).map(([key, value]) => {

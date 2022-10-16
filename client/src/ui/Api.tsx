@@ -8,7 +8,6 @@ import {
   extractMethodAndEndpoint,
   getApiContext,
   getParamGroupsFromAPIComponents,
-  MediaType,
   Param,
   ParamGroup,
 } from '@/utils/api';
@@ -33,13 +32,13 @@ export const APIBASE_CONFIG_STORAGE = 'apiBaseIndex';
 
 export function Api({
   api,
-  media = 'json',
+  contentType = 'application/json',
   auth,
   children,
   apiComponents,
 }: {
   api: string;
-  media?: MediaType;
+  contentType?: string;
   auth?: string;
   children?: any;
   apiComponents?: ApiComponent[];
@@ -101,7 +100,7 @@ export function Api({
     setIsSendingResponse(true);
 
     try {
-      const apiContext = getApiContext(apiBase, path, inputData, media);
+      const apiContext = getApiContext(apiBase, path, inputData, contentType);
       const { data } = await axios.post('/api/request', {
         method,
         ...apiContext,
@@ -165,6 +164,7 @@ export function Api({
           />
         );
       case 'file':
+      case 'files':
         return (
           <button className="relative flex items-center px-2 w-full h-7 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-dashed hover:bg-slate-50 dark:hover:bg-slate-800">
             <input

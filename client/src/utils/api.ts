@@ -7,8 +7,6 @@ import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { ApiComponent } from '@/ui/Api';
 
-export type MediaType = 'json' | 'form';
-
 export type Child = {
   props: ParamProps & { mdxType: string };
 };
@@ -61,8 +59,8 @@ const potentiallAddPathParams = (inputUrl: string, inputData: Record<string, any
   return url;
 };
 
-const getApiBody = (obj: Object, media: MediaType) => {
-  if (media === 'form') {
+const getApiBody = (obj: Object, contentType: string) => {
+  if (contentType === 'multipart/form-data') {
     let cleanedObj = removeEmpty(obj);
     const bodyFormData = new FormData();
     for (var key in cleanedObj) {
@@ -78,11 +76,11 @@ export const getApiContext = (
   apiBase: string,
   path: string,
   inputData: Record<string, any>,
-  media: MediaType
+  contentType: string
 ): { url: string; body?: Object; params?: Object; headers?: AxiosRequestHeaders } => {
   const endpoint = `${apiBase}${path}`;
   const url = potentiallAddPathParams(endpoint, inputData);
-  const body = getApiBody(inputData.Body, media);
+  const body = getApiBody(inputData.Body, contentType);
   const params = removeEmpty(inputData.Query);
   const headers: AxiosRequestHeaders = inputData.Header || {};
 

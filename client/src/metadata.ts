@@ -1,7 +1,7 @@
 import metadataJson from './metadata.json';
 
 export const documentationNav: Groups = metadataJson;
-export const nonMetaTags = ['api', 'openapi', 'sidebarTitle'];
+export const nonMetaTags = ['api', 'openapi', 'sidebarTitle', 'contentType'];
 
 export type PageContext = {
   title?: string;
@@ -9,6 +9,7 @@ export type PageContext = {
   description?: string;
   api?: string;
   openapi?: string;
+  contentType?: string;
   href?: string;
 };
 

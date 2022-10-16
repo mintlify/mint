@@ -6,6 +6,7 @@ type PageHeaderProps = {
   description?: string;
   api?: string;
   openapi?: string;
+  contentType?: string;
   auth?: string;
   section: string;
   children: any;
@@ -17,6 +18,7 @@ export function PageHeader({
   description,
   section,
   api,
+  contentType, // TODO: Add documentation
   auth,
   children,
   apiComponents,
@@ -45,7 +47,15 @@ export function PageHeader({
       {description && (
         <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
-      {api && <Api api={api} children={children} auth={auth} apiComponents={apiComponents} />}
+      {api && (
+        <Api
+          api={api}
+          children={children}
+          auth={auth}
+          apiComponents={apiComponents}
+          contentType={contentType}
+        />
+      )}
     </header>
   );
 }
