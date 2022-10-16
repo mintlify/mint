@@ -34,6 +34,7 @@ const paramTypeToNameMap: Record<string, string> = {
   query: 'Query',
   path: 'Path',
   body: 'Body',
+  header: 'Header',
 };
 
 const getPlaceholderFromObjectOrString = (value: any): undefined => {
@@ -83,7 +84,7 @@ export const getApiContext = (
   const url = potentiallAddPathParams(endpoint, inputData);
   const body = getApiBody(inputData.Body, media);
   const params = removeEmpty(inputData.Query);
-  const headers: AxiosRequestHeaders = {};
+  const headers: AxiosRequestHeaders = inputData.Header || {};
 
   if (inputData.Authorization) {
     const authEntires = Object.entries(inputData.Authorization);
@@ -200,13 +201,27 @@ export const getParamGroupsFromAPIComponents = (
     });
 
   paramFields?.forEach((paramField) => {
+    if (paramField == null) {
+      return;
+    }
+
+    const { query, body, path, header } = paramField;
+
     let paramType;
-    if (paramField?.query) {
+    let name;
+
+    if (query) {
       paramType = 'query';
-    } else if (paramField?.path) {
+      name = query;
+    } else if (path) {
       paramType = 'path';
-    } else if (paramField?.body) {
+      name = path;
+    } else if (body) {
       paramType = 'body';
+      name = body;
+    } else if (header) {
+      paramType = 'header';
+      name = header;
     }
 
     if (!paramType) {
@@ -215,14 +230,6 @@ export const getParamGroupsFromAPIComponents = (
 
     const groupName = paramTypeToNameMap[paramType];
     const existingGroup = groups[groupName];
-
-    const { query, body, path } = paramField;
-
-    let name = query || body || path;
-
-    if (!name) {
-      return;
-    }
 
     const { placeholder, default: defaultValue, required, type, enum: enumValues } = paramField;
 
