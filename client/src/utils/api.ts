@@ -91,8 +91,6 @@ export const getApiContext = (
   const params = removeEmpty(inputData.Query);
   const headers = getHeaders(inputData.Header || {}, contentType);
 
-  console.log(headers);
-
   if (inputData.Authorization) {
     const authEntires = Object.entries(inputData.Authorization);
     if (config.api?.auth?.method === 'basic' && authEntires.length === 2) {
