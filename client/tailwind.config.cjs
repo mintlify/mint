@@ -196,6 +196,8 @@ module.exports = {
               minWidth: '100%',
             },
             table: {
+              display: 'block',
+              overflow: 'auto',
               fontSize: theme('fontSize.sm')[0],
               lineHeight: theme('fontSize.sm')[1].lineHeight,
             },
