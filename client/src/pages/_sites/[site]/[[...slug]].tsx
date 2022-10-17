@@ -1,11 +1,11 @@
-// import axios from 'axios';
+import axios from 'axios';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import type { ParsedUrlQuery } from 'querystring';
 
-// const API_ENDPOINT = process.env.API_ENDPOINT;
+const API_ENDPOINT = process.env.API_ENDPOINT;
 
 interface PageProps {
   stringifiedData: string;
@@ -29,25 +29,21 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  // const { data }: { data: Record<string, string[][]> } = await axios.get(
-  //   `${API_ENDPOINT}/api/v1/admin/builds/paths`
-  // );
-  // const paths = Object.entries(data).flatMap(
-  //   ([subdomain, pathsForSubdomain]: [string, string[][]]) => {
-  //     return pathsForSubdomain.map((pathForSubdomain) => ({
-  //       params: { site: subdomain, slug: pathForSubdomain },
-  //     }));
-  //   }
-  // );
+  const { data }: { data: Record<string, string[][]> } = await axios.get(
+    `${API_ENDPOINT}/api/v1/admin/builds/paths`,
+    {
+      headers: { Authorization: `Bearer ${process.env.INTERNAL_SITE_BEARER_TOKEN}` },
+    }
+  );
+  const paths = Object.entries(data).flatMap(
+    ([subdomain, pathsForSubdomain]: [string, string[][]]) => {
+      return pathsForSubdomain.map((pathForSubdomain) => ({
+        params: { site: subdomain, slug: pathForSubdomain },
+      }));
+    }
+  );
   return {
-    paths: [
-      {
-        params: {
-          site: 'mintlify',
-          slug: undefined,
-        },
-      },
-    ],
+    paths,
     fallback: true, // TODO: Change this to true once ISR is implemented https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
   };
 };
