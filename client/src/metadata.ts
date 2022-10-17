@@ -1,6 +1,16 @@
-import metadataJson from './metadata.json';
+export const documentationNav: Groups = [
+  {
+    group: 'Home',
+    pages: [
+      {
+        title: 'Hello World',
+        description: 'hello',
+        href: '',
+      },
+    ],
+  },
+];
 
-export const documentationNav: Groups = metadataJson;
 export const nonMetaTags = ['api', 'openapi', 'sidebarTitle', 'contentType'];
 
 export type PageContext = {
