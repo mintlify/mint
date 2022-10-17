@@ -5,6 +5,8 @@ import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import type { ParsedUrlQuery } from 'querystring';
 
+import { Heading } from '@/components/Heading';
+
 const API_ENDPOINT = process.env.API_ENDPOINT;
 
 interface PageProps {
@@ -18,7 +20,7 @@ export default function Page({ stringifiedData }: PageProps) {
 
   return (
     <div>
-      <MDXRemote {...mdxSource} />
+      <MDXRemote components={{ Heading }} {...mdxSource} />
     </div>
   );
 }
