@@ -21,6 +21,7 @@ openapi
 /public/*
 /src/pages/*
 !/src/pages/api
+!/src/pages/_sites/
 /src/pages/api/*.mdx
 !/src/pages/*.tsx
 !/src/pages/*.ts

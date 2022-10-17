@@ -1,7 +1,24 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const svgToDataUri = require('mini-svg-data-uri');
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
-const config = require('./src/mint.json');
+
+// TODO - dynamically set the colors
+const config = {
+  anchors: [
+    {
+      name: 'Community',
+      icon: 'comments',
+      color: '#2564eb',
+      url: 'https://discord.gg/b499CK8P9g',
+    },
+    {
+      name: 'GitHub',
+      icon: 'github',
+      color: '#333333',
+      url: 'https://github.com/mintlify/mint',
+    },
+  ],
+};
 
 const ctaColors = {};
 config?.anchors?.forEach((anchor, i) => {
