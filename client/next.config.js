@@ -1,22 +1,22 @@
+import BundleAnalyzer from '@next/bundle-analyzer';
 import { withSentryConfig } from '@sentry/nextjs';
-import withLinkRoles from './rehype/withLinkRoles.js';
-import { createLoader } from 'simple-functional-loader';
 import frontMatter from 'front-matter';
+import remarkGfm from 'remark-gfm';
 import withSmartypants from 'remark-smartypants';
-import withTableOfContents from './remark/withTableOfContents.js';
+import { createLoader } from 'simple-functional-loader';
+
+import { potentiallyRemoveEndMatter } from './prebuild/injectNav.js';
+import withApiComponents from './rehype/withApiComponents.js';
 import withCodeBlocks from './rehype/withCodeBlocks.js';
-import withNextLinks from './remark/withNextLinks.js';
+import withLayouts from './rehype/withLayouts.js';
+import withLinkRoles from './rehype/withLinkRoles.js';
+import withRawComponents from './rehype/withRawComponents.js';
+import withStaticProps from './rehype/withStaticProps.js';
+import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
 import withImportsInjected from './remark/withImportsInjected.js';
-import BundleAnalyzer from '@next/bundle-analyzer';
-import remarkGfm from 'remark-gfm';
-import withStaticProps from './rehype/withStaticProps.js';
-import withApiComponents from './rehype/withApiComponents.js';
-import withRawComponents from './rehype/withRawComponents.js';
-import mintConfig from './src/mint.json' assert { type: 'json' };
-import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
-import withLayouts from './rehype/withLayouts.js';
-import { potentiallyRemoveEndMatter } from './prebuild/injectNav.js';
+import withNextLinks from './remark/withNextLinks.js';
+import withTableOfContents from './remark/withTableOfContents.js';
 
 const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -39,7 +39,6 @@ export default withSentryConfig(
     images: {
       disableStaticImages: true,
     },
-    basePath: mintConfig?.basePath,
     webpack(config, options) {
       config.module.rules.push({
         test: /\.(png|jpe?g|gif|webp|avif|mp4)$/i,
@@ -135,7 +134,7 @@ export default withSentryConfig(
                     isMdx: true
                   }`,
                 ],
-                withLayouts
+                withLayouts,
               ],
             },
           },

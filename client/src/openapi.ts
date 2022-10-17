@@ -1,3 +1,2 @@
-import openapiJSON from './openapi.json';
-
-export const openApi = openapiJSON as any;
+// TODO - get openApi data from backend
+export const openApi = undefined as any;
