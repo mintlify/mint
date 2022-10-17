@@ -8,7 +8,6 @@ import { config } from '@/config';
 import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
-import { MediaType } from '@/utils/api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 
 type OpenApiContentProps = {
@@ -21,15 +20,6 @@ const getType = (schema: any) => {
     return 'file';
   }
   return schema.type;
-};
-
-const getMedia = (name: string): MediaType => {
-  switch (name) {
-    case 'multipart/form-data':
-      return 'form';
-    default:
-      return 'json';
-  }
 };
 
 const getEnumDescription = (enumArray?: string[]): React.ReactNode | null => {
@@ -204,8 +194,8 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   });
 
   const bodyContent = operation.requestBody?.content;
-  const contentMedia = bodyContent && Object.keys(bodyContent)[0];
-  const bodySchema = bodyContent && bodyContent[contentMedia]?.schema;
+  const contentType = bodyContent && Object.keys(bodyContent)[0];
+  const bodySchema = bodyContent && bodyContent[contentType]?.schema;
 
   const Body =
     bodySchema?.properties &&
@@ -275,7 +265,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   return (
     <div className="prose prose-slate dark:prose-dark">
-      <Api api={api} media={getMedia(contentMedia)} auth={auth} apiComponents={apiComponents} />
+      <Api api={api} contentType={contentType} auth={auth} apiComponents={apiComponents} />
       <div>
         {Parameters?.length > 0 && (
           <Heading level={3} id="parameters" nextElement={null}>

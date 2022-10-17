@@ -4,6 +4,7 @@ export type ParamProps = {
   query?: string;
   path?: string;
   body?: string;
+  header?: string;
   children: any;
   default?: string;
   type?: string;
@@ -26,6 +27,7 @@ export function ParamField({
   query,
   path,
   body,
+  header,
   children,
   default: defaultValue,
   type,
@@ -35,11 +37,11 @@ export function ParamField({
   placeholder,
   enum: enumValues,
 }: ParamProps) {
-  if (!query && !path && !body) {
+  const name = query || path || body || header;
+
+  if (name == null) {
     return null;
   }
-
-  const name = query || path || body;
 
   return (
     <GenericParam

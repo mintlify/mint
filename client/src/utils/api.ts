@@ -7,8 +7,6 @@ import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { ApiComponent } from '@/ui/Api';
 
-export type MediaType = 'json' | 'form';
-
 export type Child = {
   props: ParamProps & { mdxType: string };
 };
@@ -34,6 +32,7 @@ const paramTypeToNameMap: Record<string, string> = {
   query: 'Query',
   path: 'Path',
   body: 'Body',
+  header: 'Header',
 };
 
 const getPlaceholderFromObjectOrString = (value: any): undefined => {
@@ -60,8 +59,8 @@ const potentiallAddPathParams = (inputUrl: string, inputData: Record<string, any
   return url;
 };
 
-const getApiBody = (obj: Object, media: MediaType) => {
-  if (media === 'form') {
+const getBody = (obj: Object, contentType: string) => {
+  if (contentType === 'multipart/form-data') {
     let cleanedObj = removeEmpty(obj);
     const bodyFormData = new FormData();
     for (var key in cleanedObj) {
@@ -73,17 +72,24 @@ const getApiBody = (obj: Object, media: MediaType) => {
   return removeEmpty(obj);
 };
 
+const getHeaders = (obj: AxiosRequestHeaders, contentType: string): AxiosRequestHeaders => {
+  return {
+    ...obj,
+    'Content-Type': contentType,
+  };
+};
+
 export const getApiContext = (
   apiBase: string,
   path: string,
   inputData: Record<string, any>,
-  media: MediaType
+  contentType: string
 ): { url: string; body?: Object; params?: Object; headers?: AxiosRequestHeaders } => {
   const endpoint = `${apiBase}${path}`;
   const url = potentiallAddPathParams(endpoint, inputData);
-  const body = getApiBody(inputData.Body, media);
+  const body = getBody(inputData.Body, contentType);
   const params = removeEmpty(inputData.Query);
-  const headers: AxiosRequestHeaders = {};
+  const headers = getHeaders(inputData.Header || {}, contentType);
 
   if (inputData.Authorization) {
     const authEntires = Object.entries(inputData.Authorization);
@@ -200,13 +206,27 @@ export const getParamGroupsFromAPIComponents = (
     });
 
   paramFields?.forEach((paramField) => {
+    if (paramField == null) {
+      return;
+    }
+
+    const { query, body, path, header } = paramField;
+
     let paramType;
-    if (paramField?.query) {
+    let name;
+
+    if (query) {
       paramType = 'query';
-    } else if (paramField?.path) {
+      name = query;
+    } else if (path) {
       paramType = 'path';
-    } else if (paramField?.body) {
+      name = path;
+    } else if (body) {
       paramType = 'body';
+      name = body;
+    } else if (header) {
+      paramType = 'header';
+      name = header;
     }
 
     if (!paramType) {
@@ -215,14 +235,6 @@ export const getParamGroupsFromAPIComponents = (
 
     const groupName = paramTypeToNameMap[paramType];
     const existingGroup = groups[groupName];
-
-    const { query, body, path } = paramField;
-
-    let name = query || body || path;
-
-    if (!name) {
-      return;
-    }
 
     const { placeholder, default: defaultValue, required, type, enum: enumValues } = paramField;
 

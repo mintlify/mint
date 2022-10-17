@@ -175,6 +175,7 @@ export type Meta = {
   auth?: string;
   api?: string;
   openapi?: string;
+  contentType?: string;
   size?: 'wide';
 };
 
@@ -220,6 +221,7 @@ export function ContentsLayout({
         description={meta.description}
         api={meta.api}
         openapi={meta.openapi}
+        contentType={meta.contentType}
         auth={meta.auth}
         section={section}
         children={children}
