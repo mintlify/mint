@@ -1,13 +1,21 @@
+<<<<<<< HEAD
 import axios from 'axios';
+=======
+// import axios from 'axios';
+>>>>>>> 1dc99b3 (hello world!)
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import type { ParsedUrlQuery } from 'querystring';
 
+<<<<<<< HEAD
 import { Heading } from '@/components/Heading';
 
 const API_ENDPOINT = process.env.API_ENDPOINT;
+=======
+// const API_ENDPOINT = process.env.API_ENDPOINT;
+>>>>>>> 1dc99b3 (hello world!)
 
 interface PageProps {
   stringifiedData: string;
@@ -20,7 +28,11 @@ export default function Page({ stringifiedData }: PageProps) {
 
   return (
     <div>
+<<<<<<< HEAD
       <MDXRemote components={{ Heading }} {...mdxSource} />
+=======
+      <MDXRemote {...mdxSource} />
+>>>>>>> 1dc99b3 (hello world!)
     </div>
   );
 }
