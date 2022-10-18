@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
 import { SidebarContext } from '@/layouts/SidebarLayout';
-import { PageContext, GroupPage, isGroup, flattenGroupPages } from '@/metadata';
+import { PageMetaTags, GroupPage, isGroup, flattenGroupPages } from '@/types/metadata';
 
-const getFirstNonGroupPage = (groupPage?: GroupPage): PageContext | null => {
+const getFirstNonGroupPage = (groupPage?: GroupPage): PageMetaTags | null => {
   if (groupPage == null) {
     return null;
   }
@@ -19,8 +19,8 @@ const getFirstNonGroupPage = (groupPage?: GroupPage): PageContext | null => {
 export function usePrevNext() {
   let router = useRouter();
   let { nav } = useContext(SidebarContext);
-  let pages: PageContext[] = nav.reduce(
-    (acc: PageContext[], currentGroup: { pages: PageContext[] }) => {
+  let pages: PageMetaTags[] = nav.reduce(
+    (acc: PageMetaTags[], currentGroup: { pages: PageMetaTags[] }) => {
       return acc.concat(...flattenGroupPages(currentGroup.pages));
     },
     []

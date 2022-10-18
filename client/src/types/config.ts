@@ -6,7 +6,7 @@ import {
   LogrocketConfigInterface,
   MixpanelConfigInterface,
   PostHogConfigInterface,
-} from './analytics/AbstractAnalyticsImplementation';
+} from '../analytics/AbstractAnalyticsImplementation';
 
 // TODO - get config data from backend
 export const config: Config = {

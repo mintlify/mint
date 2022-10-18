@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { forwardRef } from 'react';
 
-import { config } from '@/config';
+import { config } from '@/types/config';
 import {
   getAnchorBackgroundColor,
   getAnchorHoverBackgroundColor,

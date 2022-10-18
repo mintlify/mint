@@ -3,8 +3,8 @@ import { Card as GenericCard } from '@mintlify/components';
 import Link from 'next/link';
 import { ReactNode, useState } from 'react';
 
-import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { config } from '@/types/config';
 
 export function Card({
   title,

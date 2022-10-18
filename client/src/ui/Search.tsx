@@ -15,8 +15,8 @@ import {
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { config } from '@/config';
 import { useActionKey } from '@/hooks/useActionKey';
+import { config } from '@/types/config';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');

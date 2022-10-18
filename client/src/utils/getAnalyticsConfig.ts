@@ -1,4 +1,4 @@
-import { Config } from '@/config';
+import { Config } from '@/types/config';
 
 export default function getAnalyticsConfig(config: Config) {
   // If any values are in mint.json they override ALL injected values.

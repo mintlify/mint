@@ -1,4 +1,5 @@
-import { openApi } from '@/openapi';
+import { openApi } from '@/types/openapi';
+
 import { extractMethodAndEndpoint } from './api';
 
 export const getOpenApiOperationMethodAndEndpoint = (openapi: string) => {

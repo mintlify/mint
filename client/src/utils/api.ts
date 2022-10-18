@@ -2,9 +2,9 @@ import { AxiosRequestHeaders } from 'axios';
 import isAbsoluteUrl from 'is-absolute-url';
 
 import { ParamProps } from '@/components/Param';
-import { config } from '@/config';
 import { Component } from '@/enums/components';
-import { openApi } from '@/openapi';
+import { config } from '@/types/config';
+import { openApi } from '@/types/openapi';
 import { ApiComponent } from '@/ui/Api';
 
 export type Child = {
