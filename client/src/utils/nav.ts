@@ -40,7 +40,7 @@ export function getGroupsInVersion(nav: Groups, version: string): Groups {
     return nav;
   }
 
-  return nav.map((entry) => getInVersion(entry, version)).filter(Boolean) as Groups;
+  return nav.map((entry: Group) => getInVersion(entry, version)).filter(Boolean) as Groups;
 }
 
 // Recursive helper to see if a single group should be displayed.
@@ -55,7 +55,7 @@ function getInVersion(entry: GroupPage, version: string): GroupPage | undefined 
     return {
       ...entry,
       pages: entry.pages
-        .map((subEntry) => getInVersion(subEntry, version))
+        .map((subEntry: GroupPage) => getInVersion(subEntry, version))
         .filter(Boolean) as GroupPage[],
     };
   }

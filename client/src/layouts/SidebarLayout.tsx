@@ -10,12 +10,14 @@ import { createContext, forwardRef, useRef, useState } from 'react';
 import { VersionContext } from '@/context/VersionContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageContext, Group, Groups, GroupPage, isGroup } from '@/metadata';
+import { getGroupsInDivision, getGroupsNotInDivision } from '@/layouts/getGroupsInDivision';
+import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
 
-import { config, findFirstNavigationEntry } from '../config';
+import { config, findFirstNavigationEntry } from '../types/config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
 
 type SidebarContextType = {
@@ -143,7 +145,7 @@ const GroupDropdown = ({ group, level }: { group: Group; level: number }) => {
           ></path>
         </svg>
       </span>
-      {isOpen && pages.map((subpage) => <NavItem groupPage={subpage} level={level + 1} />)}
+      {isOpen && pages.map((subpage: GroupPage) => <NavItem groupPage={subpage} level={level + 1} />)}
     </>
   );
 };
@@ -228,7 +230,7 @@ function Nav({ nav, children, mobile = false }: any) {
         {nav &&
           numPages > 0 &&
           nav
-            .map(({ group, pages }: { group: string; pages: PageContext[] }, i: number) => {
+            .map(({ group, pages }: { group: string; pages: PageMetaTags[] }, i: number) => {
               return (
                 <li
                   key={i}

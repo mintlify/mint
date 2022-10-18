@@ -204,7 +204,7 @@ export function ContentsLayout({
     (component: any) => component.type === 'ResponseExample' || component.type === 'RequestExample'
   );
 
-  const isWideSize = meta.size === 'wide';
+  const isWideSize = meta?.size === 'wide';
 
   return (
     <div

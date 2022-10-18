@@ -2,7 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import { config } from '@/config';
+import { config } from '@/types/config';
 import {
   BASEPATH,
   extractBaseAndPath,

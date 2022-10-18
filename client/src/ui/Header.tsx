@@ -12,7 +12,7 @@ import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
 
-import { config, TopbarCta } from '../config';
+import { config, TopbarCta } from '../types/config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 import { VersionSelect } from './VersionSelect';
 

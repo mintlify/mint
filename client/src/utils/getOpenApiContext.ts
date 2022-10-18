@@ -1,4 +1,4 @@
-import { openApi } from '@/openapi';
+import { openApi } from '@/types/openapi';
 
 import { extractMethodAndEndpoint } from './api';
 

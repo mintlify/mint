@@ -11,9 +11,17 @@ export const documentationNav: Groups = [
   },
 ];
 
-export const nonMetaTags = ['api', 'openapi', 'sidebarTitle', 'contentType'];
+export const META_TAGS_FOR_LAYOUT = [
+  'api',
+  'openapi',
+  'sidebarTitle',
+  'contentType',
+  'href',
+  'size',
+  'auth',
+];
 
-export type PageContext = {
+export type PageMetaTags = {
   title?: string;
   sidebarTitle?: string;
   description?: string;
@@ -21,6 +29,8 @@ export type PageContext = {
   openapi?: string;
   contentType?: string;
   href?: string;
+  auth?: string;
+  size?: string;
   version?: string;
 };
 
@@ -32,10 +42,10 @@ export type Group = {
   pages: GroupPage[];
 };
 
-export type GroupPage = PageContext | Group;
+export type GroupPage = PageMetaTags | Group;
 
 export const isGroup = (group: GroupPage): group is Group => {
-  // Used in if-statements to case GroupPage into either PageContext or Group
+  // Used in if-statements to case GroupPage into either PageMetaTags or Group
   // The return type "group is Group" is the cast
   return group && group.hasOwnProperty('group') && group.hasOwnProperty('pages');
 };
@@ -43,11 +53,11 @@ export const isGroup = (group: GroupPage): group is Group => {
 export const findPageInGroup = (
   group: Group,
   targetHref: string
-): { group: string; page: PageContext } | undefined => {
+): { group: string; page: PageMetaTags } | undefined => {
   const { pages } = group;
   let target = undefined;
   pages.forEach((page) => {
-    const actualPage = page as PageContext;
+    const actualPage = page as PageMetaTags;
     const subGroup = page as Group;
     if (actualPage?.href === targetHref) {
       target = { group: group.group, page: actualPage };
@@ -61,7 +71,7 @@ export const findPageInGroup = (
   return target;
 };
 
-export const flattenGroupPages = (groupPages: GroupPage[]): PageContext[] => {
+export const flattenGroupPages = (groupPages: GroupPage[]): PageMetaTags[] => {
   return groupPages.flatMap((groupPage) => {
     if (isGroup(groupPage)) {
       return flattenGroupPages(groupPage.pages);

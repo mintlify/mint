@@ -4,19 +4,18 @@ import { ReactNode, useContext } from 'react';
 import { config } from '@/config';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
-import { documentationNav } from '@/metadata';
+import { config } from '@/types/config';
+import { documentationNav } from '@/types/metadata';
 import { Title } from '@/ui/Title';
 
 import { Meta } from './ContentsLayout';
 
 export function DocumentationLayout({
-  isMdx,
   navIsOpen,
   setNavIsOpen,
   meta,
   children,
 }: {
-  isMdx: boolean;
   navIsOpen: boolean;
   setNavIsOpen: any;
   meta: Meta;
@@ -27,10 +26,6 @@ export function DocumentationLayout({
 
   if (meta.version) {
     setSelectedVersion(meta.version);
-  }
-
-  if (!isMdx) {
-    return <>{children}</>;
   }
 
   const title = meta.sidebarTitle || meta.title;
