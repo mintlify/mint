@@ -31,9 +31,15 @@ export default class Document extends NextDocument {
             dangerouslySetInnerHTML={{
               __html: `
                 try {
-                  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  if (localStorage.theme === 'dark' || (${(
+                    config.modeToggle?.default == null
+                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
+                config.modeToggle?.default === 'dark'
+              ).toString()}) {
                     document.documentElement.classList.add('dark')
-                  } else {
+                  }
+                  
+                  else {
                     document.documentElement.classList.remove('dark')
                   }
                 } catch (_) {}

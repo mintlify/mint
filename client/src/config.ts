@@ -73,6 +73,10 @@ export type Config = {
       inputPrefix?: string;
     };
   };
+  modeToggle?: {
+    default?: string; // 'light' or 'dark'
+    isHidden?: boolean;
+  };
   metadata?: any;
   colors?: {
     primary: string;

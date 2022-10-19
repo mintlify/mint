@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Fragment, useEffect, useRef } from 'react';
 import create from 'zustand';
 
+import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 
 const useSetting = create((set: any) => ({
@@ -13,7 +14,10 @@ const useSetting = create((set: any) => ({
 function update() {
   if (
     localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    (config.modeToggle?.default == null &&
+      !('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+    config.modeToggle?.default === 'dark'
   ) {
     document.documentElement.classList.add('dark', 'changing-theme');
   } else {
@@ -100,7 +104,7 @@ function PcIcon({ selected, ...props }: { selected: boolean; className: string }
         strokeLinejoin="round"
         className={
           selected
-            ? 'stroke-primary dark:stroke-primary-light fill-primary-light/20'
+            ? 'stroke-primary dark:stroke-primary-light dark:fill-primary-light/20'
             : 'stroke-slate-400 dark:stroke-slate-500'
         }
       />
