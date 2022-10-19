@@ -38,7 +38,12 @@ yargs(hideBin(process.argv))
     () => {},
     installDepsCommand
   )
-  .command("clear", "Clear cache", () => {}, clearCommand)
+  .command(
+    "clear",
+    "Clear cache",
+    () => {},
+    (args) => clearCommand(args)
+  )
   .command("init", "Generate a mintlify template", () => {}, initCommand)
   .command("page", "Generate a new page", () => {}, generatePageTemplate)
   .command(
