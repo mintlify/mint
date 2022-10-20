@@ -15,8 +15,8 @@ import {
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { config } from '@/config';
 import { useActionKey } from '@/hooks/useActionKey';
+import { BASEPATH } from '@/utils/api';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
@@ -193,7 +193,7 @@ export function SearchProvider({ children }: any) {
   const [hits, setHits] = useState<Hit[]>([]);
 
   useEffect(() => {
-    axios.get(`${config.basePath ?? ''}/api/name`).then(({ data }) => {
+    axios.get(`${BASEPATH}/api/name`).then(({ data }) => {
       setSearchId(data);
     });
   }, []);

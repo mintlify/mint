@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { config } from '@/config';
 import {
+  BASEPATH,
   extractBaseAndPath,
   extractMethodAndEndpoint,
   getApiContext,
@@ -101,7 +102,7 @@ export function Api({
 
     try {
       const apiContext = getApiContext(apiBase, path, inputData, contentType);
-      const { data } = await axios.post('/api/request', {
+      const { data } = await axios.post(`${BASEPATH}/api/request`, {
         method,
         ...apiContext,
       });

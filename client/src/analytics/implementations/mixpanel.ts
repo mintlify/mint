@@ -49,4 +49,10 @@ export default class MixpanelAnalytics extends AbstractAnalyticsImplementation {
     };
     return captureFunc.bind(this);
   }
+
+  onRouteChange(url: string): void {
+    this.mixpanel.track('pageview', {
+      path: url,
+    });
+  }
 }

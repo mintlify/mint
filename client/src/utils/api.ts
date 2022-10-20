@@ -27,6 +27,8 @@ export type ParamGroup = {
   params: Param[];
 };
 
+export const BASEPATH = config.basePath || '';
+
 const paramTypeToNameMap: Record<string, string> = {
   auth: 'Authorization',
   query: 'Query',

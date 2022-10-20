@@ -35,7 +35,7 @@ const cleanOldFiles = async () => {
   ).toString();
   if (lastInvocationPath !== CMD_EXEC_PATH) {
     // clean if invoked in new location
-    await clearCommand();
+    await clearCommand({});
   }
 };
 

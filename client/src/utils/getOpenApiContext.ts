@@ -1,4 +1,5 @@
 import { openApi } from '@/openapi';
+
 import { extractMethodAndEndpoint } from './api';
 
 export const getOpenApiOperationMethodAndEndpoint = (openapi: string) => {
@@ -21,6 +22,7 @@ export const getOpenApiOperationMethodAndEndpoint = (openapi: string) => {
   return {
     operation,
     method,
+    path,
     endpoint,
   };
 };

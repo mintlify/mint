@@ -93,6 +93,9 @@
   "analytics": {
     "fathom": {
       "siteId": "YSVUHCAK"
+    },
+    "logrocket": {
+      "appId": "jayige/mintlify"
     }
   }
 }

@@ -1973,10 +1973,10 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@mintlify/components@^0.1.28":
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.28.tgz#0785dc926e0041dd4041882ed04abb0b38cac81d"
-  integrity sha512-vmXiUmEOf8uSm+kL/vYMZHtx7dyxcvGx9EG6RT+KFn0+ciGKTIQPBpHCj5YSv/9rYn1UrHjhFR4JUkBqovnG4g==
+"@mintlify/components@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.30.tgz#4d1678b7c97366435359fda9f856fcdf46b8d71b"
+  integrity sha512-6BvCwdNyoxgUUWbnMHmhI9EEQXhYao/jqKit6FH/uA6x5uPvCWYYHQnUP2/G1uGX7d+Tw8xnfTI0GSd6w/xgFg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.2.0"
     "@fortawesome/react-fontawesome" "^0.2.0"
@@ -2585,6 +2585,13 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
+
+"@types/logrocket-react@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/logrocket-react/-/logrocket-react-3.0.0.tgz#88278ec2fe093ff55496d66aea9056fe1061ecea"
+  integrity sha512-bQ7LUwqwt2RNpRoco3vt8QBHy78nOQFF+KfFRol1PgKq8S1nIiLYA6Y0ZUAzqGw1viA0lyjAHlPQeTI+wl4wnw==
+  dependencies:
+    logrocket "1.0.1"
 
 "@types/mdast@^3.0.0":
   version "3.0.10"
@@ -3291,6 +3298,11 @@ babel-jest@^29.1.2:
     chalk "^4.0.0"
     graceful-fs "^4.2.9"
     slash "^3.0.0"
+
+babel-plugin-add-react-displayname@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/babel-plugin-add-react-displayname/-/babel-plugin-add-react-displayname-0.0.5.tgz#339d4cddb7b65fd62d1df9db9fe04de134122bd5"
+  integrity sha512-LY3+Y0XVDYcShHHorshrDbt4KFWL4bSeniCtl4SYZbask+Syngk1uMPCeN9+nSiZo6zX5s0RTq/J9Pnaaf/KHw==
 
 babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
@@ -6584,6 +6596,11 @@ lodash@4.17.21, lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+logrocket@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/logrocket/-/logrocket-1.0.1.tgz#0555ec619d2db54a7b345c4e8df09baea835b176"
+  integrity sha512-oPA0c5GzMKsWp/6p19OaujZQMzttluqVOI+989uHeciPAljPZvGEpZRbNO3Rr+jC/8jVLJdlMP9IHuyhKsASGA==
 
 logrocket@^3.0.1:
   version "3.0.1"

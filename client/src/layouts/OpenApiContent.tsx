@@ -17,6 +17,10 @@ type OpenApiContentProps = {
   auth?: string;
 };
 
+const getAllParameters = (path: any, operation: any) => {
+  return (path.parameters || []).concat(operation.parameters || []);
+};
+
 const getType = (schema: any) => {
   if (schema.type === 'string' && schema.format === 'binary') {
     return 'file';
@@ -156,7 +160,7 @@ function ExpandableFields({ schema }: any) {
 
 export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
-  const { method, endpoint, operation } = getOpenApiOperationMethodAndEndpoint(openapi);
+  const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(openapi);
   useEffect(() => {
     const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
     if (configuredApiBaseIndex != null) {
@@ -170,7 +174,9 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   let apiComponents: ApiComponent[] = [];
 
-  const Parameters = operation.parameters?.map((parameter: any, i: number) => {
+  const parameters = getAllParameters(path, operation);
+
+  const Parameters = parameters.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType } = parameter;
     const paramName = { [paramType]: name };
     const type = schema == null ? parameter?.type : getType(schema);

@@ -1,10 +1,22 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Card as GenericCard } from '@mintlify/components';
+import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { ReactNode, useState } from 'react';
 
 import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+
+function DynamicLink(props: any) {
+  if (props.href && isAbsoluteUrl(props.href)) {
+    return (
+      <span className="not-prose">
+        <a {...props} target="_blank" rel="noopener" />
+      </span>
+    );
+  }
+  return <Link {...props} />;
+}
 
 export function Card({
   title,
@@ -42,11 +54,11 @@ export function Card({
   );
 
   // next/link is used for internal links to avoid extra network calls
-  if (href?.startsWith('/')) {
+  if (href) {
     return (
-      <Link href={href} passHref={true}>
+      <DynamicLink href={href} passHref={true}>
         <Card />
-      </Link>
+      </DynamicLink>
     );
   }
 
