@@ -1,16 +1,57 @@
 // import axios from 'axios';
+// const API_ENDPOINT = process.env.API_ENDPOINT;
+// import ProgressBar from '@badrap/bar-of-progress';
+import { ResizeObserver } from '@juggle/resize-observer';
+import 'focus-visible';
+import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
-import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Router from 'next/router';
 import type { ParsedUrlQuery } from 'querystring';
+import { useState, useEffect } from 'react';
 
+import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImplementation';
+import AnalyticsContext from '@/analytics/AnalyticsContext';
+import AnalyticsMediator from '@/analytics/AnalyticsMediator';
+import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
+import GA4Script from '@/analytics/GA4Script';
 import components from '@/components';
+import Intercom from '@/integrations/Intercom';
+import { DocumentationLayout } from '@/layouts/DocumentationLayout';
+import type { Config } from '@/types/config';
 import { Groups, PageMetaTags, findPageInGroup, META_TAGS_FOR_LAYOUT } from '@/types/metadata';
+import { Header } from '@/ui/Header';
+import { SearchProvider } from '@/ui/Search';
+import { Title } from '@/ui/Title';
+import '@/utils/fontAwesome';
+import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
-// const API_ENDPOINT = process.env.API_ENDPOINT;
+import '../../../css/fonts.css';
+import '../../../css/main.css';
 
+if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
+  window.ResizeObserver = ResizeObserver;
+}
+// TODO - Add ProgessBar back when you can access color. (Put inside Page component?)
+// const progress = new ProgressBar({
+//   size: 2,
+//   color: config?.colors?.primary ?? '#0C8C5E',
+//   className: 'bar-of-progress',
+//   delay: 100,
+// });
+
+// // this fixes safari jumping to the bottom of the page
+// // when closing the search modal using the `esc` key
+// if (typeof window !== 'undefined') {
+//   progress.start();
+//   progress.finish();
+// }
+
+// Router.events.on('routeChangeStart', () => progress.start());
+// Router.events.on('routeChangeComplete', () => progress.finish());
+// Router.events.on('routeChangeError', () => progress.finish());
 interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
@@ -18,37 +59,85 @@ interface PageProps {
 
 interface ParsedDataProps {
   siteMetadata: Groups;
+  meta: PageMetaTags;
+  section: string | undefined;
+  metaTagsForSeo: PageMetaTags;
+  title: string;
+  config: Config;
 }
 
 export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
-  const router = useRouter();
-  const mdxSource = JSON.parse(stringifiedMdxSource) as MDXRemoteSerializeResult<
-    Record<string, unknown>
-  >;
-  console.log({ mdxSource });
-  const { siteMetadata } = JSON.parse(stringifiedData) as ParsedDataProps;
+  const mdxSource = JSON.parse(stringifiedMdxSource);
+  const { meta, section, metaTagsForSeo, title, config } = JSON.parse(
+    stringifiedData
+  ) as ParsedDataProps;
+  const [initializedAnalyticsMediator, setInitializedAnalyticsMediator] = useState(false);
+  const [analyticsMediator, setAnalyticsMediator] = useState<AnalyticsMediatorInterface>(
+    new FakeAnalyticsMediator()
+  );
 
-  let section = undefined;
-  let meta: PageMetaTags = {};
-  siteMetadata.forEach((group) => {
-    const foundPage = findPageInGroup(group, router.pathname);
-    if (foundPage) {
-      section = foundPage.group;
-      meta = foundPage.page;
-      return false;
+  const analytics = getAnalyticsConfig(config);
+
+  // AnalyticsMediator can only run in the browser
+  // We use useEffect because it only runs on render
+  useEffect(() => {
+    if (!initializedAnalyticsMediator) {
+      const newMediator = new AnalyticsMediator(analytics);
+      setAnalyticsMediator(newMediator);
+      setInitializedAnalyticsMediator(true);
     }
-    return true;
-  });
-  const metaTagsForSeo: PageMetaTags = {};
-  Object.entries(meta).forEach(([key, value]) => {
-    if (META_TAGS_FOR_LAYOUT.includes(key)) return;
-    metaTagsForSeo[key as keyof PageMetaTags] = value;
-  });
+  }, [initializedAnalyticsMediator, analytics]);
+
+  let [navIsOpen, setNavIsOpen] = useState(false);
+
+  useEffect(() => {
+    Router.events.on('routeChangeComplete', (url: string, routeProps: any) => {
+      analyticsMediator.onRouteChange(url, routeProps);
+    });
+  }, [analyticsMediator]);
+
+  useEffect(() => {
+    if (!navIsOpen) return;
+    function handleRouteChange() {
+      setNavIsOpen(false);
+    }
+    Router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      Router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [navIsOpen]);
 
   return (
-    <div>
-      <MDXRemote scope={{ section, meta }} components={components} {...mdxSource} />
-    </div>
+    <Intercom appId={config.integrations?.intercom} autoBoot>
+      <AnalyticsContext.Provider value={analyticsMediator}>
+        <Title suffix={config.name}>{title}</Title>
+        <Head>
+          {config?.metadata &&
+            Object.entries(config?.metadata).map(([key, value]) => {
+              if (!value) {
+                return null;
+              }
+              return <meta key={key} name={key} content={value as any} />;
+            })}
+          {Object.entries(metaTagsForSeo).map(([key, value]) => (
+            <meta key={key} name={key} content={value as any} />
+          ))}
+        </Head>
+        <GA4Script ga4={analytics.ga4} />
+        <SearchProvider>
+          <Header
+            hasNav={Boolean(config.navigation?.length)}
+            navIsOpen={navIsOpen}
+            onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+            title={meta?.title}
+            section={section}
+          />
+          <DocumentationLayout navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
+            <MDXRemote components={components} {...mdxSource} />
+          </DocumentationLayout>
+        </SearchProvider>
+      </AnalyticsContext.Provider>
+    </Intercom>
   );
 }
 
@@ -88,6 +177,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (!params) throw new Error('No path parameters found');
 
   const { site, slug } = params;
+  const path = slug.join('/');
 
   // TODO - get all the data (page data AND global data (metadata, openApi, config))
   const content: string = `---
@@ -199,9 +289,105 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   
   On your project page go to Settings > Webhooks. Enter \`https://docs.mintlify.com/api/v1/sites/deploys/gitlab-listener\` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.
   
-  </Accordion>
-  `;
-  const mdxSource = await getMdxSource(content);
+  </Accordion>`;
+  const config = `{
+    "name": "Mintlify",
+    "basePath": "/docs",
+    "logo": {
+      "light": "/docs/logo/light.svg",
+      "dark": "/docs/logo/dark.svg",
+      "href": "https://mintlify.com"
+    },
+    "favicon": "/favicon.svg",
+    "colors": {
+      "primary": "#16A34A",
+      "light": "#4ADE80",
+      "dark": "#166534",
+      "ultraLight": "#DCFCE7",
+      "ultraDark": "#14532D"
+    },
+    "topbarLinks": [
+      {
+        "name": "Contact Sales",
+        "url": "mailto:hi@mintlify.com"
+      }
+    ],
+    "topbarCtaButton": {
+      "name": "Get Started",
+      "url": "https://mintlify.com/start"
+    },
+    "anchors": [
+      {
+        "name": "Community",
+        "icon": "comments",
+        "color": "#2564eb",
+        "url": "https://discord.gg/b499CK8P9g"
+      },
+      {
+        "name": "GitHub",
+        "icon": "github",
+        "color": "#333333",
+        "url": "https://github.com/mintlify/mint"
+      }
+    ],
+    "navigation": [
+      {
+        "group": "Getting Started",
+        "pages": ["quickstart"]
+      },
+      {
+        "group": "Settings",
+        "pages": ["settings/customization", "settings/page"]
+      },
+      {
+        "group": "Components",
+        "pages": [
+          "components/overview",
+          "components/accordion",
+          "components/callout",
+          "components/card",
+          "components/code",
+          "components/embed",
+          "components/image",
+          "components/frame",
+          "components/list",
+          "components/text",
+          "components/table"
+        ]
+      },
+      {
+        "group": "API Components",
+        "pages": [
+          "api-components/overview",
+          "api-components/param",
+          "api-components/response",
+          "api-components/expandable",
+          "api-components/examples",
+          "api-components/openapi"
+        ]
+      },
+      {
+        "group": "Analytics",
+        "pages": [
+          "site-stats/setup",
+          "site-stats/ga4",
+          "site-stats/amplitude",
+          "site-stats/mp",
+          "site-stats/posthog"
+        ]
+      }
+    ],
+    "footerSocials": {
+      "github": "https://github.com/mintlify",
+      "discord": "https://discord.gg/MPNgtSZkgK",
+      "twitter": "https://twitter.com/mintlify"
+    },
+    "analytics": {
+      "fathom": {
+        "siteId": "YSVUHCAK"
+      }
+    }
+  }`;
   const siteMetadata: Groups = [
     {
       group: 'Home',
@@ -214,11 +400,35 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       ],
     },
   ];
-  console.log({ mdxSource });
+  let section = undefined;
+  let meta: PageMetaTags = {};
+  siteMetadata.forEach((group) => {
+    const foundPage = findPageInGroup(group, path);
+    if (foundPage) {
+      section = foundPage.group;
+      meta = foundPage.page;
+      return false;
+    }
+    return true;
+  });
+  const metaTagsForSeo: PageMetaTags = {};
+  Object.entries(meta).forEach(([key, value]) => {
+    if (META_TAGS_FOR_LAYOUT.includes(key)) return;
+    metaTagsForSeo[key as keyof PageMetaTags] = value;
+  });
+  const title = meta.sidebarTitle || meta.title;
+  const mdxSource = await getMdxSource(content, { section, meta });
   return {
     props: {
       stringifiedMdxSource: JSON.stringify(mdxSource),
-      stringifiedData: JSON.stringify({ siteMetadata }),
+      stringifiedData: JSON.stringify({
+        siteMetadata,
+        meta,
+        section,
+        metaTagsForSeo,
+        title,
+        config,
+      }),
     },
   };
 };
