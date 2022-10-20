@@ -1,10 +1,9 @@
 import slugify from '@sindresorhus/slugify';
 
-import { addImport, addExport, createMdxJsxAttribute } from './utils.js';
+import { addExport, createMdxJsxAttribute } from './utils.js';
 
 const withTableOfContents = () => {
   return (tree) => {
-    const component = addImport(tree, '@/components/Heading', 'Heading');
     const contents = [];
     let hasTopLayer = false;
     for (let nodeIndex = 0; nodeIndex < tree.children.length; nodeIndex++) {
@@ -49,7 +48,7 @@ const withTableOfContents = () => {
 
         node.attributes = mdxJsxAttributes;
         node.type = 'mdxJsxFlowElement';
-        node.name = component;
+        node.name = 'Heading';
         const depth = node.depth;
         if (level <= 2) {
           hasTopLayer = true;

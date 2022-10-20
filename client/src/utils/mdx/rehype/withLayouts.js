@@ -2,13 +2,9 @@ import { getEsmNode } from '../remark/utils.js';
 
 const withLayouts = () => {
   return (tree) => {
-    const importNode = getEsmNode(
-      `import { ContentsLayout as _Default } from '@/layouts/ContentsLayout'`
-    );
-    tree.children.unshift(importNode);
     tree.children.push({
       type: 'mdxjsEsm',
-      value: `export default (props) => <_Default {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</_Default>`,
+      value: `export default (props) => <ContentsLayout {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</ContentsLayout>`,
       data: {
         estree: {
           type: 'Program',
@@ -46,7 +42,7 @@ const withLayouts = () => {
                     type: 'JSXClosingElement',
                     name: {
                       type: 'JSXIdentifier',
-                      name: '_Default',
+                      name: 'ContentsLayout',
                     },
                   },
                   openingElement: {
@@ -54,7 +50,7 @@ const withLayouts = () => {
                     selfClosing: false,
                     name: {
                       type: 'JSXIdentifier',
-                      name: '_Default',
+                      name: 'ContentsLayout',
                     },
                     attributes: [
                       {
