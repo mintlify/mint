@@ -2,7 +2,7 @@ const withLayouts = () => {
   return (tree) => {
     tree.children.push({
       type: 'mdxjsEsm',
-      value: `export default (props) => <ContentsLayout {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</ContentsLayout>`,
+      value: `export default (props) => <ContentsLayout {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} section={section} meta={meta}>{props.children}</ContentsLayout>`,
       data: {
         estree: {
           type: 'Program',
@@ -97,6 +97,20 @@ const withLayouts = () => {
                           expression: {
                             type: 'Identifier',
                             name: 'meta',
+                          },
+                        },
+                      },
+                      {
+                        type: 'JSXAttribute',
+                        name: {
+                          type: 'JSXIdentifier',
+                          name: 'section',
+                        },
+                        value: {
+                          type: 'JSXExpressionContainer',
+                          expression: {
+                            type: 'Identifier',
+                            name: 'section',
                           },
                         },
                       },
