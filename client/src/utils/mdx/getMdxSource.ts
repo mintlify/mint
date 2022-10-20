@@ -37,6 +37,7 @@ const getMdxSource = async (pageContents: string) => {
         withLayouts,
       ],
       format: 'mdx',
+      useDynamicImport: true,
     },
     parseFrontmatter: true,
   });
