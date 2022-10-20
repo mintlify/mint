@@ -2,11 +2,10 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
 import { useRouter } from 'next/router';
 import type { ParsedUrlQuery } from 'querystring';
 
-// import components from '@/components';
+import components from '@/components';
 import { Groups, PageMetaTags, findPageInGroup, META_TAGS_FOR_LAYOUT } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
@@ -47,7 +46,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
 
   return (
     <div>
-      <MDXRemote scope={{ section, meta }} lazy {...mdxSource} />
+      <MDXRemote scope={{ section, meta }} components={components} {...mdxSource} />
     </div>
   );
 }
@@ -90,7 +89,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { site, slug } = params;
 
   // TODO - get all the data (page data AND global data (metadata, openApi, config))
-  const content = 'hello world';
+  const content = '## hello world';
   const mdxSource = await getMdxSource(content);
   const siteMetadata: Groups = [
     {

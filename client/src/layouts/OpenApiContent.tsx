@@ -6,9 +6,9 @@ import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
-import { config } from '@@/types/openapi
 import { Component } from '@/enums/components';
-import { openApi } from '@/openapi';
+import { config } from '@/types/config';
+import { openApi } from '@/types/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 
