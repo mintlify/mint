@@ -5,10 +5,8 @@ import { config } from '@/config';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { config } from '@/types/config';
-import { documentationNav } from '@/types/metadata';
+import { documentationNav, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
-
-import { Meta } from './ContentsLayout';
 
 export function DocumentationLayout({
   navIsOpen,
@@ -18,7 +16,7 @@ export function DocumentationLayout({
 }: {
   navIsOpen: boolean;
   setNavIsOpen: any;
-  meta: Meta;
+  meta: PageMetaTags;
   children: ReactNode;
 }) {
   const router = useRouter();

@@ -24,12 +24,8 @@ import { Groups, PageMetaTags, findPageInGroup, META_TAGS_FOR_LAYOUT } from '@/t
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
-import '@/utils/fontAwesome';
 import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-
-import '../../../css/fonts.css';
-import '../../../css/main.css';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -165,7 +161,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
       {
         params: {
           site: 'mintlify',
-          slug: ['index'],
+          slug: ['hello'],
         },
       },
     ],
@@ -395,7 +391,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         {
           title: 'Hello World',
           description: 'hello',
-          href: 'index',
+          href: 'hello',
         },
       ],
     },
@@ -405,7 +401,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   siteMetadata.forEach((group) => {
     const foundPage = findPageInGroup(group, path);
     if (foundPage) {
-      section = foundPage.group;
+      section = group.group;
       meta = foundPage.page;
       return false;
     }
@@ -417,6 +413,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     metaTagsForSeo[key as keyof PageMetaTags] = value;
   });
   const title = meta.sidebarTitle || meta.title;
+
   const mdxSource = await getMdxSource(content, { section, meta });
   return {
     props: {
