@@ -7,14 +7,14 @@ import withCodeBlocks from './rehype/withCodeBlocks.js';
 import withLayouts from './rehype/withLayouts.js';
 import withLinkRoles from './rehype/withLinkRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
-import withStaticProps from './rehype/withStaticProps.js';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
 import withNextLinks from './remark/withNextLinks.js';
 import withTableOfContents from './remark/withTableOfContents.js';
 
-const getMdxSource = async (pageContents: string) => {
+const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
   return serialize(pageContents, {
+    scope: data,
     mdxOptions: {
       remarkPlugins: [remarkGfm, withFrames, withTableOfContents, withNextLinks, withSmartypants],
       rehypePlugins: [
@@ -28,12 +28,6 @@ const getMdxSource = async (pageContents: string) => {
         withLinkRoles,
         withApiComponents,
         withRawComponents,
-        [
-          withStaticProps,
-          `{
-            isMdx: true
-          }`,
-        ],
         withLayouts,
       ],
       format: 'mdx',

@@ -1,5 +1,3 @@
-import { getEsmNode } from '../remark/utils.js';
-
 const withLayouts = () => {
   return (tree) => {
     tree.children.push({
@@ -85,6 +83,20 @@ const withLayouts = () => {
                           expression: {
                             type: 'Identifier',
                             name: 'apiComponents',
+                          },
+                        },
+                      },
+                      {
+                        type: 'JSXAttribute',
+                        name: {
+                          type: 'JSXIdentifier',
+                          name: 'meta',
+                        },
+                        value: {
+                          type: 'JSXExpressionContainer',
+                          expression: {
+                            type: 'Identifier',
+                            name: 'meta',
                           },
                         },
                       },
