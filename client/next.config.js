@@ -1,22 +1,5 @@
 import BundleAnalyzer from '@next/bundle-analyzer';
 import { withSentryConfig } from '@sentry/nextjs';
-import frontMatter from 'front-matter';
-import remarkGfm from 'remark-gfm';
-import withSmartypants from 'remark-smartypants';
-import { createLoader } from 'simple-functional-loader';
-
-import { potentiallyRemoveEndMatter } from './prebuild/injectNav.js';
-import withApiComponents from './rehype/withApiComponents.js';
-import withCodeBlocks from './rehype/withCodeBlocks.js';
-import withLayouts from './rehype/withLayouts.js';
-import withLinkRoles from './rehype/withLinkRoles.js';
-import withRawComponents from './rehype/withRawComponents.js';
-import withStaticProps from './rehype/withStaticProps.js';
-import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
-import withFrames from './remark/withFrames.js';
-import withImportsInjected from './remark/withImportsInjected.js';
-import withNextLinks from './remark/withNextLinks.js';
-import withTableOfContents from './remark/withTableOfContents.js';
 
 const withBundleAnalyzer = BundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -68,80 +51,6 @@ export default withSentryConfig(
               name: 'static/media/[name].[hash].[ext]',
             },
           },
-        ],
-      });
-
-      config.module.rules.push({
-        test: { and: [/\.mdx$/, /snippets/] },
-        use: [
-          options.defaultLoaders.babel,
-          {
-            loader: '@mdx-js/loader',
-            options: {
-              providerImportSource: '@mdx-js/react',
-              remarkPlugins: [
-                remarkGfm,
-                withImportsInjected,
-                withFrames,
-                withNextLinks,
-                withSmartypants,
-              ],
-              rehypePlugins: [
-                [
-                  withSyntaxHighlighting,
-                  {
-                    ignoreMissing: true,
-                  },
-                ],
-                withCodeBlocks,
-                withLinkRoles,
-              ],
-            },
-          },
-        ],
-      });
-
-      config.module.rules.push({
-        test: { and: [/\.mdx?$/], not: [/snippets/] },
-        use: [
-          options.defaultLoaders.babel,
-          {
-            loader: '@mdx-js/loader',
-            options: {
-              providerImportSource: '@mdx-js/react',
-              remarkPlugins: [
-                remarkGfm,
-                withImportsInjected,
-                withFrames,
-                withTableOfContents,
-                withNextLinks,
-                withSmartypants,
-              ],
-              rehypePlugins: [
-                [
-                  withSyntaxHighlighting,
-                  {
-                    ignoreMissing: true,
-                  },
-                ],
-                withCodeBlocks,
-                withLinkRoles,
-                withApiComponents,
-                withRawComponents,
-                [
-                  withStaticProps,
-                  `{
-                    isMdx: true
-                  }`,
-                ],
-                withLayouts,
-              ],
-            },
-          },
-          createLoader(function (source) {
-            const { body } = frontMatter(source);
-            return potentiallyRemoveEndMatter(body);
-          }),
         ],
       });
       return config;

@@ -1,9 +1,11 @@
-import Link from 'next/link';
-import clsx from 'clsx';
-import React from 'react';
-import { config } from '../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
+import Link from 'next/link';
+import React from 'react';
+
 import { isBrandFontAwesomeIcon } from '@/utils/fontAwesome';
+
+import { config } from '../types/config';
 
 type FooterProps = {
   children?: React.ReactChild;

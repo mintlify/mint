@@ -6,7 +6,6 @@ import { addImport } from '../remark/utils.js';
 const withCodeBlocks = () => {
   return (tree) => {
     let preTree = { children: [] };
-    let componentName;
 
     visit(tree, 'element', (node, i, parent) => {
       if (node?.tagName !== 'pre') return node;
@@ -34,12 +33,9 @@ const withCodeBlocks = () => {
         filename = code.data.meta;
       }
       if (filename) {
-        if (!componentName) {
-          componentName = addImport(preTree, '@/components/Editor', 'Editor');
-        }
         const wrap = {
           type: 'mdxJsxFlowElement',
-          name: componentName,
+          name: 'Editor',
           attributes: [{ type: 'mdxJsxAttribute', name: 'filename', value: filename }],
           data: { _mdxExplicitJsx: true },
         };

@@ -17,8 +17,8 @@ import { solid, regular, light, thin, duotone, brands } from '@fortawesome/fonta
 `;
 
 const withImportsInjected = () => {
-  return (tree) => {
-    tree.children = tree.children.filter((node) => {
+  return (tree: any) => {
+    tree.children = tree.children.filter((node: any) => {
       return (
         (node.type === 'import' && !node.value?.includes('@/components/')) || node.type !== 'import'
       );

@@ -1,14 +1,8 @@
-import { getEsmNode } from '../remark/utils.js';
-
 const withLayouts = () => {
   return (tree) => {
-    const importNode = getEsmNode(
-      `import { ContentsLayout as _Default } from '@/layouts/ContentsLayout'`
-    );
-    tree.children.unshift(importNode);
     tree.children.push({
       type: 'mdxjsEsm',
-      value: `export default (props) => <_Default {...props} tableOfContents={tableOfContents} apiComponents={apiComponents}>{props.children}</_Default>`,
+      value: `export default (props) => <ContentsLayout {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} section={section} meta={meta}>{props.children}</ContentsLayout>`,
       data: {
         estree: {
           type: 'Program',
@@ -46,7 +40,7 @@ const withLayouts = () => {
                     type: 'JSXClosingElement',
                     name: {
                       type: 'JSXIdentifier',
-                      name: '_Default',
+                      name: 'ContentsLayout',
                     },
                   },
                   openingElement: {
@@ -54,7 +48,7 @@ const withLayouts = () => {
                     selfClosing: false,
                     name: {
                       type: 'JSXIdentifier',
-                      name: '_Default',
+                      name: 'ContentsLayout',
                     },
                     attributes: [
                       {
@@ -89,6 +83,34 @@ const withLayouts = () => {
                           expression: {
                             type: 'Identifier',
                             name: 'apiComponents',
+                          },
+                        },
+                      },
+                      {
+                        type: 'JSXAttribute',
+                        name: {
+                          type: 'JSXIdentifier',
+                          name: 'meta',
+                        },
+                        value: {
+                          type: 'JSXExpressionContainer',
+                          expression: {
+                            type: 'Identifier',
+                            name: 'meta',
+                          },
+                        },
+                      },
+                      {
+                        type: 'JSXAttribute',
+                        name: {
+                          type: 'JSXIdentifier',
+                          name: 'section',
+                        },
+                        value: {
+                          type: 'JSXExpressionContainer',
+                          expression: {
+                            type: 'Identifier',
+                            name: 'section',
                           },
                         },
                       },

@@ -9,11 +9,11 @@ import { createContext, forwardRef, useRef, useState } from 'react';
 
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { getGroupsInDivision, getGroupsNotInDivision } from '@/layouts/getGroupsInDivision';
-import { PageContext, Group, Groups, GroupPage, isGroup } from '@/metadata';
+import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
 
-import { config, findFirstNavigationEntry } from '../config';
+import { config, findFirstNavigationEntry } from '../types/config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
 import isPathInGroupPages from './isPathInGroupPages';
 
@@ -227,7 +227,7 @@ function Nav({ nav, children, mobile = false }: any) {
         {nav &&
           numPages > 0 &&
           nav
-            .map(({ group, pages }: { group: string; pages: PageContext[] }, i: number) => {
+            .map(({ group, pages }: { group: string; pages: PageMetaTags[] }, i: number) => {
               return (
                 <li
                   key={i}

@@ -1,4 +1,4 @@
-import { Config } from '@/config';
+import { Config } from '@/types/config';
 
 export default function getLogoHref(configJSON: Config) {
   if (typeof configJSON?.logo === 'string') {

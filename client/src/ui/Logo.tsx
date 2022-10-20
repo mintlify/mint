@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 
-import { config } from '@/config';
+import { config } from '@/types/config';
 
 export function Logo() {
   const className = clsx('w-auto h-7 relative', config.classes?.logo);

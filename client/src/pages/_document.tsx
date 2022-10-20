@@ -1,6 +1,6 @@
 import NextDocument, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 
-import { config } from '@/config';
+import { config } from '@/types/config';
 
 const FAVICON_VERSION = 3;
 

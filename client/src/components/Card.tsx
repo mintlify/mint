@@ -4,8 +4,8 @@ import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { ReactNode, useState } from 'react';
 
-import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { config } from '@/types/config';
 
 function DynamicLink(props: any) {
   if (props.href && isAbsoluteUrl(props.href)) {
