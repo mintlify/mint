@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 
-import ConfigContext from '@/config/ConfigContext';
+import ConfigContext from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { getVersionOfPage } from '@/utils/nav';
 
