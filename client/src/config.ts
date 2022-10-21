@@ -77,6 +77,7 @@ export type Config = {
     default?: string; // 'light' or 'dark'
     isHidden?: boolean;
   };
+  versions?: string[];
   metadata?: any;
   colors?: {
     primary: string;

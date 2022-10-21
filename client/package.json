@@ -50,7 +50,6 @@
     "brotli-size": "^4.0.0",
     "clean-css": "^4.2.3",
     "clsx": "^1.1.1",
-    "compare-versions": "^5.0.1",
     "deasync": "^0.1.20",
     "debounce": "^1.2.0",
     "dlv": "^1.1.3",

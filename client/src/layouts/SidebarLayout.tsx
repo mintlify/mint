@@ -4,14 +4,15 @@ import clsx from 'clsx';
 import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 import { createContext, forwardRef, useRef, useState } from 'react';
 
+import { VersionContext } from '@/context/VersionContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageContext, Group, Groups, GroupPage, isGroup } from '@/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
-import { getGroupsInDivision, getGroupsNotInDivision } from '@/utils/nav';
+import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
 
 import { config, findFirstNavigationEntry } from '../config';
@@ -356,6 +357,8 @@ export function SidebarLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { selectedVersion } = useContext(VersionContext);
+
   const pathname = router.pathname;
   const currentDivision = config.anchors?.find((anchor) => pathname.startsWith(`/${anchor.url}`));
 
@@ -369,6 +372,8 @@ export function SidebarLayout({
       divisions.map((division) => division.url)
     );
   }
+
+  navForDivision = getGroupsInVersion(navForDivision, selectedVersion);
 
   return (
     <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>

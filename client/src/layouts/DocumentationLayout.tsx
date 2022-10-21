@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 
 import { config } from '@/config';
+import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { documentationNav } from '@/metadata';
 import { Title } from '@/ui/Title';
@@ -22,6 +23,11 @@ export function DocumentationLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { setSelectedVersion } = useContext(VersionContext);
+
+  if (meta.version) {
+    setSelectedVersion(meta.version);
+  }
 
   if (!isMdx) {
     return <>{children}</>;

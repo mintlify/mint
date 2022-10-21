@@ -1,25 +1,19 @@
 import { Menu } from '@headlessui/react';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 
-import { getVersionsSorted } from '@/utils/versions';
+import { VersionContext } from '@/context/VersionContext';
 
 export function VersionSelect() {
-  const [selectedVersion, setSelectedVersion] = useState<string>();
+  const { versionOptions, selectedVersion, setSelectedVersion } = useContext(VersionContext);
 
-  const versions = getVersionsSorted();
-
-  useEffect(() => {
-    const storedVersion = window.localStorage.getItem('version');
-    if (storedVersion) {
-      setSelectedVersion(storedVersion);
-    } else {
-      setSelectedVersion(versions[0]);
-    }
-  }, []);
+  // It's possible to show a selected version that doesn't exist in versionOptions, for example by navigating to
+  // a secret v3 page when the menu only shows v1 and v2. Thus, we only hide the dropdown when nothing is selected.
+  if (!selectedVersion) {
+    return null;
+  }
 
   const onClickVersion = (version: string) => {
-    window.localStorage.setItem('version', version);
     setSelectedVersion(version);
   };
 
@@ -38,12 +32,12 @@ export function VersionSelect() {
         </svg>
       </Menu.Button>
       <Menu.Items className="absolute top-full mt-1 py-2 w-40 rounded-lg bg-white shadow ring-1 ring-background-dark/5 text-sm leading-6 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:highlight-white/5">
-        {versions.map((version: string) => (
-          <Menu.Item disabled={version === selectedVersion}>
+        {versionOptions.map((version: string) => (
+          <Menu.Item disabled={version === selectedVersion} key={version}>
             {({ active }) => (
               <a
                 className={clsx(
-                  'flex items-center justify-between px-3 py-1',
+                  'flex items-center justify-between px-3 py-1 cursor-pointer',
                   active && 'bg-slate-50 text-slate-900 dark:bg-slate-600/30 dark:text-white',
                   version === selectedVersion && 'text-primary dark:text-primary-light'
                 )}

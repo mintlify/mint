@@ -11,12 +11,14 @@ export type PageContext = {
   openapi?: string;
   contentType?: string;
   href?: string;
+  version?: string;
 };
 
 export type Groups = Group[];
 
 export type Group = {
   group: string;
+  version?: string;
   pages: GroupPage[];
 };
 

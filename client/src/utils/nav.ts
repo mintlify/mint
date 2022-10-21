@@ -32,3 +32,33 @@ export function isPathInGroupPages(pathname: string, groupPages: GroupPage[]): b
     return groupPage.href === pathname;
   });
 }
+
+export function getGroupsInVersion(nav: Groups, version: string): Groups {
+  // Sites without versions default to an empty string
+  if (!version) {
+    return nav;
+  }
+
+  return nav.map((entry) => getInVersion(entry, version)).filter(Boolean) as Groups;
+}
+
+// Recursive helper to see if a single group should be displayed.
+function getInVersion(entry: GroupPage, version: string) {
+  // Entries without a version are always included
+  if (!entry.version) {
+    return entry;
+  }
+
+  if (entry.version && entry.version !== version) {
+    return undefined;
+  }
+
+  // Matched version
+  if (isGroup(entry) && entry.pages.length > 0) {
+    entry.pages = entry.pages
+      .map((subEntry) => getInVersion(subEntry, version))
+      .filter(Boolean) as GroupPage[];
+  }
+
+  return entry;
+}
