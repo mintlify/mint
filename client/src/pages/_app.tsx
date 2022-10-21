@@ -22,7 +22,6 @@ import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
 import '@/utils/fontAwesome';
 import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
-import { versions } from '@/utils/nav';
 
 import '../css/fonts.css';
 import '../css/main.css';
@@ -109,7 +108,7 @@ export default function App(props: any) {
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <AnalyticsContext.Provider value={analyticsMediator}>
-        <VersionContextController versionOptions={versions}>
+        <VersionContextController versionOptions={config.versions}>
           <Title suffix={config.name}>{title}</Title>
           <Head>
             {config?.metadata &&
