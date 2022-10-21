@@ -10,6 +10,8 @@ export function VersionSelect() {
   const { versionOptions, selectedVersion, setSelectedVersion } = useContext(VersionContext);
   const router = useRouter();
 
+  // Only run when the page loads. Otherwise, users could never change the API version
+  // because the page would keep changing it back to its own version.
   useEffect(() => {
     const version = getVersionOfPage(router.pathname.substring(1));
     if (version) {
