@@ -1,11 +1,28 @@
 import { Menu } from '@headlessui/react';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 import { getVersionsSorted } from '@/utils/versions';
 
 export function VersionSelect() {
+  const [selectedVersion, setSelectedVersion] = useState<string>();
+
   const versions = getVersionsSorted();
-  const selectedVersion = 'v2'; // detect from storage. use latest if unspecified
+
+  useEffect(() => {
+    const storedVersion = window.localStorage.getItem('version');
+    if (storedVersion) {
+      setSelectedVersion(storedVersion);
+    } else {
+      setSelectedVersion(versions[0]);
+    }
+  }, []);
+
+  const onClickVersion = (version: string) => {
+    window.localStorage.setItem('version', version);
+    setSelectedVersion(version);
+  };
+
   return (
     <Menu as="div" className="relative">
       <Menu.Button className="text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5">
@@ -30,7 +47,7 @@ export function VersionSelect() {
                   active && 'bg-slate-50 text-slate-900 dark:bg-slate-600/30 dark:text-white',
                   version === selectedVersion && 'text-primary dark:text-primary-light'
                 )}
-                href="https://google.com"
+                onClick={() => onClickVersion(version)}
               >
                 {version}
                 {version === selectedVersion && (
