@@ -7,10 +7,10 @@ import { AnalyticsMediatorConstructorInterface } from '@/analytics/AnalyticsMedi
 import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 
 /**
- * This hook is and should continue to be the only way to create an AnalyticsMediator.
- * This allows us to guarantee code like onRouteChange is always run correctly without managing tons of callsites.
- * We need useEffect which requires this code to be a hook. All hook names must start with use.
- * @param config Site config to extract analytics settings from
+ * useAnalytics is the only way to create an AnalyticsMediator. Trying to create an
+ * AnalyticsMediator without this hook will break because code like onRouteChange will
+ * never be called.
+ * @param analyticsConfig Config for each analytics implementation
  */
 export function useAnalytics(analyticsConfig: AnalyticsMediatorConstructorInterface) {
   const [initializedAnalyticsMediator, setInitializedAnalyticsMediator] = useState(false);
