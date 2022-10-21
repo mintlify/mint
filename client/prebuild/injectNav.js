@@ -33,19 +33,7 @@ export const potentiallyRemoveEndMatter = (fileContents) => {
 
 const getMetadata = (fileContents) => {
   const { data } = matter(fileContents);
-
-  if (Object.keys(data).length > 0) {
-    return data;
-  }
-
-  const startIndex = getIndexOfEndMatter(fileContents);
-  if (startIndex === -1) {
-    return {};
-  }
-
-  const fileContentFromFrontMatter = fileContents.substring(startIndex);
-  const { data: nonTopFrontMatter } = matter(fileContentFromFrontMatter);
-  return nonTopFrontMatter;
+  return data;
 };
 
 export const createPage = (path, content, openApiObj) => {
@@ -68,6 +56,7 @@ export const injectNav = (pages, configObj) => {
   const createNav = (nav) => {
     return {
       group: nav.group,
+      version: nav.version,
       pages: nav.pages.map((page) => {
         if (typeof page === 'string') {
           return pages[page];

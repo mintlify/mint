@@ -31,12 +31,14 @@ export type PageMetaTags = {
   href?: string;
   auth?: string;
   size?: string;
+  version?: string;
 };
 
 export type Groups = Group[];
 
 export type Group = {
   group: string;
+  version?: string;
   pages: GroupPage[];
 };
 

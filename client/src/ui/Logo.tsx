@@ -8,39 +8,21 @@ export function Logo() {
   if (typeof config.logo === 'object' && config.logo !== null) {
     return (
       <>
-        <div className={clsx(className, 'block dark:hidden')}>
-          <Image
-            src={config?.logo.light}
-            alt="light logo"
-            layout="fill"
-            objectFit="contain"
-            objectPosition="left"
-          />
-        </div>
-        <div className={clsx(className, 'hidden dark:block')}>
-          <Image
-            src={config?.logo.dark}
-            alt="dark logo"
-            layout="fill"
-            objectFit="contain"
-            objectPosition="left"
-          />
-        </div>
+        <img
+          className={clsx(className, 'block dark:hidden')}
+          src={config?.logo.light}
+          alt="light logo"
+        />
+        <img
+          className={clsx(className, 'hidden dark:block')}
+          src={config?.logo.dark}
+          alt="dark logo"
+        />
       </>
     );
   }
   if (config?.logo) {
-    return (
-      <div className={clsx(className)}>
-        <Image
-          src={config?.logo}
-          alt="logo"
-          layout="fill"
-          objectFit="contain"
-          objectPosition="left"
-        />
-      </div>
-    );
+    return <Image className={clsx(className)} src={config?.logo} alt="logo" />;
   }
   if (config?.name) {
     return (

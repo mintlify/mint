@@ -113,6 +113,7 @@ export type NavigationEntry = string | Navigation;
 export type Navigation = {
   group: string;
   pages: NavigationEntry[];
+  version?: string;
 };
 
 type Logo = string | { light: string; dark: string; href?: string };
@@ -174,6 +175,7 @@ export type Config = {
     default?: string; // 'light' or 'dark'
     isHidden?: boolean;
   };
+  versions?: string[];
   metadata?: any;
   colors?: {
     primary: string;

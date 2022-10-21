@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 
+import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { config } from '@/types/config';
 import { documentationNav, PageMetaTags } from '@/types/metadata';
@@ -18,6 +19,11 @@ export function DocumentationLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { setSelectedVersion } = useContext(VersionContext);
+
+  if (meta.version) {
+    setSelectedVersion(meta.version);
+  }
 
   const title = meta.sidebarTitle || meta.title;
 

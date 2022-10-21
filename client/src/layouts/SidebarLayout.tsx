@@ -4,18 +4,19 @@ import clsx from 'clsx';
 import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
 import { createContext, forwardRef, useRef, useState } from 'react';
 
+import { VersionContext } from '@/context/VersionContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-import { getGroupsInDivision, getGroupsNotInDivision } from '@/layouts/getGroupsInDivision';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
+import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
+import { isPathInGroupPages } from '@/utils/nav';
 
 import { config, findFirstNavigationEntry } from '../types/config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
-import isPathInGroupPages from './isPathInGroupPages';
 
 type SidebarContextType = {
   nav: any;
@@ -142,7 +143,8 @@ const GroupDropdown = ({ group, level }: { group: Group; level: number }) => {
           ></path>
         </svg>
       </span>
-      {isOpen && pages.map((subpage) => <NavItem groupPage={subpage} level={level + 1} />)}
+      {isOpen &&
+        pages.map((subpage: GroupPage) => <NavItem groupPage={subpage} level={level + 1} />)}
     </>
   );
 };
@@ -356,6 +358,8 @@ export function SidebarLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { selectedVersion } = useContext(VersionContext);
+
   const pathname = router.pathname;
   const currentDivision = config.anchors?.find((anchor) => pathname.startsWith(`/${anchor.url}`));
 
@@ -369,6 +373,8 @@ export function SidebarLayout({
       divisions.map((division) => division.url)
     );
   }
+
+  navForDivision = getGroupsInVersion(navForDivision, selectedVersion);
 
   return (
     <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>

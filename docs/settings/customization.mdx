@@ -10,7 +10,6 @@ All `mint.json` properties are optional except for `name` and `navigation`.
 ## Properties
 
 <ResponseField name="name" type="string">
-
 Name of your project. Used for the global title.
 
 Example: `mintlify`
@@ -18,25 +17,18 @@ Example: `mintlify`
 </ResponseField>
 
 <ResponseField name="logo" type="string or object">
-
-Path to logo image or object with path to "light" and "dark" mode logo images
-
-<Expandable title="Logo">
-
-<ResponseField name="light" type="string">
-  Path to the logo in light mode
-</ResponseField>
-
-<ResponseField name="dark" type="string">
-  Path to the logo in dark mode
-</ResponseField>
-
-<ResponseField name="href" type="string" default="/">
-  Where clicking on the logo links you to
-</ResponseField>
-
-</Expandable>
-
+  Path to logo image or object with path to "light" and "dark" mode logo images
+  <Expandable title="Logo">
+    <ResponseField name="light" type="string">
+      Path to the logo in light mode
+    </ResponseField>
+    <ResponseField name="dark" type="string">
+      Path to the logo in dark mode
+    </ResponseField>
+    <ResponseField name="href" type="string" default="/">
+      Where clicking on the logo links you to
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="favicon" type="string">
@@ -44,228 +36,149 @@ Path to logo image or object with path to "light" and "dark" mode logo images
 </ResponseField>
 
 <ResponseField name="colors" type="Colors">
-
-Hex color codes for your global theme
-
-<Expandable title="Colors">
-
-<ResponseField name="primary" type="string" required>
-  The primary color. Used for most often for highlighted content, section
-  headers, accents, in light mode
-</ResponseField>
-
-<ResponseField name="light" type="string">
-  The primary color for dark mode. Used for most often for highlighted content,
-  section headers, accents, in dark mode
-</ResponseField>
-
-<ResponseField name="dark" type="string">
-  The primary color for important buttons
-</ResponseField>
-
-<ResponseField name="ultraLight" type="string">
-  Used in highlighting certain text and buttons
-</ResponseField>
-
-<ResponseField name="ultraDark" type="string">
-  Used primarily as the hover state color for content already in darkmode
-</ResponseField>
-
-<ResponseField name="background" type="object">
-
-The color of the background in both light and dark mode
-
-<Expandable title="Object">
-
-<ResponseField name="light" type="string" required>
-  The hex color code of the background in light mode
-</ResponseField>
-
-<ResponseField name="dark" type="string" required>
-  The hex color code of the background in dark mode
-</ResponseField>
-
-</Expandable>
-
-</ResponseField>
-
-</Expandable>
-
+  Hex color codes for your global theme
+  <Expandable title="Colors">
+    <ResponseField name="primary" type="string" required>
+      The primary color. Used for most often for highlighted content, section
+      headers, accents, in light mode
+    </ResponseField>
+    <ResponseField name="light" type="string">
+      The primary color for dark mode. Used for most often for highlighted
+      content, section headers, accents, in dark mode
+    </ResponseField>
+    <ResponseField name="dark" type="string">
+      The primary color for important buttons
+    </ResponseField>
+    <ResponseField name="ultraLight" type="string">
+      Used in highlighting certain text and buttons
+    </ResponseField>
+    <ResponseField name="ultraDark" type="string">
+      Used primarily as the hover state color for content already in darkmode
+    </ResponseField>
+    <ResponseField name="background" type="object">
+      The color of the background in both light and dark mode
+      <Expandable title="Object">
+        <ResponseField name="light" type="string" required>
+          The hex color code of the background in light mode
+        </ResponseField>
+        <ResponseField name="dark" type="string" required>
+          The hex color code of the background in dark mode
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="topbarLinks" type="TopbarLink[]">
+  Array of `name`s and `url`s of links you want to include in the topbar
+  <Expandable title="TopbarLink">
+    <ResponseField name="name" type="string">
+    The name of the button.
 
-Array of `name`s and `url`s of links you want to include in the topbar
+    Example: `Contact us`
+    </ResponseField>
+    <ResponseField name="url" type="string">
+    The url once you click on the button. Example: `https://mintlify.com/contact`
+    </ResponseField>
 
-<Expandable title="TopbarLink">
-
-<ResponseField name="name" type="string">
-
-The name of the button.
-
-Example: `Contact us`
-
-</ResponseField>
-
-<ResponseField name="url" type="string">
-
-The url once you click on the button. Example: `https://mintlify.com/contact`
-
-</ResponseField>
-
-</Expandable>
-
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="navigation" type="Navigation[]">
+  An array of groups with all the pages within that group
+  <Expandable title="Navigation">
+    <ResponseField name="group" type="string">
+    The name of the group.
 
-An array of groups with all the pages within that group
+    Example: `Settings`
 
-<Expandable title="Navigation">
+    </ResponseField>
+    <ResponseField name="pages" type="string[]">
+    The relative paths to the markdown files that will serve as pages.
 
-<ResponseField name="group" type="string">
+    Example: `["customization", "page"]`
 
-The name of the group.
+    </ResponseField>
 
-Example: `Settings`
-
-</ResponseField>
-
-<ResponseField name="pages" type="string[]">
-
-The relative paths to the markdown files that will serve as pages.
-
-Example: `["customization", "page"]`
-
-</ResponseField>
-
-</Expandable>
-
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="anchors" type="Anchor[]">
+  An array of the anchors, includes the `icon`, `color`, and `url`.
+  <img class="block h-32 dark:hidden" src="/docs/img/anchor/light.png" />
+  <img class="hidden h-32 dark:block" src="/docs/img/anchor/dark.png" />
+  <Expandable title="Anchor">
+    <ResponseField name="icon" type="string">
+    The [Font Awesome](https://fontawesome.com/search?s=brands%2Cduotone) icon used to feature the anchor.
 
-An array of the anchors, includes the `icon`, `color`, and `url`.
+    Example: `comments`
+    </ResponseField>
+    <ResponseField name="name" type="string">
+    The name of the anchor label.
 
-<img class="block h-32 dark:hidden" src="/docs/img/anchor/light.png" />
-<img class="hidden h-32 dark:block" src="/docs/img/anchor/dark.png" />
+    Example: `Community`
+    </ResponseField>
+    <ResponseField name="color" type="string">
+      The hex color of the anchor icon background.
+    </ResponseField>
 
-<Expandable title="Anchor">
-
-<ResponseField name="icon" type="string">
-
-The [Font Awesome](https://fontawesome.com/search?s=brands%2Cduotone) icon used to feature the anchor.
-
-Example: `comments`
-
-</ResponseField>
-
-<ResponseField name="name" type="string">
-
-The name of the anchor label.
-
-Example: `Community`
-
-</ResponseField>
-
-<ResponseField name="color" type="string">
-
-The hex color of the anchor icon background.
-
-</ResponseField>
-
-</Expandable>
-
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="topAnchor" type="Object">
-
-Override the default configurations for the top-most anchor
-
-<Expandable title="Object">
-
-<ResponseField name="name" default="Documentation" type="string">
-
-The name of the top-most anchor
-
-</ResponseField>
-
-</Expandable>
-
+  Override the default configurations for the top-most anchor
+  <Expandable title="Object">
+    <ResponseField name="name" default="Documentation" type="string">
+      The name of the top-most anchor
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="api" type="API">
+  Configuration for API settings. Learn more about API pages at [API Components](/api-components/overview).
+  <Expandable title="API">
+    <ResponseField name="baseUrl" type="string">
+      The base url for all API endpoints. If `apiBase` is an array, it will enable for multiple base url
+      options that the user can toggle.
+    </ResponseField>
 
-Configuration for API settings. Learn more about API pages at [API Components](/api-components/overview).
+    <ResponseField name="auth" type="Auth">
+      <Expandable title="Auth">
+        <ResponseField name="method" type='"bearer" | "key" | "basic"'>
+          The authentication strategy used for all API endpoints.
+        </ResponseField>
+        <ResponseField name="name" type="string">
+        The name of the authentication parameter used in the API playground.
 
-<Expandable title="API">
+        If method is `basic`, the format should be `[usernameName]:[passwordName]`
+        </ResponseField>
+        <ResponseField name="inputPrefix" type="string">
+        The default value that's designed to be a prefix for the authentication input field.
 
-<ResponseField name="baseUrl" type="string">
+        E.g. If an `inputPrefix` of `AuthKey` would inherit the default input result of the authentication field as `AuthKey`.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
 
-The base url for all API endpoints. If `apiBase` is an array, it will enable for multiple base url options that the user can toggle.
-
-</ResponseField>
-
-<ResponseField name="auth" type="Auth">
-
-<Expandable title="Auth">
-
-<ResponseField name="method" type='"bearer" | "key" | "basic"'>
-
-The authentication strategy used for all API endpoints.
-
-</ResponseField>
-
-<ResponseField name="name" type="string">
-
-The name of the authentication parameter used in the API playground.
-
-If method is `basic`, the format should be `[usernameName]:[passwordName]`
-
-</ResponseField>
-
-<ResponseField name="inputPrefix" type="string">
-
-The default value that's designed to be a prefix for the authentication input field.
-
-E.g. If an `inputPrefix` of `AuthKey` would inherit the default input result of the authentication field as `AuthKey`.
-
-</ResponseField>
-
-</Expandable>
-
-</ResponseField>
-
-</Expandable>
-
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="footerSocials" type="FooterSocials">
-
-An object of social media accounts where the key:property pair represents the social media platform and the account url.
-
-Example: `{ "twitter": "https://twitter.com/mintlify", "website": "https://mintlify.com" }`
-
-<Expandable title="FooterSocials">
-
-<ResponseField name="key" type="website | facebook | twitter | discord | slack | github | linkedin | instagram | hacker-news">
-
-The social platform for the link
-
-Example: `twitter`
-
-</ResponseField>
-
-<ResponseField name="property" type="string">
-
-The URL to the social platform.
-
-Example: `https://twitter.com/mintlify`
-
-</ResponseField>
-
-</Expandable>
-
+  An object of social media accounts where the key:property pair represents the social media platform and the account url.
+  
+  Example: `{ "twitter": "https://twitter.com/mintlify", "website": "https://mintlify.com" }`
+  <Expandable title="FooterSocials">
+    <ResponseField name="[key]" type="string">
+    One of the following values `website`, `facebook`, `twitter`, `discord`, `slack`, `github`, `linkedin`, `instagram`, `hacker-news`
+    
+    Example: `twitter`
+    </ResponseField>
+    <ResponseField name="property" type="string">
+    The URL to the social platform.
+    
+    Example: `https://twitter.com/mintlify`
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 ## Example

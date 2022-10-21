@@ -14,6 +14,7 @@ import getLogoHref from '@/utils/getLogoHref';
 
 import { config, TopbarCta } from '../types/config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
+import { VersionSelect } from './VersionSelect';
 
 export function NavPopover({
   display = 'md:hidden',
@@ -163,18 +164,24 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
           target="_blank"
           className={clsx(
             config.classes?.topbarCtaButton ||
-              'relative inline-flex items-center space-x-1 px-4 py-1 border border-transparent shadow-sm text-sm font-medium rounded-[0.3rem] text-white bg-primary-dark hover:bg-primary-ultradark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-primary-light'
+              'relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5'
           )}
         >
           <span>{button.name}</span>
           {!config.classes?.topbarCtaButton && (
             <svg
-              className="h-2.5 text-white"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 320 512"
+              width="6"
+              height="3"
+              className="h-2 overflow-visible -rotate-90"
+              aria-hidden="true"
             >
-              <path d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z" />
+              <path
+                d="M0 0L3 3L6 0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
           )}
         </a>
@@ -249,7 +256,7 @@ export function Header({
             )}
           >
             <div className="relative flex items-center">
-              <div className="flex-1">
+              <div className="flex-1 flex items-center space-x-3">
                 <Link href={getLogoHref(config)}>
                   <a
                     onContextMenu={(e) => {
@@ -261,6 +268,7 @@ export function Header({
                     <Logo />
                   </a>
                 </Link>
+                <VersionSelect />
               </div>
               <div className="relative flex-none bg-white lg:w-64 xl:w-80 dark:bg-slate-900 pointer-events-auto rounded-md">
                 <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-slate-400 rounded-md ring-1 ring-slate-500/10 shadow-sm py-1.5 pl-2 pr-3 bg-slate-50 hover:ring-slate-900/20 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">

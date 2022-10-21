@@ -177,6 +177,7 @@ export type Meta = {
   openapi?: string;
   contentType?: string;
   size?: 'wide';
+  version?: string;
 };
 
 type ContentsLayoutProps = {
