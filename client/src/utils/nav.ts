@@ -44,21 +44,20 @@ export function getGroupsInVersion(nav: Groups, version: string): Groups {
 }
 
 // Recursive helper to see if a single group should be displayed.
-function getInVersion(entry: GroupPage, version: string) {
-  // Entries without a version are always included
-  if (!entry.version) {
-    return entry;
-  }
-
+function getInVersion(entry: GroupPage, version: string): GroupPage | undefined {
   if (entry.version && entry.version !== version) {
     return undefined;
   }
 
-  // Matched version
+  // Either there is no version or the version matched,
+  // check everything below the group recursively.
   if (isGroup(entry) && entry.pages.length > 0) {
-    entry.pages = entry.pages
-      .map((subEntry) => getInVersion(subEntry, version))
-      .filter(Boolean) as GroupPage[];
+    return {
+      ...entry,
+      pages: entry.pages
+        .map((subEntry) => getInVersion(subEntry, version))
+        .filter(Boolean) as GroupPage[],
+    };
   }
 
   return entry;
