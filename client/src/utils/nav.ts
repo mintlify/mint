@@ -1,3 +1,4 @@
+import { config } from '@/config';
 import { Group, Groups, GroupPage, isGroup } from '@/metadata';
 
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
@@ -61,4 +62,42 @@ function getInVersion(entry: GroupPage, version: string) {
   }
 
   return entry;
+}
+
+function getVersionOfPageRecursively(
+  navigation: any,
+  targetPage: string,
+  lastVersion?: string
+): string | void {
+  if (typeof navigation === 'string' && navigation === targetPage) {
+    return lastVersion;
+  }
+
+  let version = lastVersion;
+
+  if (navigation.version) {
+    version = navigation.version;
+  }
+
+  if (Array.isArray(navigation)) {
+    for (const nav of navigation) {
+      const versionFound = getVersionOfPageRecursively(nav, targetPage, version);
+      if (versionFound) {
+        return versionFound;
+      }
+    }
+  }
+
+  if (navigation.pages) {
+    for (const page of navigation.pages) {
+      const versionFound = getVersionOfPageRecursively(page, targetPage, version);
+      if (versionFound) {
+        return versionFound;
+      }
+    }
+  }
+}
+
+export function getVersionOfPage(targetPage: string): string | void {
+  return getVersionOfPageRecursively(config.navigation, targetPage);
 }

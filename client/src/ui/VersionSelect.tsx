@@ -1,11 +1,19 @@
 import { Menu } from '@headlessui/react';
 import clsx from 'clsx';
-import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useEffect } from 'react';
 
 import { VersionContext } from '@/context/VersionContext';
+import { getVersionOfPage } from '@/utils/nav';
 
 export function VersionSelect() {
   const { versionOptions, selectedVersion, setSelectedVersion } = useContext(VersionContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    const version = getVersionOfPage(router.pathname.substring(1));
+    setSelectedVersion(version);
+  }, []);
 
   // It's possible to show a selected version that doesn't exist in versionOptions, for example by navigating to
   // a secret v3 page when the menu only shows v1 and v2. Thus, we only hide the dropdown when nothing is selected.
