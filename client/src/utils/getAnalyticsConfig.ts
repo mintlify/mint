@@ -1,6 +1,6 @@
 import { Config } from '@/types/config';
 
-export default function getAnalyticsConfig(config: Config) {
+export function getAnalyticsConfig(config: Config) {
   // If any values are in mint.json they override ALL injected values.
   // For example, setting the apiKey for PostHog also overrides the apiHost.
   return {

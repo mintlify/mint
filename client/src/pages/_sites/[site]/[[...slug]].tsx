@@ -11,11 +11,9 @@ import Router from 'next/router';
 import type { ParsedUrlQuery } from 'querystring';
 import { useState, useEffect } from 'react';
 
-import { AnalyticsMediatorInterface } from '@/analytics/AbstractAnalyticsImplementation';
 import AnalyticsContext from '@/analytics/AnalyticsContext';
-import AnalyticsMediator from '@/analytics/AnalyticsMediator';
-import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import GA4Script from '@/analytics/GA4Script';
+import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
@@ -24,7 +22,7 @@ import { Groups, PageMetaTags, findPageInGroup, META_TAGS_FOR_LAYOUT } from '@/t
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
-import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
+import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
@@ -67,30 +65,11 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
   const { meta, section, metaTagsForSeo, title, config } = JSON.parse(
     stringifiedData
   ) as ParsedDataProps;
-  const [initializedAnalyticsMediator, setInitializedAnalyticsMediator] = useState(false);
-  const [analyticsMediator, setAnalyticsMediator] = useState<AnalyticsMediatorInterface>(
-    new FakeAnalyticsMediator()
-  );
 
-  const analytics = getAnalyticsConfig(config);
-
-  // AnalyticsMediator can only run in the browser
-  // We use useEffect because it only runs on render
-  useEffect(() => {
-    if (!initializedAnalyticsMediator) {
-      const newMediator = new AnalyticsMediator(analytics);
-      setAnalyticsMediator(newMediator);
-      setInitializedAnalyticsMediator(true);
-    }
-  }, [initializedAnalyticsMediator, analytics]);
+  const analyticsConfig = getAnalyticsConfig(config);
+  const analyticsMediator = useAnalytics(analyticsConfig);
 
   let [navIsOpen, setNavIsOpen] = useState(false);
-
-  useEffect(() => {
-    Router.events.on('routeChangeComplete', (url: string, routeProps: any) => {
-      analyticsMediator.onRouteChange(url, routeProps);
-    });
-  }, [analyticsMediator]);
 
   useEffect(() => {
     if (!navIsOpen) return;
@@ -119,7 +98,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
             <meta key={key} name={key} content={value as any} />
           ))}
         </Head>
-        <GA4Script ga4={analytics.ga4} />
+        <GA4Script ga4={analyticsConfig.ga4} />
         <SearchProvider>
           <Header
             hasNav={Boolean(config.navigation?.length)}
