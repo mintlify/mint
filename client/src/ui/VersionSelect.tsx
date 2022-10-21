@@ -12,7 +12,9 @@ export function VersionSelect() {
 
   useEffect(() => {
     const version = getVersionOfPage(router.pathname.substring(1));
-    setSelectedVersion(version);
+    if (version) {
+      setSelectedVersion(version);
+    }
   }, []);
 
   // It's possible to show a selected version that doesn't exist in versionOptions, for example by navigating to
