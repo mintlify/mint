@@ -14,6 +14,7 @@ import getLogoHref from '@/utils/getLogoHref';
 
 import { config, TopbarCta } from '../config';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
+import { VersionSelect } from './VersionSelect';
 
 export function NavPopover({
   display = 'md:hidden',
@@ -163,13 +164,13 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
           target="_blank"
           className={clsx(
             config.classes?.topbarCtaButton ||
-              'relative inline-flex items-center space-x-1 px-4 py-1 border border-transparent shadow-sm text-sm font-medium rounded-[0.3rem] text-white bg-primary-dark hover:bg-primary-ultradark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-primary-light'
+              'relative inline-flex items-center space-x-1.5 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5'
           )}
         >
           <span>{button.name}</span>
           {!config.classes?.topbarCtaButton && (
             <svg
-              className="h-2.5 text-white"
+              className="h-2 text-white"
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 320 512"
@@ -249,7 +250,7 @@ export function Header({
             )}
           >
             <div className="relative flex items-center">
-              <div className="flex-1">
+              <div className="flex-1 flex items-center space-x-3">
                 <Link href={getLogoHref(config)}>
                   <a
                     onContextMenu={(e) => {
@@ -261,6 +262,7 @@ export function Header({
                     <Logo />
                   </a>
                 </Link>
+                <VersionSelect />
               </div>
               <div className="relative flex-none bg-white lg:w-64 xl:w-80 dark:bg-slate-900 pointer-events-auto rounded-md">
                 <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-slate-400 rounded-md ring-1 ring-slate-500/10 shadow-sm py-1.5 pl-2 pr-3 bg-slate-50 hover:ring-slate-900/20 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">
