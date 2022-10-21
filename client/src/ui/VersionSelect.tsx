@@ -3,11 +3,14 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 
+import ConfigContext from '@/config/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { getVersionOfPage } from '@/utils/nav';
 
 export function VersionSelect() {
-  const { versionOptions, selectedVersion, setSelectedVersion } = useContext(VersionContext);
+  const config = useContext(ConfigContext);
+  const versions = config.versions?.filter(Boolean) || [];
+  const { selectedVersion, setSelectedVersion } = useContext(VersionContext);
   const router = useRouter();
 
   // Only run when the page loads. Otherwise, users could never change the API version
@@ -17,6 +20,7 @@ export function VersionSelect() {
     if (version) {
       setSelectedVersion(version);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // It's possible to show a selected version that doesn't exist in versionOptions, for example by navigating to
@@ -44,7 +48,7 @@ export function VersionSelect() {
         </svg>
       </Menu.Button>
       <Menu.Items className="absolute top-full mt-1 py-2 w-40 rounded-lg bg-white shadow ring-1 ring-background-dark/5 text-sm leading-6 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:highlight-white/5">
-        {versionOptions.map((version: string) => (
+        {versions.map((version: string) => (
           <Menu.Item disabled={version === selectedVersion} key={version}>
             {({ active }) => (
               <a

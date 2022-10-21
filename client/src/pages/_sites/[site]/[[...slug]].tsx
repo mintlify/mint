@@ -16,6 +16,7 @@ import GA4Script from '@/analytics/GA4Script';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import ConfigContext from '@/config/ConfigContext';
+import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import type { Config } from '@/types/config';
@@ -85,36 +86,38 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
 
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
-      <ConfigContext.Provider value={config}>
-        <AnalyticsContext.Provider value={analyticsMediator}>
-          <Title suffix={config.name}>{title}</Title>
-          <Head>
-            {config?.metadata &&
-              Object.entries(config?.metadata).map(([key, value]) => {
-                if (!value) {
-                  return null;
-                }
-                return <meta key={key} name={key} content={value as any} />;
-              })}
-            {Object.entries(metaTagsForSeo).map(([key, value]) => (
-              <meta key={key} name={key} content={value as any} />
-            ))}
-          </Head>
-          <GA4Script ga4={analyticsConfig.ga4} />
-          <SearchProvider>
-            <Header
-              hasNav={Boolean(config.navigation?.length)}
-              navIsOpen={navIsOpen}
-              onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-              title={meta?.title}
-              section={section}
-            />
-            <DocumentationLayout navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
-              <MDXRemote components={components} {...mdxSource} />
-            </DocumentationLayout>
-          </SearchProvider>
-        </AnalyticsContext.Provider>
-      </ConfigContext.Provider>
+      <VersionContextController>
+        <ConfigContext.Provider value={config}>
+          <AnalyticsContext.Provider value={analyticsMediator}>
+            <Title suffix={config.name}>{title}</Title>
+            <Head>
+              {config?.metadata &&
+                Object.entries(config?.metadata).map(([key, value]) => {
+                  if (!value) {
+                    return null;
+                  }
+                  return <meta key={key} name={key} content={value as any} />;
+                })}
+              {Object.entries(metaTagsForSeo).map(([key, value]) => (
+                <meta key={key} name={key} content={value as any} />
+              ))}
+            </Head>
+            <GA4Script ga4={analyticsConfig.ga4} />
+            <SearchProvider>
+              <Header
+                hasNav={Boolean(config.navigation?.length)}
+                navIsOpen={navIsOpen}
+                onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+                title={meta?.title}
+                section={section}
+              />
+              <DocumentationLayout navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
+                <MDXRemote components={components} {...mdxSource} />
+              </DocumentationLayout>
+            </SearchProvider>
+          </AnalyticsContext.Provider>
+        </ConfigContext.Provider>
+      </VersionContextController>
     </Intercom>
   );
 }
