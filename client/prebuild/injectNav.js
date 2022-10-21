@@ -9,38 +9,12 @@ import { slugToTitle } from './slugToTitle.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// End matter is front matter, but at the end
-const getIndexOfEndMatter = (fileContents) => {
-  const frontMatters = fileContents.match(
-    /---\n(title:.+\n|description:.+\n|sidebarTitle:.+\n|api:.+\n|openapi:.+\n)+---$/m
-  );
-  if (frontMatters) {
-    return fileContents.indexOf(frontMatters[0]);
-  }
-
-  return -1;
-};
-
-export const potentiallyRemoveEndMatter = (fileContents) => {
-  const endMatterIndex = getIndexOfEndMatter(fileContents);
-
-  if (endMatterIndex === -1) {
-    return fileContents;
-  }
-
-  return fileContents.substring(0, endMatterIndex);
-};
-
-const getMetadata = (fileContents) => {
-  const { data } = matter(fileContents);
-  return data;
-};
-
 export const createPage = (path, content, openApiObj) => {
   const slug = path.replace(/\.mdx?$/, '');
   let defaultTitle = slugToTitle(slug);
   const fileContents = Buffer.from(content).toString();
-  const metadata = getMetadata(fileContents);
+  const { data } = matter(fileContents);
+  const metadata = data;
   // Append data from OpenAPI if it exists
   const { title, description } = getOpenApiTitleAndDescription(openApiObj, metadata?.openapi);
   if (title) {
