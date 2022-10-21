@@ -1,3 +1,4 @@
+import { config } from '@/config';
 import { Group, Groups, GroupPage, isGroup } from '@/metadata';
 
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
@@ -62,3 +63,11 @@ function getInVersion(entry: GroupPage, version: string) {
 
   return entry;
 }
+
+export const versions = config.navigation?.reduce((arr: string[], nav) => {
+  if (typeof nav !== 'string' && nav.version && !arr.includes(nav.version)) {
+    return arr.concat(nav.version);
+  }
+
+  return arr;
+}, []);

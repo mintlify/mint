@@ -13,7 +13,6 @@ import FakeAnalyticsMediator from '@/analytics/FakeAnalyticsMediator';
 import GA4Script from '@/analytics/GA4Script';
 import { config } from '@/config';
 import { VersionContextController } from '@/context/VersionContext';
-import { VersionContext } from '@/hooks/useVersionContext';
 import Intercom from '@/integrations/Intercom';
 import { Meta } from '@/layouts/ContentsLayout';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
@@ -23,6 +22,7 @@ import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
 import '@/utils/fontAwesome';
 import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
+import { versions } from '@/utils/nav';
 
 import '../css/fonts.css';
 import '../css/main.css';
@@ -109,7 +109,7 @@ export default function App(props: any) {
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <AnalyticsContext.Provider value={analyticsMediator}>
-        <VersionContextController versionOptions={config.versions}>
+        <VersionContextController versionOptions={versions}>
           <Title suffix={config.name}>{title}</Title>
           <Head>
             {config?.metadata &&
