@@ -8,14 +8,14 @@ import { ReactNode } from 'react';
 import { createContext, forwardRef, useRef, useState } from 'react';
 
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-import { getGroupsInDivision, getGroupsNotInDivision } from '@/layouts/getGroupsInDivision';
 import { PageContext, Group, Groups, GroupPage, isGroup } from '@/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
+import { getGroupsInDivision, getGroupsNotInDivision } from '@/utils/nav';
+import { isPathInGroupPages } from '@/utils/nav';
 
 import { config, findFirstNavigationEntry } from '../config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
-import isPathInGroupPages from './isPathInGroupPages';
 
 type SidebarContextType = {
   nav: any;

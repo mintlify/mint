@@ -23,3 +23,12 @@ function isGroupPageInDivision(page: GroupPage, divisionUrl: string): boolean {
 
   return page.href.startsWith(`/${divisionUrl}/`);
 }
+
+export function isPathInGroupPages(pathname: string, groupPages: GroupPage[]): boolean {
+  return groupPages.some((groupPage) => {
+    if (isGroup(groupPage)) {
+      return isPathInGroupPages(pathname, groupPage.pages);
+    }
+    return groupPage.href === pathname;
+  });
+}
