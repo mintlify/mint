@@ -1,5 +1,5 @@
-import { config } from '@/config';
-import { Group, Groups, GroupPage, isGroup } from '@/metadata';
+import { config } from '@/types/config';
+import { Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
   return nav.filter((group: Group) => isGroupInDivision(group, divisionUrls));

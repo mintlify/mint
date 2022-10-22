@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { Fragment, useEffect, useRef } from 'react';
 import create from 'zustand';
 
-import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { config } from '@/types/config';
 
 const useSetting = create((set: any) => ({
   setting: 'system',

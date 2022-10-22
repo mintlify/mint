@@ -1,7 +1,6 @@
-// import axios from 'axios';
-// const API_ENDPOINT = process.env.API_ENDPOINT;
 // import ProgressBar from '@badrap/bar-of-progress';
 import { ResizeObserver } from '@juggle/resize-observer';
+import axios from 'axios';
 import 'focus-visible';
 import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
@@ -26,6 +25,8 @@ import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+
+const API_ENDPOINT = process.env.API_ENDPOINT;
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -61,7 +62,7 @@ interface ParsedDataProps {
   title: string;
   config: Config;
 }
-
+// TODO - handle incorrect urls
 export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
   const mdxSource = JSON.parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, config } = JSON.parse(
@@ -158,7 +159,18 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (!params) throw new Error('No path parameters found');
 
   const { site, slug } = params;
-  const path = slug.join('/');
+  const path = slug ? slug.join('/') : 'index';
+
+  // const { data }: { data: Record<string, string[][]> } = await axios.get(
+  //   `${API_ENDPOINT}/api/v1/admin/build/static-props`,
+  //   {
+  //     headers: { Authorization: `Bearer ${process.env.INTERNAL_SITE_BEARER_TOKEN}` },
+  //     params: {
+  //       subdomain: site,
+  //       path,
+  //     },
+  //   }
+  // );
 
   // TODO - get all the data (page data AND global data (metadata, openApi, config))
   const content: string = `---
@@ -381,7 +393,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       ],
     },
   ];
-  let section = undefined;
+  let section = null;
   let meta: PageMetaTags = {};
   siteMetadata.forEach((group) => {
     const foundPage = findPageInGroup(group, path);

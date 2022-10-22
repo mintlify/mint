@@ -16,6 +16,7 @@ import {
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { useActionKey } from '@/hooks/useActionKey';
+import { BASEPATH } from '@/utils/api';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
