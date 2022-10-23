@@ -46,9 +46,9 @@ export function Api({
   const { config } = useContext(SiteContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
-  const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex);
+  const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex, config?.api?.baseUrl);
 
-  const paramGroups = getParamGroupsFromAPIComponents(apiComponents, auth);
+  const paramGroups = getParamGroupsFromAPIComponents(apiComponents, auth, config?.api);
   const [currentActiveParamGroup, setCurrentActiveParamGroup] = useState<ParamGroup>(
     paramGroups[0]
   );
@@ -101,7 +101,7 @@ export function Api({
     setIsSendingResponse(true);
 
     try {
-      const apiContext = getApiContext(apiBase, path, inputData, contentType);
+      const apiContext = getApiContext(apiBase, path, inputData, contentType, config?.api);
       const { data } = await axios.post(`${config?.basePath ?? ''}/api/request`, {
         method,
         ...apiContext,

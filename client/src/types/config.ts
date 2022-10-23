@@ -156,6 +156,15 @@ type Integrations = {
 
 type FooterSocials = Record<string, string>;
 
+export type ApiConfig = {
+  baseUrl?: string | string[];
+  auth?: {
+    method: string; // 'key', 'bearer', or 'basic'
+    name?: string;
+    inputPrefix?: string;
+  };
+};
+
 export type Config = {
   mintlify?: string;
   name: string;
@@ -163,14 +172,7 @@ export type Config = {
   logo?: Logo;
   favicon?: string;
   openApi?: string;
-  api?: {
-    baseUrl?: string | string[];
-    auth?: {
-      method: string; // 'key', 'bearer', or 'basic'
-      name?: string;
-      inputPrefix?: string;
-    };
-  };
+  api?: ApiConfig;
   modeToggle?: {
     default?: string; // 'light' or 'dark'
     isHidden?: boolean;

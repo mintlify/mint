@@ -1,4 +1,4 @@
-import { config } from '@/types/config';
+import { Navigation } from '@/types/config';
 import { Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
@@ -97,6 +97,6 @@ function getVersionOfPageRecursively(
   }
 }
 
-export function getVersionOfPage(targetPage: string): string | void {
-  return getVersionOfPageRecursively(config.navigation, targetPage);
+export function getVersionOfPage(navigation: Navigation[], targetPage: string): string | void {
+  return getVersionOfPageRecursively(navigation, targetPage);
 }

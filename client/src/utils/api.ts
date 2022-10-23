@@ -1,11 +1,9 @@
 import { AxiosRequestHeaders } from 'axios';
 import isAbsoluteUrl from 'is-absolute-url';
-import { useContext } from 'react';
 
 import { ParamProps } from '@/components/Param';
-import SiteContext from '@/context/SiteContext';
 import { Component } from '@/enums/components';
-import { config } from '@/types/config';
+import { ApiConfig } from '@/types/config';
 import { openApi } from '@/types/openapi';
 import { ApiComponent } from '@/ui/Api';
 
@@ -85,7 +83,8 @@ export const getApiContext = (
   apiBase: string,
   path: string,
   inputData: Record<string, any>,
-  contentType: string
+  contentType: string,
+  apiConfig?: ApiConfig
 ): { url: string; body?: Object; params?: Object; headers?: AxiosRequestHeaders } => {
   const endpoint = `${apiBase}${path}`;
   const url = potentiallAddPathParams(endpoint, inputData);
@@ -95,12 +94,12 @@ export const getApiContext = (
 
   if (inputData.Authorization) {
     const authEntires = Object.entries(inputData.Authorization);
-    if (config.api?.auth?.method === 'basic' && authEntires.length === 2) {
+    if (apiConfig?.auth?.method === 'basic' && authEntires.length === 2) {
       let [[usernameField, username], [, password]]: any = authEntires;
       // Get order based on username:password
       if (
-        (config.api.auth.name && config.api.auth.name.split(':')[0] !== usernameField) ||
-        (!config.api.auth.name && usernameField.toLowerCase() !== 'username')
+        (apiConfig?.auth.name && apiConfig?.auth.name.split(':')[0] !== usernameField) ||
+        (!apiConfig?.auth.name && usernameField.toLowerCase() !== 'username')
       ) {
         // switch orders
         const temp = username;
@@ -136,10 +135,13 @@ export const extractMethodAndEndpoint = (api: string) => {
   };
 };
 
-export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
+export const extractBaseAndPath = (
+  endpoint: string,
+  apiBaseIndex = 0,
+  baseUrl?: string | string[]
+) => {
   let fullEndpoint;
-  const baseUrl =
-    config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
+  baseUrl = baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
   if (isAbsoluteUrl(endpoint)) {
     fullEndpoint = endpoint;
   } else if (baseUrl) {
@@ -161,23 +163,24 @@ export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
 
 export const getParamGroupsFromAPIComponents = (
   apiComponents?: ApiComponent[],
-  auth?: string
+  auth?: string,
+  apiConfig?: ApiConfig
 ): ParamGroup[] => {
   const groups: Record<string, Param[]> = {};
 
   // Add auth if configured
   if (auth?.toLowerCase() !== 'none') {
-    if (config.api?.auth?.name) {
+    if (apiConfig?.auth?.name) {
       groups.Authorization = [
         {
-          name: config.api.auth.name,
+          name: apiConfig.auth.name,
           required: true,
         },
       ];
     }
 
-    if (config.api?.auth?.method === 'basic') {
-      const name = config.api.auth.name || 'username:password';
+    if (apiConfig?.auth?.method === 'basic') {
+      const name = apiConfig.auth.name || 'username:password';
       groups.Authorization = name.split(':').map((section) => {
         return {
           name: section,
@@ -186,7 +189,7 @@ export const getParamGroupsFromAPIComponents = (
       });
     }
 
-    if (config.api?.auth?.method?.toLowerCase() === 'bearer' || auth?.toLowerCase() === 'bearer') {
+    if (apiConfig?.auth?.method?.toLowerCase() === 'bearer' || auth?.toLowerCase() === 'bearer') {
       groups.Authorization = [
         {
           name: 'Bearer',
