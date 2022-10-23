@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { forwardRef } from 'react';
 
 import { config } from '@/config';
+import { isBrandsIcon } from '@/ui/Icon';
 import {
   getAnchorBackgroundColor,
   getAnchorHoverBackgroundColor,
   getAnchorShadowColor,
   getAnchorTextColor,
 } from '@/utils/brands';
-import { isBrandFontAwesomeIcon } from '@/utils/fontAwesome';
 
 import Icon from './Icon';
 
@@ -90,7 +90,7 @@ export function StyledTopLevelLink({
   i,
   ...props
 }: TopLevelProps) {
-  const isBrandIcon = isBrandFontAwesomeIcon(icon);
+  const isBrandIcon = isBrandsIcon(icon);
   const iconType = isBrandIcon ? 'brands' : 'duotone';
   const AnchorIcon =
     icon == null ? (

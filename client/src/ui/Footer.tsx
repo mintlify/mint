@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import React from 'react';
 
-import { isBrandFontAwesomeIcon } from '@/utils/fontAwesome';
+import { isBrandsIcon } from '@/ui/Icon';
 
 import { config } from '../config';
 import Icon from './Icon';
@@ -37,7 +37,7 @@ const Social = ({ type, url }: SocialProps) => {
     return null;
   }
 
-  const iconType = isBrandFontAwesomeIcon(type) ? 'brands' : 'solid';
+  const iconType = isBrandsIcon(type) ? 'brands' : 'solid';
   return (
     <a href={url}>
       <span className="sr-only">{type}</span>

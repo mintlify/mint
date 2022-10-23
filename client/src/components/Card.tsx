@@ -1,4 +1,3 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Card as GenericCard } from '@mintlify/components';
 import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
@@ -26,7 +25,7 @@ export function Card({
   children,
 }: {
   title?: string;
-  icon?: ReactNode | IconDefinition;
+  icon?: ReactNode | string;
   color?: string;
   href?: string;
   children: React.ReactNode;
