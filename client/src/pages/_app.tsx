@@ -20,7 +20,6 @@ import { documentationNav, findPageInGroup, PageContext, nonMetaTags } from '@/m
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
-import '@/utils/fontAwesome';
 import getAnalyticsConfig from '@/utils/getAnalyticsConfig';
 
 import '../css/fonts.css';
