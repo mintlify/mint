@@ -14,7 +14,7 @@ import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
-import ConfigContext from '@/config/ConfigContext';
+import ConfigContext from '@/context/ConfigContext';
 import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
