@@ -15,7 +15,7 @@ import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
-import ConfigContext from '@/config/ConfigContext';
+import SiteContext from '@/context/SiteContext';
 import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
@@ -67,7 +67,7 @@ interface ParsedDataProps {
 // TODO - handle incorrect urls
 export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
   const mdxSource = JSON.parse(stringifiedMdxSource);
-  const { meta, section, metaTagsForSeo, title, config } = parse(
+  const { meta, section, metaTagsForSeo, title, config, nav, openApi } = parse(
     stringifiedData
   ) as ParsedDataProps;
 
@@ -90,7 +90,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <VersionContextController>
-        <ConfigContext.Provider value={config}>
+        <SiteContext.Provider value={{ config, nav, openApi }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <Title suffix={config.name}>{title}</Title>
             <Head>
@@ -119,7 +119,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
               </DocumentationLayout>
             </SearchProvider>
           </AnalyticsContext.Provider>
-        </ConfigContext.Provider>
+        </SiteContext.Provider>
       </VersionContextController>
     </Intercom>
   );
