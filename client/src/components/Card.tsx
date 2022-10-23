@@ -20,12 +20,14 @@ function DynamicLink(props: any) {
 export function Card({
   title,
   icon,
+  iconType,
   color,
   href,
   children,
 }: {
   title?: string;
   icon?: ReactNode | string;
+  iconType?: string;
   color?: string;
   href?: string;
   children: React.ReactNode;
@@ -43,6 +45,7 @@ export function Card({
     <GenericCard
       title={title}
       icon={icon}
+      iconType={iconType}
       iconColor={color || activeConfigColor}
       hoverHighlightColour={href ? color || activeConfigColor : undefined}
       href={forwardHref}

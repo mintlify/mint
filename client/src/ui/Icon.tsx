@@ -21,6 +21,32 @@ export default function Icon({
   );
 }
 
+// Currently used to support backwards compability with Font Awesome dynamic imports
+// TODO: remove when everyone has been migrated
+export function solid(icon: string) {
+  return icon;
+}
+
+export function regular(icon: string) {
+  return icon;
+}
+
+export function light(icon: string) {
+  return icon;
+}
+
+export function thin(icon: string) {
+  return icon;
+}
+
+export function duotone(icon: string) {
+  return icon;
+}
+
+export function brands(icon: string) {
+  return icon;
+}
+
 export const isBrandsIcon = (icon?: string): boolean => {
   if (!icon) return false;
 

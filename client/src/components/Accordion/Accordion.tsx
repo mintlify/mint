@@ -8,12 +8,14 @@ function Accordion({
   description,
   defaultOpen = false,
   icon,
+  iconType,
   children,
 }: {
   title: string;
   description?: string;
   defaultOpen: boolean;
   icon?: ReactNode | string;
+  iconType?: string;
   children: ReactNode;
 }) {
   const analyticsMediator = useContext(AnalyticsContext);
@@ -35,6 +37,7 @@ function Accordion({
       defaultOpen={defaultOpen}
       onChange={onChange}
       icon={icon}
+      iconType={iconType}
     >
       {children}
     </GenericAccordion>
