@@ -1,32 +1,15 @@
 import { Listbox } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef, useContext, useCallback } from 'react';
 import create from 'zustand';
 
+import SiteContext from '@/context/SiteContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-import { config } from '@/types/config';
 
 const useSetting = create((set: any) => ({
   setting: 'system',
   setSetting: (setting: string) => set({ setting }),
 })) as any;
-
-function update() {
-  if (
-    localStorage.theme === 'dark' ||
-    (config.modeToggle?.default == null &&
-      !('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches) ||
-    config.modeToggle?.default === 'dark'
-  ) {
-    document.documentElement.classList.add('dark', 'changing-theme');
-  } else {
-    document.documentElement.classList.remove('dark', 'changing-theme');
-  }
-  window.setTimeout(() => {
-    document.documentElement.classList.remove('changing-theme');
-  });
-}
 
 let settings = [
   {
@@ -124,8 +107,26 @@ function PcIcon({ selected, ...props }: { selected: boolean; className: string }
 }
 
 function useTheme() {
+  const { config } = useContext(SiteContext);
   let { setting, setSetting } = useSetting();
   let initial = useRef(true);
+
+  const update = useCallback(() => {
+    if (
+      localStorage.theme === 'dark' ||
+      (config?.modeToggle?.default == null &&
+        !('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+      config?.modeToggle?.default === 'dark'
+    ) {
+      document.documentElement.classList.add('dark', 'changing-theme');
+    } else {
+      document.documentElement.classList.remove('dark', 'changing-theme');
+    }
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('changing-theme');
+    });
+  }, [config?.modeToggle?.default]);
 
   useIsomorphicLayoutEffect(() => {
     let theme = localStorage.theme;
@@ -176,15 +177,16 @@ function useTheme() {
 
       window.removeEventListener('storage', onStorage);
     };
-  }, [setSetting]);
+  }, [setSetting, update]);
 
   return [setting, setSetting];
 }
 
 export function ThemeToggle({ panelClassName = 'mt-4' }) {
+  const { config } = useContext(SiteContext);
   let [setting, setSetting] = useTheme();
 
-  if (config.modeToggle?.isHidden) {
+  if (config?.modeToggle?.isHidden) {
     return null;
   }
 
@@ -231,9 +233,10 @@ export function ThemeToggle({ panelClassName = 'mt-4' }) {
 }
 
 export function ThemeSelect() {
+  const { config } = useContext(SiteContext);
   let [setting, setSetting] = useTheme();
 
-  if (config.modeToggle?.isHidden) {
+  if (config?.modeToggle?.isHidden) {
     return null;
   }
 

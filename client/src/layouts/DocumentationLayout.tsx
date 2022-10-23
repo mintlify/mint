@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 
+import SiteContext from '@/context/SiteContext';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
-import { config } from '@/types/config';
 import { documentationNav, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
 
@@ -20,7 +20,7 @@ export function DocumentationLayout({
 }) {
   const router = useRouter();
   const { setSelectedVersion } = useContext(VersionContext);
-
+  const { config } = useContext(SiteContext);
   if (meta.version) {
     setSelectedVersion(meta.version);
   }
@@ -29,7 +29,7 @@ export function DocumentationLayout({
 
   return (
     <>
-      <Title suffix={router.pathname === '/' ? '' : config.name}>{title}</Title>
+      <Title suffix={router.pathname === '/' ? '' : config?.name ?? ''}>{title}</Title>
       <SidebarLayout nav={documentationNav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen}>
         {children}
       </SidebarLayout>

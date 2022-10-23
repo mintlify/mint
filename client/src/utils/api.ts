@@ -1,7 +1,9 @@
 import { AxiosRequestHeaders } from 'axios';
 import isAbsoluteUrl from 'is-absolute-url';
+import { useContext } from 'react';
 
 import { ParamProps } from '@/components/Param';
+import SiteContext from '@/context/SiteContext';
 import { Component } from '@/enums/components';
 import { config } from '@/types/config';
 import { openApi } from '@/types/openapi';
@@ -26,8 +28,6 @@ export type ParamGroup = {
   name: string;
   params: Param[];
 };
-
-export const BASEPATH = config.basePath || '';
 
 const paramTypeToNameMap: Record<string, string> = {
   auth: 'Authorization',

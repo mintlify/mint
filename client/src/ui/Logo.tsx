@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import Image from 'next/image';
+import { useContext } from 'react';
 
-import { config } from '@/types/config';
+import SiteContext from '@/context/SiteContext';
 
 export function Logo() {
-  const className = clsx('w-auto h-7 relative', config.classes?.logo);
-  if (typeof config.logo === 'object' && config.logo !== null) {
+  const { config } = useContext(SiteContext);
+  const className = clsx('w-auto h-7 relative', config?.classes?.logo);
+  if (typeof config?.logo === 'object' && config.logo !== null) {
     return (
       <>
         <img

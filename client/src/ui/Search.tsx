@@ -15,6 +15,7 @@ import {
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
+import SiteContext from '@/context/SiteContext';
 import { useActionKey } from '@/hooks/useActionKey';
 import { BASEPATH } from '@/utils/api';
 
@@ -187,13 +188,14 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
 
 export function SearchProvider({ children }: any) {
   const router = useRouter();
+  const { config } = useContext(SiteContext);
   const [searchId, setSearchId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [hits, setHits] = useState<Hit[]>([]);
 
   useEffect(() => {
-    axios.get(`${BASEPATH}/api/name`).then(({ data }) => {
+    axios.get(`${config?.basePath ?? ''}/api/name`).then(({ data }) => {
       setSearchId(data);
     });
   }, []);

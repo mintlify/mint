@@ -1,10 +1,9 @@
 import axios from 'axios';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
-import { config } from '@/types/config';
+import SiteContext from '@/context/SiteContext';
 import {
-  BASEPATH,
   extractBaseAndPath,
   extractMethodAndEndpoint,
   getApiContext,
@@ -44,6 +43,7 @@ export function Api({
   children?: any;
   apiComponents?: ApiComponent[];
 }) {
+  const { config } = useContext(SiteContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
   const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex);
@@ -68,7 +68,7 @@ export function Api({
 
     // Configure api auth prefix
     // TODO: Standardize to work without auth name and reliable for different methods
-    if (config.api?.auth?.inputPrefix && config.api.auth.name) {
+    if (config?.api?.auth?.inputPrefix && config.api.auth.name) {
       setInputData({
         ...inputData,
         Authorization: {
@@ -80,7 +80,7 @@ export function Api({
   }, [api, children]);
 
   const onChangeApiBaseSelection = (base: string) => {
-    if (config.api == null || !Array.isArray(config.api?.baseUrl)) {
+    if (config?.api == null || !Array.isArray(config.api?.baseUrl)) {
       return;
     }
     const index = config.api.baseUrl.indexOf(base);
@@ -102,7 +102,7 @@ export function Api({
 
     try {
       const apiContext = getApiContext(apiBase, path, inputData, contentType);
-      const { data } = await axios.post(`${BASEPATH}/api/request`, {
+      const { data } = await axios.post(`${config?.basePath ?? ''}/api/request`, {
         method,
         ...apiContext,
       });
@@ -249,7 +249,7 @@ export function Api({
             </div>
           )}
           {/* Only display dropdown when there are multiple endpoints */}
-          {config.api?.baseUrl && Array.isArray(config.api?.baseUrl) && (
+          {config?.api?.baseUrl && Array.isArray(config.api?.baseUrl) && (
             <div
               className={clsx(
                 'relative select-none align-middle inline-flex rounded-md -top-px mx-1 w-5 h-[1.125rem] bg-white hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 border hover:border-slate-400 dark:hover:border-slate-400 focus:outline-none cursor-pointer',
@@ -265,7 +265,7 @@ export function Api({
                 onChange={(e) => onChangeApiBaseSelection(e.target.value)}
               >
                 <option disabled>Select API base</option>
-                {config.api.baseUrl.map((base) => (
+                {config?.api.baseUrl.map((base) => (
                   <option key={base} selected={base === apiBase}>
                     {base}
                   </option>

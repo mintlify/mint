@@ -2,10 +2,10 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Card as GenericCard } from '@mintlify/components';
 import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useContext } from 'react';
 
+import SiteContext from '@/context/SiteContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-import { config } from '@/types/config';
 
 function DynamicLink(props: any) {
   if (props.href && isAbsoluteUrl(props.href)) {
@@ -31,6 +31,7 @@ export function Card({
   href?: string;
   children: React.ReactNode;
 }) {
+  const { config } = useContext(SiteContext);
   const [isDarkMode, setIsDarkMode] = useState<boolean>();
   useIsomorphicLayoutEffect(() => {
     if (window.document.querySelector('html.dark')) {
@@ -38,7 +39,7 @@ export function Card({
     }
   }, []);
 
-  const activeConfigColor = isDarkMode ? config.colors?.light : config.colors?.primary;
+  const activeConfigColor = isDarkMode ? config?.colors?.light : config?.colors?.primary;
 
   const Card = ({ forwardHref, onClick }: { forwardHref?: string; onClick?: any }) => (
     <GenericCard

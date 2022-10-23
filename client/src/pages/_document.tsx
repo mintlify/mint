@@ -1,5 +1,6 @@
 import NextDocument, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 
+// TODO - Custom CSS isn't supposed to be set through the document. Move logic reliant on config to layout https://nextjs.org/docs/advanced-features/custom-document
 import { config } from '@/types/config';
 
 const FAVICON_VERSION = 3;

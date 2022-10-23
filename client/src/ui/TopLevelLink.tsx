@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 
-import { config } from '@/types/config';
+import SiteContext from '@/context/SiteContext';
 import {
   getAnchorBackgroundColor,
   getAnchorHoverBackgroundColor,
@@ -29,9 +29,11 @@ type TopLevelProps = {
 
 const TopLevelAnchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color, i }: TopLevelProps, ref: any) => {
+    const { config } = useContext(SiteContext);
     const activeBackgroundColor =
-      config.classes?.activeAnchors ?? getAnchorBackgroundColor(i, color);
-    const hoverBackgroundColor = config.classes?.anchors ?? getAnchorHoverBackgroundColor(i, color);
+      config?.classes?.activeAnchors ?? getAnchorBackgroundColor(i, color);
+    const hoverBackgroundColor =
+      config?.classes?.anchors ?? getAnchorHoverBackgroundColor(i, color);
     const shadowColor = getAnchorShadowColor(i, color);
     return (
       <li>

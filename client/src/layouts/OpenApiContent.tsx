@@ -1,13 +1,13 @@
 // TODO: Refactor this file to improve readability
 import { Tab, Tabs } from '@mintlify/components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
+import SiteContext from '@/context/SiteContext';
 import { Component } from '@/enums/components';
-import { config } from '@/types/config';
 import { openApi } from '@/types/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
@@ -159,6 +159,7 @@ function ExpandableFields({ schema }: any) {
 }
 
 export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
+  const { config } = useContext(SiteContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(openapi);
   useEffect(() => {
@@ -289,7 +290,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   let responseSchema = operation.responses?.['200']?.content?.['application/json']?.schema;
   // endpoint in OpenAPI refers to the path
   const configBaseUrl =
-    config.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
+    config?.api?.baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
   const baseUrl =
     configBaseUrl && Array.isArray(configBaseUrl) ? configBaseUrl[apiBaseIndex] : configBaseUrl;
   const api = `${method} ${baseUrl}${endpoint}`;
