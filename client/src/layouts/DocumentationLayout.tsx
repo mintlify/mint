@@ -4,7 +4,7 @@ import { ReactNode, useContext } from 'react';
 import SiteContext from '@/context/SiteContext';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
-import { documentationNav, PageMetaTags } from '@/types/metadata';
+import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
 
 export function DocumentationLayout({
@@ -12,11 +12,13 @@ export function DocumentationLayout({
   setNavIsOpen,
   meta,
   children,
+  nav,
 }: {
   navIsOpen: boolean;
   setNavIsOpen: any;
   meta: PageMetaTags;
   children: ReactNode;
+  nav: Groups;
 }) {
   const router = useRouter();
   const { setSelectedVersion } = useContext(VersionContext);
@@ -30,7 +32,7 @@ export function DocumentationLayout({
   return (
     <>
       <Title suffix={router.pathname === '/' ? '' : config?.name ?? ''}>{title}</Title>
-      <SidebarLayout nav={documentationNav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen}>
+      <SidebarLayout nav={nav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen}>
         {children}
       </SidebarLayout>
     </>

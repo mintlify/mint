@@ -114,7 +114,12 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
                 title={meta?.title}
                 section={section}
               />
-              <DocumentationLayout navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
+              <DocumentationLayout
+                nav={nav}
+                navIsOpen={navIsOpen}
+                setNavIsOpen={setNavIsOpen}
+                meta={meta}
+              >
                 <MDXRemote components={components} {...mdxSource} />
               </DocumentationLayout>
             </SearchProvider>

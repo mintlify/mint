@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 
+// TODO - documentationNav not available on 404. Create endpoint to get nav
 import { documentationNav, isGroup } from '@/types/metadata';
 
 export default function Error() {
