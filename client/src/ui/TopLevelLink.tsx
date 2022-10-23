@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { forwardRef } from 'react';
@@ -11,6 +10,8 @@ import {
   getAnchorTextColor,
 } from '@/utils/brands';
 import { isBrandFontAwesomeIcon } from '@/utils/fontAwesome';
+
+import Icon from './Icon';
 
 type TopLevelProps = {
   href: string;
@@ -49,7 +50,7 @@ const TopLevelAnchor = forwardRef(
         >
           <div
             className={clsx(
-              `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10`,
+              `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10 p-1`,
               shadowColor || 'shadow-primary/40',
               hoverBackgroundColor,
               isActive
@@ -90,19 +91,19 @@ export function StyledTopLevelLink({
   ...props
 }: TopLevelProps) {
   const isBrandIcon = isBrandFontAwesomeIcon(icon);
-  const iconPrefix = isBrandIcon ? 'fab' : 'fad';
-  const Icon =
+  const iconType = isBrandIcon ? 'brands' : 'duotone';
+  const AnchorIcon =
     icon == null ? (
       <div className="h-6 w-px"></div>
     ) : (
-      <FontAwesomeIcon
+      <Icon
+        icon={icon.toLowerCase()}
+        iconType={iconType}
         className={clsx(
-          `h-6 w-6 p-1 text-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:text-white`,
-          isBrandIcon && 'fa-secondary',
-          isActive ? 'dark:text-white' : 'dark:text-slate-500',
-          color == null && 'dark:group-hover:text-white'
+          `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
+          isActive ? 'dark:bg-white' : 'dark:bg-slate-500',
+          color == null && 'dark:group-hover:bg-white'
         )}
-        icon={[iconPrefix, icon.toLowerCase()]}
       />
     );
   return (
@@ -111,7 +112,7 @@ export function StyledTopLevelLink({
       as={as}
       href={href}
       className="mb-4"
-      icon={Icon}
+      icon={AnchorIcon}
       isActive={isActive}
       color={color}
       i={i}

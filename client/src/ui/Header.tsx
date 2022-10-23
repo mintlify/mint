@@ -1,5 +1,3 @@
-import { brands, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import clsx from 'clsx';
@@ -13,6 +11,7 @@ import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
 
 import { config, TopbarCta } from '../config';
+import Icon from './Icon';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 import { VersionSelect } from './VersionSelect';
 
@@ -134,11 +133,19 @@ function GitHubCta({ button }: { button: TopbarCta }) {
             {repoData ? (
               <div className="text-xs flex items-center space-x-2 text-slate-600 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">
                 <span className="flex items-center space-x-1">
-                  <FontAwesomeIcon className="h-3 w-3" icon={regular('star')} />
+                  <Icon
+                    className="h-3 w-3 bg-slate-600 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-300"
+                    icon="star"
+                    iconType="regular"
+                  />
                   <span>{repoData.stargazers_count}</span>
                 </span>
                 <span className="flex items-center space-x-1">
-                  <FontAwesomeIcon className="h-3 w-3" icon={regular('code-fork')} />
+                  <Icon
+                    className="h-3 w-3 bg-slate-600 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-300"
+                    icon="code-fork"
+                    iconType="regular"
+                  />
                   <span>{repoData.forks_count}</span>
                 </span>
               </div>
