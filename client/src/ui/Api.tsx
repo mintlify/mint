@@ -43,10 +43,10 @@ export function Api({
   children?: any;
   apiComponents?: ApiComponent[];
 }) {
-  const { config } = useContext(SiteContext);
+  const { config, openApi } = useContext(SiteContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
-  const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex, config?.api?.baseUrl);
+  const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex, config?.api?.baseUrl, openApi);
 
   const paramGroups = getParamGroupsFromAPIComponents(apiComponents, auth, config?.api);
   const [currentActiveParamGroup, setCurrentActiveParamGroup] = useState<ParamGroup>(

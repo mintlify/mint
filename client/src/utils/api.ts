@@ -4,7 +4,6 @@ import isAbsoluteUrl from 'is-absolute-url';
 import { ParamProps } from '@/components/Param';
 import { Component } from '@/enums/components';
 import { ApiConfig } from '@/types/config';
-import { openApi } from '@/types/openapi';
 import { ApiComponent } from '@/ui/Api';
 
 export type Child = {
@@ -138,7 +137,8 @@ export const extractMethodAndEndpoint = (api: string) => {
 export const extractBaseAndPath = (
   endpoint: string,
   apiBaseIndex = 0,
-  baseUrl?: string | string[]
+  baseUrl?: string | string[],
+  openApi?: any
 ) => {
   let fullEndpoint;
   baseUrl = baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);

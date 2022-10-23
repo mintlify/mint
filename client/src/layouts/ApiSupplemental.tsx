@@ -1,10 +1,10 @@
 import axios from 'axios';
 import parse from 'html-react-parser';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Editor } from '@/components/Editor';
+import SiteContext from '@/context/SiteContext';
 import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
@@ -26,11 +26,12 @@ type ApiComponent = {
 
 export function ApiSupplemental({
   apiComponents,
-  openapi,
+  endpointStr,
 }: {
   apiComponents: ApiComponent[];
-  openapi?: string;
+  endpointStr?: string;
 }) {
+  const { openApi } = useContext(SiteContext);
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
   const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
@@ -74,10 +75,10 @@ export function ApiSupplemental({
   const [highlightedExamples, setHighlightedExamples] = useState<string[]>([]);
 
   useEffect(() => {
-    if (openapi == null) {
+    if (endpointStr == null) {
       return;
     }
-    const { operation } = getOpenApiOperationMethodAndEndpoint(openapi);
+    const { operation } = getOpenApiOperationMethodAndEndpoint(endpointStr, openApi);
     if (operation?.responses != null) {
       const responseExamplesOpenApi = Object.values(operation?.responses)
         .map((resp: any) => {
@@ -91,7 +92,7 @@ export function ApiSupplemental({
         setOpenApiResponseExamples(responseExamplesOpenApi);
       }
     }
-  }, [openapi]);
+  }, [endpointStr, openApi]);
 
   useEffect(() => {
     if (openApiResponseExamples.length > 0) {

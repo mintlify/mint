@@ -8,12 +8,11 @@ import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import SiteContext from '@/context/SiteContext';
 import { Component } from '@/enums/components';
-import { openApi } from '@/types/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 
 type OpenApiContentProps = {
-  openapi: string;
+  endpointStr: string;
   auth?: string;
 };
 
@@ -158,16 +157,19 @@ function ExpandableFields({ schema }: any) {
   );
 }
 
-export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
-  const { config } = useContext(SiteContext);
+export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
+  const { config, openApi } = useContext(SiteContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
-  const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(openapi);
+  const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(
+    endpointStr,
+    openApi
+  );
   useEffect(() => {
     const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
     if (configuredApiBaseIndex != null) {
       setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
     }
-  }, [openapi]);
+  }, [openApi]);
 
   if (operation == null) {
     return null;
