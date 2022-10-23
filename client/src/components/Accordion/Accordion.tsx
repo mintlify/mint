@@ -2,6 +2,7 @@ import { Accordion as GenericAccordion } from '@mintlify/components';
 import { ReactNode, useContext } from 'react';
 
 import AnalyticsContext from '@/analytics/AnalyticsContext';
+import { ComponentIcon } from '@/ui/Icon';
 
 function Accordion({
   title,
@@ -30,14 +31,20 @@ function Accordion({
     }
   };
 
+  const Icon =
+    typeof icon === 'string' ? (
+      <ComponentIcon icon={icon} iconType={iconType as any} className="w-4 h-4" />
+    ) : (
+      icon
+    );
+
   return (
     <GenericAccordion
       title={title}
       description={description}
       defaultOpen={defaultOpen}
       onChange={onChange}
-      icon={icon}
-      iconType={iconType}
+      icon={Icon}
     >
       {children}
     </GenericAccordion>

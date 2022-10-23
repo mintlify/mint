@@ -1,13 +1,14 @@
-export default function Icon({
-  icon,
-  iconType,
-  className,
-}: {
+import clsx from 'clsx';
+
+type IconProps = {
   icon: string;
   iconType?: 'brands' | 'duotone' | 'light' | 'regular' | 'sharp-solid' | 'solid' | 'thin';
   className?: string;
-}) {
-  const type = iconType || 'regular';
+  color?: string;
+};
+
+export default function Icon({ icon, iconType, className, color }: IconProps) {
+  const type = isBrandsIcon(icon) ? 'brands' : iconType ?? 'regular';
 
   return (
     <svg
@@ -16,8 +17,20 @@ export default function Icon({
         WebkitMaskImage: `url(https://deo472wkghxhm.cloudfront.net/${type}/${icon}.svg)`,
         WebkitMaskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',
+        backgroundColor: color,
       }}
     ></svg>
+  );
+}
+
+export function ComponentIcon({ icon, iconType, className, color }: IconProps) {
+  return (
+    <Icon
+      icon={icon}
+      iconType={iconType}
+      className={clsx(className, !color && 'bg-slate-800 dark:bg-slate-100')}
+      color={color}
+    />
   );
 }
 
@@ -47,7 +60,7 @@ export function brands(icon: string) {
   return icon;
 }
 
-export const isBrandsIcon = (icon?: string): boolean => {
+function isBrandsIcon(icon?: string): boolean {
   if (!icon) return false;
 
   const brands = [
@@ -509,4 +522,4 @@ export const isBrandsIcon = (icon?: string): boolean => {
     'zhihu',
   ];
   return brands.includes(icon.toLowerCase());
-};
+}

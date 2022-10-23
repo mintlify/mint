@@ -2,8 +2,6 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import React from 'react';
 
-import { isBrandsIcon } from '@/ui/Icon';
-
 import { config } from '../config';
 import Icon from './Icon';
 
@@ -37,13 +35,12 @@ const Social = ({ type, url }: SocialProps) => {
     return null;
   }
 
-  const iconType = isBrandsIcon(type) ? 'brands' : 'solid';
   return (
     <a href={url}>
       <span className="sr-only">{type}</span>
       <Icon
         icon={icon}
-        iconType={iconType}
+        iconType="solid"
         className="h-5 w-5 bg-slate-400 dark:bg-slate-500 hover:bg-slate-500 dark:hover:bg-slate-400"
       />
     </a>

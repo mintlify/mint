@@ -24,7 +24,7 @@
     "@juggle/resize-observer": "^3.2.0",
     "@mdx-js/loader": "^2.1.3",
     "@mdx-js/react": "^2.1.3",
-    "@mintlify/components": "^0.1.32",
+    "@mintlify/components": "^0.1.33",
     "@next/bundle-analyzer": "^12.3.1",
     "@next/mdx": "^12.3.0",
     "@sentry/nextjs": "^7.9.0",

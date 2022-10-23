@@ -5,6 +5,7 @@ import { ReactNode, useState } from 'react';
 
 import { config } from '@/config';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
+import { ComponentIcon } from '@/ui/Icon';
 
 function DynamicLink(props: any) {
   if (props.href && isAbsoluteUrl(props.href)) {
@@ -41,12 +42,22 @@ export function Card({
 
   const activeConfigColor = isDarkMode ? config.colors?.light : config.colors?.primary;
 
+  const Icon =
+    typeof icon === 'string' ? (
+      <ComponentIcon
+        icon={icon}
+        iconType={iconType as any}
+        color={color || activeConfigColor}
+        className="h-6 w-6"
+      />
+    ) : (
+      icon
+    );
+
   const Card = ({ forwardHref, onClick }: { forwardHref?: string; onClick?: any }) => (
     <GenericCard
       title={title}
-      icon={icon}
-      iconType={iconType}
-      iconColor={color || activeConfigColor}
+      icon={Icon}
       hoverHighlightColour={href ? color || activeConfigColor : undefined}
       href={forwardHref}
       onClick={onClick}

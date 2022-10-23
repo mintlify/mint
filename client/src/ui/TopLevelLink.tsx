@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { forwardRef } from 'react';
 
 import { config } from '@/config';
-import { isBrandsIcon } from '@/ui/Icon';
 import {
   getAnchorBackgroundColor,
   getAnchorHoverBackgroundColor,
@@ -90,15 +89,13 @@ export function StyledTopLevelLink({
   i,
   ...props
 }: TopLevelProps) {
-  const isBrandIcon = isBrandsIcon(icon);
-  const iconType = isBrandIcon ? 'brands' : 'duotone';
   const AnchorIcon =
     icon == null ? (
       <div className="h-6 w-px"></div>
     ) : (
       <Icon
         icon={icon.toLowerCase()}
-        iconType={iconType}
+        iconType="duotone"
         className={clsx(
           `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
           isActive ? 'dark:bg-white' : 'dark:bg-slate-500',
