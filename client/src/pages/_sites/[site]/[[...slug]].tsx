@@ -21,6 +21,7 @@ import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import type { Config } from '@/types/config';
 import { Groups, PageMetaTags } from '@/types/metadata';
+import { ColorVariables } from '@/ui/ColorVariables';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
@@ -92,6 +93,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
       <VersionContextController>
         <ConfigContext.Provider value={{ config, nav, openApi }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
+            <ColorVariables />
             <Title suffix={config.name}>{title}</Title>
             <Head>
               {config?.metadata &&
