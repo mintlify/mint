@@ -66,7 +66,7 @@ interface ParsedDataProps {
 }
 // TODO - handle incorrect urls
 export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
-  const mdxSource = JSON.parse(stringifiedMdxSource);
+  const mdxSource = parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, config, nav, openApi } = parse(
     stringifiedData
   ) as ParsedDataProps;
@@ -186,7 +186,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const mdxSource = await getMdxSource(content, { section, meta });
   return {
     props: {
-      stringifiedMdxSource: JSON.stringify(mdxSource),
+      stringifiedMdxSource: stringify(mdxSource),
       stringifiedData: stringify({
         nav,
         meta,

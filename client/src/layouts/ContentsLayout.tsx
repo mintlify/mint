@@ -234,7 +234,7 @@ export function ContentsLayout({
         </div>
       </ContentsContext.Provider>
 
-      {meta.openapi && <OpenApiContent openapi={meta.openapi} auth={meta.auth} />}
+      {meta.openapi && <OpenApiContent endpointStr={meta.openapi} auth={meta.auth} />}
 
       <Footer previous={prev} next={next} hasBottomPadding={!hasApiSupplementalComponents} />
       <div
@@ -250,7 +250,7 @@ export function ContentsLayout({
         )}
         {hasApiSupplementalComponents && (
           <div className="sticky top-[6rem] left-0">
-            <ApiSupplemental openapi={meta.openapi} apiComponents={apiComponents} />
+            <ApiSupplemental endpointStr={meta.openapi} apiComponents={apiComponents} />
           </div>
         )}
       </div>
