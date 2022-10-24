@@ -2,8 +2,6 @@ import { ResizeObserver } from '@juggle/resize-observer';
 import 'focus-visible';
 import 'intersection-observer';
 
-import '@/utils/fontAwesome';
-
 import '../css/fonts.css';
 import '../css/main.css';
 

@@ -1,124 +1,67 @@
-import { config as fontawesomeConfig } from '@fortawesome/fontawesome-svg-core';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faDiscord,
-  faFacebook,
-  faGithub,
-  faLinkedin,
-  faSlack,
-  faTwitter,
-  faInstagram,
-  faHackerNews,
-  faGoogle,
-  faMicrosoft,
-  faAws,
-  faYoutube,
-  faMedium,
-  faReddit,
-} from '@fortawesome/free-brands-svg-icons';
-import {
-  faBookBookmark,
-  faBookOpen,
-  faCircleNodes,
-  faCirclePlay,
-  faCommentDots,
-  faEnvelope,
-  faFlask,
-  faLink,
-  faPenNib,
-  faRectangleTerminal,
-  faRocketLaunch,
-  faEnvelopeOpenText,
-  faComments,
-  faCoins,
-  faMap,
-  faNewspaper,
-  faPeopleGroup,
-  faHandshake,
-  faChartNetwork,
-  faCircleQuestion,
-  faBook,
-  faLocationDot,
-  faPhone,
-  faWavePulse,
-  faPaperPlane,
-  faBookmark,
-  faList,
-  faShieldHalved,
-  faPlug,
-  faBell,
-  faUserShield,
-  faCreditCard,
-  faFileShield,
-  faTags,
-  faGraduationCap,
-  faSquare1,
-  faSquare2,
-  faStarShooting,
-} from '@fortawesome/pro-duotone-svg-icons';
-import { faEarthAmericas } from '@fortawesome/pro-solid-svg-icons';
+import clsx from 'clsx';
 
-fontawesomeConfig.replacementClass = '';
-library.add(
-  // Duotone
-  faBookOpen,
-  faBookBookmark,
-  faCirclePlay,
-  faEnvelope,
-  faRocketLaunch,
-  faCircleNodes,
-  faCommentDots,
-  faPenNib,
-  faLink,
-  faFlask,
-  faRectangleTerminal,
-  faEnvelopeOpenText,
-  faComments,
-  faCoins,
-  faMap,
-  faNewspaper,
-  faPeopleGroup,
-  faHandshake,
-  faChartNetwork,
-  faCircleQuestion,
-  faBook,
-  faLocationDot,
-  faPhone,
-  faWavePulse,
-  faPaperPlane,
-  faBookmark,
-  faList,
-  faShieldHalved,
-  faPlug,
-  faBell,
-  faUserShield,
-  faCreditCard,
-  faFileShield,
-  faTags,
-  faGraduationCap,
-  faSquare1,
-  faSquare2,
-  faStarShooting,
-  // Solids
-  faEarthAmericas,
-  // Brands
-  faDiscord,
-  faSlack,
-  faGithub,
-  faTwitter,
-  faFacebook,
-  faLinkedin,
-  faInstagram,
-  faGoogle,
-  faMicrosoft,
-  faAws,
-  faYoutube,
-  faMedium,
-  faHackerNews,
-  faReddit
-);
+type IconProps = {
+  icon: string;
+  iconType?: 'brands' | 'duotone' | 'light' | 'regular' | 'sharp-solid' | 'solid' | 'thin';
+  className?: string;
+  color?: string;
+  overrideColor?: boolean;
+};
 
-export const isBrandFontAwesomeIcon = (icon?: string): boolean => {
+export default function Icon({ icon, iconType, className, color }: IconProps) {
+  const type = isBrandsIcon(icon) ? 'brands' : iconType ?? 'regular';
+
+  return (
+    <svg
+      className={className}
+      style={{
+        WebkitMaskImage: `url(https://deo472wkghxhm.cloudfront.net/${type}/${icon}.svg)`,
+        WebkitMaskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        backgroundColor: color,
+      }}
+    ></svg>
+  );
+}
+
+export function ComponentIcon({ icon, iconType, className, color, overrideColor }: IconProps) {
+  return (
+    <Icon
+      icon={icon}
+      iconType={iconType}
+      className={clsx(className, !color && !overrideColor && 'bg-slate-800 dark:bg-slate-100')}
+      color={color}
+    />
+  );
+}
+
+// Currently used to support backwards compability with Font Awesome dynamic imports
+// TODO: remove when everyone has been migrated
+export function solid(icon: string) {
+  return icon;
+}
+
+export function regular(icon: string) {
+  return icon;
+}
+
+export function light(icon: string) {
+  return icon;
+}
+
+export function thin(icon: string) {
+  return icon;
+}
+
+export function duotone(icon: string) {
+  return icon;
+}
+
+export function brands(icon: string) {
+  return icon;
+}
+
+function isBrandsIcon(icon?: string): boolean {
   if (!icon) return false;
 
   const brands = [
@@ -580,4 +523,4 @@ export const isBrandFontAwesomeIcon = (icon?: string): boolean => {
     'zhihu',
   ];
   return brands.includes(icon.toLowerCase());
-};
+}

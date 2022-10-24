@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
+
+import Icon from '@/ui/Icon';
 
 const FeedbackTooltip = ({ message }: { message: string }) => {
   return (
@@ -36,17 +36,19 @@ export function UserFeedback({ title }: { title: string }) {
     <div className="flex items-center space-x-2">
       <Link href={`/api/suggest?path=${router.pathname}`}>
         <a
-          className="relative w-fit flex items-center p-1.5 group fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200 dark:hover:text-slate-300"
+          className="relative w-fit flex items-center p-1.5 group"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FontAwesomeIcon
-            icon={regular('pencil')}
-            className="h-3.5 w-3.5 block group-hover:hidden"
+          <Icon
+            icon="pencil"
+            iconType="regular"
+            className="h-3.5 w-3.5 block group-hover:hidden bg-slate-500 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-200"
           />
-          <FontAwesomeIcon
-            icon={solid('pencil')}
-            className="h-3.5 w-3.5 hidden group-hover:block"
+          <Icon
+            icon="pencil"
+            iconType="solid"
+            className="h-3.5 w-3.5 hidden group-hover:block bg-slate-500 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-200"
           />
           <FeedbackTooltip message="Edit this page" />
         </a>
@@ -57,13 +59,15 @@ export function UserFeedback({ title }: { title: string }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FontAwesomeIcon
-            icon={regular('triangle-exclamation')}
-            className="h-3.5 w-3.5 block group-hover:hidden"
+          <Icon
+            icon="triangle-exclamation"
+            iconType="regular"
+            className="h-3.5 w-3.5 block group-hover:hidden bg-slate-500 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-200"
           />
-          <FontAwesomeIcon
-            icon={solid('triangle-exclamation')}
-            className="h-3.5 w-3.5 hidden group-hover:block"
+          <Icon
+            icon="triangle-exclamation"
+            iconType="solid"
+            className="h-3.5 w-3.5 hidden group-hover:block bg-slate-500 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-200"
           />
           <FeedbackTooltip message="Raise an issue" />
         </a>

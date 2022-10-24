@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { Groups, PageMetaTags } from '@/types/metadata';
@@ -22,7 +22,7 @@ export function DocumentationLayout({
 }) {
   const router = useRouter();
   const { setSelectedVersion } = useContext(VersionContext);
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   if (meta.version) {
     setSelectedVersion(meta.version);
   }

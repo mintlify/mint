@@ -2,7 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import { useEffect, useState, useContext } from 'react';
 
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import {
   extractBaseAndPath,
   extractMethodAndEndpoint,
@@ -43,7 +43,7 @@ export function Api({
   children?: any;
   apiComponents?: ApiComponent[];
 }) {
-  const { config, openApi } = useContext(SiteContext);
+  const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
   const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex, config?.api?.baseUrl, openApi);

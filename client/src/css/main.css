@@ -1,4 +1,4 @@
-@import "../../node_modules/@mintlify/components/dist/main.css";
+@import '../../node_modules/@mintlify/components/dist/main.css';
 @import 'base.css';
 
 /*! purgecss start ignore */
@@ -8,4 +8,3 @@
 
 @import 'tailwindcss/components';
 @import 'utilities.css';
-@import 'font-awesome.css';

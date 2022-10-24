@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Fragment, useEffect, useRef, useContext, useCallback } from 'react';
 import create from 'zustand';
 
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 
 const useSetting = create((set: any) => ({
@@ -107,7 +107,7 @@ function PcIcon({ selected, ...props }: { selected: boolean; className: string }
 }
 
 function useTheme() {
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   let { setting, setSetting } = useSetting();
   let initial = useRef(true);
 
@@ -183,7 +183,7 @@ function useTheme() {
 }
 
 export function ThemeToggle({ panelClassName = 'mt-4' }) {
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   let [setting, setSetting] = useTheme();
 
   if (config?.modeToggle?.isHidden) {
@@ -233,7 +233,7 @@ export function ThemeToggle({ panelClassName = 'mt-4' }) {
 }
 
 export function ThemeSelect() {
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   let [setting, setSetting] = useTheme();
 
   if (config?.modeToggle?.isHidden) {

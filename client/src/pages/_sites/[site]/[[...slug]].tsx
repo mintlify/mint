@@ -15,7 +15,7 @@ import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
@@ -90,7 +90,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <VersionContextController>
-        <SiteContext.Provider value={{ config, nav, openApi }}>
+        <ConfigContext.Provider value={{ config, nav, openApi }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <Title suffix={config.name}>{title}</Title>
             <Head>
@@ -124,7 +124,7 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
               </DocumentationLayout>
             </SearchProvider>
           </AnalyticsContext.Provider>
-        </SiteContext.Provider>
+        </ConfigContext.Provider>
       </VersionContextController>
     </Intercom>
   );

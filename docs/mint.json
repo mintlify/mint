@@ -12,7 +12,10 @@
     "light": "#4ADE80",
     "dark": "#166534",
     "ultraLight": "#DCFCE7",
-    "ultraDark": "#14532D"
+    "ultraDark": "#14532D",
+    "background": {
+      "dark": "#151515"
+    }
   },
   "topbarLinks": [
     {

@@ -1,52 +1,69 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Card as GenericCard } from '@mintlify/components';
+import clsx from 'clsx';
 import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
-import { ReactNode, useState, useContext } from 'react';
+import { ReactNode } from 'react';
 
-import SiteContext from '@/context/SiteContext';
-import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
-
-function DynamicLink(props: any) {
-  if (props.href && isAbsoluteUrl(props.href)) {
+function DynamicLink({
+  href,
+  passHref,
+  children,
+}: {
+  href: string;
+  passHref?: boolean;
+  children?: ReactNode;
+}) {
+  if (href && isAbsoluteUrl(href)) {
     return (
       <span className="not-prose">
-        <a {...props} target="_blank" rel="noopener" />
+        <a href={href} target="_blank" rel="noreferrer">
+          {children}
+        </a>
       </span>
     );
   }
-  return <Link {...props} />;
+  return (
+    <Link href={href} passHref={passHref}>
+      {children}
+    </Link>
+  );
 }
 
 export function Card({
   title,
   icon,
+  iconType,
   color,
   href,
   children,
 }: {
   title?: string;
-  icon?: ReactNode | IconDefinition;
+  icon?: ReactNode | string;
+  iconType?: string;
   color?: string;
   href?: string;
   children: React.ReactNode;
 }) {
-  const { config } = useContext(SiteContext);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>();
-  useIsomorphicLayoutEffect(() => {
-    if (window.document.querySelector('html.dark')) {
-      setIsDarkMode(true);
-    }
-  }, []);
-
-  const activeConfigColor = isDarkMode ? config?.colors?.light : config?.colors?.primary;
+  const Icon =
+    typeof icon === 'string' ? (
+      <ComponentIcon
+        icon={icon}
+        iconType={iconType as any}
+        color={color}
+        className="h-6 w-6 bg-primary dark:bg-primary-light"
+        overrideColor
+      />
+    ) : (
+      icon
+    );
 
   const Card = ({ forwardHref, onClick }: { forwardHref?: string; onClick?: any }) => (
     <GenericCard
+      className={clsx(
+        href && 'cursor-pointer hover:border-primary dark:hover:border-primary-light'
+      )}
       title={title}
-      icon={icon}
-      iconColor={color || activeConfigColor}
-      hoverHighlightColour={href ? color || activeConfigColor : undefined}
+      icon={Icon}
       href={forwardHref}
       onClick={onClick}
     >

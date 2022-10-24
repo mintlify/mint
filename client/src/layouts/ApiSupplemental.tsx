@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Editor } from '@/components/Editor';
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
@@ -31,7 +31,7 @@ export function ApiSupplemental({
   apiComponents: ApiComponent[];
   endpointStr?: string;
 }) {
-  const { openApi } = useContext(SiteContext);
+  const { openApi } = useContext(ConfigContext);
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
   const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);

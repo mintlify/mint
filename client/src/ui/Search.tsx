@@ -15,9 +15,8 @@ import {
 } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { useActionKey } from '@/hooks/useActionKey';
-import { BASEPATH } from '@/utils/api';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
@@ -188,7 +187,7 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
 
 export function SearchProvider({ children }: any) {
   const router = useRouter();
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   const [searchId, setSearchId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');

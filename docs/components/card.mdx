@@ -3,29 +3,27 @@ title: "Cards"
 description: "Highlight main points or links with customizable icons"
 ---
 
-<Card title="Card Title" icon={duotone("lightbulb")}>
+<Card title="Card Title" icon="lightbulb">
   This is how you use a card with an icon
 </Card>
 
 ```jsx
-<Card title="Card Title" icon={duotone("lightbulb")}>
+<Card title="Card Title" icon="lightbulb">
   This is how you use a card with an icon
 </Card>
 ```
 
-## Card
+### Icon Settings
 
-### Icon Colors
+Adjust the icon type using the `iconType` property color by using the `color` property.
 
-Adjust the icon color by using the `color` property.
-
-<Card title="Colored Card" icon={duotone("lightbulb")} color="#ca8b04">
-  Here is a card with a yellow icon
+<Card title="Colored Card" icon="lightbulb" iconType="duotone" color="#ca8b04">
+  Here is a card with a duotone yellow icon
 </Card>
 
 ```jsx
-<Card title="Colored Card" icon={duotone("lightbulb")} color="#ca8b04">
-  Here is a card with a yellow icon
+<Card title="Colored Card" icon="lightbulb" iconType="duotone" color="#ca8b04">
+  Here is a card with a duotone yellow icon
 </Card>
 ```
 
@@ -33,12 +31,12 @@ Adjust the icon color by using the `color` property.
 
 Make a card a navigation item by adding the `href` property like you would on an anchor element.
 
-<Card title="Click on me" icon={duotone("link")} href="/quickstart">
+<Card title="Click on me" icon="link" href="/quickstart">
   Clicking on this card brings you to the quickstart page
 </Card>
 
 ```jsx
-<Card title="Click on me" icon={duotone("link")} href="/quickstart">
+<Card title="Click on me" icon="link" href="/quickstart">
   Clicking on this card brings you to the quickstart page
 </Card>
 ```
@@ -50,9 +48,11 @@ Make a card a navigation item by adding the `href` property like you would on an
 </ResponseField>
 
 <ResponseField name="icon" type="Icon">
+  A [Font Awesome icon](https://fontawesome.com/icons)
+</ResponseField>
 
-A valid [Font Awesome](https://fontawesome.com/icons) icon with one of the following wrappers: `solid()`, `light()`, `regular()`, `thin()`, or `duotone()`
-
+<ResponseField name="iconType" type="string">
+  One of `regular`, `solid`, `light`, `thin`, `sharp-solid`, `duotone`, `brands`
 </ResponseField>
 
 <ResponseField name="color" type="string">
@@ -60,7 +60,7 @@ A valid [Font Awesome](https://fontawesome.com/icons) icon with one of the follo
 </ResponseField>
 
 <ResponseField name="href" type="string">
-  The url that clicking on the card would navigate the user to.
+  The url that clicking on the card would navigate the user to
 </ResponseField>
 
 <ResponseField name="children" type="MDX or string">
@@ -73,32 +73,32 @@ A valid [Font Awesome](https://fontawesome.com/icons) icon with one of the follo
 The `CardGroup` component lets you group multiple `Card` components together. It's most often used to put multiple cards on the same column.
 
 <CardGroup cols={2}>
-  <Card title="First Card" icon={duotone("square-1")} color="#ea5a0c">
+  <Card title="First Card" icon="square-1" color="#ea5a0c">
     Neque porro quisquam est qui dolorem ipsum quia dolor sit amet
   </Card>
-  <Card title="Second Card" icon={duotone("square-2")} color="#0285c7">
+  <Card title="Second Card" icon="square-2" color="#0285c7">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit
   </Card>
-  <Card title="Third Card" icon={duotone("square-3")} color="#16a34a">
+  <Card title="Third Card" icon="square-3" color="#16a34a">
     Ut enim ad minim veniam, quis nostrud exercitation ullamco
   </Card>
-  <Card title="Fourth Card" icon={duotone("square-4")} color="#dc2626">
+  <Card title="Fourth Card" icon="square-4" color="#dc2626">
     Excepteur sint occaecat cupidatat non proident
   </Card>
 </CardGroup>
 
 ```jsx
 <CardGroup cols={2}>
-  <Card title="First Card" icon={duotone("square-1")} color="#ea5a0c">
+  <Card title="First Card" icon="square-1" color="#ea5a0c">
     Neque porro quisquam est qui dolorem ipsum quia dolor sit amet
   </Card>
-  <Card title="Second Card" icon={duotone("square-2")} color="#0285c7">
+  <Card title="Second Card" icon="square-2" color="#0285c7">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit
   </Card>
-  <Card title="Third Card" icon={duotone("square-3")} color="#16a34a">
+  <Card title="Third Card" icon="square-3" color="#16a34a">
     Ut enim ad minim veniam, quis nostrud exercitation ullamco
   </Card>
-  <Card title="Fourth Card" icon={duotone("square-4")} color="#dc2626">
+  <Card title="Fourth Card" icon="square-4" color="#dc2626">
     Excepteur sint occaecat cupidatat non proident
   </Card>
 </CardGroup>

@@ -6,6 +6,7 @@ import { config } from '@/types/config';
 const FAVICON_VERSION = 3;
 
 function v(href: string) {
+  // To do, come back and set the basepath
   return `${href}?v=${FAVICON_VERSION}`;
 }
 

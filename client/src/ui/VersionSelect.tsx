@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { getVersionOfPage } from '@/utils/nav';
 
 export function VersionSelect() {
-  const { config } = useContext(SiteContext);
+  const { config } = useContext(ConfigContext);
   const versions = config?.versions?.filter(Boolean) || [];
   const { selectedVersion, setSelectedVersion } = useContext(VersionContext);
   const router = useRouter();

@@ -1,18 +1,19 @@
-import { brands, regular } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import clsx from 'clsx';
 import gh from 'github-url-to-object';
 import Link from 'next/link';
 import Router from 'next/router';
+import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 
+import { ConfigContext } from '@/context/ConfigContext';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
 
-import { config, TopbarCta } from '../types/config';
+import { TopbarCta } from '../types/config';
+import Icon from './Icon';
 import { ThemeSelect, ThemeToggle } from './ThemeToggle';
 import { VersionSelect } from './VersionSelect';
 
@@ -134,11 +135,19 @@ function GitHubCta({ button }: { button: TopbarCta }) {
             {repoData ? (
               <div className="text-xs flex items-center space-x-2 text-slate-600 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-300">
                 <span className="flex items-center space-x-1">
-                  <FontAwesomeIcon className="h-3 w-3" icon={regular('star')} />
+                  <Icon
+                    className="h-3 w-3 bg-slate-600 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-300"
+                    icon="star"
+                    iconType="regular"
+                  />
                   <span>{repoData.stargazers_count}</span>
                 </span>
                 <span className="flex items-center space-x-1">
-                  <FontAwesomeIcon className="h-3 w-3" icon={regular('code-fork')} />
+                  <Icon
+                    className="h-3 w-3 bg-slate-600 dark:bg-slate-400 group-hover:bg-slate-700 dark:group-hover:bg-slate-300"
+                    icon="code-fork"
+                    iconType="regular"
+                  />
                   <span>{repoData.forks_count}</span>
                 </span>
               </div>
@@ -153,6 +162,8 @@ function GitHubCta({ button }: { button: TopbarCta }) {
 }
 
 function TopBarCtaButton({ button }: { button: TopbarCta }) {
+  const { config } = useContext(ConfigContext);
+
   if (button.type === 'github') {
     return <GitHubCta button={button} />;
   }
@@ -163,12 +174,12 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
         <a
           target="_blank"
           className={clsx(
-            config.classes?.topbarCtaButton ||
+            config?.classes?.topbarCtaButton ||
               'relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5'
           )}
         >
           <span>{button.name}</span>
-          {!config.classes?.topbarCtaButton && (
+          {!config?.classes?.topbarCtaButton && (
             <svg
               width="6"
               height="3"
@@ -191,6 +202,7 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
 }
 
 export function NavItems() {
+  const { config } = useContext(ConfigContext);
   return (
     <>
       {config?.topbarLinks?.map((topbarLink) => (
@@ -220,6 +232,7 @@ export function Header({
   title?: string;
   section?: string;
 }) {
+  const { config } = useContext(ConfigContext);
   let [isOpaque, setIsOpaque] = useState(false);
 
   useEffect(() => {
@@ -257,14 +270,14 @@ export function Header({
           >
             <div className="relative flex items-center">
               <div className="flex-1 flex items-center space-x-3">
-                <Link href={getLogoHref(config)}>
+                <Link href={getLogoHref(config!)}>
                   <a
                     onContextMenu={(e) => {
                       e.preventDefault();
-                      Router.push(getLogoHref(config));
+                      Router.push(getLogoHref(config!));
                     }}
                   >
-                    <span className="sr-only">{config.name} home page</span>
+                    <span className="sr-only">{config?.name} home page</span>
                     <Logo />
                   </a>
                 </Link>

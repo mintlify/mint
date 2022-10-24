@@ -6,7 +6,7 @@ import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
-import SiteContext from '@/context/SiteContext';
+import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
@@ -158,7 +158,7 @@ function ExpandableFields({ schema }: any) {
 }
 
 export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
-  const { config, openApi } = useContext(SiteContext);
+  const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(
     endpointStr,

@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dialog } from '@headlessui/react';
 import clsx from 'clsx';
 import isAbsoluteUrl from 'is-absolute-url';
@@ -10,6 +9,7 @@ import { createContext, forwardRef, useRef, useState } from 'react';
 import { VersionContext } from '@/context/VersionContext';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
+import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getMethodDotsColor } from '@/utils/brands';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
@@ -276,12 +276,13 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
         className="mb-4"
         shadow="group-hover:shadow-primary-ultralight dark:group-hover:bg-primary"
         icon={
-          <FontAwesomeIcon
+          <Icon
+            icon="book-open"
+            iconType="duotone"
             className={clsx(
-              `h-6 w-6 p-1 text-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:text-white`,
-              isRootAnchorActive ? 'dark:text-white' : 'dark:text-slate-500'
+              `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
+              isRootAnchorActive ? 'dark:bg-white' : 'dark:bg-slate-500'
             )}
-            icon={['fad', 'book-open']}
           />
         }
       >

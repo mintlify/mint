@@ -1,19 +1,22 @@
-import { ReactNode, useContext } from "react";
-import { Accordion as GenericAccordion } from "@mintlify/components";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import AnalyticsContext from "@/analytics/AnalyticsContext";
+import { Accordion as GenericAccordion } from '@mintlify/components';
+import { ReactNode, useContext } from 'react';
+
+import AnalyticsContext from '@/analytics/AnalyticsContext';
+import { ComponentIcon } from '@/ui/Icon';
 
 function Accordion({
   title,
   description,
   defaultOpen = false,
   icon,
+  iconType,
   children,
 }: {
   title: string;
   description?: string;
   defaultOpen: boolean;
-  icon?: ReactNode | IconDefinition;
+  icon?: ReactNode | string;
+  iconType?: string;
   children: ReactNode;
 }) {
   const analyticsMediator = useContext(AnalyticsContext);
@@ -28,14 +31,22 @@ function Accordion({
     }
   };
 
+  const Icon =
+    typeof icon === 'string' ? (
+      <ComponentIcon icon={icon} iconType={iconType as any} className="w-4 h-4" />
+    ) : (
+      icon
+    );
+
   return (
-    <GenericAccordion 
+    <GenericAccordion
       title={title}
       description={description}
       defaultOpen={defaultOpen}
       onChange={onChange}
-      icon={icon}>
-        {children}
+      icon={Icon}
+    >
+      {children}
     </GenericAccordion>
   );
 }
