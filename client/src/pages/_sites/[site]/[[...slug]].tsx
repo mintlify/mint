@@ -212,13 +212,6 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   };
 };
 
-const FAVICON_VERSION = 3;
-
-function faviconURI(subdomain: string, href: string) {
-  // TODO: come back and set the basepath
-  return `https://mintlify.s3.us-west-1.amazonaws.com/${subdomain}/_generated/favicons/${href}?v=${FAVICON_VERSION}`;
-}
-
 export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ params }) => {
   if (!params) throw new Error('No path parameters found');
 
@@ -227,7 +220,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
 
   // TODO - get all the data (page data AND global data (metadata, openApi, config))
   const {
-    data: { content, config, nav, section, meta, metaTagsForSeo, title, openApi },
+    data: { content, config, nav, section, meta, metaTagsForSeo, title, openApi, favicons },
   }: {
     data: {
       content: string;
@@ -238,6 +231,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       metaTagsForSeo: PageMetaTags;
       title: string;
       openApi?: string;
+      favicons: FaviconsProps;
     };
   } = await axios.get(`${API_ENDPOINT}/api/v1/admin/build/static-props`, {
     headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
@@ -246,14 +240,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       path,
     },
   });
-
-  const favicons: FaviconsProps = {
-    'apple-touch-icon': faviconURI(site, 'apple-touch-icon.png'),
-    '32x32': faviconURI(site, 'favicon-32x32.png'),
-    '16x16': faviconURI(site, 'favicon-16x16.png'),
-    'shortcut-icon': faviconURI(site, 'favicon.ico'),
-    browserconfig: faviconURI(site, 'browserconfig.xml'),
-  };
 
   const mdxSource = await getMdxSource(content, { section, meta });
   return {
