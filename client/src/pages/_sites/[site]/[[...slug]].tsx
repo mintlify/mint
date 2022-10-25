@@ -34,13 +34,6 @@ if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
 }
 
-const FAVICON_VERSION = 3;
-
-function v(href: string) {
-  // TODO: come back and set the basepath
-  return `${href}?v=${FAVICON_VERSION}`;
-}
-
 // TODO - Add ProgessBar back when you can access color. (Put inside Page component?)
 // const progress = new ProgressBar({
 //   size: 2,
@@ -62,6 +55,7 @@ function v(href: string) {
 interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
+  stringifiedFavicons: string;
 }
 
 interface ParsedDataProps {
@@ -73,12 +67,26 @@ interface ParsedDataProps {
   config: Config;
   openApi?: any;
 }
+
+interface FaviconsProps {
+  'apple-touch-icon': string;
+  '32x32': string;
+  '16x16': string;
+  'shortcut-icon': string;
+  browserconfig: string;
+}
+
 // TODO - handle incorrect urls
-export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
+export default function Page({
+  stringifiedMdxSource,
+  stringifiedData,
+  stringifiedFavicons,
+}: PageProps) {
   const mdxSource = parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, config, nav, openApi } = parse(
     stringifiedData
   ) as ParsedDataProps;
+  const favicons = parse(stringifiedFavicons) as FaviconsProps;
 
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
@@ -104,29 +112,15 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
             <ColorVariables />
             <Title suffix={config.name}>{title}</Title>
             <Head>
-              <link
-                rel="apple-touch-icon"
-                sizes="180x180"
-                href={v('/favicons/apple-touch-icon.png')}
-              />
-              <link
-                rel="icon"
-                type="image/png"
-                sizes="32x32"
-                href={v('/favicons/favicon-32x32.png')}
-              />
-              <link
-                rel="icon"
-                type="image/png"
-                sizes="16x16"
-                href={v('/favicons/favicon-16x16.png')}
-              />
-              <link rel="shortcut icon" href={v('/favicons/favicon.ico')} />
+              <link rel="apple-touch-icon" sizes="180x180" href={favicons['apple-touch-icon']} />
+              <link rel="icon" type="image/png" sizes="32x32" href={favicons['apple-touch-icon']} />
+              <link rel="icon" type="image/png" sizes="16x16" href={favicons['16x16']} />
+              <link rel="shortcut icon" href={favicons['shortcut-icon']} />
               <meta name="apple-mobile-web-app-title" content={config.name} />
               <meta name="application-name" content={config.name} />
               <meta name="theme-color" content="#ffffff" />
               <meta name="msapplication-TileColor" content={config.colors?.primary} />
-              <meta name="msapplication-config" content={v('/favicons/browserconfig.xml')} />
+              <meta name="msapplication-config" content={favicons['browserconfig']} />
               <meta name="theme-color" content="#ffffff" />
               <script
                 dangerouslySetInnerHTML={{
@@ -218,6 +212,13 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   };
 };
 
+const FAVICON_VERSION = 3;
+
+function faviconURI(subdomain: string, href: string) {
+  // TODO: come back and set the basepath
+  return `https://mintlify.s3.us-west-1.amazonaws.com/${subdomain}/_generated/favicons/${href}?v=${FAVICON_VERSION}`;
+}
+
 export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ params }) => {
   if (!params) throw new Error('No path parameters found');
 
@@ -246,6 +247,14 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     },
   });
 
+  const favicons: FaviconsProps = {
+    'apple-touch-icon': faviconURI(site, 'apple-touch-icon.png'),
+    '32x32': faviconURI(site, 'favicon-32x32.png'),
+    '16x16': faviconURI(site, 'favicon-16x16.png'),
+    'shortcut-icon': faviconURI(site, 'favicon.ico'),
+    browserconfig: faviconURI(site, 'browserconfig.xml'),
+  };
+
   const mdxSource = await getMdxSource(content, { section, meta });
   return {
     props: {
@@ -259,6 +268,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         config,
         openApi,
       }),
+      stringifiedFavicons: stringify(favicons),
     },
   };
 };
