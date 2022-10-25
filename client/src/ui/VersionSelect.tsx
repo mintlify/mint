@@ -32,5 +32,12 @@ export function VersionSelect() {
     setSelectedVersion(version);
   };
 
-  return <PillSelect options={versions} onChange={onVersionChange} />;
+  return (
+    <PillSelect
+      options={versions}
+      onChange={onVersionChange}
+      defaultOption={selectedVersion}
+      selectedOptionClass="text-primary dark:text-primary-light"
+    />
+  );
 }
