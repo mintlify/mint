@@ -1,5 +1,6 @@
-import { getMethodTextColor } from '@/utils/brands';
 import clsx from 'clsx';
+
+import { getMethodTextColor } from '@/utils/openApiColors';
 
 // TO BE DEPRECATED after migrating Sieve
 export function RequestSimple({

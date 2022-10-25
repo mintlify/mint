@@ -1,11 +1,3 @@
-// import {
-//   solid,
-//   regular,
-//   light,
-//   thin,
-//   duotone,
-//   brands,
-// } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { CardGroup, Info, Warning, Note, Tip, Check } from '@mintlify/components';
 import { Tabs, Tab } from '@mintlify/components';
 import { Tooltip } from '@mintlify/components';

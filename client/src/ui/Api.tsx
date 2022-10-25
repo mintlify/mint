@@ -16,7 +16,7 @@ import {
   getMethodBgColorWithHover,
   getMethodBorderColor,
   getMethodTextColor,
-} from '@/utils/brands';
+} from '@/utils/openApiColors';
 
 export type ApiComponent = {
   type: string;

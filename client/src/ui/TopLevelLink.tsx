@@ -1,14 +1,10 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { forwardRef, useContext } from 'react';
+import { forwardRef, useContext, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
-import {
-  getAnchorBackgroundColor,
-  getAnchorHoverBackgroundColor,
-  getAnchorShadowColor,
-  getAnchorTextColor,
-} from '@/utils/brands';
+import { useColors } from '@/hooks/useColors';
+import { getAnchorHoverBackgroundColor } from '@/utils/openApiColors';
 
 import Icon from './Icon';
 
@@ -30,32 +26,42 @@ type TopLevelProps = {
 const TopLevelAnchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color, i }: TopLevelProps, ref: any) => {
     const { config } = useContext(ConfigContext);
-    const activeBackgroundColor =
-      config?.classes?.activeAnchors ?? getAnchorBackgroundColor(i, color);
-    const hoverBackgroundColor =
-      config?.classes?.anchors ?? getAnchorHoverBackgroundColor(i, color);
-    const shadowColor = getAnchorShadowColor(i, color);
+    const colors = useColors();
+    const anchorColor = config?.classes?.activeAnchors ?? colors.anchors[i];
+    const [hovering, setHovering] = useState(false);
+
     return (
       <li>
         <a
           ref={ref}
           href={href}
           onClick={onClick}
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
+          style={isActive && anchorColor ? { color: anchorColor } : {}}
           className={clsx(
             'group flex items-center lg:text-sm lg:leading-6',
             className,
             isActive
-              ? ['font-semibold', getAnchorTextColor(i, color)]
+              ? ['font-semibold', anchorColor ? '' : 'text-primary dark:text-primary-light']
               : 'font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
           )}
         >
           <div
+            style={
+              (isActive || hovering) && anchorColor
+                ? {
+                    backgroundColor: anchorColor,
+                  }
+                : {}
+            }
             className={clsx(
               `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10 p-1`,
-              shadowColor || 'shadow-primary/40',
-              hoverBackgroundColor,
               isActive
-                ? [activeBackgroundColor, 'highlight-slate-700/10 dark:highlight-white/10']
+                ? [
+                    anchorColor ? '' : 'bg-primary',
+                    'highlight-slate-700/10 dark:highlight-white/10',
+                  ]
                 : 'bg-slate-300 highlight-slate-700/5 dark:bg-slate-800 dark:highlight-white/5'
             )}
           >

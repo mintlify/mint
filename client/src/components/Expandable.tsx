@@ -1,6 +1,7 @@
-import { ReactNode, useContext } from "react";
-import { Expandable as GenericExpandable } from "@mintlify/components";
-import AnalyticsContext from "@/analytics/AnalyticsContext";
+import { Expandable as GenericExpandable } from '@mintlify/components';
+import { ReactNode, useContext } from 'react';
+
+import AnalyticsContext from '@/analytics/AnalyticsContext';
 
 export function Expandable({
   title,
@@ -30,11 +31,8 @@ export function Expandable({
   };
 
   return (
-    <GenericExpandable
-      title={title}
-      onChange={onChange}
-      >
-        {children}
+    <GenericExpandable title={title} onChange={onChange} defaultOpen={defaultOpen}>
+      {children}
     </GenericExpandable>
   );
 }
