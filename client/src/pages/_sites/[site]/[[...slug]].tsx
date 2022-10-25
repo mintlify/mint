@@ -64,8 +64,8 @@ interface ParsedDataProps {
   section: string | undefined;
   metaTagsForSeo: PageMetaTags;
   title: string;
-  config: Config;
-  openApi?: any;
+  stringifiedConfig: string;
+  stringifiedOpenApi?: string;
 }
 
 interface FaviconsProps {
@@ -85,11 +85,11 @@ export default function Page({
   stringifiedFavicons,
 }: PageProps) {
   const mdxSource = parse(stringifiedMdxSource);
-  const { meta, section, metaTagsForSeo, title, config, nav, openApi } = parse(
-    stringifiedData
-  ) as ParsedDataProps;
+  const { meta, section, metaTagsForSeo, title, stringifiedConfig, nav, stringifiedOpenApi } =
+    parse(stringifiedData) as ParsedDataProps;
+  const config = JSON.parse(stringifiedConfig) as Config;
+  const openApi = stringifiedOpenApi ? JSON.parse(stringifiedOpenApi) : {};
   const favicons = parse(stringifiedFavicons) as FaviconsProps;
-
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
 
@@ -226,17 +226,27 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
 
   // TODO - get all the data (page data AND global data (metadata, openApi, config))
   const {
-    data: { content, config, nav, section, meta, metaTagsForSeo, title, openApi, favicons },
+    data: {
+      content,
+      stringifiedConfig,
+      nav,
+      section,
+      meta,
+      metaTagsForSeo,
+      title,
+      stringifiedOpenApi,
+      favicons
+    },
   }: {
     data: {
       content: string;
-      config: string;
+      stringifiedConfig: string;
       nav: Groups;
       section: string;
       meta: PageMetaTags;
       metaTagsForSeo: PageMetaTags;
       title: string;
-      openApi?: string;
+      stringifiedOpenApi?: string;
       favicons: FaviconsProps;
     };
   } = await axios.get(`${API_ENDPOINT}/api/v1/admin/build/static-props`, {
@@ -257,8 +267,8 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         section,
         metaTagsForSeo,
         title,
-        config,
-        openApi,
+        stringifiedConfig,
+        stringifiedOpenApi,
       }),
       stringifiedFavicons: stringify(favicons),
     },
