@@ -69,10 +69,12 @@ interface ParsedDataProps {
 }
 
 interface FaviconsProps {
-  'apple-touch-icon': string;
-  '32x32': string;
-  '16x16': string;
-  'shortcut-icon': string;
+  icons: {
+    rel: string;
+    href: string;
+    type: string;
+    sizes?: string;
+  }[];
   browserconfig: string;
 }
 
@@ -112,15 +114,19 @@ export default function Page({
             <ColorVariables />
             <Title suffix={config.name}>{title}</Title>
             <Head>
-              <link rel="apple-touch-icon" sizes="180x180" href={favicons['apple-touch-icon']} />
-              <link rel="icon" type="image/png" sizes="32x32" href={favicons['apple-touch-icon']} />
-              <link rel="icon" type="image/png" sizes="16x16" href={favicons['16x16']} />
-              <link rel="shortcut icon" href={favicons['shortcut-icon']} />
+              {favicons.icons.map((favicon) => (
+                <link
+                  rel={favicon.rel}
+                  type={favicon.type}
+                  sizes={favicon.sizes}
+                  href={favicon.href}
+                />
+              ))}
+              <meta name="msapplication-config" content={favicons.browserconfig} />
               <meta name="apple-mobile-web-app-title" content={config.name} />
               <meta name="application-name" content={config.name} />
               <meta name="theme-color" content="#ffffff" />
               <meta name="msapplication-TileColor" content={config.colors?.primary} />
-              <meta name="msapplication-config" content={favicons['browserconfig']} />
               <meta name="theme-color" content="#ffffff" />
               <script
                 dangerouslySetInnerHTML={{
