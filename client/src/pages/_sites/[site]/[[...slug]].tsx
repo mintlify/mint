@@ -33,6 +33,7 @@ const API_ENDPOINT = process.env.API_ENDPOINT;
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
 }
+
 // TODO - Add ProgessBar back when you can access color. (Put inside Page component?)
 // const progress = new ProgressBar({
 //   size: 2,
@@ -54,6 +55,7 @@ if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
 interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
+  stringifiedFavicons: string;
 }
 
 interface ParsedDataProps {
@@ -65,13 +67,29 @@ interface ParsedDataProps {
   stringifiedConfig: string;
   stringifiedOpenApi?: string;
 }
+
+interface FaviconsProps {
+  icons: {
+    rel: string;
+    href: string;
+    type: string;
+    sizes?: string;
+  }[];
+  browserconfig: string;
+}
+
 // TODO - handle incorrect urls
-export default function Page({ stringifiedMdxSource, stringifiedData }: PageProps) {
+export default function Page({
+  stringifiedMdxSource,
+  stringifiedData,
+  stringifiedFavicons,
+}: PageProps) {
   const mdxSource = parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, stringifiedConfig, nav, stringifiedOpenApi } =
     parse(stringifiedData) as ParsedDataProps;
   const config = JSON.parse(stringifiedConfig) as Config;
   const openApi = stringifiedOpenApi ? JSON.parse(stringifiedOpenApi) : {};
+  const favicons = parse(stringifiedFavicons) as FaviconsProps;
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
 
@@ -96,6 +114,39 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
             <ColorVariables />
             <Title suffix={config.name}>{title}</Title>
             <Head>
+              {favicons.icons.map((favicon) => (
+                <link
+                  rel={favicon.rel}
+                  type={favicon.type}
+                  sizes={favicon.sizes}
+                  href={favicon.href}
+                />
+              ))}
+              <meta name="msapplication-config" content={favicons.browserconfig} />
+              <meta name="apple-mobile-web-app-title" content={config.name} />
+              <meta name="application-name" content={config.name} />
+              <meta name="theme-color" content="#ffffff" />
+              <meta name="msapplication-TileColor" content={config.colors?.primary} />
+              <meta name="theme-color" content="#ffffff" />
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                try {
+                  if (localStorage.theme === 'dark' || (${(
+                    config.modeToggle?.default == null
+                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
+                    config.modeToggle?.default === 'dark'
+                  ).toString()}) {
+                    document.documentElement.classList.add('dark')
+                  }
+                  
+                  else {
+                    document.documentElement.classList.remove('dark')
+                  }
+                } catch (_) {}
+              `,
+                }}
+              />
               {config?.metadata &&
                 Object.entries(config?.metadata).map(([key, value]) => {
                   if (!value) {
@@ -109,21 +160,31 @@ export default function Page({ stringifiedMdxSource, stringifiedData }: PageProp
             </Head>
             <GA4Script ga4={analyticsConfig.ga4} />
             <SearchProvider>
-              <Header
-                hasNav={Boolean(config.navigation?.length)}
-                navIsOpen={navIsOpen}
-                onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                title={meta?.title}
-                section={section}
-              />
-              <DocumentationLayout
-                nav={nav}
-                navIsOpen={navIsOpen}
-                setNavIsOpen={setNavIsOpen}
-                meta={meta}
+              <div
+                className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
+                // Add background image
+                {...(config.backgroundImage && {
+                  style: {
+                    background: `url('${config.backgroundImage}') no-repeat fixed top right`,
+                  },
+                })}
               >
-                <MDXRemote components={components} {...mdxSource} />
-              </DocumentationLayout>
+                <Header
+                  hasNav={Boolean(config.navigation?.length)}
+                  navIsOpen={navIsOpen}
+                  onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+                  title={meta?.title}
+                  section={section}
+                />
+                <DocumentationLayout
+                  nav={nav}
+                  navIsOpen={navIsOpen}
+                  setNavIsOpen={setNavIsOpen}
+                  meta={meta}
+                >
+                  <MDXRemote components={components} {...mdxSource} />
+                </DocumentationLayout>
+              </div>
             </SearchProvider>
           </AnalyticsContext.Provider>
         </ConfigContext.Provider>
@@ -174,6 +235,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       metaTagsForSeo,
       title,
       stringifiedOpenApi,
+      favicons
     },
   }: {
     data: {
@@ -185,6 +247,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       metaTagsForSeo: PageMetaTags;
       title: string;
       stringifiedOpenApi?: string;
+      favicons: FaviconsProps;
     };
   } = await axios.get(`${API_ENDPOINT}/api/v1/admin/build/static-props`, {
     headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
@@ -207,6 +270,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         stringifiedConfig,
         stringifiedOpenApi,
       }),
+      stringifiedFavicons: stringify(favicons),
     },
   };
 };

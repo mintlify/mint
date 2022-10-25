@@ -58,16 +58,16 @@ const potentiallAddPathParams = (inputUrl: string, inputData: Record<string, any
   return url;
 };
 
-const getBody = (obj: Object, contentType: string) => {
-  if (contentType === 'multipart/form-data') {
-    let cleanedObj = removeEmpty(obj);
-    const bodyFormData = new FormData();
-    for (var key in cleanedObj) {
-      bodyFormData.append(key, cleanedObj[key]);
-    }
-
-    return bodyFormData;
-  }
+const getBody = (obj: Object, _: string) => {
+  // TODO: Add support for files in getBody with multipart/form-data
+  // if (contentType === 'multipart/form-data') {
+  //   let cleanedObj = removeEmpty(obj);
+  //   const bodyFormData = new FormData();
+  //   for (var key in cleanedObj) {
+  //     bodyFormData.append(key, cleanedObj[key]);
+  //   }
+  //   return bodyFormData;
+  // }
   return removeEmpty(obj);
 };
 
