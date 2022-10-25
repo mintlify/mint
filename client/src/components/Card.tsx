@@ -4,6 +4,8 @@ import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
+import { ComponentIcon } from '@/ui/Icon';
+
 function DynamicLink({
   href,
   passHref,

@@ -5,22 +5,22 @@ import { ConfigContext } from '@/context/ConfigContext';
 export function useColors(): Colors {
   const { config } = useContext(ConfigContext);
 
-  const primaryColor = config?.colors?.primary ?? '#a888ff';
+  const primaryColor = config?.colors?.primary ?? '#16A34A';
 
   const anchors =
     config?.anchors?.map((anchor) => {
       if (anchor.color) {
-        return anchor.color.toLowerCase();
+        return anchor.color;
       }
-      return undefined;
+      return primaryColor;
     }) ?? [];
 
   return {
     primary: primaryColor,
-    primaryLight: config?.colors?.light ?? '#c4b5fd',
-    primaryDark: config?.colors?.dark ?? '#7c3aed',
-    primaryUltraLight: config?.colors?.ultraLight ?? '#ddd6fe',
-    primaryUltraDark: config?.colors?.ultraDark ?? '#5b21b6',
+    primaryLight: config?.colors?.light ?? '#4ADE80',
+    primaryDark: config?.colors?.dark ?? '#166534',
+    primaryUltraLight: config?.colors?.ultraLight ?? '#DCFCE7',
+    primaryUltraDark: config?.colors?.ultraDark ?? '#14532D',
     backgroundLight: config?.colors?.background?.light ?? '#ffffff',
     backgroundDark: config?.colors?.background?.dark ?? '#0C1322',
     anchors,
