@@ -141,7 +141,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   const { data }: { data: Record<string, string[][]> } = await axios.get(
     `${API_ENDPOINT}/api/v1/admin/build/paths`,
     {
-      headers: { Authorization: `Bearer ${process.env.INTERNAL_SITE_BEARER_TOKEN}` },
+      headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
     }
   );
   const paths = Object.entries(data).flatMap(
@@ -178,7 +178,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       openApi?: string;
     };
   } = await axios.get(`${API_ENDPOINT}/api/v1/admin/build/static-props`, {
-    headers: { Authorization: `Bearer ${process.env.INTERNAL_SITE_BEARER_TOKEN}` },
+    headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
     data: {
       subdomain: site,
       path,
