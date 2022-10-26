@@ -1,14 +1,7 @@
-// import {
-//   solid,
-//   regular,
-//   light,
-//   thin,
-//   duotone,
-//   brands,
-// } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { CardGroup, Info, Warning, Note, Tip, Check } from '@mintlify/components';
 import { Tabs, Tab } from '@mintlify/components';
 import { Tooltip } from '@mintlify/components';
+import Link from 'next/link';
 
 import { Accordion, AccordionGroup } from '@/components/Accordion';
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
@@ -47,12 +40,7 @@ const components: any = {
   Tooltip,
   ContentsLayout,
   Editor,
-  // solid,
-  // regular,
-  // light,
-  // thin,
-  // duotone,
-  // brands,
+  Link,
 };
 
 export default components;

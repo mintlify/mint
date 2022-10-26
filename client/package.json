@@ -104,6 +104,7 @@
     "@types/glob": "^7.2.0",
     "@types/jest": "^29.1.2",
     "@types/logrocket-react": "^3.0.0",
+    "@types/mdast": "^3.0.10",
     "@types/mdx-js__react": "^1.5.5",
     "@types/node": "^18.0.5",
     "@types/prismjs": "^1.26.0",

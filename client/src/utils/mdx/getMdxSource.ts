@@ -5,18 +5,18 @@ import withSmartypants from 'remark-smartypants';
 import withApiComponents from './rehype/withApiComponents.js';
 import withCodeBlocks from './rehype/withCodeBlocks.js';
 import withLayouts from './rehype/withLayouts.js';
-import withLinkRoles from './rehype/withLinkRoles.js';
+import withListRoles from './rehype/withListRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
-import withNextLinks from './remark/withNextLinks.js';
+import withNextLinks from './remark/withNextLinks';
 import withTableOfContents from './remark/withTableOfContents.js';
 
 const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
   return serialize(pageContents, {
     scope: data,
     mdxOptions: {
-      remarkPlugins: [remarkGfm, withFrames, withTableOfContents, withNextLinks, withSmartypants],
+      remarkPlugins: [remarkGfm, withFrames, withTableOfContents, withSmartypants, withNextLinks],
       rehypePlugins: [
         [
           withSyntaxHighlighting,
@@ -25,7 +25,7 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
           },
         ],
         withCodeBlocks,
-        withLinkRoles,
+        withListRoles,
         withApiComponents,
         withRawComponents,
         withLayouts,
