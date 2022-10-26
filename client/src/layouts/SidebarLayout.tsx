@@ -11,9 +11,9 @@ import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
-import { getMethodDotsColor } from '@/utils/brands';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
+import { getMethodDotsColor } from '@/utils/openApiColors';
 
 import { config, findFirstNavigationEntry } from '../types/config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
