@@ -56,7 +56,7 @@ const NavItem = forwardRef(
 
     const { href, api: pageApi, openapi } = groupPage;
 
-    const isActive = groupPage.href === router.pathname;
+    const isActive = groupPage.href === router.asPath;
     const api = pageApi || openapi;
     const title = groupPage.sidebarTitle || groupPage.title;
 
