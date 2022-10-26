@@ -8,6 +8,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
 import Head from 'next/head';
 import Router from 'next/router';
+import Script from 'next/script';
 import type { ParsedUrlQuery } from 'querystring';
 import { useState, useEffect } from 'react';
 
@@ -108,7 +109,7 @@ export default function Page({
 
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
-      <VersionContextController>
+      <VersionContextController versionOptions={config?.versions}>
         <ConfigContext.Provider value={{ config, nav, openApi }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />
@@ -128,25 +129,6 @@ export default function Page({
               <meta name="theme-color" content="#ffffff" />
               <meta name="msapplication-TileColor" content={config.colors?.primary} />
               <meta name="theme-color" content="#ffffff" />
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                try {
-                  if (localStorage.theme === 'dark' || (${(
-                    config.modeToggle?.default == null
-                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
-                    config.modeToggle?.default === 'dark'
-                  ).toString()}) {
-                    document.documentElement.classList.add('dark')
-                  }
-                  
-                  else {
-                    document.documentElement.classList.remove('dark')
-                  }
-                } catch (_) {}
-              `,
-                }}
-              />
               {config?.metadata &&
                 Object.entries(config?.metadata).map(([key, value]) => {
                   if (!value) {
@@ -158,6 +140,26 @@ export default function Page({
                 <meta key={key} name={key} content={value as any} />
               ))}
             </Head>
+            <Script
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                try {
+                  if (localStorage.theme === 'dark' || (${(
+                    config.modeToggle?.default == null
+                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
+                  config.modeToggle?.default === 'dark'
+                ).toString()}) {
+                    document.documentElement.classList.add('dark')
+                  }
+                  
+                  else {
+                    document.documentElement.classList.remove('dark')
+                  }
+                } catch (_) {}
+              `,
+              }}
+            />
             <GA4Script ga4={analyticsConfig.ga4} />
             <SearchProvider>
               <div
@@ -235,7 +237,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       metaTagsForSeo,
       title,
       stringifiedOpenApi,
-      favicons
+      favicons,
     },
   }: {
     data: {

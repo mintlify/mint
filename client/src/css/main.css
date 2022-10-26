@@ -1,5 +1,5 @@
-@import '../../node_modules/@mintlify/components/dist/main.css';
 @import 'base.css';
+@import '../../node_modules/@mintlify/components/dist/main.css';
 
 /*! purgecss start ignore */
 @import 'prism.css';
