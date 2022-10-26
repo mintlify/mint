@@ -4,7 +4,6 @@ import { forwardRef, useContext, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { useColors } from '@/hooks/useColors';
-import { getAnchorHoverBackgroundColor } from '@/utils/openApiColors';
 
 import Icon from './Icon';
 
