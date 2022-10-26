@@ -77,6 +77,7 @@ export const createMetadataFileFromPages = (pages: any, configObj: any) => {
   const createNav = (nav) => {
     return {
       group: nav.group,
+      version: nav.version,
       pages: nav.pages.map((page) => {
         if (typeof page === "string") {
           return pages[page];
