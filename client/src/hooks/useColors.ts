@@ -7,13 +7,15 @@ export function useColors(): Colors {
 
   const primaryColor = config?.colors?.primary ?? '#16A34A';
 
-  const anchors =
+  // Include the primary color as the color for the first anchor
+  const anchors = [primaryColor].concat(
     config?.anchors?.map((anchor) => {
       if (anchor.color) {
         return anchor.color;
       }
       return primaryColor;
-    }) ?? [];
+    }) ?? []
+  );
 
   return {
     primary: primaryColor,

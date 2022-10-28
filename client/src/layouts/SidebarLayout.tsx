@@ -7,6 +7,7 @@ import { ReactNode, useContext } from 'react';
 import { createContext, forwardRef, useRef, useState } from 'react';
 
 import { VersionContext } from '@/context/VersionContext';
+import { useColors } from '@/hooks/useColors';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import Icon from '@/ui/Icon';
@@ -263,18 +264,21 @@ function Nav({ nav, children, mobile = false }: any) {
 
 function TopLevelNav({ mobile }: { mobile: boolean }) {
   let { pathname } = useRouter();
+  const colors = useColors();
+
   const isRootAnchorActive =
     pathname.startsWith('/') &&
     !config.anchors?.some((anchor) => pathname.startsWith(`/${anchor.url}`));
   return (
     <>
       <TopLevelLink
-        i={0}
         mobile={mobile}
         href="/"
+        key="/"
         isActive={isRootAnchorActive}
         className="mb-4"
         shadow="group-hover:shadow-primary-ultralight dark:group-hover:bg-primary"
+        color={colors.anchors[0]}
         icon={
           <Icon
             icon="book-open"
@@ -319,13 +323,12 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
 
             return (
               <StyledTopLevelLink
-                i={i}
-                key={i}
+                key={href}
                 mobile={mobile}
                 href={href || '/'}
                 name={anchor?.name}
                 icon={anchor?.icon}
-                color={anchor?.color}
+                color={colors.anchors[i + 1]}
                 isActive={pathname.startsWith(`/${anchor.url}`)}
               />
             );
