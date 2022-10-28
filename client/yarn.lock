@@ -2052,6 +2052,82 @@
   resolved "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.21.tgz"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@react-email/avatar@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/avatar/-/avatar-0.0.2.tgz#4fe9118627efcdf92ecccce897eac4313cfed1f1"
+  integrity sha512-5gSnMTPHtrkG/Rtx7vb12X0I/XgZfoZfxagyES7lZaGDqeP5s9KeMwhn0mmZj2EVB4OwMD0GlKJaGcHTO9ELyQ==
+  dependencies:
+    "@react-email/img" "*"
+    react "18.2.0"
+
+"@react-email/button@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@react-email/button/-/button-0.0.3.tgz#6488b18698bf5bbac6fdca7d8023b475ba775bc3"
+  integrity sha512-AgwK1ebdVZy42gVyrBmUTHSb171Ac3rbFxmTi0G/qwJnAnvxbGLzFEKeqxXMVPrBqo/MYwLF+qxThc+mZgN7Dw==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/code@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/code/-/code-0.0.2.tgz#bbe55e6695bd4c08c395f3a32f8ecf3266ac2f0b"
+  integrity sha512-PFpcb8IewlgbWayngYEJpFnfojwf0eGo0M7AoKqp4/4X+bvnpPWm+koQ/e3gk86c80qAtnd2PQGQiK88q6Eu9w==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/container@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@react-email/container/-/container-0.0.4.tgz#0fd2eb5b113f6047f44dc653696495ecc7367efd"
+  integrity sha512-NwyppwXFfj+jzociP/jXIVkxCB6q9hNyoyMPIOnSbZDl6A16WaEi4ABo+i8BG3dzqQCJ357KPvMRkn8PJ/pWjA==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/head@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/head/-/head-0.0.2.tgz#a14afa9c1d836b9fc865560585ed8b68c05d8e33"
+  integrity sha512-DLPDRPsqxOKTUYMy7TouldjGZ6/ZAnfmQuRFceliL2YyP4QPQyR+cWaYUItw026+wIJ4eNqLmVgb6M6UOFzB9w==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/html@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/html/-/html-0.0.2.tgz#a597569b3772630e346213d766bc310a88674291"
+  integrity sha512-j6r7PdBUuH0G5OhiIskCtDerdowkiOia8nzAMbKt2S3vkRkgIIULIZwWA1mEjHXyTP5ZAOeCaqFTILt4Wn1seA==
+
+"@react-email/img@*", "@react-email/img@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/img/-/img-0.0.2.tgz#d8d80cbc1cc01ad5b1859fd88ae71b77e7a8529d"
+  integrity sha512-ULvl6OnKlifj0kcQ3U0WL2Ita2e6FOqjZb9PFYGzu82ZphceiK3aMetn9tK+WJCsQA1LEKt9fYr5o3Yz8MF58A==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/link@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/link/-/link-0.0.2.tgz#0ce24f7ca2821c16f231196d3f1728baddec588f"
+  integrity sha512-HhUGxOfoBJW6G/7dWs7LIKwkGBn+PfTYcewpkxBoA+IBc6YTwu1KL0gyB3VLTB0qeEXDlT9lNM+qc/EZNsRoaQ==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/pre@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/pre/-/pre-0.0.2.tgz#855a631ed05ad5d49789664b59ae1cb96d62180d"
+  integrity sha512-pbpg1CzfKt21hM5SRN40XyjoF1FJk6NJx5+D8VF1CA82vNNjxs4dA4AVHFwDUDQJ2Jvb8iCtcyM8xuyze9rYZQ==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/preview@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/preview/-/preview-0.0.2.tgz#d0945c2939dabebee0cd927aa4cc8c1647815dad"
+  integrity sha512-qUe4n5R3z999O12H1IGGzq/zCFKKrzRoi30PLCpxqN4e1CWB+e/s0w20UDFJRy7rRpaZYuLTwTQ5w4T6XHNHIg==
+  dependencies:
+    react "18.2.0"
+
+"@react-email/text@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@react-email/text/-/text-0.0.2.tgz#02427c02f7decaf315c1a501d060d135f5d43c20"
+  integrity sha512-BUOl5/2nsImBLSBC9XE7Khj3KWpubni73l0jT1weLzXG+GY3cZARTEErSit3BC5/KAG9lVISwFTTOfnVjhVDBA==
+  dependencies:
+    react "18.2.0"
+
 "@rushstack/eslint-patch@^1.1.0":
   version "1.1.4"
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz"
@@ -7870,7 +7946,7 @@ react-use-rect@^2.0.4:
   resolved "https://registry.npmjs.org/react-use-rect/-/react-use-rect-2.0.4.tgz"
   integrity sha512-U0MyT5le01P83t/G37t+Z36lafKEl5icCM1M9V4ubt5+kgczllyd5xWNH4Ahxn+CzMs6mnTypZ+XwpFbE045XA==
 
-react@^18.2.0:
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
