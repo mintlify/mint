@@ -29,6 +29,8 @@ import { Title } from '@/ui/Title';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
+import { getPaths } from '../../../lib/paths';
+
 const API_ENDPOINT = process.env.API_ENDPOINT;
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
@@ -201,12 +203,7 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const { data }: { data: Record<string, string[][]> } = await axios.get(
-    `${API_ENDPOINT}/api/v1/admin/build/paths`,
-    {
-      headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
-    }
-  );
+  const data: Record<string, string[][]> = await getPaths();
   const paths = Object.entries(data).flatMap(
     ([subdomain, pathsForSubdomain]: [string, string[][]]) => {
       return pathsForSubdomain.map((pathForSubdomain) => ({
