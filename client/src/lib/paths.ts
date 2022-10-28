@@ -1,9 +1,11 @@
-const API_ENDPOINT = process.env.API_ENDPOINT;
+import axios from 'axios';
 
 export const getPaths = async () => {
-  const res = await fetch(`${API_ENDPOINT}/api/v1/admin/build/paths`, {
-    headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
-  });
-  const data = res.json();
+  const { data }: { data: Record<string, string[][]> } = await axios.get(
+    `${process.env.API_ENDPOINT}/api/v1/admin/build/paths`,
+    {
+      headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
+    }
+  );
   return data;
 };

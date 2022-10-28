@@ -1,6 +1,5 @@
 // import ProgressBar from '@badrap/bar-of-progress';
 import { ResizeObserver } from '@juggle/resize-observer';
-import axios from 'axios';
 import { stringify, parse } from 'flatted';
 import 'focus-visible';
 import 'intersection-observer';
@@ -20,6 +19,8 @@ import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
+import { getPage } from '@/lib/page';
+import { getPaths } from '@/lib/paths';
 import type { Config } from '@/types/config';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
@@ -28,10 +29,6 @@ import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-
-import { getPaths } from '../../../lib/paths';
-
-const API_ENDPOINT = process.env.API_ENDPOINT;
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -223,38 +220,27 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { site, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
-  // TODO - get all the data (page data AND global data (metadata, openApi, config))
   const {
-    data: {
-      content,
-      stringifiedConfig,
-      nav,
-      section,
-      meta,
-      metaTagsForSeo,
-      title,
-      stringifiedOpenApi,
-      favicons,
-    },
+    content,
+    stringifiedConfig,
+    nav,
+    section,
+    meta,
+    metaTagsForSeo,
+    title,
+    stringifiedOpenApi,
+    favicons,
   }: {
-    data: {
-      content: string;
-      stringifiedConfig: string;
-      nav: Groups;
-      section: string;
-      meta: PageMetaTags;
-      metaTagsForSeo: PageMetaTags;
-      title: string;
-      stringifiedOpenApi?: string;
-      favicons: FaviconsProps;
-    };
-  } = await axios.get(`${API_ENDPOINT}/api/v1/admin/build/static-props`, {
-    headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
-    data: {
-      subdomain: site,
-      path,
-    },
-  });
+    content: string;
+    stringifiedConfig: string;
+    nav: Groups;
+    section: string;
+    meta: PageMetaTags;
+    metaTagsForSeo: PageMetaTags;
+    title: string;
+    stringifiedOpenApi?: string;
+    favicons: FaviconsProps;
+  } = await getPage(site, path);
 
   const mdxSource = await getMdxSource(content, { section, meta });
   return {
