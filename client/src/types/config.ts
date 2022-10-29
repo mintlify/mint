@@ -7,106 +7,7 @@ import {
   MixpanelConfigInterface,
   PostHogConfigInterface,
 } from '../analytics/AbstractAnalyticsImplementation';
-
-// TODO - get config data from backend
-export const config: Config = {
-  name: 'Mintlify',
-  basePath: '/docs',
-  logo: {
-    light: '/docs/logo/light.svg',
-    dark: '/docs/logo/dark.svg',
-    href: 'https://mintlify.com',
-  },
-  favicon: '/favicon.svg',
-  colors: {
-    primary: '#16A34A',
-    light: '#4ADE80',
-    dark: '#166534',
-    ultraLight: '#DCFCE7',
-    ultraDark: '#14532D',
-  },
-  topbarLinks: [
-    {
-      name: 'Contact Sales',
-      url: 'mailto:hi@mintlify.com',
-    },
-  ],
-  topbarCtaButton: {
-    name: 'Get Started',
-    url: 'https://mintlify.com/start',
-  },
-  anchors: [
-    {
-      name: 'Community',
-      icon: 'comments',
-      color: '#2564eb',
-      url: 'https://discord.gg/b499CK8P9g',
-    },
-    {
-      name: 'GitHub',
-      icon: 'github',
-      color: '#333333',
-      url: 'https://github.com/mintlify/mint',
-    },
-  ],
-  navigation: [
-    {
-      group: 'Getting Started',
-      pages: ['quickstart'],
-    },
-    {
-      group: 'Settings',
-      pages: ['settings/customization', 'settings/page'],
-    },
-    {
-      group: 'Components',
-      pages: [
-        'components/overview',
-        'components/accordion',
-        'components/callout',
-        'components/card',
-        'components/code',
-        'components/embed',
-        'components/image',
-        'components/frame',
-        'components/list',
-        'components/text',
-        'components/table',
-      ],
-    },
-    {
-      group: 'API Components',
-      pages: [
-        'api-components/overview',
-        'api-components/param',
-        'api-components/response',
-        'api-components/expandable',
-        'api-components/examples',
-        'api-components/openapi',
-      ],
-    },
-    {
-      group: 'Analytics',
-      pages: [
-        'site-stats/setup',
-        'site-stats/ga4',
-        'site-stats/amplitude',
-        'site-stats/mp',
-        'site-stats/posthog',
-      ],
-    },
-  ],
-  footerSocials: {
-    github: 'https://github.com/mintlify',
-    discord: 'https://discord.gg/MPNgtSZkgK',
-    twitter: 'https://twitter.com/mintlify',
-  },
-  analytics: {
-    fathom: {
-      siteId: 'YSVUHCAK',
-    },
-  },
-};
+import { Gradient } from './gradient';
 
 export type NavigationEntry = string | Navigation;
 
@@ -126,11 +27,11 @@ type NavbarLink = {
 
 export type TopbarCta = NavbarLink;
 
-type Anchor = {
+export type Anchor = {
   name: string;
   url: string;
   icon?: string;
-  color?: string;
+  color?: string | Gradient;
   isDefaultHidden?: boolean;
 };
 
@@ -189,6 +90,7 @@ export type Config = {
       light?: string;
       dark?: string;
     };
+    anchors?: string | Gradient;
   };
   topbarCtaButton?: NavbarLink;
   topbarLinks?: NavbarLink[];
@@ -199,8 +101,6 @@ export type Config = {
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
   classes?: {
-    anchors?: string;
-    activeAnchors?: string;
     topbarCtaButton?: string;
     navigationItem?: string;
     logo?: string;

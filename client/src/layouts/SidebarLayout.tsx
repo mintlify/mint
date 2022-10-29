@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { ReactNode, useContext } from 'react';
 import { createContext, forwardRef, useRef, useState } from 'react';
 
+import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useColors } from '@/hooks/useColors';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
@@ -16,7 +17,7 @@ import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from 
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
 
-import { config, findFirstNavigationEntry } from '../types/config';
+import { Anchor, findFirstNavigationEntry, Navigation } from '../types/config';
 import { StyledTopLevelLink, TopLevelLink } from '../ui/TopLevelLink';
 
 type SidebarContextType = {
@@ -46,6 +47,7 @@ const getPaddingByLevel = (level: number) => {
 const NavItem = forwardRef(
   ({ groupPage, level = 0 }: { groupPage: GroupPage | undefined; level?: number }, ref: any) => {
     const router = useRouter();
+    const { config } = useContext(ConfigContext);
 
     if (groupPage == null) {
       return null;
@@ -71,7 +73,7 @@ const NavItem = forwardRef(
                 ? 'text-primary border-current font-semibold dark:text-primary-light'
                 : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
               getPaddingByLevel(level),
-              config.classes?.navigationItem
+              config?.classes?.navigationItem
             )}
           >
             {api && (
@@ -173,6 +175,7 @@ function nearestScrollableContainer(el: any) {
 
 function Nav({ nav, children, mobile = false }: any) {
   const router = useRouter();
+  const { config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
   const previousActiveItemRef: any = useRef();
   const scrollRef: any = useRef();
@@ -218,7 +221,7 @@ function Nav({ nav, children, mobile = false }: any) {
           <div
             className={clsx(
               'h-8',
-              config.backgroundImage == null &&
+              config?.backgroundImage == null &&
                 'bg-gradient-to-b from-background-light dark:from-background-dark'
             )}
           />
@@ -264,11 +267,12 @@ function Nav({ nav, children, mobile = false }: any) {
 
 function TopLevelNav({ mobile }: { mobile: boolean }) {
   let { pathname } = useRouter();
+  const { config } = useContext(ConfigContext);
   const colors = useColors();
 
   const isRootAnchorActive =
     pathname.startsWith('/') &&
-    !config.anchors?.some((anchor) => pathname.startsWith(`/${anchor.url}`));
+    !config?.anchors?.some((anchor: Anchor) => pathname.startsWith(`/${anchor.url}`));
   return (
     <>
       <TopLevelLink
@@ -290,24 +294,24 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
           />
         }
       >
-        {config.topAnchor?.name ?? 'Documentation'}
+        {config?.topAnchor?.name ?? 'Documentation'}
       </TopLevelLink>
       {config?.anchors &&
         config.anchors
-          .filter((anchor) => {
+          .filter((anchor: Anchor) => {
             if (!anchor.isDefaultHidden) {
               return true;
             }
 
             return pathname.startsWith(`/${anchor.url}`);
           })
-          .map((anchor, i) => {
+          .map((anchor: Anchor, i: number) => {
             const isAbsolute = isAbsoluteUrl(anchor.url);
             let href;
             if (isAbsolute) {
               href = anchor.url;
             } else {
-              config.navigation?.every((nav) => {
+              config.navigation?.every((nav: Navigation) => {
                 const page = findFirstNavigationEntry(nav, `${anchor.url}/`);
                 if (page) {
                   if (typeof page === 'string') {
@@ -362,19 +366,22 @@ export function SidebarLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
 
   const pathname = router.pathname;
-  const currentDivision = config.anchors?.find((anchor) => pathname.startsWith(`/${anchor.url}`));
+  const currentDivision = config?.anchors?.find((anchor: Anchor) =>
+    pathname.startsWith(`/${anchor.url}`)
+  );
 
   let navForDivision = getGroupsInDivision(nav, currentDivision?.url ? [currentDivision?.url] : []);
 
   if (navForDivision.length === 0) {
     // Base docs include everything NOT in an anchor
-    const divisions = config.anchors?.filter((anchor) => !isAbsoluteUrl(anchor.url)) || [];
+    const divisions = config?.anchors?.filter((anchor: Anchor) => !isAbsoluteUrl(anchor.url)) || [];
     navForDivision = getGroupsNotInDivision(
       nav,
-      divisions.map((division) => division.url)
+      divisions.map((division: Anchor) => division.url)
     );
   }
 

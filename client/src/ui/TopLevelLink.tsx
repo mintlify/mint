@@ -20,8 +20,8 @@ type TopLevelProps = {
 
 const TopLevelAnchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color }: TopLevelProps, ref: any) => {
-    const anchorColor = color;
     const [hovering, setHovering] = useState(false);
+    const usePrimaryColorForText = !!color?.includes('linear-gradient');
 
     return (
       <a
@@ -30,27 +30,30 @@ const TopLevelAnchor = forwardRef(
         onClick={onClick}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
-        style={isActive && anchorColor ? { color: anchorColor } : {}}
+        style={isActive && !usePrimaryColorForText ? { color: color } : {}}
         className={clsx(
           'group flex items-center lg:text-sm lg:leading-6',
           className,
           isActive
-            ? ['font-semibold', anchorColor ? '' : 'text-primary dark:text-primary-light']
+            ? [
+                'font-semibold',
+                usePrimaryColorForText ? 'text-primary dark:text-primary-light' : '',
+              ]
             : 'font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
         )}
       >
         <div
           style={
-            (isActive || hovering) && anchorColor
+            (isActive || hovering) && color
               ? {
-                  backgroundColor: anchorColor,
+                  background: color,
                 }
               : {}
           }
           className={clsx(
             `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10 p-1`,
             isActive
-              ? [anchorColor ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
+              ? [color ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
               : 'bg-slate-300 highlight-slate-700/5 dark:bg-slate-800 dark:highlight-white/5'
           )}
         >

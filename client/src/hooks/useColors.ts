@@ -1,19 +1,21 @@
 import { useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
+import { Gradient } from '@/types/gradient';
 
 export function useColors(): Colors {
   const { config } = useContext(ConfigContext);
 
   const primaryColor = config?.colors?.primary ?? '#16A34A';
 
-  // Include the primary color as the color for the first anchor
-  const anchors = [primaryColor].concat(
+  const defaultAnchorColor = colorToBackground(config?.colors?.anchors);
+  const firstAnchorColor = defaultAnchorColor ?? primaryColor;
+
+  // Include the color for the first anchor even though the config object
+  // doesn't define it explicitly
+  const anchors = [firstAnchorColor].concat(
     config?.anchors?.map((anchor) => {
-      if (anchor.color) {
-        return anchor.color;
-      }
-      return primaryColor;
+      return colorToBackground(anchor.color) ?? defaultAnchorColor ?? primaryColor;
     }) ?? []
   );
 
@@ -27,6 +29,29 @@ export function useColors(): Colors {
     backgroundDark: config?.colors?.background?.dark ?? '#0C1322',
     anchors,
   };
+}
+
+/**
+ * Will generate a linear-gradient if the color is a Gradient config.
+ * If the color is a string, we just return the original.
+ *
+ * @param color Hex color or a Gradient config object
+ * @returns Original hex color or a linear-gradient generated from the object
+ */
+function colorToBackground(color?: string | Gradient) {
+  if (color == null) {
+    return color;
+  }
+
+  if (typeof color === 'string') {
+    return color;
+  }
+
+  // We have a gradient object if we are defined and not a string
+  if (color.via) {
+    return `linear-gradient(45deg, ${color.from}, ${color.via}, ${color.to})`;
+  }
+  return `linear-gradient(45deg, ${color.from}, ${color.to})`;
 }
 
 export type Colors = {
