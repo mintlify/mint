@@ -21,7 +21,7 @@ type TopLevelProps = {
 const TopLevelAnchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color }: TopLevelProps, ref: any) => {
     const [hovering, setHovering] = useState(false);
-    const usePrimaryColorForText = !!color?.includes('linear-gradient');
+    const usePrimaryColorForText = color == null || color.includes('linear-gradient');
 
     return (
       <a
