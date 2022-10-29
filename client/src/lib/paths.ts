@@ -1,11 +1,18 @@
 import axios from 'axios';
 
+const REQUEST_ADMIN_OPTIONS = {
+  headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
+};
+
 const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 const checkWorkerStatus = async (id: string): Promise<any> => {
-  const status = await axios.get(`${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all/${id}`);
+  const status = await axios.get(
+    `${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all/${id}`,
+    REQUEST_ADMIN_OPTIONS
+  );
   return status.data;
 };
 
@@ -35,18 +42,23 @@ export const monitorWorkerStatus = async (id: string) => {
 const cacheAll = async () => {
   const {
     data: { id },
-  } = await axios.post(`${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all`);
+  } = await axios.post(
+    `${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all`,
+    null,
+    REQUEST_ADMIN_OPTIONS
+  );
   return id;
 };
 
 export const getPaths = async () => {
-  const id = await cacheAll();
-  await monitorWorkerStatus(id);
+  // Only cache all in production ~ called only once in build
+  if (process.env.NODE_ENV === 'production') {
+    const id = await cacheAll();
+    await monitorWorkerStatus(id);
+  }
   const { data }: { data: Record<string, string[][]> } = await axios.get(
     `${process.env.API_ENDPOINT}/api/v1/admin/build/paths`,
-    {
-      headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
-    }
+    REQUEST_ADMIN_OPTIONS
   );
   return data;
 };
