@@ -8,9 +8,9 @@ const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const checkWorkerStatus = async (id: string): Promise<any> => {
+const checkGetPathsStatus = async (id: string): Promise<any> => {
   const status = await axios.get(
-    `${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all/${id}`,
+    `${process.env.API_ENDPOINT}/api/v1/admin/build/get-paths/${id}`,
     REQUEST_ADMIN_OPTIONS
   );
   return status.data;
@@ -18,13 +18,13 @@ const checkWorkerStatus = async (id: string): Promise<any> => {
 
 const THREE_MINUTES_IN_MS = 1000 * 60 * 3;
 
-export const monitorWorkerStatus = async (id: string) => {
+export const monitorGetPathsStatus = async (id: string) => {
   let workerStatus = null;
   let millisecondsPassed = 0;
   const intervalMs = 100;
 
   while (workerStatus == null && millisecondsPassed < THREE_MINUTES_IN_MS) {
-    const status = await checkWorkerStatus(id);
+    const status = await checkGetPathsStatus(id);
     if (status.state === 'completed' && status.data) {
       workerStatus = status.data;
       break;
@@ -39,26 +39,14 @@ export const monitorWorkerStatus = async (id: string) => {
   return workerStatus;
 };
 
-const cacheAll = async () => {
+export const getPaths = async () => {
   const {
     data: { id },
-  } = await axios.post(
-    `${process.env.API_ENDPOINT}/api/v1/admin/build/cache-all`,
-    null,
-    REQUEST_ADMIN_OPTIONS
-  );
-  return id;
-};
-
-export const getPaths = async () => {
-  // Only cache all in production ~ called only once in build
-  if (process.env.NODE_ENV === 'production') {
-    const id = await cacheAll();
-    await monitorWorkerStatus(id);
-  }
-  const { data }: { data: Record<string, string[][]> } = await axios.get(
+  }: { data: { id: string } } = await axios.get(
     `${process.env.API_ENDPOINT}/api/v1/admin/build/paths`,
     REQUEST_ADMIN_OPTIONS
   );
-  return data;
+  const paths = await monitorGetPathsStatus(id);
+
+  return paths;
 };
