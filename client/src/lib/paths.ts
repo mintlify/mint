@@ -10,7 +10,7 @@ const sleep = (ms: number) => {
 
 const checkGetPathsStatus = async (id: string): Promise<any> => {
   const status = await axios.get(
-    `${process.env.API_ENDPOINT}/api/v1/admin/build/get-paths/${id}`,
+    `${process.env.API_ENDPOINT}/api/v1/admin/build/paths/${id}`,
     REQUEST_ADMIN_OPTIONS
   );
   return status.data;
