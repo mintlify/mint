@@ -210,7 +210,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   );
   return {
     paths,
-    fallback: true, // TODO: Change this to true once ISR is implemented https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-true
+    fallback: true,
   };
 };
 
