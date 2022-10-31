@@ -70,7 +70,11 @@ function getVersionOfPageRecursively(
   targetPage: string,
   lastVersion?: string
 ): string | void {
-  if (typeof navigation === 'string' && navigation === targetPage) {
+  // pathToVersionDict depends on this but doesn't have a / at the start so we need to compare both path varieties
+  if (
+    typeof navigation === 'string' &&
+    (`/${navigation}` === targetPage || navigation === targetPage)
+  ) {
     return lastVersion;
   }
 
@@ -104,7 +108,7 @@ export function getVersionOfPage(
   anchors: Anchor[],
   pathname: string
 ): string | void {
-  const pageVersion = getVersionOfPageRecursively(navigation, pathname.substring(1));
+  const pageVersion = getVersionOfPageRecursively(navigation, pathname);
   if (pageVersion) {
     return pageVersion;
   }
