@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { Config } from '@/config';
 import { Group, Groups, GroupPage, isGroup } from '@/metadata';
 
 import { getCurrentAnchorVersion } from './getCurrentAnchor';
@@ -70,7 +70,11 @@ function getVersionOfPageRecursively(
   targetPage: string,
   lastVersion?: string
 ): string | void {
-  if (typeof navigation === 'string' && navigation === targetPage) {
+  // pathToVersionDict depends on this but doesn't have a / at the start so we need to compare both path varieties
+  if (
+    typeof navigation === 'string' &&
+    (`/${navigation}` === targetPage || navigation === targetPage)
+  ) {
     return lastVersion;
   }
 
@@ -99,10 +103,10 @@ function getVersionOfPageRecursively(
   }
 }
 
-export function getVersionOfPage(pathname: string): string | void {
-  const pageVersion = getVersionOfPageRecursively(config.navigation, pathname.substring(1));
+export function getVersionOfPage(config: Config, pathname: string): string | void {
+  const pageVersion = getVersionOfPageRecursively(config.navigation, pathname);
   if (pageVersion) {
     return pageVersion;
   }
-  return getCurrentAnchorVersion(config.anchors || [], pathname);
+  return getCurrentAnchorVersion(config.anchors ?? [], pathname);
 }
