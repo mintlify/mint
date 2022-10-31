@@ -221,41 +221,49 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const path = slug ? slug.join('/') : 'index';
 
   const {
-    content,
-    stringifiedConfig,
-    nav,
-    section,
-    meta,
-    metaTagsForSeo,
-    title,
-    stringifiedOpenApi,
-    favicons,
+    success
   }: {
-    content: string;
-    stringifiedConfig: string;
-    nav: Groups;
-    section: string;
-    meta: PageMetaTags;
-    metaTagsForSeo: PageMetaTags;
-    title: string;
-    stringifiedOpenApi?: string;
-    favicons: FaviconsProps;
+    success?: {
+      content: string,
+      stringifiedConfig: string,
+      nav: Groups,
+      section: string,
+      meta: PageMetaTags,
+      metaTagsForSeo: PageMetaTags,
+      title: string,
+      stringifiedOpenApi?: string,
+      favicons: FaviconsProps
+    }
   } = await getPage(site, path);
+  if (success) {
+    const {
+      content,
+      stringifiedConfig,
+      nav,
+      section,
+      meta,
+      metaTagsForSeo,
+      title,
+      stringifiedOpenApi,
+      favicons
+    } = success;
+    const mdxSource = await getMdxSource(content, { section, meta });
+    return {
+      props: {
+        stringifiedMdxSource: stringify(mdxSource),
+        stringifiedData: stringify({
+          nav,
+          meta,
+          section,
+          metaTagsForSeo,
+          title,
+          stringifiedConfig,
+          stringifiedOpenApi,
+        }),
+        stringifiedFavicons: stringify(favicons),
+      },
+    };
+  }
 
-  const mdxSource = await getMdxSource(content, { section, meta });
-  return {
-    props: {
-      stringifiedMdxSource: stringify(mdxSource),
-      stringifiedData: stringify({
-        nav,
-        meta,
-        section,
-        metaTagsForSeo,
-        title,
-        stringifiedConfig,
-        stringifiedOpenApi,
-      }),
-      stringifiedFavicons: stringify(favicons),
-    },
-  };
+  
 };
