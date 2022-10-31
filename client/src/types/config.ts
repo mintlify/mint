@@ -33,6 +33,7 @@ export type Anchor = {
   icon?: string;
   color?: string | Gradient;
   isDefaultHidden?: boolean;
+  version?: string;
 };
 
 // To deprecate array types

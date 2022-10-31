@@ -13,6 +13,7 @@ import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
+import { getAnchorsToDisplay } from '@/utils/getAnchorsToDisplay';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
@@ -268,6 +269,7 @@ function Nav({ nav, children, mobile = false }: any) {
 function TopLevelNav({ mobile }: { mobile: boolean }) {
   let { pathname } = useRouter();
   const { config } = useContext(ConfigContext);
+  const { selectedVersion } = useContext(VersionContext);
   const colors = useColors();
 
   const isRootAnchorActive =
@@ -297,15 +299,8 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
         {config?.topAnchor?.name ?? 'Documentation'}
       </TopLevelLink>
       {config?.anchors &&
-        config.anchors
-          .filter((anchor: Anchor) => {
-            if (!anchor.isDefaultHidden) {
-              return true;
-            }
-
-            return pathname.startsWith(`/${anchor.url}`);
-          })
-          .map((anchor: Anchor, i: number) => {
+        getAnchorsToDisplay(config.anchors, selectedVersion, pathname).map(
+          (anchor: Anchor, i: number) => {
             const isAbsolute = isAbsoluteUrl(anchor.url);
             let href;
             if (isAbsolute) {
@@ -336,7 +331,8 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
                 isActive={pathname.startsWith(`/${anchor.url}`)}
               />
             );
-          })}
+          }
+        )}
     </>
   );
 }
