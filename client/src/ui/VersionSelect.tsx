@@ -15,12 +15,16 @@ export function VersionSelect() {
   // Only run when the page loads. Otherwise, users could never change the API version
   // because the page would keep changing it back to its own version.
   useEffect(() => {
-    const version = getVersionOfPage(config?.navigation ?? [], router.pathname.substring(1));
+    const version = getVersionOfPage(
+      config?.navigation ?? [],
+      config?.anchors ?? [],
+      router.pathname
+    );
     if (version) {
       setSelectedVersion(version);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setSelectedVersion]);
 
   // It's possible to show a selected version that doesn't exist in versionOptions, for example by navigating to
   // a secret v3 page when the menu only shows v1 and v2. Thus, we only hide the dropdown when nothing is selected.
@@ -30,6 +34,7 @@ export function VersionSelect() {
 
   const onVersionChange = (version: string) => {
     setSelectedVersion(version);
+    router.push('/');
   };
 
   return (

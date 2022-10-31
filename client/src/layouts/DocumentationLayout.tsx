@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
+import { getCurrentAnchorVersion } from '@/utils/getCurrentAnchor';
 
 export function DocumentationLayout({
   navIsOpen,
