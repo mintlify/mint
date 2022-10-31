@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 
 import { config } from '@/config';
 import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { documentationNav } from '@/metadata';
 import { Title } from '@/ui/Title';
+import { getCurrentAnchorVersion } from '@/utils/getCurrentAnchor';
 
 import { Meta } from './ContentsLayout';
 

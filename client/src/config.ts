@@ -29,7 +29,7 @@ type NavbarLink = {
 
 export type TopbarCta = NavbarLink;
 
-type Anchor = {
+export type Anchor = {
   name: string;
   url: string;
   icon?: string;

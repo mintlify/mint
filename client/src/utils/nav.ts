@@ -1,6 +1,8 @@
 import { config } from '@/config';
 import { Group, Groups, GroupPage, isGroup } from '@/metadata';
 
+import { getCurrentAnchorVersion } from './getCurrentAnchor';
+
 export function getGroupsInDivision(nav: Groups, divisionUrls: string[]) {
   return nav.filter((group: Group) => isGroupInDivision(group, divisionUrls));
 }
@@ -97,6 +99,10 @@ function getVersionOfPageRecursively(
   }
 }
 
-export function getVersionOfPage(targetPage: string): string | void {
-  return getVersionOfPageRecursively(config.navigation, targetPage);
+export function getVersionOfPage(pathname: string): string | void {
+  const pageVersion = getVersionOfPageRecursively(config.navigation, pathname.substring(1));
+  if (pageVersion) {
+    return pageVersion;
+  }
+  return getCurrentAnchorVersion(config.anchors || [], pathname);
 }
