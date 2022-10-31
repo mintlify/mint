@@ -226,6 +226,10 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       notFound: true
     };
   }
+  if (status === 308) {
+    const {redirect}: {redirect: {destination: string, permanent: boolean} } = data;
+    return {redirect};
+  }
   if (status === 200) {
     const {
       content,
