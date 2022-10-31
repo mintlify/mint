@@ -1,17 +1,6 @@
 import { pathToVersionDict } from '@/utils/pathToVersionDict';
 
 describe('pathToVersionDict', () => {
-  const configNoAnchors = {
-    name: 'site-name',
-    navigation: [
-      {
-        group: 'group-name',
-        version: 'v1',
-        pages: ['path/to/page'],
-      },
-    ],
-  };
-
   test('gets page version from group', () => {
     const output = pathToVersionDict(
       [
@@ -21,7 +10,16 @@ describe('pathToVersionDict', () => {
           pages: [{ href: 'path/to/page' }],
         },
       ],
-      configNoAnchors
+      {
+        name: 'site-name',
+        navigation: [
+          {
+            group: 'group-name',
+            version: 'v1',
+            pages: ['path/to/page'],
+          },
+        ],
+      }
     );
     expect(output).toEqual({ 'path/to/page': 'v1' });
   });
@@ -35,9 +33,39 @@ describe('pathToVersionDict', () => {
           pages: [{ href: 'path/to/page', version: 'v2' }],
         },
       ],
-      configNoAnchors
+      {
+        name: 'site-name',
+        navigation: [
+          {
+            group: 'group-name',
+            version: 'v1',
+            pages: ['path/to/page'],
+          },
+        ],
+      }
     );
     expect(output).toEqual({ 'path/to/page': 'v2' });
+  });
+
+  test('undefined when there is no versioning', () => {
+    const output = pathToVersionDict(
+      [
+        {
+          group: 'group-name',
+          pages: [{ href: 'path/to/page' }, { href: 'path/to/other-page', version: 'v1' }],
+        },
+      ],
+      {
+        name: 'site-name',
+        navigation: [
+          {
+            group: 'group-name',
+            pages: ['path/to/page'],
+          },
+        ],
+      }
+    );
+    expect(output).toEqual({ 'path/to/page': undefined, 'path/to/other-page': 'v1' });
   });
 
   test('gets page version from anchor', () => {
