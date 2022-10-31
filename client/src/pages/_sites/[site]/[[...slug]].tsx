@@ -220,22 +220,13 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { site, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
-  const {
-    success
-  }: {
-    success?: {
-      content: string,
-      stringifiedConfig: string,
-      nav: Groups,
-      section: string,
-      meta: PageMetaTags,
-      metaTagsForSeo: PageMetaTags,
-      title: string,
-      stringifiedOpenApi?: string,
-      favicons: FaviconsProps
-    }
-  } = await getPage(site, path);
-  if (success) {
+  const { data, status } = await getPage(site, path);
+  if (status === 404) {
+    return {
+      notFound: true
+    };
+  }
+  if (status === 200) {
     const {
       content,
       stringifiedConfig,
@@ -246,7 +237,17 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       title,
       stringifiedOpenApi,
       favicons
-    } = success;
+    }: {
+      content: string,
+      stringifiedConfig: string,
+      nav: Groups,
+      section: string,
+      meta: PageMetaTags,
+      metaTagsForSeo: PageMetaTags,
+      title: string,
+      stringifiedOpenApi?: string,
+      favicons: FaviconsProps
+    } = data;
     const mdxSource = await getMdxSource(content, { section, meta });
     return {
       props: {
@@ -264,6 +265,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       },
     };
   }
-
-  
+  return {
+    notFound: true
+  }
 };
