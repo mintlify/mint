@@ -1,4 +1,4 @@
-import { Anchor } from '@/config';
+import { Anchor } from '@/types/config';
 
 export function getCurrentAnchor(anchors: Anchor[], pathname: string) {
   return anchors.find((anchor) => {
