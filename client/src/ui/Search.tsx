@@ -16,7 +16,10 @@ import {
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { ConfigContext } from '@/context/ConfigContext';
+import { VersionContext } from '@/context/VersionContext';
 import { useActionKey } from '@/hooks/useActionKey';
+import { pathToBreadcrumbs } from '@/utils/pathToBreadcrumbs';
+import { pathToVersionDict } from '@/utils/pathToVersionDict';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
@@ -46,7 +49,15 @@ type Hit = {
 };
 
 // TODO: Simplify the repeated components
-function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
+function SearchHit({
+  active,
+  hit,
+  breadcrumbs,
+}: {
+  active: boolean;
+  hit: Hit;
+  breadcrumbs: string[];
+}) {
   if (hit._highlightResult.heading?.matchLevel === 'full') {
     return (
       <>
@@ -74,23 +85,44 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
           </svg>
         </div>
         <div className="ml-3 flex-auto">
-          {hit._highlightResult.title?.value && (
-            <div>
-              <span
-                className={clsx(
-                  'rounded-full py-px px-2 text-xs',
-                  active
-                    ? 'bg-primary text-white'
-                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                )}
-                dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-              ></span>
-            </div>
-          )}
-          <div
-            className="mt-1 truncate"
-            dangerouslySetInnerHTML={{ __html: hit._highlightResult.heading?.value }}
-          ></div>
+          <div className="flex items-center">
+            {breadcrumbs.map((breadcrumb) => (
+              <>
+                <span>{breadcrumb}</span>
+                <svg
+                  width="3"
+                  height="6"
+                  aria-hidden="true"
+                  className="mx-3 overflow-visible text-slate-400"
+                >
+                  <path
+                    d="M0 0L3 3L0 6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </>
+            ))}
+            {hit._highlightResult.title?.value && (
+              <div>
+                <span
+                  className={clsx(
+                    'rounded-full py-px px-2 text-xs',
+                    active
+                      ? 'bg-primary text-white'
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                  )}
+                  dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
+                ></span>
+              </div>
+            )}
+            <div
+              className="mt-1 truncate"
+              dangerouslySetInnerHTML={{ __html: hit._highlightResult.heading?.value }}
+            ></div>
+          </div>
         </div>
         {active && <ChevronRightIcon className="h-4 w-4 ml-3 flex-none" />}
       </>
@@ -124,23 +156,44 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
           </svg>
         </div>
         <div className="ml-3 flex-auto">
-          {hit._highlightResult.title?.value && (
-            <div>
-              <span
-                className={clsx(
-                  'rounded-full py-px px-2 text-xs',
-                  active
-                    ? 'bg-primary text-white'
-                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                )}
-                dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-              ></span>
-            </div>
-          )}
-          <div
-            className="mt-1 truncate"
-            dangerouslySetInnerHTML={{ __html: hit._highlightResult.subheading?.value }}
-          ></div>
+          <div className="flex items-center">
+            {breadcrumbs.map((breadcrumb) => (
+              <>
+                <span>{breadcrumb}</span>
+                <svg
+                  width="3"
+                  height="6"
+                  aria-hidden="true"
+                  className="mx-3 overflow-visible text-slate-400"
+                >
+                  <path
+                    d="M0 0L3 3L0 6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </>
+            ))}
+            {hit._highlightResult.title?.value && (
+              <div>
+                <span
+                  className={clsx(
+                    'rounded-full py-px px-2 text-xs',
+                    active
+                      ? 'bg-primary text-white'
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                  )}
+                  dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
+                ></span>
+              </div>
+            )}
+            <div
+              className="mt-1 truncate"
+              dangerouslySetInnerHTML={{ __html: hit._highlightResult.subheading?.value }}
+            ></div>
+          </div>
         </div>
         {active && <ChevronRightIcon className="h-4 w-4 ml-3 flex-none" />}
       </>
@@ -171,10 +224,32 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
         </svg>
       </div>
       <div className="ml-3 flex-auto">
-        <div
-          className="truncate"
-          dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-        ></div>
+        <div className="flex items-center">
+          {breadcrumbs.map((breadcrumb) => (
+            <>
+              <span>{breadcrumb}</span>
+              <svg
+                width="3"
+                height="6"
+                aria-hidden="true"
+                className="mx-3 overflow-visible text-slate-400"
+              >
+                <path
+                  d="M0 0L3 3L0 6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </>
+          ))}
+          <div
+            className="truncate"
+            dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
+          ></div>
+        </div>
+
         {hit._highlightResult.content?.matchLevel === 'full' &&
           hit._snippetResult.content?.value && (
             <div dangerouslySetInnerHTML={{ __html: hit._snippetResult.content.value }}></div>
@@ -187,7 +262,9 @@ function SearchHit({ active, hit }: { active: boolean; hit: Hit }) {
 
 export function SearchProvider({ children }: any) {
   const router = useRouter();
-  const { config } = useContext(ConfigContext);
+  const { config, nav } = useContext(ConfigContext);
+  const { selectedVersion } = useContext(VersionContext);
+  const pathToVersion = pathToVersionDict(nav ?? [], config ?? { name: '' });
   const [searchId, setSearchId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');
@@ -225,11 +302,12 @@ export function SearchProvider({ children }: any) {
       setHits([]);
       return;
     }
+
     const { hits } = await index.search(query, {
       filters: `orgID:${searchId}`,
     });
 
-    setHits(hits as Hit[]);
+    setHits(filterHitsToCurrentVersion(hits as Hit[], selectedVersion, pathToVersion));
   };
 
   const onSelectOption = (hit: any) => {
@@ -329,7 +407,13 @@ export function SearchProvider({ children }: any) {
                                     )
                                   }
                                 >
-                                  {({ active }) => <SearchHit active={active} hit={hit} />}
+                                  {({ active }) => (
+                                    <SearchHit
+                                      active={active}
+                                      hit={hit}
+                                      breadcrumbs={pathToBreadcrumbs(hit.slug, config)}
+                                    />
+                                  )}
                                 </Combobox.Option>
                               ))}
                             </ul>
@@ -384,4 +468,21 @@ export function SearchButton({ children, ...props }: any) {
       {typeof children === 'function' ? children({ actionKey }) : children}
     </button>
   );
+}
+
+function filterHitsToCurrentVersion(
+  hits: Hit[],
+  selectedVersion: string,
+  pathToVersion: any
+): Hit[] {
+  return hits.filter((hit) => {
+    const version = pathToVersion[hit.slug];
+
+    // Pages without versioning are always included
+    if (!version) {
+      return true;
+    }
+
+    return version === selectedVersion;
+  });
 }

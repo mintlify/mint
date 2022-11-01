@@ -7,7 +7,7 @@ describe('pathToVersionDict', () => {
         {
           group: 'group-name',
           version: 'v1',
-          pages: [{ href: 'path/to/page' }],
+          pages: [{ href: '/path/to/page' }],
         },
       ],
       {
@@ -30,7 +30,7 @@ describe('pathToVersionDict', () => {
         {
           group: 'group-name',
           version: 'v1',
-          pages: [{ href: 'path/to/page', version: 'v2' }],
+          pages: [{ href: '/path/to/page', version: 'v2' }],
         },
       ],
       {
@@ -52,7 +52,7 @@ describe('pathToVersionDict', () => {
       [
         {
           group: 'group-name',
-          pages: [{ href: 'path/to/page' }, { href: 'path/to/other-page', version: 'v1' }],
+          pages: [{ href: '/path/to/page' }, { href: '/path/to/other-page', version: 'v1' }],
         },
       ],
       {
@@ -60,7 +60,7 @@ describe('pathToVersionDict', () => {
         navigation: [
           {
             group: 'group-name',
-            pages: ['path/to/page'],
+            pages: ['path/to/page', '/path/to/other-page'],
           },
         ],
       }
@@ -74,7 +74,7 @@ describe('pathToVersionDict', () => {
         {
           group: 'group-name',
           version: 'v1',
-          pages: [{ href: 'path/to/page' }],
+          pages: [{ href: '/path/to/page' }],
         },
         {
           group: 'other-group-name',
@@ -87,7 +87,7 @@ describe('pathToVersionDict', () => {
           {
             group: 'group-name',
             version: 'v1',
-            pages: ['path/to/page'],
+            pages: ['/path/to/page'],
           },
           {
             group: 'other-group-name',
