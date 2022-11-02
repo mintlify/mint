@@ -260,21 +260,14 @@ function SearchHit({
   );
 }
 
-export function SearchProvider({ children }: any) {
+export function SearchProvider({ subdomain, children }: { subdomain: string; children: any }) {
   const router = useRouter();
   const { config, nav } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
   const pathToVersion = pathToVersionDict(nav ?? [], config ?? { name: '' });
-  const [searchId, setSearchId] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [hits, setHits] = useState<Hit[]>([]);
-
-  useEffect(() => {
-    axios.get(`${config?.basePath ?? ''}/api/name`).then(({ data }) => {
-      setSearchId(data);
-    });
-  }, []);
 
   useHotkeys('cmd+k', (e) => {
     e.preventDefault();
@@ -304,7 +297,7 @@ export function SearchProvider({ children }: any) {
     }
 
     const { hits } = await index.search(query, {
-      filters: `orgID:${searchId}`,
+      filters: `orgID:${subdomain}`,
     });
 
     setHits(filterHitsToCurrentVersion(hits as Hit[], selectedVersion, pathToVersion));

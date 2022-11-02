@@ -56,6 +56,7 @@ interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
   stringifiedFavicons: string;
+  subdomain: string;
 }
 
 interface ParsedDataProps {
@@ -83,6 +84,7 @@ export default function Page({
   stringifiedMdxSource,
   stringifiedData,
   stringifiedFavicons,
+  subdomain,
 }: PageProps) {
   const mdxSource = parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, stringifiedConfig, nav, stringifiedOpenApi } =
@@ -160,7 +162,7 @@ export default function Page({
               }}
             />
             <GA4Script ga4={analyticsConfig.ga4} />
-            <SearchProvider>
+            <SearchProvider subdomain={subdomain}>
               <div
                 className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
                 // Add background image
@@ -195,7 +197,7 @@ export default function Page({
 }
 
 interface PathProps extends ParsedUrlQuery {
-  site: string;
+  subdomain: string;
   slug: string[];
 }
 
@@ -204,7 +206,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   const paths = Object.entries(data).flatMap(
     ([subdomain, pathsForSubdomain]: [string, string[][]]) => {
       return pathsForSubdomain.map((pathForSubdomain) => ({
-        params: { site: subdomain, slug: pathForSubdomain },
+        params: { subdomain, slug: pathForSubdomain },
       }));
     }
   );
@@ -217,18 +219,18 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
 export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ params }) => {
   if (!params) throw new Error('No path parameters found');
 
-  const { site, slug } = params;
+  const { subdomain, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
-  const { data, status } = await getPage(site, path);
+  const { data, status } = await getPage(subdomain, path);
   if (status === 404) {
     return {
-      notFound: true
+      notFound: true,
     };
   }
   if (status === 308) {
-    const {redirect}: {redirect: {destination: string, permanent: boolean} } = data;
-    return {redirect};
+    const { redirect }: { redirect: { destination: string; permanent: boolean } } = data;
+    return { redirect };
   }
   if (status === 200) {
     const {
@@ -240,17 +242,17 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       metaTagsForSeo,
       title,
       stringifiedOpenApi,
-      favicons
+      favicons,
     }: {
-      content: string,
-      stringifiedConfig: string,
-      nav: Groups,
-      section: string,
-      meta: PageMetaTags,
-      metaTagsForSeo: PageMetaTags,
-      title: string,
-      stringifiedOpenApi?: string,
-      favicons: FaviconsProps
+      content: string;
+      stringifiedConfig: string;
+      nav: Groups;
+      section: string;
+      meta: PageMetaTags;
+      metaTagsForSeo: PageMetaTags;
+      title: string;
+      stringifiedOpenApi?: string;
+      favicons: FaviconsProps;
     } = data;
     const mdxSource = await getMdxSource(content, { section, meta });
     return {
@@ -266,10 +268,11 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           stringifiedOpenApi,
         }),
         stringifiedFavicons: stringify(favicons),
+        subdomain,
       },
     };
   }
   return {
-    notFound: true
-  }
+    notFound: true,
+  };
 };
