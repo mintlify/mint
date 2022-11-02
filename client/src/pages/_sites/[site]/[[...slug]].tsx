@@ -108,49 +108,50 @@ export default function Page({
     };
   }, [navIsOpen]);
 
-  return (
-    <Intercom appId={config.integrations?.intercom} autoBoot>
-      <VersionContextController versionOptions={config?.versions}>
-        <ConfigContext.Provider value={{ config, nav, openApi }}>
-          <AnalyticsContext.Provider value={analyticsMediator}>
-            <ColorVariables />
-            <Title suffix={config.name}>{title}</Title>
-            <Head>
-              {favicons.icons.map((favicon) => (
-                <link
-                  rel={favicon.rel}
-                  type={favicon.type}
-                  sizes={favicon.sizes}
-                  href={favicon.href}
-                />
-              ))}
-              <meta name="msapplication-config" content={favicons.browserconfig} />
-              <meta name="apple-mobile-web-app-title" content={config.name} />
-              <meta name="application-name" content={config.name} />
-              <meta name="theme-color" content="#ffffff" />
-              <meta name="msapplication-TileColor" content={config.colors?.primary} />
-              <meta name="theme-color" content="#ffffff" />
-              {config?.metadata &&
-                Object.entries(config?.metadata).map(([key, value]) => {
-                  if (!value) {
-                    return null;
-                  }
-                  return <meta key={key} name={key} content={value as any} />;
-                })}
-              {Object.entries(metaTagsForSeo).map(([key, value]) => (
-                <meta key={key} name={key} content={value as any} />
-              ))}
-            </Head>
-            <Script
-              strategy="beforeInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
+  try {
+    return (
+      <Intercom appId={config.integrations?.intercom} autoBoot>
+        <VersionContextController versionOptions={config?.versions}>
+          <ConfigContext.Provider value={{ config, nav, openApi }}>
+            <AnalyticsContext.Provider value={analyticsMediator}>
+              <ColorVariables />
+              <Title suffix={config.name}>{title}</Title>
+              <Head>
+                {favicons.icons.map((favicon) => (
+                  <link
+                    rel={favicon.rel}
+                    type={favicon.type}
+                    sizes={favicon.sizes}
+                    href={favicon.href}
+                  />
+                ))}
+                <meta name="msapplication-config" content={favicons.browserconfig} />
+                <meta name="apple-mobile-web-app-title" content={config.name} />
+                <meta name="application-name" content={config.name} />
+                <meta name="theme-color" content="#ffffff" />
+                <meta name="msapplication-TileColor" content={config.colors?.primary} />
+                <meta name="theme-color" content="#ffffff" />
+                {config?.metadata &&
+                  Object.entries(config?.metadata).map(([key, value]) => {
+                    if (!value) {
+                      return null;
+                    }
+                    return <meta key={key} name={key} content={value as any} />;
+                  })}
+                {Object.entries(metaTagsForSeo).map(([key, value]) => (
+                  <meta key={key} name={key} content={value as any} />
+                ))}
+              </Head>
+              <Script
+                strategy="beforeInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: `
                 try {
                   if (localStorage.theme === 'dark' || (${(
                     config.modeToggle?.default == null
                   ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
-                  config.modeToggle?.default === 'dark'
-                ).toString()}) {
+                    config.modeToggle?.default === 'dark'
+                  ).toString()}) {
                     document.documentElement.classList.add('dark')
                   }
                   
@@ -159,41 +160,60 @@ export default function Page({
                   }
                 } catch (_) {}
               `,
-              }}
-            />
-            <GA4Script ga4={analyticsConfig.ga4} />
-            <SearchProvider subdomain={subdomain}>
-              <div
-                className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
-                // Add background image
-                {...(config.backgroundImage && {
-                  style: {
-                    background: `url('${config.backgroundImage}') no-repeat fixed top right`,
-                  },
-                })}
-              >
-                <Header
-                  hasNav={Boolean(config.navigation?.length)}
-                  navIsOpen={navIsOpen}
-                  onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                  title={meta?.title}
-                  section={section}
-                />
-                <DocumentationLayout
-                  nav={nav}
-                  navIsOpen={navIsOpen}
-                  setNavIsOpen={setNavIsOpen}
-                  meta={meta}
+                }}
+              />
+              <GA4Script ga4={analyticsConfig.ga4} />
+              <SearchProvider subdomain={subdomain}>
+                <div
+                  className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
+                  // Add background image
+                  {...(config.backgroundImage && {
+                    style: {
+                      background: `url('${config.backgroundImage}') no-repeat fixed top right`,
+                    },
+                  })}
                 >
-                  <MDXRemote components={components} {...mdxSource} />
-                </DocumentationLayout>
-              </div>
-            </SearchProvider>
-          </AnalyticsContext.Provider>
-        </ConfigContext.Provider>
-      </VersionContextController>
-    </Intercom>
-  );
+                  <Header
+                    hasNav={Boolean(config.navigation?.length)}
+                    navIsOpen={navIsOpen}
+                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+                    title={meta?.title}
+                    section={section}
+                  />
+                  <DocumentationLayout
+                    nav={nav}
+                    navIsOpen={navIsOpen}
+                    setNavIsOpen={setNavIsOpen}
+                    meta={meta}
+                  >
+                    <MDXRemote components={components} {...mdxSource} />
+                  </DocumentationLayout>
+                </div>
+              </SearchProvider>
+            </AnalyticsContext.Provider>
+          </ConfigContext.Provider>
+        </VersionContextController>
+      </Intercom>
+    );
+  } catch (e) {
+    return (
+      <div>
+        <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md mx-auto py-12 sm:py-20">
+            <div className="text-center">
+              <p className="text-xl font-semibold text-primary dark:text-primary-light">500</p>
+              <h1 className="mt-2 text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight sm:text-4xl sm:tracking-tight">
+                Page building error
+              </h1>
+              <p className="mt-2 text-lg text-slate-500 dark:text-slate-400">
+                We could not generate this page
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 }
 
 interface PathProps extends ParsedUrlQuery {
