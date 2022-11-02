@@ -1,6 +1,15 @@
-import { CardGroup, Info, Warning, Note, Tip, Check } from '@mintlify/components';
-import { Tabs, Tab } from '@mintlify/components';
-import { Tooltip } from '@mintlify/components';
+import {
+  CardGroup,
+  Info,
+  Warning,
+  Note,
+  Tip,
+  Check,
+  Tabs,
+  Tab,
+  Tooltip,
+  Frame,
+} from '@mintlify/components';
 import Link from 'next/link';
 
 import { Accordion, AccordionGroup } from '@/components/Accordion';
@@ -40,6 +49,7 @@ const components: any = {
   Tooltip,
   ContentsLayout,
   Editor,
+  Frame,
   Link,
 };
 

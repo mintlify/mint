@@ -1,9 +1,8 @@
-import { addImport, tomdxJsxFlowElement } from './utils.js';
+import { tomdxJsxFlowElement } from './utils.js';
 
 const withFrames = () => {
   return (tree) => {
     let preTree = { children: [] };
-    let componentName;
 
     tree.children = tree.children.map((node, index) => {
       // Start of horizontal block: -- block
@@ -37,10 +36,7 @@ const withFrames = () => {
       }
 
       if (node.type === 'mdxJsxFlowElement' && (node.name === 'Example' || node.name === 'Frame')) {
-        if (!componentName) {
-          componentName = addImport(preTree, '@mintlify/components', 'Frame');
-        }
-        node.name = componentName;
+        node.name = 'Frame';
       }
       if (node.type === 'jsx') {
         node = tomdxJsxFlowElement(node.value);
