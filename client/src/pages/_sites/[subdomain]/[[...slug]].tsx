@@ -274,7 +274,14 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       stringifiedOpenApi?: string;
       favicons: FaviconsProps;
     } = data;
-    const mdxSource = await getMdxSource(content, { section, meta });
+    let mdxSource: any = '';
+    try {
+      const response = await getMdxSource(content, { section, meta });
+      mdxSource = response;
+    } catch (err) {
+      console.log(err);
+    }
+
     return {
       props: {
         stringifiedMdxSource: stringify(mdxSource),
