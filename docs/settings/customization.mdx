@@ -103,6 +103,19 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
+<ResponseField name="versions" type="string[]">
+  Array of version names. Only use this if you want to show different versions
+  of docs with a dropdown in the navigation bar.
+  <img
+    class="block h-8 dark:hidden"
+    src="/docs/img/version-dropdown-light.png"
+  />
+  <img
+    class="hidden h-8 dark:block"
+    src="/docs/img/version-dropdown-dark.png"
+  />
+</ResponseField>
+
 <ResponseField name="anchors" type="Anchor[]">
   An array of the anchors, includes the `icon`, `color`, and `url`.
   <img class="block h-32 dark:hidden" src="/docs/img/anchor/light.png" />
@@ -118,8 +131,17 @@ Example: `mintlify`
 
     Example: `Community`
     </ResponseField>
+    <ResponseField name="url" type="string">
+      The start of the URL that marks what pages go in the anchor. Generally, this is the name of the folder you put your pages in.
+    </ResponseField>
     <ResponseField name="color" type="string">
-      The hex color of the anchor icon background.
+      The hex color of the anchor icon background. Can also be a gradient if you pass an object with the properties `from` and `to` that are each a hex color.
+    </ResponseField>
+    <ResponseField name="version" type="string">
+      Used if you want to hide an anchor until the correct docs version is selected.
+    </ResponseField>
+    <ResponseField name="isDefaultHidden" type="boolean" default="false">
+      Pass `true` if you want to hide the anchor until you directly link someone to docs inside it.
     </ResponseField>
 
   </Expandable>
