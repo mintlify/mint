@@ -1,4 +1,3 @@
-// import ProgressBar from '@badrap/bar-of-progress';
 import { ResizeObserver } from '@juggle/resize-observer';
 import { stringify, parse } from 'flatted';
 import 'focus-visible';
@@ -17,6 +16,7 @@ import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContextController } from '@/context/VersionContext';
+import useProgressBar from '@/hooks/useProgressBar';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { getPage } from '@/lib/page';
@@ -34,24 +34,6 @@ if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
 }
 
-// TODO - Add ProgessBar back when you can access color. (Put inside Page component?)
-// const progress = new ProgressBar({
-//   size: 2,
-//   color: config?.colors?.primary ?? '#0C8C5E',
-//   className: 'bar-of-progress',
-//   delay: 100,
-// });
-
-// // this fixes safari jumping to the bottom of the page
-// // when closing the search modal using the `esc` key
-// if (typeof window !== 'undefined') {
-//   progress.start();
-//   progress.finish();
-// }
-
-// Router.events.on('routeChangeStart', () => progress.start());
-// Router.events.on('routeChangeComplete', () => progress.finish());
-// Router.events.on('routeChangeError', () => progress.finish());
 interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
@@ -86,6 +68,7 @@ export default function Page({
   stringifiedFavicons,
   subdomain,
 }: PageProps) {
+  useProgressBar();
   const mdxSource = parse(stringifiedMdxSource);
   const { meta, section, metaTagsForSeo, title, stringifiedConfig, nav, stringifiedOpenApi } =
     parse(stringifiedData) as ParsedDataProps;
