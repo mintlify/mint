@@ -48,7 +48,11 @@
     },
     {
       "group": "Settings",
-      "pages": ["settings/customization", "settings/page"]
+      "pages": [
+        "settings/customization",
+        "settings/page",
+        "settings/versioned-docs"
+      ]
     },
     {
       "group": "Components",
@@ -79,13 +83,7 @@
     },
     {
       "group": "Analytics",
-      "pages": [
-        "site-stats/setup",
-        "site-stats/ga4",
-        "site-stats/amplitude",
-        "site-stats/mp",
-        "site-stats/posthog"
-      ]
+      "pages": ["site-stats/setup", "site-stats/ga4"]
     }
   ],
   "footerSocials": {

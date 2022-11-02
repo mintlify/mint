@@ -1,0 +1,112 @@
+---
+title: "Versioned Docs"
+description: "Optionally, you can have separate v1 and v2 docs. Configuring versions only takes a few minutes."
+---
+
+Some times you release a V2 of your product and want to have entirely new docs. We let you hide content based on your docs version.
+
+Not _all_ content has to be hidden though! Any content without a version value shows up in every version so you never duplicate content!
+
+You can add version values to anchors, groups, or individual pages.
+
+<Frame>
+
+<img class="block h-8 dark:hidden" src="/docs/img/version-dropdown-light.png" />
+<img class="hidden h-8 dark:block" src="/docs/img/version-dropdown-dark.png" />
+
+</Frame>
+
+## Required Setup
+
+### List All Possible Versions
+
+Add `"versions": ["v2", "v1"]` to your `mint.json` file where "v1" and "v2" are the names of your versions. You can put any number of versions in this array.
+
+<Tip>
+  The versions dropdown will show your versions in the order you include them in
+  `mint.json`. Most people will want their versions written in descending order.
+  For example, `"versions": ["v3.1", "v3.0", "v2.0", "v1.0"]`.
+</Tip>
+
+## Versioning Options
+
+### Versioning Anchors
+
+You can hide an entire anchor based on a version. This is useful when you have dozens of pages you want to hide. For example, for an API reference section.
+
+Simply add `version` to your anchor. Anchors without a version value are shown in every version.
+
+```json Anchor Versioning Example
+"anchors": [
+    {
+        "name": "API Reference V1",
+        "url": "v1/api-reference",
+        "version": "v1"
+    },
+    {
+        "name": "API Reference V2",
+        "url": "v2/api-reference",
+        "version": "v2"
+    },
+    {
+        "name": "Anchor Without a Version",
+        "url": "example-anchor"
+    }
+]
+```
+
+You don't need to add `v1/` or `v2/` to the start of your URLs, but some customers do it to keep their doc files organized.
+
+### Versioning Groups
+
+You can version specific groups. This is useful when a few pages changed but everything else stayed the same.
+
+Simply add `version` to your groups. Groups without a version value are shown in every version.
+
+In the example below, pages in `Nested Group V1` only show up when `v1` docs are shown.
+
+```json Group Versioning Example
+"navigation": [
+    {
+        "group": "Group without a version",
+        "pages": [
+            {
+                "group": "Nested Group V1",
+                "pages": ["page-w-version", "page-w-version-2"],
+                "version": "v1"
+            },
+            {
+                "group": "Nested Group Always Shows",
+                "pages": ["page", "page-2"],
+            },
+            "other-page"
+        ]
+    }
+]
+```
+
+### Versioning Pages
+
+You can version a single page. Add `version` to the top of your page metadata like so:
+
+```md Page Versioning Example
+---
+title: "My page title"
+description: "My page description"
+version: "v1"
+---
+```
+
+Your navigation config in `mint.json` should include the page like normal, but the page will only show up when the correct version is selected.
+
+## Troubleshooting
+
+### Pages Show Up In Wrong Version
+
+You likely nested a version inside of another. For example, your group had version "v1" but your page had version "v2".
+
+We do not recommend nesting versions inside of each other because it's hard to maintain your docs later.
+
+### Missing Pages
+
+If you add versions to your docs and the pages disappeared from your navigation, make sure you spelled the version the same as in your `versions` array in `mint.json`.
