@@ -1,16 +1,3 @@
-export const documentationNav: Groups = [
-  {
-    group: 'Home',
-    pages: [
-      {
-        title: 'Hello World',
-        description: 'hello',
-        href: '',
-      },
-    ],
-  },
-];
-
 export const META_TAGS_FOR_LAYOUT = [
   'api',
   'openapi',
