@@ -10,7 +10,7 @@ import withRawComponents from './rehype/withRawComponents.js';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
 import withNextLinks from './remark/withNextLinks';
-import withRemoveImports from './remark/withRemoveImports.js';
+import withRemoveImports from './remark/withRemoveImports';
 import withTableOfContents from './remark/withTableOfContents.js';
 
 const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
