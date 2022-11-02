@@ -6,7 +6,6 @@ import { VersionContext } from '@/context/VersionContext';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
-import { getCurrentAnchorVersion } from '@/utils/getCurrentAnchor';
 
 export function DocumentationLayout({
   navIsOpen,
