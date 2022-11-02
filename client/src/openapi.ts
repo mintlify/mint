@@ -1,3 +1,10 @@
 import openapiJSON from './openapi.json';
 
-export const openApi = openapiJSON as any;
+type OpenAPIFiles = {
+  files: {
+    name: string;
+    openapi: any;
+  }[];
+};
+
+export const openApi: OpenAPIFiles = openapiJSON;

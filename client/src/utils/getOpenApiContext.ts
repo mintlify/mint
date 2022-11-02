@@ -3,9 +3,18 @@ import { openApi } from '@/openapi';
 import { extractMethodAndEndpoint } from './api';
 
 export const getOpenApiOperationMethodAndEndpoint = (openapi: string) => {
-  const { endpoint, method } = extractMethodAndEndpoint(openapi);
+  const { endpoint, method, filename } = extractMethodAndEndpoint(openapi);
 
-  const path = openApi?.paths && openApi.paths[endpoint];
+  let path;
+
+  openApi.files.forEach((file) => {
+    const openApiFile = file.openapi;
+    const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
+    const isFilenameOrNone = !filename || filename === file.name;
+    if (openApiPath && isFilenameOrNone) {
+      path = openApiPath;
+    }
+  });
 
   if (path == null) {
     return {};
