@@ -80,14 +80,17 @@ const listener = () => {
               path.join(CMD_EXEC_PATH, filename)
             );
             isOpenApi = openApiInfo.isOpenApi;
+            if (isOpenApi) {
+              await fse.outputFile(path.join(CLIENT_PATH, "src", "openapi.json"), Buffer.from(openApiInfo.buffer), {
+                flag: "w",
+              });
+              updateMetadata = true;
+            }
           }
-          let targetPath = path.join(CLIENT_PATH, "public", filename);
-          if (isOpenApi) {
-            targetPath = path.join(CLIENT_PATH, "src", "openapi.json");
-            updateMetadata = true;
+          if (!isOpenApi) { // all other files
+            const targetPath = path.join(CLIENT_PATH, "public", filename);
+            await fse.copy(filePath, targetPath);
           }
-          // all other files
-          await fse.copy(filePath, targetPath);
           switch (event) {
             case "add":
             case "addDir":

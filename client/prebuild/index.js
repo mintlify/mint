@@ -41,10 +41,8 @@ const injectStaticFiles = (staticFiles) => {
 
 const injectConfig = (config) => {
   const path = __dirname + `/../src/mint.json`;
-  const buffer = Buffer.from(config);
-  fs.outputFileSync(path, buffer, { flag: 'w' });
+  fs.outputFileSync(path, JSON.stringify(config), { flag: 'w' });
   console.log('⚙️  Config file set properly as mint.json');
-  return JSON.parse(buffer.toString());
 };
 
 const injectOpenApi = async (openApi) => {
@@ -70,8 +68,8 @@ const getAllFilesAndConfig = async () => {
     },
   });
   const openApiObj = await injectOpenApi(openApi);
-  const configObj = await injectConfig(config);
-  injectMarkdownFilesAndNav(markdownFiles, openApiObj, configObj);
+  injectConfig(config);
+  injectMarkdownFilesAndNav(markdownFiles, openApiObj, config);
   injectStaticFiles(staticFiles);
 };
 
