@@ -1,4 +1,4 @@
-import { Config, Navigation } from '@/config';
+import { Config, Navigation } from '@/types/config';
 
 export function pathToBreadcrumbs(pathname: string, config: Config) {
   if (!Array.isArray(config.navigation)) {
