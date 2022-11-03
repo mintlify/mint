@@ -46,7 +46,14 @@ const getPaddingByLevel = (level: number) => {
 };
 
 const NavItem = forwardRef(
-  ({ groupPage, level = 0 }: { groupPage: GroupPage | undefined; level?: number }, ref: any) => {
+  (
+    {
+      groupPage,
+      level = 0,
+      mobile,
+    }: { groupPage: GroupPage | undefined; level?: number; mobile: boolean },
+    ref: any
+  ) => {
     const router = useRouter();
     const { config } = useContext(ConfigContext);
 
@@ -55,7 +62,7 @@ const NavItem = forwardRef(
     }
 
     if (isGroup(groupPage)) {
-      return <GroupDropdown group={groupPage} level={level} />;
+      return <GroupDropdown group={groupPage} level={level} neverNavigateToFirstPage={mobile} />;
     }
 
     const { href, api: pageApi, openapi } = groupPage;
@@ -93,7 +100,15 @@ const NavItem = forwardRef(
   }
 );
 
-const GroupDropdown = ({ group, level }: { group: Group; level: number }) => {
+const GroupDropdown = ({
+  group,
+  level,
+  neverNavigateToFirstPage,
+}: {
+  group: Group;
+  level: number;
+  neverNavigateToFirstPage: boolean;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { group: name, pages } = group;
@@ -104,10 +119,12 @@ const GroupDropdown = ({ group, level }: { group: Group; level: number }) => {
 
   const onClick = () => {
     // Do not navigate if:
-    // 1. closing
-    // 2. The first link is another nested menu
-    // 3. The current page is in the nested pages being exposed
+    // 1. We are on mobile, and thus passed true to neverNavigateToFirstPage.
+    // 2. closing
+    // 3. The first link is another nested menu
+    // 4. The current page is in the nested pages being exposed
     if (
+      !neverNavigateToFirstPage &&
       !isOpen &&
       !isGroup(pages[0]) &&
       pages[0]?.href &&
@@ -148,7 +165,9 @@ const GroupDropdown = ({ group, level }: { group: Group; level: number }) => {
         </svg>
       </span>
       {isOpen &&
-        pages.map((subpage: GroupPage) => <NavItem groupPage={subpage} level={level + 1} />)}
+        pages.map((subpage: GroupPage) => (
+          <NavItem groupPage={subpage} level={level + 1} mobile={neverNavigateToFirstPage} />
+        ))}
     </>
   );
 };
@@ -254,7 +273,7 @@ function Nav({ nav, children, mobile = false }: any) {
                     )}
                   >
                     {pages.map((page, i: number) => {
-                      return <NavItem key={i} groupPage={page} />;
+                      return <NavItem key={i} groupPage={page} mobile={mobile} />;
                     })}
                   </ul>
                 </li>
