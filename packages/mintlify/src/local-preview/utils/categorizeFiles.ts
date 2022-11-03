@@ -53,10 +53,9 @@ const categorizeFiles = async (): Promise<{
           );
           isOpenApi = openApiInfo.isOpenApi;
           if (isOpenApi) {
+            const fileName = path.parse(file.name).base;
             openApiFiles.push({
-              name: path
-                .parse(file.name)
-                .base.substring(0, file.name.lastIndexOf(".")),
+              name: fileName.substring(0, fileName.lastIndexOf(".")),
               openapi: openApiInfo.openapi,
             });
           }
