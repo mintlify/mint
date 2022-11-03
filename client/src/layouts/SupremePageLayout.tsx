@@ -13,22 +13,13 @@ import { VersionContextController } from '@/context/VersionContext';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { Config } from '@/types/config';
+import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
-
-interface FaviconsProps {
-  icons: {
-    rel: string;
-    href: string;
-    type: string;
-    sizes?: string;
-  }[];
-  browserconfig: string;
-}
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
