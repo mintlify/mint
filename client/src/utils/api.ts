@@ -170,7 +170,7 @@ export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
 export const getParamGroupsFromAPIComponents = (
   apiComponents?: ApiComponent[],
   auth?: string
-): ParamGroup[] => {
+): Record<string, Param[]> => {
   const groups: Record<string, Param[]> = {};
 
   // Add auth if configured
@@ -265,10 +265,5 @@ export const getParamGroupsFromAPIComponents = (
     }
   });
 
-  return Object.entries(groups).map(([groupName, params]) => {
-    return {
-      name: groupName,
-      params,
-    };
-  });
+  return groups;
 };

@@ -3,6 +3,6 @@ export enum Component {
   Expandable = 'Expandable',
   ResponseExample = 'ResponseExample',
   RequestExample = 'RequestExample',
-  // Depreciated
+  // Deprecated
   Param = 'Param',
 }

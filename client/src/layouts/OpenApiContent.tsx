@@ -17,7 +17,7 @@ type OpenApiContentProps = {
   auth?: string;
 };
 
-const getAllParameters = (path: any, operation: any) => {
+export const getAllOpenApiParameters = (path: any, operation: any) => {
   return (path.parameters || []).concat(operation.parameters || []);
 };
 
@@ -174,7 +174,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   let apiComponents: ApiComponent[] = [];
 
-  const parameters = getAllParameters(path, operation);
+  const parameters = getAllOpenApiParameters(path, operation);
 
   const Parameters = parameters.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType, example } = parameter;

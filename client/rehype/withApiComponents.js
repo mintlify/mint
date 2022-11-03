@@ -22,7 +22,7 @@ const withApiComponents = () => {
     let apiComponents = [];
     visit(tree, 'mdxJsxFlowElement', (node, _, parent) => {
       if (['ResponseExample', 'RequestExample'].includes(node.name)) {
-        // remove all jsx components to convert to html (removes <ResponseExample> and <Editor>)
+        // remove all jsx components to convert to html (removes <ResponseExample> and <RequestExample>)
         const children = node.children.map((child, i) => {
           const preComponent = child.children[0];
           const html = toHtml(preComponent);
