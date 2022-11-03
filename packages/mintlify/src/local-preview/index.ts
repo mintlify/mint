@@ -44,18 +44,16 @@ const { readFile } = _promises;
 const copyFiles = async (logger: any) => {
   logger.start("Syncing doc files...");
   shell.cd(CMD_EXEC_PATH);
-  const { markdownFiles, staticFiles, openApiBuffer } = await categorizeFiles();
+  const { markdownFiles, staticFiles, openApi } = await categorizeFiles();
 
   const configObj = await updateConfigFile(logger);
 
   const openApiTargetPath = path.join(CLIENT_PATH, "src", "openapi.json");
-  let openApiObj = null;
-  if (openApiBuffer) {
+  if (openApi) {
     logger.succeed("OpenApi file synced");
-    await fse.outputFile(openApiTargetPath, Buffer.from(openApiBuffer), {
+    await fse.outputFile(openApiTargetPath, JSON.stringify(openApi), {
       flag: "w",
     });
-    openApiObj = JSON.parse(openApiBuffer.toString());
   } else {
     await fse.outputFile(openApiTargetPath, "{}", { flag: "w" });
   }
@@ -73,7 +71,7 @@ const copyFiles = async (logger: any) => {
 
         const fileContent = await readFile(sourcePath);
         const contentStr = fileContent.toString();
-        const page = createPage(filename, contentStr, openApiObj);
+        const page = createPage(filename, contentStr, openApi);
         pages = {
           ...pages,
           ...page,

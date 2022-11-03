@@ -3,17 +3,16 @@ import { promises as _promises } from "fs";
 
 const openApiCheck = async (
   path: string
-): Promise<{ buffer: Buffer | undefined; isOpenApi: boolean }> => {
-  let buffer = undefined;
+): Promise<{ openapi: any; isOpenApi: boolean }> => {
+  let openapi;
   let isOpenApi = false;
   try {
-    const api = await SwaggerParser.validate(path);
-    buffer = Buffer.from(JSON.stringify(api, null, 2), "utf-8");
+    openapi = await SwaggerParser.validate(path);
     isOpenApi = true;
   } catch {
     // not valid openApi
   }
-  return { buffer, isOpenApi };
+  return { openapi, isOpenApi };
 };
 
 export default openApiCheck;

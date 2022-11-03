@@ -81,13 +81,18 @@ const listener = () => {
             );
             isOpenApi = openApiInfo.isOpenApi;
             if (isOpenApi) {
-              await fse.outputFile(path.join(CLIENT_PATH, "src", "openapi.json"), Buffer.from(openApiInfo.buffer), {
-                flag: "w",
-              });
+              await fse.outputFile(
+                path.join(CLIENT_PATH, "src", "openapi.json"),
+                JSON.stringify(openApiInfo.openapi),
+                {
+                  flag: "w",
+                }
+              );
               updateMetadata = true;
             }
           }
-          if (!isOpenApi) { // all other files
+          if (!isOpenApi) {
+            // all other files
             const targetPath = path.join(CLIENT_PATH, "public", filename);
             await fse.copy(filePath, targetPath);
           }
