@@ -132,7 +132,6 @@ export const extractMethodAndEndpoint = (
 
   const startIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) : 0;
   const endIndexOfMethod = foundMethod ? startIndexOfMethod + foundMethod[0].length - 1 : 0;
-
   const filename = api.substring(0, startIndexOfMethod).trim();
 
   return {
