@@ -20,7 +20,7 @@ export const getOpenApiOperationMethodAndEndpoint = (openApi, openApiMetaField) 
 
   let path;
 
-  openApi.files.forEach((file) => {
+  openApi.files?.forEach((file) => {
     const openApiFile = file.openapi;
     const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
     const isFilenameOrNone = !filename || filename === file.name;
