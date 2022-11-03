@@ -16,7 +16,6 @@ import { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
-import ErrorBoundary from '@/ui/ErrorBoundary';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
@@ -62,49 +61,48 @@ export default function SupremePageLayout({
   }, [navIsOpen]);
 
   return (
-    <ErrorBoundary>
-      <Intercom appId={config.integrations?.intercom} autoBoot>
-        <VersionContextController versionOptions={config?.versions}>
-          <ConfigContext.Provider value={{ config, nav, openApi }}>
-            <AnalyticsContext.Provider value={analyticsMediator}>
-              <ColorVariables />
-              <Title suffix={config.name}>{title}</Title>
-              <Head>
-                {favicons.icons.map((favicon) => (
-                  <link
-                    rel={favicon.rel}
-                    type={favicon.type}
-                    sizes={favicon.sizes}
-                    href={favicon.href}
-                  />
-                ))}
-                <meta name="msapplication-config" content={favicons.browserconfig} />
-                <meta name="apple-mobile-web-app-title" content={config.name} />
-                <meta name="application-name" content={config.name} />
-                <meta name="theme-color" content="#ffffff" />
-                <meta name="msapplication-TileColor" content={config.colors?.primary} />
-                <meta name="theme-color" content="#ffffff" />
-                {config?.metadata &&
-                  Object.entries(config?.metadata).map(([key, value]) => {
-                    if (!value) {
-                      return null;
-                    }
-                    return <meta key={key} name={key} content={value as any} />;
-                  })}
-                {Object.entries(metaTagsForSeo).map(([key, value]) => (
-                  <meta key={key} name={key} content={value as any} />
-                ))}
-              </Head>
-              <Script
-                strategy="beforeInteractive"
-                dangerouslySetInnerHTML={{
-                  __html: `
+    <Intercom appId={config.integrations?.intercom} autoBoot>
+      <VersionContextController versionOptions={config?.versions}>
+        <ConfigContext.Provider value={{ config, nav, openApi }}>
+          <AnalyticsContext.Provider value={analyticsMediator}>
+            <ColorVariables />
+            <Title suffix={config.name}>{title}</Title>
+            <Head>
+              {favicons.icons.map((favicon) => (
+                <link
+                  rel={favicon.rel}
+                  type={favicon.type}
+                  sizes={favicon.sizes}
+                  href={favicon.href}
+                />
+              ))}
+              <meta name="msapplication-config" content={favicons.browserconfig} />
+              <meta name="apple-mobile-web-app-title" content={config.name} />
+              <meta name="application-name" content={config.name} />
+              <meta name="theme-color" content="#ffffff" />
+              <meta name="msapplication-TileColor" content={config.colors?.primary} />
+              <meta name="theme-color" content="#ffffff" />
+              {config?.metadata &&
+                Object.entries(config?.metadata).map(([key, value]) => {
+                  if (!value) {
+                    return null;
+                  }
+                  return <meta key={key} name={key} content={value as any} />;
+                })}
+              {Object.entries(metaTagsForSeo).map(([key, value]) => (
+                <meta key={key} name={key} content={value as any} />
+              ))}
+            </Head>
+            <Script
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
                 try {
                   if (localStorage.theme === 'dark' || (${(
                     config.modeToggle?.default == null
                   ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
-                    config.modeToggle?.default === 'dark'
-                  ).toString()}) {
+                  config.modeToggle?.default === 'dark'
+                ).toString()}) {
                     document.documentElement.classList.add('dark')
                   }
                   
@@ -113,40 +111,39 @@ export default function SupremePageLayout({
                   }
                 } catch (_) {}
               `,
-                }}
-              />
-              <GA4Script ga4={analyticsConfig.ga4} />
-              <SearchProvider subdomain={subdomain}>
-                <div
-                  className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
-                  // Add background image
-                  {...(config.backgroundImage && {
-                    style: {
-                      background: `url('${config.backgroundImage}') no-repeat fixed top right`,
-                    },
-                  })}
+              }}
+            />
+            <GA4Script ga4={analyticsConfig.ga4} />
+            <SearchProvider subdomain={subdomain}>
+              <div
+                className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
+                // Add background image
+                {...(config.backgroundImage && {
+                  style: {
+                    background: `url('${config.backgroundImage}') no-repeat fixed top right`,
+                  },
+                })}
+              >
+                <Header
+                  hasNav={Boolean(config.navigation?.length)}
+                  navIsOpen={navIsOpen}
+                  onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+                  title={meta?.title}
+                  section={section}
+                />
+                <DocumentationLayout
+                  nav={nav}
+                  navIsOpen={navIsOpen}
+                  setNavIsOpen={setNavIsOpen}
+                  meta={meta}
                 >
-                  <Header
-                    hasNav={Boolean(config.navigation?.length)}
-                    navIsOpen={navIsOpen}
-                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                    title={meta?.title}
-                    section={section}
-                  />
-                  <DocumentationLayout
-                    nav={nav}
-                    navIsOpen={navIsOpen}
-                    setNavIsOpen={setNavIsOpen}
-                    meta={meta}
-                  >
-                    <MDXRemote components={components} {...mdxSource} />
-                  </DocumentationLayout>
-                </div>
-              </SearchProvider>
-            </AnalyticsContext.Provider>
-          </ConfigContext.Provider>
-        </VersionContextController>
-      </Intercom>
-    </ErrorBoundary>
+                  <MDXRemote components={components} {...mdxSource} />
+                </DocumentationLayout>
+              </div>
+            </SearchProvider>
+          </AnalyticsContext.Provider>
+        </ConfigContext.Provider>
+      </VersionContextController>
+    </Intercom>
   );
 }

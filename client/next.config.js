@@ -23,6 +23,9 @@ export default withSentryConfig(
       disableStaticImages: true,
     },
     staticPageGenerationTimeout: 1000,
+    experimental: {
+      largePageDataBytes: 128 * 10000, // 1280KB instead of the default 128Kb
+    },
     webpack(config) {
       config.module.rules.push({
         test: /\.(png|jpe?g|gif|webp|avif|mp4)$/i,
