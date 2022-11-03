@@ -127,16 +127,16 @@ export const getApiContext = (
 export const extractMethodAndEndpoint = (
   api: string
 ): { method?: string; endpoint: string; filename?: string } => {
-  const methodRegex = /^get|post|put|delete|patch/i;
+  const methodRegex = /(get|post|put|delete|patch)\s/i;
   const foundMethod = api.trim().match(methodRegex);
 
   const startIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) : 0;
-  const endIndexOfMethod = foundMethod ? startIndexOfMethod + foundMethod[0].length : 0;
+  const endIndexOfMethod = foundMethod ? startIndexOfMethod + foundMethod[0].length - 1 : 0;
 
   const filename = api.substring(0, startIndexOfMethod).trim();
 
   return {
-    method: foundMethod ? foundMethod[0].toUpperCase() : undefined,
+    method: foundMethod ? foundMethod[0].slice(0, -1).toUpperCase() : undefined,
     endpoint: api.substring(endIndexOfMethod).trim(),
     filename: filename ? filename : undefined,
   };
