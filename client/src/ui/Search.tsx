@@ -1,7 +1,6 @@
 import { Combobox, Dialog, Transition } from '@headlessui/react';
 import { ChevronRightIcon, FolderIcon, SearchIcon } from '@heroicons/react/outline';
 import algoliasearch from 'algoliasearch';
-import axios from 'axios';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import {

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useContext, useEffect } from 'react';
+import { ReactNode, useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
