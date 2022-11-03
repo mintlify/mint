@@ -3,31 +3,14 @@ import { stringify, parse } from 'flatted';
 import 'focus-visible';
 import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import { MDXRemote } from 'next-mdx-remote';
-import Head from 'next/head';
-import Router from 'next/router';
-import Script from 'next/script';
 import type { ParsedUrlQuery } from 'querystring';
-import { useState, useEffect } from 'react';
 
-import AnalyticsContext from '@/analytics/AnalyticsContext';
-import GA4Script from '@/analytics/GA4Script';
-import { useAnalytics } from '@/analytics/useAnalytics';
-import components from '@/components';
-import { ConfigContext } from '@/context/ConfigContext';
-import { VersionContextController } from '@/context/VersionContext';
 import useProgressBar from '@/hooks/useProgressBar';
-import Intercom from '@/integrations/Intercom';
-import { DocumentationLayout } from '@/layouts/DocumentationLayout';
+import SupremePageLayout from '@/layouts/SupremePageLayout';
 import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
 import type { Config } from '@/types/config';
 import { Groups, PageMetaTags } from '@/types/metadata';
-import { ColorVariables } from '@/ui/ColorVariables';
-import { Header } from '@/ui/Header';
-import { SearchProvider } from '@/ui/Search';
-import { Title } from '@/ui/Title';
-import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
@@ -51,16 +34,6 @@ interface ParsedDataProps {
   stringifiedOpenApi?: string;
 }
 
-interface FaviconsProps {
-  icons: {
-    rel: string;
-    href: string;
-    type: string;
-    sizes?: string;
-  }[];
-  browserconfig: string;
-}
-
 // TODO - handle incorrect urls
 export default function Page({
   stringifiedMdxSource,
@@ -68,115 +41,22 @@ export default function Page({
   stringifiedFavicons,
   subdomain,
 }: PageProps) {
-  useProgressBar();
-  const mdxSource = parse(stringifiedMdxSource);
-  const { meta, section, metaTagsForSeo, title, stringifiedConfig, nav, stringifiedOpenApi } =
-    parse(stringifiedData) as ParsedDataProps;
-  const config = JSON.parse(stringifiedConfig) as Config;
-  const openApi = stringifiedOpenApi ? JSON.parse(stringifiedOpenApi) : {};
-  const favicons = parse(stringifiedFavicons) as FaviconsProps;
-  const analyticsConfig = getAnalyticsConfig(config);
-  const analyticsMediator = useAnalytics(analyticsConfig);
-
-  let [navIsOpen, setNavIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!navIsOpen) return;
-    function handleRouteChange() {
-      setNavIsOpen(false);
-    }
-    Router.events.on('routeChangeComplete', handleRouteChange);
-    return () => {
-      Router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [navIsOpen]);
-
   try {
+    useProgressBar();
+    const mdxSource = parse(stringifiedMdxSource);
+    const parsedData = parse(stringifiedData) as ParsedDataProps;
+    const config = JSON.parse(parsedData.stringifiedConfig) as Config;
+    const openApi = parsedData.stringifiedOpenApi ? JSON.parse(parsedData.stringifiedOpenApi) : {};
+    const favicons = parse(stringifiedFavicons);
     return (
-      <Intercom appId={config.integrations?.intercom} autoBoot>
-        <VersionContextController versionOptions={config?.versions}>
-          <ConfigContext.Provider value={{ config, nav, openApi }}>
-            <AnalyticsContext.Provider value={analyticsMediator}>
-              <ColorVariables />
-              <Title suffix={config.name}>{title}</Title>
-              <Head>
-                {favicons.icons.map((favicon) => (
-                  <link
-                    rel={favicon.rel}
-                    type={favicon.type}
-                    sizes={favicon.sizes}
-                    href={favicon.href}
-                  />
-                ))}
-                <meta name="msapplication-config" content={favicons.browserconfig} />
-                <meta name="apple-mobile-web-app-title" content={config.name} />
-                <meta name="application-name" content={config.name} />
-                <meta name="theme-color" content="#ffffff" />
-                <meta name="msapplication-TileColor" content={config.colors?.primary} />
-                <meta name="theme-color" content="#ffffff" />
-                {config?.metadata &&
-                  Object.entries(config?.metadata).map(([key, value]) => {
-                    if (!value) {
-                      return null;
-                    }
-                    return <meta key={key} name={key} content={value as any} />;
-                  })}
-                {Object.entries(metaTagsForSeo).map(([key, value]) => (
-                  <meta key={key} name={key} content={value as any} />
-                ))}
-              </Head>
-              <Script
-                strategy="beforeInteractive"
-                dangerouslySetInnerHTML={{
-                  __html: `
-                try {
-                  if (localStorage.theme === 'dark' || (${(
-                    config.modeToggle?.default == null
-                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
-                    config.modeToggle?.default === 'dark'
-                  ).toString()}) {
-                    document.documentElement.classList.add('dark')
-                  }
-                  
-                  else {
-                    document.documentElement.classList.remove('dark')
-                  }
-                } catch (_) {}
-              `,
-                }}
-              />
-              <GA4Script ga4={analyticsConfig.ga4} />
-              <SearchProvider subdomain={subdomain}>
-                <div
-                  className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
-                  // Add background image
-                  {...(config.backgroundImage && {
-                    style: {
-                      background: `url('${config.backgroundImage}') no-repeat fixed top right`,
-                    },
-                  })}
-                >
-                  <Header
-                    hasNav={Boolean(config.navigation?.length)}
-                    navIsOpen={navIsOpen}
-                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                    title={meta?.title}
-                    section={section}
-                  />
-                  <DocumentationLayout
-                    nav={nav}
-                    navIsOpen={navIsOpen}
-                    setNavIsOpen={setNavIsOpen}
-                    meta={meta}
-                  >
-                    <MDXRemote components={components} {...mdxSource} />
-                  </DocumentationLayout>
-                </div>
-              </SearchProvider>
-            </AnalyticsContext.Provider>
-          </ConfigContext.Provider>
-        </VersionContextController>
-      </Intercom>
+      <SupremePageLayout
+        mdxSource={mdxSource}
+        parsedData={parsedData}
+        config={config}
+        openApi={openApi}
+        favicons={favicons}
+        subdomain={subdomain}
+      />
     );
   } catch (e) {
     return (
