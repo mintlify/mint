@@ -16,6 +16,7 @@ import { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
+import ErrorBoundary from '@/ui/ErrorBoundary';
 import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/Search';
 import { Title } from '@/ui/Title';
@@ -60,8 +61,8 @@ export default function SupremePageLayout({
     };
   }, [navIsOpen]);
 
-  try {
-    return (
+  return (
+    <ErrorBoundary>
       <Intercom appId={config.integrations?.intercom} autoBoot>
         <VersionContextController versionOptions={config?.versions}>
           <ConfigContext.Provider value={{ config, nav, openApi }}>
@@ -146,8 +147,6 @@ export default function SupremePageLayout({
           </ConfigContext.Provider>
         </VersionContextController>
       </Intercom>
-    );
-  } catch (e) {
-    return <p>An error occured in the SupremePageLayout</p>;
-  }
+    </ErrorBoundary>
+  );
 }
