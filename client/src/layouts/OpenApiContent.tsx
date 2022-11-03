@@ -288,7 +288,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   let responseSchema = operation.responses?.['200']?.content?.['application/json']?.schema;
   // endpoint in OpenAPI refers to the path
-  const openApiServers = openApi?.files.reduce((acc, file) => {
+  const openApiServers = openApi?.files?.reduce((acc, file) => {
     return acc.concat(file.openapi.servers);
   }, []);
   const configBaseUrl =
