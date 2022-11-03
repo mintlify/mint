@@ -53,4 +53,33 @@ const components: any = {
   Link,
 };
 
+export const allowedComponents = [
+  'Accordion',
+  'AccordionGroup',
+  'Heading',
+  'CodeGroup',
+  'SnippetGroup',
+  'RequestSimple',
+  'RequestExample',
+  'ResponseExample',
+  'Param',
+  'ParamField',
+  'Card',
+  'ResponseField',
+  'Expandable',
+  'CardGroup',
+  'Info',
+  'Warning',
+  'Note',
+  'Tip',
+  'Check',
+  'Tabs',
+  'Tab',
+  'Tooltip',
+  'ContentsLayout',
+  'Editor',
+  'Frame',
+  'Link',
+];
+
 export default components;

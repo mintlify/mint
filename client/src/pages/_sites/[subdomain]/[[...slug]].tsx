@@ -279,7 +279,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       const response = await getMdxSource(content, { section, meta });
       mdxSource = response;
     } catch (err) {
-      mdxSource = await getMdxSource('🚧 Content under construction', { section, meta });
+      mdxSource = await getMdxSource('🚧 Content under construction', { section, meta }); // placeholder content for when there is a syntax error.
       console.log('MDX failed to parse: ', err);
     }
 

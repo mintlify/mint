@@ -102,6 +102,7 @@
     "stringify-object": "^3.3.0",
     "tailwindcss": "^3.1.6",
     "tinytime": "^0.2.6",
+    "unist-util-map": "^3.1.2",
     "unist-util-remove": "^3.1.0",
     "webpack": "^5.74.0",
     "zustand": "^4.0.0-rc.0"
@@ -137,9 +138,9 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "gray-matter": "^4.0.3",
     "hast-util-to-string": "^2.0.0",
-    "mdast": "^3.0.0",
     "jest": "^29.2.2",
     "jest-environment-jsdom": "^29.2.2",
+    "mdast": "^3.0.0",
     "prettier": "^2.5.0",
     "refractor": "^4.8.0",
     "ts-node": "^10.9.1",
