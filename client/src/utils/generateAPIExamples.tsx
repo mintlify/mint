@@ -53,7 +53,7 @@ export function generateRequestExamples(
   const pythonSnippet = {
     filename: 'Python',
     code:
-      'import requests\n' +
+      'import requests\n\n' +
       `url = "${fullEndpoint}"\n` +
       `headers = {"accept": "application/json"${pythonAuthHeader}}\n` +
       `response = requests.${method?.toLowerCase()}(url, headers=headers)`,
