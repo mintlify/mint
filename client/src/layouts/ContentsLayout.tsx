@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useState, useEffect, createContext, Fragment, useCallback, useContext } from 'react';
 
 import { Heading } from '@/components/Heading';
+import { config } from '@/config';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { SidebarContext } from '@/layouts/SidebarLayout';
 import { Footer } from '@/ui/Footer';
@@ -251,7 +252,8 @@ export function ContentsLayout({
               apiComponents={apiComponents}
               api={meta.api}
               openapi={meta.openapi}
-              auth={meta.auth}
+              auth={meta.auth ?? config.api?.auth?.method}
+              authName={config.api?.auth?.name}
             />
           </div>
         )}

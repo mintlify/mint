@@ -32,11 +32,13 @@ export function ApiSupplemental({
   api,
   openapi,
   auth,
+  authName,
 }: {
   apiComponents: ApiComponent[];
   api?: string;
   openapi?: string;
   auth?: string;
+  authName?: string;
 }) {
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
 
@@ -52,11 +54,7 @@ export function ApiSupplemental({
       ? getOpenApiOperationMethodAndEndpoint(openapi)
       : { operation: undefined, path: undefined };
   //const parameters = getAllOpenApiParameters(path, operation);
-  const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth); // will include auth even if not set on each page
-  // remember param types not included will be undefined instead of an empty array
-  // console.log(api);
-  // console.log(openapi);
-  // console.log(paramGroups);
+  const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth);
 
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
@@ -174,7 +172,7 @@ export function ApiSupplemental({
     <div className="space-y-6 pb-6">
       {mdxRequestExample
         ? mdxRequestExample
-        : generateRequestExamples(api, apiBaseIndex, paramGroups)}
+        : generateRequestExamples(api || openapi, apiBaseIndex, paramGroups, auth, authName)}
       {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
       {highlightedExamples.length === 0 && mdxResponseExample}
       {highlightedExamples.length > 0 && (

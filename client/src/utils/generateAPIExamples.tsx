@@ -11,11 +11,15 @@ import { extractBaseAndPath, extractMethodAndEndpoint, Param } from './api';
 export function generateRequestExamples(
   api: string | undefined,
   apiBaseIndex: number,
-  params: Record<string, Param[]>
+  params: Record<string, Param[]>,
+  auth: string | undefined,
+  authName: string | undefined
 ): JSX.Element | undefined {
   if (api == null) {
     return undefined;
   }
+
+  console.log(auth);
 
   const { endpoint, method } = extractMethodAndEndpoint(api);
   const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex);
@@ -27,19 +31,30 @@ export function generateRequestExamples(
     code:
       `curl --request ${method} \\\n` +
       `     --url ${fullEndpoint} \\\n` +
-      `     --header 'accept: application/json'`,
+      `     --header 'accept: application/json'` +
+      (auth === 'bearer'
+        ? ` \\\n     --header 'Authorization: ${authName ?? 'Bearer'} {YOUR_TOKEN}'`
+        : '') +
+      (auth === 'key' ? ` \\\n     --header '${authName ?? 'key'}: {YOUR_KEY}'` : ''),
     prism: {
       grammar: Prism.languages.bash,
       language: 'bash',
     },
   };
 
+  let pythonAuthHeader = '';
+  if (auth === 'bearer') {
+    pythonAuthHeader = `, "Authorization": "${authName ?? 'Bearer'} {YOUR_TOKEN}"'`;
+  } else if (auth === 'key') {
+    pythonAuthHeader = `, "${authName ?? 'key'}": "{YOUR_KEY}"'`;
+  }
+
   const pythonSnippet = {
     filename: 'Python',
     code:
       'import requests\n' +
       `url = "${fullEndpoint}"\n` +
-      'headers = {"accept": "application/json"}\n' +
+      `headers = {"accept": "application/json"${pythonAuthHeader}}\n` +
       `response = requests.${method?.toLowerCase()}(url, headers=headers)`,
     prism: {
       grammar: Prism.languages.python,
@@ -50,8 +65,8 @@ export function generateRequestExamples(
   const snippets = [curlSnippet, pythonSnippet];
 
   return (
-    <RequestExample
-      children={snippets.map((snippet) => {
+    <RequestExample>
+      {snippets.map((snippet) => {
         return (
           <Editor filename={snippet.filename}>
             <pre>
@@ -69,6 +84,6 @@ export function generateRequestExamples(
           </Editor>
         );
       })}
-    />
+    </RequestExample>
   );
 }
