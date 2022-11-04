@@ -167,7 +167,7 @@ export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
   };
 };
 
-export const getParamGroupsFromAPIComponents = (
+export const getParamGroupsFromApiComponents = (
   apiComponents?: ApiComponent[],
   auth?: string
 ): Record<string, Param[]> => {

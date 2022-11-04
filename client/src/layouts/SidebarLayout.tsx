@@ -58,7 +58,7 @@ const NavItem = forwardRef(
     }
 
     if (isGroup(groupPage)) {
-      return <GroupDropdown group={groupPage} level={level} neverNavigateToFirstPage={mobile} />;
+      return <GroupDropdown group={groupPage} level={level} mobile={mobile} />;
     }
 
     const { href, api: pageApi, openapi } = groupPage;
@@ -99,11 +99,11 @@ const NavItem = forwardRef(
 const GroupDropdown = ({
   group,
   level,
-  neverNavigateToFirstPage,
+  mobile,
 }: {
   group: Group;
   level: number;
-  neverNavigateToFirstPage: boolean;
+  mobile: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -115,12 +115,12 @@ const GroupDropdown = ({
 
   const onClick = () => {
     // Do not navigate if:
-    // 1. We are on mobile, and thus passed true to neverNavigateToFirstPage.
+    // 1. We are on mobile (users need to a larger space to tap to open the menu)
     // 2. closing
     // 3. The first link is another nested menu
     // 4. The current page is in the nested pages being exposed
     if (
-      !neverNavigateToFirstPage &&
+      !mobile &&
       !isOpen &&
       !isGroup(pages[0]) &&
       pages[0]?.href &&
@@ -160,7 +160,8 @@ const GroupDropdown = ({
           ></path>
         </svg>
       </span>
-      {isOpen && pages.map((subpage) => <NavItem groupPage={subpage} level={level + 1} />)}
+      {isOpen &&
+        pages.map((subpage) => <NavItem groupPage={subpage} level={level + 1} mobile={mobile} />)}
     </>
   );
 };

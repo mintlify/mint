@@ -8,7 +8,7 @@ import {
   extractBaseAndPath,
   extractMethodAndEndpoint,
   getApiContext,
-  getParamGroupsFromAPIComponents,
+  getParamGroupsFromApiComponents,
   Param,
   ParamGroup,
 } from '@/utils/api';
@@ -48,7 +48,7 @@ export function Api({
   const { method, endpoint } = extractMethodAndEndpoint(api);
   const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex);
 
-  const paramGroupDict = getParamGroupsFromAPIComponents(apiComponents, auth);
+  const paramGroupDict = getParamGroupsFromApiComponents(apiComponents, auth);
   const paramGroups = Object.entries(paramGroupDict).map(([groupName, params]) => {
     return {
       name: groupName,
