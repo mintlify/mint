@@ -9,21 +9,23 @@ import { CopyToClipboard } from '@/icons/CopyToClipboard';
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from './api';
 
 export function generateRequestExamples(
-  api: string | undefined,
+  endpointStr: string | undefined,
+  baseUrl: string[] | string | undefined,
   apiBaseIndex: number,
   params: Record<string, Param[]>,
   auth: string | undefined,
-  authName: string | undefined
+  authName: string | undefined,
+  openApi: any
 ): JSX.Element | undefined {
-  if (api == null) {
+  if (endpointStr == null) {
     return undefined;
   }
 
   // To do: Generate content for the examples from the params
   Object.entries(params);
 
-  const { endpoint, method } = extractMethodAndEndpoint(api);
-  const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex);
+  const { endpoint, method } = extractMethodAndEndpoint(endpointStr);
+  const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex, baseUrl, openApi);
   const fullEndpoint = base + endpointPath;
 
   // \ symbols are escaped otherwise they escape the ` at ends the string

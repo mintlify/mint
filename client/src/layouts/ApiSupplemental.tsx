@@ -38,7 +38,7 @@ export function ApiSupplemental({
   auth?: string;
   authName?: string;
 }) {
-  const { openApi } = useContext(ConfigContext);
+  const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
 
   useEffect(() => {
@@ -172,7 +172,15 @@ export function ApiSupplemental({
     <div className="space-y-6 pb-6">
       {mdxRequestExample
         ? mdxRequestExample
-        : generateRequestExamples(endpointStr, apiBaseIndex, paramGroups, auth, authName)}
+        : generateRequestExamples(
+            endpointStr,
+            config?.api?.baseUrl,
+            apiBaseIndex,
+            paramGroups,
+            auth,
+            authName,
+            openApi
+          )}
       {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
       {highlightedExamples.length === 0 && mdxResponseExample}
       {highlightedExamples.length > 0 && (
