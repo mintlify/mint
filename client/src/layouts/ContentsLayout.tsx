@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useState, useEffect, createContext, Fragment, useCallback, useContext } from 'react';
 
 import { Heading } from '@/components/Heading';
+import { ConfigContext } from '@/context/ConfigContext';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { SidebarContext } from '@/layouts/SidebarLayout';
 import { Footer } from '@/ui/Footer';
@@ -195,22 +196,20 @@ export function ContentsLayout({
   section,
   apiComponents,
 }: ContentsLayoutProps) {
+  const { config } = useContext(ConfigContext);
   const toc = [...tableOfContents];
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
   let { prev, next } = usePrevNext();
 
-  const hasApiSupplementalComponents = apiComponents.some(
-    (component: any) => component.type === 'ResponseExample' || component.type === 'RequestExample'
-  );
-
-  const isWideSize = meta?.size === 'wide';
+  const isApi = meta.api || meta.openapi;
+  const isWideSize = meta.size === 'wide';
 
   return (
     <div
       className={clsx(
         'relative max-w-3xl mx-auto pt-10 xl:max-w-none xl:ml-0',
-        hasApiSupplementalComponents
+        isApi
           ? 'xl:pr-12 xl:mr-[28rem]'
           : isWideSize
           ? 'xl:pr-20 xl:mr-[12rem]'
@@ -236,21 +235,26 @@ export function ContentsLayout({
 
       {meta.openapi && <OpenApiContent endpointStr={meta.openapi} auth={meta.auth} />}
 
-      <Footer previous={prev} next={next} hasBottomPadding={!hasApiSupplementalComponents} />
+      <Footer previous={prev} next={next} hasBottomPadding={!isApi} />
       <div
         className={clsx(
           'z-10 hidden xl:block pr-8',
-          hasApiSupplementalComponents
+          isApi
             ? 'w-[30rem] absolute top-[7.6rem] left-full h-full'
             : 'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto'
         )}
       >
-        {!hasApiSupplementalComponents && toc.length > 0 && !isWideSize && (
+        {!isApi && toc.length > 0 && !isWideSize && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         )}
-        {hasApiSupplementalComponents && (
+        {isApi && (
           <div className="sticky top-[6rem] left-0">
-            <ApiSupplemental endpointStr={meta.openapi} apiComponents={apiComponents} />
+            <ApiSupplemental
+              apiComponents={apiComponents}
+              endpointStr={meta.openapi || meta.api}
+              auth={meta.auth ?? config?.api?.auth?.method}
+              authName={config?.api?.auth?.name}
+            />
           </div>
         )}
       </div>

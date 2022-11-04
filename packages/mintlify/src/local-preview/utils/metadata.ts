@@ -54,14 +54,14 @@ const getMetadata = (fileContents: string) => {
 export const createPage = (
   path: string,
   content: string,
-  openApiObj: object | null
+  openApi: object | null
 ) => {
   const slug = path.replace(/\.mdx?$/, "").substring(1);
   let defaultTitle = slugToTitle(slug);
   const metadata = getMetadata(content);
   // Append data from OpenAPI if it exists
   const { title, description } = getOpenApiTitleAndDescription(
-    openApiObj,
+    openApi,
     metadata?.openapi
   );
   if (title) {
@@ -127,11 +127,7 @@ export const createMetadataFileFromPages = (pages: any, configObj: any) => {
 
 export const createMetadataFile = async () => {
   // create pages
-  const { markdownFiles, openApiBuffer } = await categorizeFiles();
-  let openApiObj = null;
-  if (openApiBuffer) {
-    openApiObj = JSON.parse(openApiBuffer.toString());
-  }
+  const { markdownFiles, openApi } = await categorizeFiles();
   // create config object
   const configObj = await getConfigObj();
   let pages = {};
@@ -142,7 +138,7 @@ export const createMetadataFile = async () => {
         const sourcePath = path.join(CMD_EXEC_PATH, filename);
         const fileContent = await readFile(sourcePath);
         const contentStr = fileContent.toString();
-        const page = createPage(filename, contentStr, openApiObj);
+        const page = createPage(filename, contentStr, openApi);
         pages = {
           ...pages,
           ...page,

@@ -10,11 +10,11 @@ const API_ENDPOINT = 'https://docs.mintlify.com';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const injectMarkdownFilesAndNav = (markdownFiles, openApiObj, configObj) => {
+const injectMarkdownFilesAndNav = (markdownFiles, openApi, config) => {
   let pages = {};
   markdownFiles.forEach((markdownFile) => {
     const path = __dirname + `/../src/pages/${markdownFile.path}`;
-    const page = createPage(markdownFile.path, markdownFile.content, openApiObj);
+    const page = createPage(markdownFile.path, markdownFile.content, openApi);
     if (page != null) {
       pages = {
         ...pages,
@@ -27,7 +27,7 @@ const injectMarkdownFilesAndNav = (markdownFiles, openApiObj, configObj) => {
 
   console.log(`📄  ${markdownFiles.length} pages injected`);
 
-  injectNav(pages, configObj);
+  injectNav(pages, config);
 };
 
 const injectStaticFiles = (staticFiles) => {
@@ -48,10 +48,9 @@ const injectConfig = (config) => {
 const injectOpenApi = async (openApi) => {
   const path = __dirname + `/../src/openapi.json`;
   if (openApi) {
-    const buffer = Buffer.from(openApi);
-    fs.outputFileSync(path, buffer, { flag: 'w' });
+    fs.outputFileSync(path, JSON.stringify(openApi), { flag: 'w' });
     console.log('🖥️  OpenAPI file detected and set as openapi.json');
-    return JSON.parse(buffer.toString());
+    return;
   }
 
   fs.outputFileSync(path, '{}', { flag: 'w' });
@@ -67,9 +66,9 @@ const getAllFilesAndConfig = async () => {
       ref,
     },
   });
-  const openApiObj = await injectOpenApi(openApi);
+  injectOpenApi(openApi);
   injectConfig(config);
-  injectMarkdownFilesAndNav(markdownFiles, openApiObj, config);
+  injectMarkdownFilesAndNav(markdownFiles, openApi, config);
   injectStaticFiles(staticFiles);
 };
 

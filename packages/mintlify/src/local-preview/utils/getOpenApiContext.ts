@@ -1,25 +1,41 @@
-export const extractMethodAndEndpoint = (api) => {
-  const methodRegex = /^get|post|put|delete|patch/i;
+export const extractMethodAndEndpoint = (
+  api: string
+): { method?: string; endpoint: string; filename?: string } => {
+  const methodRegex = /(get|post|put|delete|patch)\s/i;
   const trimmed = api.trim();
   const foundMethod = trimmed.match(methodRegex);
 
+  const startIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) : 0;
   const endIndexOfMethod = foundMethod
-    ? api.indexOf(foundMethod[0]) + foundMethod[0].length
+    ? startIndexOfMethod + foundMethod[0].length - 1
     : 0;
 
+  const filename = api.substring(0, startIndexOfMethod).trim();
+
   return {
-    method: foundMethod ? foundMethod[0].toUpperCase() : undefined,
+    method: foundMethod ? foundMethod[0].slice(0, -1).toUpperCase() : undefined,
     endpoint: api.substring(endIndexOfMethod).trim(),
+    filename: filename ? filename : undefined,
   };
 };
 
 export const getOpenApiOperationMethodAndEndpoint = (
-  openApiObj,
-  openApiMetaField
+  openApi: any,
+  openApiMetaField: string
 ) => {
-  const { endpoint, method } = extractMethodAndEndpoint(openApiMetaField);
+  const { endpoint, method, filename } =
+    extractMethodAndEndpoint(openApiMetaField);
 
-  const path = openApiObj?.paths && openApiObj.paths[endpoint];
+  let path: any;
+
+  openApi.files?.forEach((file: any) => {
+    const openApiFile = file.openapi;
+    const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
+    const isFilenameOrNone = !filename || filename === file.name;
+    if (openApiPath && isFilenameOrNone) {
+      path = openApiPath;
+    }
+  });
 
   if (path == null) {
     return {};
@@ -40,13 +56,13 @@ export const getOpenApiOperationMethodAndEndpoint = (
   };
 };
 
-export const getOpenApiTitleAndDescription = (openApiObj, openApiMetaField) => {
-  if (openApiObj == null || !openApiMetaField || openApiMetaField == null) {
+export const getOpenApiTitleAndDescription = (openApi, openApiMetaField) => {
+  if (openApi == null || !openApiMetaField || openApiMetaField == null) {
     return {};
   }
 
   const { operation } = getOpenApiOperationMethodAndEndpoint(
-    openApiObj,
+    openApi,
     openApiMetaField
   );
 

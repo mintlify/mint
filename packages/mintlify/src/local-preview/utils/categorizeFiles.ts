@@ -27,13 +27,13 @@ const getFileList = async (dirName: string, og = dirName) => {
 const categorizeFiles = async (): Promise<{
   markdownFiles: string[];
   staticFiles: string[];
-  openApiBuffer: Buffer | undefined;
+  openApi: object | undefined;
 }> => {
   const allFilesInCmdExecutionPath = await getFileList(CMD_EXEC_PATH);
   const markdownFiles = [];
   const staticFiles = [];
   const promises = [];
-  let openApiBuffer = undefined;
+  const openApiFiles = [];
   allFilesInCmdExecutionPath.forEach((file) => {
     promises.push(
       (async () => {
@@ -53,7 +53,11 @@ const categorizeFiles = async (): Promise<{
           );
           isOpenApi = openApiInfo.isOpenApi;
           if (isOpenApi) {
-            openApiBuffer = openApiInfo.buffer;
+            const fileName = path.parse(file.name).base;
+            openApiFiles.push({
+              name: fileName.substring(0, fileName.lastIndexOf(".")),
+              openapi: openApiInfo.openapi,
+            });
           }
         } else if (
           (!file.name.endsWith("mint.config.json") ||
@@ -68,7 +72,11 @@ const categorizeFiles = async (): Promise<{
   });
   await Promise.all(promises);
 
-  return { markdownFiles, staticFiles, openApiBuffer };
+  const openApi = {
+    files: openApiFiles,
+  };
+
+  return { markdownFiles, staticFiles, openApi };
 };
 
 export default categorizeFiles;

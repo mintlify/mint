@@ -9,14 +9,14 @@ import { slugToTitle } from './slugToTitle.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const createPage = (path, content, openApiObj) => {
+export const createPage = (path, content, openApi) => {
   const slug = path.replace(/\.mdx?$/, '');
   let defaultTitle = slugToTitle(slug);
   const fileContents = Buffer.from(content).toString();
   const { data } = matter(fileContents);
   const metadata = data;
   // Append data from OpenAPI if it exists
-  const { title, description } = getOpenApiTitleAndDescription(openApiObj, metadata?.openapi);
+  const { title, description } = getOpenApiTitleAndDescription(openApi, metadata?.openapi);
   if (title) {
     defaultTitle = title;
   }

@@ -122,15 +122,22 @@ export const getApiContext = (
   return { url, body, params, headers };
 };
 
-export const extractMethodAndEndpoint = (api: string) => {
-  const methodRegex = /^get|post|put|delete|patch/i;
+export const extractMethodAndEndpoint = (
+  api: string
+): { method?: string; endpoint: string; filename?: string } => {
+  const methodRegex = /(get|post|put|delete|patch)\s/i;
   const foundMethod = api.trim().match(methodRegex);
 
-  const endIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) + foundMethod[0].length : 0;
+  const startIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) : 0;
+  const endIndexOfMethod = foundMethod ? startIndexOfMethod + foundMethod[0].length - 1 : 0;
+  const filename = api.substring(0, startIndexOfMethod).trim();
 
+  // Filename is used when we have multiple openapi files. Filename will be an empty string
+  // for non-openapi pages and openapi pages with a single file.
   return {
-    method: foundMethod ? foundMethod[0].toUpperCase() : undefined,
+    method: foundMethod ? foundMethod[0].slice(0, -1).toUpperCase() : undefined,
     endpoint: api.substring(endIndexOfMethod).trim(),
+    filename: filename ? filename : undefined,
   };
 };
 
@@ -161,11 +168,11 @@ export const extractBaseAndPath = (
   };
 };
 
-export const getParamGroupsFromAPIComponents = (
+export const getParamGroupsFromApiComponents = (
   apiComponents?: ApiComponent[],
   auth?: string,
   apiConfig?: ApiConfig
-): ParamGroup[] => {
+): Record<string, Param[]> => {
   const groups: Record<string, Param[]> = {};
 
   // Add auth if configured
@@ -260,10 +267,5 @@ export const getParamGroupsFromAPIComponents = (
     }
   });
 
-  return Object.entries(groups).map(([groupName, params]) => {
-    return {
-      name: groupName,
-      params,
-    };
-  });
+  return groups;
 };
