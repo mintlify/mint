@@ -201,6 +201,12 @@ export function Api({
             )}
           </button>
         );
+      case 'object':
+        return (
+          <button className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200">
+            Show properties
+          </button>
+        );
       default:
         if (enumValues) {
           return (
@@ -322,9 +328,19 @@ export function Api({
           <div className="mt-4 text-[0.84rem] space-y-2">
             {currentActiveParamGroup?.params.map((param) => (
               <div className="flex items-center space-x-2">
-                <div className="flex-1 font-mono text-slate-600 dark:text-slate-300">
+                <div className="flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300">
                   {param.name}
                   {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
+                  {param.type === 'object' && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={clsx('h-3 w-3', false && 'rotate-90 -mt-1')}
+                      viewBox="0 0 256 512"
+                      fill="currentColor"
+                    >
+                      <path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z" />
+                    </svg>
+                  )}
                 </div>
                 <div className="flex-initial w-1/3">
                   {renderInput(currentActiveParamGroup, param, param.type, param.enum)}
