@@ -19,7 +19,8 @@ export function generateRequestExamples(
     return undefined;
   }
 
-  console.log(auth);
+  // To do: Generate content for the examples from the params
+  Object.entries(params);
 
   const { endpoint, method } = extractMethodAndEndpoint(api);
   const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex);
