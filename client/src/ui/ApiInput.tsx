@@ -50,6 +50,7 @@ export default function ApiInput({
           </svg>
         </div>
       );
+      break;
     case 'integer':
     case 'number':
       InputField = (
@@ -63,6 +64,7 @@ export default function ApiInput({
           }
         />
       );
+      break;
     case 'file':
     case 'files':
       InputField = (
@@ -95,12 +97,14 @@ export default function ApiInput({
           )}
         </button>
       );
+      break;
     case 'object':
       InputField = (
         <button className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200">
           Show properties
         </button>
       );
+      break;
     default:
       if (param.enum) {
         InputField = (
@@ -138,6 +142,7 @@ export default function ApiInput({
           onChange={(e) => onChangeParam(activeParamGroupName, param.name, e.target.value)}
         />
       );
+      break;
   }
 
   return (
@@ -149,7 +154,10 @@ export default function ApiInput({
           {param.type === 'object' && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={clsx('h-3 w-3', false && 'rotate-90 -mt-1')}
+              className={clsx(
+                'h-3 w-3 text-slate-500 dark:text-slate-300',
+                false && 'rotate-90 -mt-1'
+              )}
               viewBox="0 0 256 512"
               fill="currentColor"
             >
