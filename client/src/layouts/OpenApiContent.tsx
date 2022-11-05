@@ -7,10 +7,10 @@ import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import { config } from '@/config';
-import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
+import { createParamField } from '@/utils/openapi';
 
 type OpenApiContentProps = {
   openapi: string;
@@ -175,41 +175,18 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   let apiComponents: ApiComponent[] = [];
 
   const parameters = getAllOpenApiParameters(path, operation);
-
   const Parameters = parameters.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType, example } = parameter;
     const paramName = { [paramType]: name };
     const type = schema == null ? parameter?.type : getType(schema);
-    apiComponents.push({
-      type: Component.ParamField,
-      attributes: [
-        {
-          type: 'mdx',
-          name: paramType,
-          value: name,
-        },
-        {
-          type: 'mdx',
-          name: 'required',
-          value: required,
-        },
-        {
-          type: 'mdx',
-          name: 'type',
-          value: type,
-        },
-        {
-          type: 'mdx',
-          name: 'default',
-          value: schema?.default,
-        },
-        {
-          type: 'mdx',
-          name: 'placeholder',
-          value: example || schema?.enum,
-        },
-      ],
+    const paramField = createParamField({
+      [paramType]: name,
+      required,
+      type,
+      default: schema?.default,
+      placeholder: example || schema?.enum,
     });
+    apiComponents.push(paramField);
     return (
       <ParamField
         key={i}
@@ -237,41 +214,15 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
         ? JSON.stringify(bodySchema.example[property])
         : undefined;
       const last = i + 1 === operation.parameters?.length;
-      apiComponents.push({
-        type: Component.ParamField,
-        attributes: [
-          {
-            type: 'mdx',
-            name: 'body',
-            value: property,
-          },
-          {
-            type: 'mdx',
-            name: 'required',
-            value: required,
-          },
-          {
-            type: 'mdx',
-            name: 'type',
-            value: type,
-          },
-          {
-            type: 'mdx',
-            name: 'default',
-            value: bodyDefault,
-          },
-          {
-            type: 'mdx',
-            name: 'enum',
-            value: value.enum,
-          },
-          {
-            type: 'mdx',
-            name: 'last',
-            value: last,
-          },
-        ],
+      const paramField = createParamField({
+        body: property,
+        required,
+        type,
+        default: bodyDefault,
+        enum: value.enum,
+        last,
       });
+      apiComponents.push(paramField);
       return (
         <ParamField
           body={property}
