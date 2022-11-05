@@ -22,6 +22,7 @@ import ApiInput from './ApiInput';
 
 export type ApiComponent = {
   type: string;
+  name?: string;
   children?: any;
   attributes?: {
     type: string;

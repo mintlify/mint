@@ -20,6 +20,8 @@ export type Param = {
   type?: string;
   enum?: string[];
   format?: string;
+  group?: string;
+  properties?: Param[];
 };
 
 export type ParamGroup = {
@@ -169,6 +171,86 @@ export const extractBaseAndPath = (endpoint: string, apiBaseIndex = 0) => {
   };
 };
 
+const getParams = (apiComponents?: ApiComponent[]): Param[] => {
+  const paramFields = apiComponents
+    ?.filter(
+      (apiComponent) =>
+        apiComponent.type === Component.ParamField ||
+        apiComponent.type === Component.Param ||
+        apiComponent.name === Component.ParamField ||
+        apiComponent.name === Component.Param
+    )
+    .map((apiComponent) => {
+      const attributesMap: Record<any, any> = {};
+      apiComponent?.attributes?.forEach((attribute: any) => {
+        attributesMap[attribute.name] = attribute.value;
+      });
+
+      const expandable = apiComponent.children?.find(
+        (child: any) => child.name === Component.Expandable
+      );
+      if (expandable?.children != null) {
+        attributesMap.children = getParams(expandable.children);
+      }
+
+      return attributesMap;
+    });
+
+  const params: Param[] = [];
+
+  paramFields?.forEach((paramField) => {
+    if (paramField == null) {
+      return;
+    }
+
+    const { query, body, path, header } = paramField;
+
+    let group;
+    let name;
+
+    if (query) {
+      group = 'query';
+      name = query;
+    } else if (path) {
+      group = 'path';
+      name = path;
+    } else if (body) {
+      group = 'body';
+      name = body;
+    } else if (header) {
+      group = 'header';
+      name = header;
+    }
+
+    if (!group) {
+      return;
+    }
+
+    const {
+      placeholder,
+      default: defaultValue,
+      required,
+      type,
+      enum: enumValues,
+      properties,
+    } = paramField;
+
+    params.push({
+      name,
+      placeholder:
+        getPlaceholderFromObjectOrString(placeholder) ||
+        getPlaceholderFromObjectOrString(defaultValue),
+      required: required === null || required === true, // intentionally check for just null or true
+      type,
+      enum: enumValues,
+      group,
+      properties,
+    });
+  });
+
+  return params;
+};
+
 export const getParamGroupsFromApiComponents = (
   apiComponents?: ApiComponent[],
   auth?: string
@@ -206,59 +288,15 @@ export const getParamGroupsFromApiComponents = (
     }
   }
 
-  const paramFields = apiComponents
-    ?.filter((apiComponent) => apiComponent.type === Component.ParamField)
-    .map((apiComponent) => {
-      const attributesMap: Record<any, any> = {};
-      apiComponent?.attributes?.forEach((attribute: any) => {
-        attributesMap[attribute.name] = attribute.value;
-      });
+  const params = getParams(apiComponents);
 
-      return attributesMap;
-    });
-
-  paramFields?.forEach((paramField) => {
-    if (paramField == null) {
+  params.forEach((param) => {
+    if (param.group == null) {
       return;
     }
 
-    const { query, body, path, header } = paramField;
-
-    let paramType;
-    let name;
-
-    if (query) {
-      paramType = 'query';
-      name = query;
-    } else if (path) {
-      paramType = 'path';
-      name = path;
-    } else if (body) {
-      paramType = 'body';
-      name = body;
-    } else if (header) {
-      paramType = 'header';
-      name = header;
-    }
-
-    if (!paramType) {
-      return;
-    }
-
-    const groupName = paramTypeToNameMap[paramType];
+    const groupName = paramTypeToNameMap[param.group];
     const existingGroup = groups[groupName];
-
-    const { placeholder, default: defaultValue, required, type, enum: enumValues } = paramField;
-
-    const param = {
-      name,
-      placeholder:
-        getPlaceholderFromObjectOrString(placeholder) ||
-        getPlaceholderFromObjectOrString(defaultValue),
-      required: required === null || required === true, // intentionally check for just null or true
-      type,
-      enum: enumValues,
-    };
 
     if (existingGroup) {
       groups[groupName] = [...existingGroup, param];
