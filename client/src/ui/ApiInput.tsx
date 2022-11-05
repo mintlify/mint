@@ -100,7 +100,7 @@ export default function ApiInput({
       break;
     case 'object':
       InputField = (
-        <button className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200">
+        <button className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200">
           Show properties
         </button>
       );
