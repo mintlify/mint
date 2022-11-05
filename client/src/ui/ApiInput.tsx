@@ -8,6 +8,7 @@ export default function ApiInput({
   inputData,
   currentActiveParamGroup,
   onChangeParam,
+  path = [],
 }: {
   param: Param;
   inputData: Record<string, any>;
@@ -15,8 +16,10 @@ export default function ApiInput({
   onChangeParam: (
     paramGroup: string,
     param: string,
-    value: string | number | boolean | File
+    value: string | number | boolean | File,
+    path: string[]
   ) => void;
+  path?: string[];
 }) {
   const [isExpandedProperties, setIsExpandedProperties] = useState(false);
   const activeParamGroupName = currentActiveParamGroup.name;
@@ -31,9 +34,9 @@ export default function ApiInput({
             onChange={(e) => {
               const selection = e.target.value;
               if (selection === 'true') {
-                onChangeParam(activeParamGroupName, param.name, true);
+                onChangeParam(activeParamGroupName, param.name, true, path);
               } else {
-                onChangeParam(activeParamGroupName, param.name, false);
+                onChangeParam(activeParamGroupName, param.name, false, path);
               }
             }}
           >
@@ -62,7 +65,7 @@ export default function ApiInput({
           placeholder={param.placeholder}
           value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
           onChange={(e) =>
-            onChangeParam(activeParamGroupName, param.name, parseInt(e.target.value, 10))
+            onChangeParam(activeParamGroupName, param.name, parseInt(e.target.value, 10), path)
           }
         />
       );
@@ -79,7 +82,7 @@ export default function ApiInput({
                 return;
               }
 
-              onChangeParam(activeParamGroupName, param.name, event.target.files[0]);
+              onChangeParam(activeParamGroupName, param.name, event.target.files[0], path);
             }}
           />
           <svg
@@ -118,7 +121,7 @@ export default function ApiInput({
               className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
               onChange={(e) => {
                 const selection = e.target.value;
-                onChangeParam(activeParamGroupName, param.name, selection);
+                onChangeParam(activeParamGroupName, param.name, selection, path);
               }}
             >
               <option disabled selected>
@@ -144,7 +147,7 @@ export default function ApiInput({
           type="text"
           placeholder={param.placeholder}
           value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
-          onChange={(e) => onChangeParam(activeParamGroupName, param.name, e.target.value)}
+          onChange={(e) => onChangeParam(activeParamGroupName, param.name, e.target.value, path)}
         />
       );
       break;
@@ -187,6 +190,7 @@ export default function ApiInput({
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
+              path={[...path, param.name]}
             />
           ))}
         </div>

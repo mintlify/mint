@@ -1,5 +1,6 @@
 import axios from 'axios';
 import clsx from 'clsx';
+import set from 'lodash.set';
 import { useEffect, useState } from 'react';
 
 import { config } from '@/config';
@@ -101,9 +102,14 @@ export function Api({
   const onChangeParam = (
     paramGroup: string,
     param: string,
-    value: string | number | boolean | File
+    value: string | number | boolean | File,
+    path: string[]
   ) => {
-    setInputData({ ...inputData, [paramGroup]: { ...inputData[paramGroup], [param]: value } });
+    const newParamGroup = {
+      ...inputData[paramGroup],
+      ...set(inputData[paramGroup], [...path, param], value),
+    };
+    setInputData({ ...inputData, [paramGroup]: newParamGroup });
   };
 
   const makeApiRequest = async () => {
