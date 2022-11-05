@@ -144,8 +144,8 @@ export const extractMethodAndEndpoint = (
 export const extractBaseAndPath = (
   endpoint: string,
   apiBaseIndex = 0,
-  baseUrl?: string | string[],
-  openApi?: any
+  baseUrl: string | string[] | undefined,
+  openApi: any
 ) => {
   let fullEndpoint;
   baseUrl = baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
