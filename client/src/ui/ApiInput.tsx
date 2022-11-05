@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useState } from 'react';
 
 import { Param, ParamGroup } from '@/utils/api';
 
@@ -17,6 +18,7 @@ export default function ApiInput({
     value: string | number | boolean | File
   ) => void;
 }) {
+  const [isExpandedProperties, setIsExpandedProperties] = useState(false);
   const activeParamGroupName = currentActiveParamGroup.name;
 
   let InputField;
@@ -100,8 +102,11 @@ export default function ApiInput({
       break;
     case 'object':
       InputField = (
-        <button className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200">
-          Show properties
+        <button
+          className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200"
+          onClick={() => setIsExpandedProperties(!isExpandedProperties)}
+        >
+          {isExpandedProperties ? 'Hide' : 'Show'} properties
         </button>
       );
       break;
@@ -149,24 +154,43 @@ export default function ApiInput({
     <div>
       <div className="flex items-center space-x-2">
         <div className="flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300">
-          {param.name}
-          {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
-          {param.type === 'object' && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={clsx(
-                'h-3 w-3 text-slate-500 dark:text-slate-300',
-                false && 'rotate-90 -mt-1'
-              )}
-              viewBox="0 0 256 512"
-              fill="currentColor"
-            >
-              <path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z" />
-            </svg>
-          )}
+          <div
+            className={clsx('flex items-center', param.type === 'object' && 'cursor-pointer')}
+            onClick={() =>
+              param.type === 'object' && setIsExpandedProperties(!isExpandedProperties)
+            }
+          >
+            {param.name}
+            {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
+            {param.type === 'object' && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={clsx(
+                  'ml-0.5 h-3 w-3 text-slate-500 dark:text-slate-300',
+                  isExpandedProperties && 'rotate-90'
+                )}
+                viewBox="0 0 256 512"
+                fill="currentColor"
+              >
+                <path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z" />
+              </svg>
+            )}
+          </div>
         </div>
         <div className="flex-initial w-1/3">{InputField}</div>
       </div>
+      {isExpandedProperties && param.properties && (
+        <div className="mt-2 ml-2 pl-3 border-l border-slate-200 dark:border-slate-700 space-y-2">
+          {param.properties.map((property) => (
+            <ApiInput
+              param={property}
+              inputData={inputData}
+              currentActiveParamGroup={currentActiveParamGroup}
+              onChangeParam={onChangeParam}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

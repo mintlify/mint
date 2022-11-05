@@ -190,7 +190,7 @@ const getParams = (apiComponents?: ApiComponent[]): Param[] => {
         (child: any) => child.name === Component.Expandable
       );
       if (expandable?.children != null) {
-        attributesMap.children = getParams(expandable.children);
+        attributesMap.properties = getParams(expandable.children);
       }
 
       return attributesMap;
