@@ -106,10 +106,20 @@ export default function ApiInput({
     case 'object':
       InputField = (
         <button
-          className="relative flex items-center px-2 w-full h-7 rounded border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-400 hover:text-slate-700 dark:hover:border-slate-400 dark:hover:text-slate-200"
+          className="relative flex items-center w-full h-4 justify-end "
           onClick={() => setIsExpandedProperties(!isExpandedProperties)}
         >
-          {isExpandedProperties ? 'Hide' : 'Show'} properties
+          <span className="fill-slate-500 dark:fill-slate-400 group-hover:fill-slate-700 dark:group-hover:fill-slate-200">
+            {isExpandedProperties ? (
+              <svg className="h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+              </svg>
+            ) : (
+              <svg className="h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M344 0H488c13.3 0 24 10.7 24 24V168c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39-87 87c-9.4 9.4-24.6 9.4-33.9 0l-32-32c-9.4-9.4-9.4-24.6 0-33.9l87-87L327 41c-6.9-6.9-8.9-17.2-5.2-26.2S334.3 0 344 0zM184 496H40c-13.3 0-24-10.7-24-24V328c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2l39 39 87-87c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8z" />
+              </svg>
+            )}
+          </span>
         </button>
       );
       break;
@@ -154,36 +164,27 @@ export default function ApiInput({
   }
 
   return (
-    <div>
-      <div className="flex items-center space-x-2">
-        <div className="flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300">
-          <div
-            className={clsx('flex items-center', param.type === 'object' && 'cursor-pointer')}
-            onClick={() =>
-              param.type === 'object' && setIsExpandedProperties(!isExpandedProperties)
-            }
-          >
-            {param.name}
-            {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
-            {param.type === 'object' && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={clsx(
-                  'ml-0.5 h-3 w-3 text-slate-500 dark:text-slate-300',
-                  isExpandedProperties && 'rotate-90'
-                )}
-                viewBox="0 0 256 512"
-                fill="currentColor"
-              >
-                <path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z" />
-              </svg>
-            )}
-          </div>
+    <div
+      className={clsx(
+        param.type === 'object' &&
+          'px-2 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
+      )}
+    >
+      <div className="flex items-center space-x-2 group">
+        <div
+          className={clsx(
+            'flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300',
+            param.type === 'object' && 'cursor-pointer'
+          )}
+          onClick={() => param.type === 'object' && setIsExpandedProperties(!isExpandedProperties)}
+        >
+          {param.name}
+          {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
         </div>
         <div className="flex-initial w-1/3">{InputField}</div>
       </div>
       {isExpandedProperties && param.properties && (
-        <div className="mt-2 ml-2 pl-3 border-l border-slate-200 dark:border-slate-700 space-y-2">
+        <div className="mt-2 pl-3 border-slate-200 dark:border-slate-700 space-y-2">
           {param.properties.map((property) => (
             <ApiInput
               param={property}
