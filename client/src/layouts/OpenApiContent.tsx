@@ -7,10 +7,10 @@ import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import { config } from '@/config';
-import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
+import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
 type OpenApiContentProps = {
   openapi: string;
@@ -175,41 +175,18 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
   let apiComponents: ApiComponent[] = [];
 
   const parameters = getAllOpenApiParameters(path, operation);
-
   const Parameters = parameters.map((parameter: any, i: number) => {
     const { name, description, required, schema, in: paramType, example } = parameter;
     const paramName = { [paramType]: name };
     const type = schema == null ? parameter?.type : getType(schema);
-    apiComponents.push({
-      type: Component.ParamField,
-      attributes: [
-        {
-          type: 'mdx',
-          name: paramType,
-          value: name,
-        },
-        {
-          type: 'mdx',
-          name: 'required',
-          value: required,
-        },
-        {
-          type: 'mdx',
-          name: 'type',
-          value: type,
-        },
-        {
-          type: 'mdx',
-          name: 'default',
-          value: schema?.default,
-        },
-        {
-          type: 'mdx',
-          name: 'placeholder',
-          value: example || schema?.enum,
-        },
-      ],
+    const paramField = createParamField({
+      [paramType]: name,
+      required,
+      type,
+      default: schema?.default,
+      placeholder: example || schema?.enum,
     });
+    apiComponents.push(paramField);
     return (
       <ParamField
         key={i}
@@ -230,58 +207,40 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   const Body =
     bodySchema?.properties &&
-    Object.entries(bodySchema.properties)?.map(([property, value]: any, i: number) => {
+    Object.entries(bodySchema.properties)?.map(([property, propertyValue]: any, i: number) => {
       const required = bodySchema.required?.includes(property);
-      const type = getType(value);
+      const type = getType(propertyValue);
       const bodyDefault = bodySchema.example
         ? JSON.stringify(bodySchema.example[property])
         : undefined;
       const last = i + 1 === operation.parameters?.length;
-      apiComponents.push({
-        type: Component.ParamField,
-        attributes: [
-          {
-            type: 'mdx',
-            name: 'body',
-            value: property,
-          },
-          {
-            type: 'mdx',
-            name: 'required',
-            value: required,
-          },
-          {
-            type: 'mdx',
-            name: 'type',
-            value: type,
-          },
-          {
-            type: 'mdx',
-            name: 'default',
-            value: bodyDefault,
-          },
-          {
-            type: 'mdx',
-            name: 'enum',
-            value: value.enum,
-          },
-          {
-            type: 'mdx',
-            name: 'last',
-            value: last,
-          },
-        ],
-      });
+      let children;
+      if (propertyValue.properties) {
+        const properties = getProperties(propertyValue.properties);
+        children = [createExpandable(properties)];
+      }
+      const paramField = createParamField(
+        {
+          body: property,
+          required,
+          type,
+          default: bodyDefault,
+          enum: propertyValue.enum,
+          last,
+        },
+        children
+      );
+      apiComponents.push(paramField);
       return (
         <ParamField
           body={property}
           required={required}
           type={type}
           default={bodyDefault}
-          enum={value.enum}
+          enum={propertyValue.enum}
           last={last}
         >
-          {value.description || value.title}
+          {propertyValue.description || propertyValue.title}
         </ParamField>
       );
     });
