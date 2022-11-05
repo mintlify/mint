@@ -10,7 +10,7 @@ import { config } from '@/config';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
-import { createParamField } from '@/utils/openapi';
+import { createExpandable, createParamField } from '@/utils/openapi';
 
 type OpenApiContentProps = {
   openapi: string;
@@ -214,14 +214,28 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
         ? JSON.stringify(bodySchema.example[property])
         : undefined;
       const last = i + 1 === operation.parameters?.length;
-      const paramField = createParamField({
-        body: property,
-        required,
-        type,
-        default: bodyDefault,
-        enum: value.enum,
-        last,
-      });
+      let children;
+      if (bodySchema.properties) {
+        const properties = Object.entries(bodySchema.properties).map(([property, values]: any) => {
+          return createParamField({
+            body: property,
+            ...values,
+          });
+        });
+
+        children = [createExpandable(properties)];
+      }
+      const paramField = createParamField(
+        {
+          body: property,
+          required,
+          type,
+          default: bodyDefault,
+          enum: value.enum,
+          last,
+        },
+        children
+      );
       apiComponents.push(paramField);
       return (
         <ParamField
