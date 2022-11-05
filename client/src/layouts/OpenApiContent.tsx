@@ -10,7 +10,7 @@ import { config } from '@/config';
 import { openApi } from '@/openapi';
 import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
-import { createExpandable, createParamField } from '@/utils/openapi';
+import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
 type OpenApiContentProps = {
   openapi: string;
@@ -207,22 +207,16 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   const Body =
     bodySchema?.properties &&
-    Object.entries(bodySchema.properties)?.map(([property, value]: any, i: number) => {
+    Object.entries(bodySchema.properties)?.map(([property, propertyValue]: any, i: number) => {
       const required = bodySchema.required?.includes(property);
-      const type = getType(value);
+      const type = getType(propertyValue);
       const bodyDefault = bodySchema.example
         ? JSON.stringify(bodySchema.example[property])
         : undefined;
       const last = i + 1 === operation.parameters?.length;
       let children;
-      if (bodySchema.properties) {
-        const properties = Object.entries(bodySchema.properties).map(([property, values]: any) => {
-          return createParamField({
-            body: property,
-            ...values,
-          });
-        });
-
+      if (propertyValue.properties) {
+        const properties = getProperties(propertyValue.properties);
         children = [createExpandable(properties)];
       }
       const paramField = createParamField(
@@ -231,7 +225,7 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
           required,
           type,
           default: bodyDefault,
-          enum: value.enum,
+          enum: propertyValue.enum,
           last,
         },
         children
@@ -243,10 +237,10 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
           required={required}
           type={type}
           default={bodyDefault}
-          enum={value.enum}
+          enum={propertyValue.enum}
           last={last}
         >
-          {value.description || value.title}
+          {propertyValue.description || propertyValue.title}
         </ParamField>
       );
     });
