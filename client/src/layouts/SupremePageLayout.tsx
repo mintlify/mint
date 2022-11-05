@@ -45,6 +45,7 @@ export default function SupremePageLayout({
 }) {
   const { meta, section, metaTagsForSeo, title, nav } = parsedData;
   let [navIsOpen, setNavIsOpen] = useState(false);
+  const basePathMiddlewareRemoves = '/_sites/' + subdomain;
 
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
@@ -63,7 +64,7 @@ export default function SupremePageLayout({
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <VersionContextController versionOptions={config?.versions}>
-        <ConfigContext.Provider value={{ config, nav, openApi }}>
+        <ConfigContext.Provider value={{ config, nav, openApi, basePathMiddlewareRemoves }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />
             <Title suffix={config.name}>{title}</Title>
@@ -74,6 +75,7 @@ export default function SupremePageLayout({
                   type={favicon.type}
                   sizes={favicon.sizes}
                   href={favicon.href}
+                  key={favicon.href}
                 />
               ))}
               <meta name="msapplication-config" content={favicons.browserconfig} />

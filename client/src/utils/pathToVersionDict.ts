@@ -1,8 +1,8 @@
 import { Config } from '@/types/config';
 import { Group, isGroup, GroupPage } from '@/types/metadata';
 
+import { optionallyRemoveLeadingSlash } from './leadingSlashHelpers';
 import { getVersionOfPage } from './nav';
-import { optionallyRemoveLeadingSlash } from './optionallyRemoveLeadingSlash';
 
 /**
  * Assumes page hrefs in navWithPageContext have a leading / but config page paths do not.

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import Icon from '@/ui/Icon';
 
 const FeedbackTooltip = ({ message }: { message: string }) => {
@@ -31,10 +31,10 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
 };
 
 export function UserFeedback({ title }: { title: string }) {
-  const router = useRouter();
+  const path = useCurrentPath();
   return (
     <div className="flex items-center space-x-2">
-      <Link href={`/api/suggest?path=${router.pathname}`}>
+      <Link href={`/api/suggest?path=${path}`}>
         <a
           className="relative w-fit flex items-center p-1.5 group"
           target="_blank"
@@ -53,7 +53,7 @@ export function UserFeedback({ title }: { title: string }) {
           <FeedbackTooltip message="Edit this page" />
         </a>
       </Link>
-      <Link href={`/api/issue?path=${router.pathname}&title=${title}`}>
+      <Link href={`/api/issue?path=${path}&title=${title}`}>
         <a
           className="relative w-fit flex items-center p-1.5 group fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200 dark:hover:text-slate-300"
           target="_blank"

@@ -321,7 +321,7 @@ export function Api({
           </div>
           <div className="mt-4 text-[0.84rem] space-y-2">
             {currentActiveParamGroup?.params.map((param) => (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2" key={param.type + param.name}>
                 <div className="flex-1 font-mono text-slate-600 dark:text-slate-300">
                   {param.name}
                   {param.required && <span className="text-red-600 dark:text-red-400">*</span>}

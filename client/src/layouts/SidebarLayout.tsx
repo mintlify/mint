@@ -9,11 +9,16 @@ import { createContext, forwardRef, useRef, useState } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useColors } from '@/hooks/useColors';
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
 import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getAnchorsToDisplay } from '@/utils/getAnchorsToDisplay';
+import {
+  isEqualIgnoringLeadingSlash,
+  optionallyRemoveLeadingSlash,
+} from '@/utils/leadingSlashHelpers';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
@@ -54,7 +59,7 @@ const NavItem = forwardRef(
     }: { groupPage: GroupPage | undefined; level?: number; mobile?: boolean },
     ref: any
   ) => {
-    const router = useRouter();
+    const currentPath = useCurrentPath();
     const { config } = useContext(ConfigContext);
 
     if (groupPage == null) {
@@ -67,8 +72,9 @@ const NavItem = forwardRef(
 
     const { href, api: pageApi, openapi } = groupPage;
 
-    const isActive = groupPage.href === router.asPath;
-    const api = pageApi || openapi;
+    const isActive = isEqualIgnoringLeadingSlash(groupPage.href, currentPath);
+
+    const endpointStr = pageApi || openapi;
     const title = groupPage.sidebarTitle || groupPage.title;
 
     return (
@@ -84,11 +90,11 @@ const NavItem = forwardRef(
               config?.classes?.navigationItem
             )}
           >
-            {api && (
+            {endpointStr && (
               <div
                 className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
                   'bg-primary dark:bg-primary-light': isActive,
-                  [getMethodDotsColor(extractMethodAndEndpoint(api).method)]: !isActive,
+                  [getMethodDotsColor(extractMethodAndEndpoint(endpointStr).method)]: !isActive,
                 })}
               />
             )}
@@ -111,6 +117,7 @@ const GroupDropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const path = useCurrentPath();
   const { group: name, pages } = group;
 
   if (!name || !pages) {
@@ -128,7 +135,7 @@ const GroupDropdown = ({
       !isOpen &&
       !isGroup(pages[0]) &&
       pages[0]?.href &&
-      !isPathInGroupPages(router.pathname, pages)
+      !isPathInGroupPages(path, pages)
     ) {
       // Navigate to the first page if it exists
       router.push(pages[0].href);
@@ -192,7 +199,7 @@ function nearestScrollableContainer(el: any) {
 }
 
 function Nav({ nav, children, mobile = false }: any) {
-  const router = useRouter();
+  const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
   const previousActiveItemRef: any = useRef();
@@ -230,7 +237,7 @@ function Nav({ nav, children, mobile = false }: any) {
         scrollable.scrollTop = top - scrollRect.height / 2 + activeItemRect.height / 2;
       }
     }
-  }, [router.pathname]);
+  }, [currentPath]);
 
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
@@ -378,13 +385,12 @@ export function SidebarLayout({
   layoutProps?: any;
   children: ReactNode;
 }) {
-  const router = useRouter();
   const { config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
 
-  const pathname = router.pathname;
+  const currentPathNoLeadingSlash = optionallyRemoveLeadingSlash(useCurrentPath());
   const currentDivision = config?.anchors?.find((anchor: Anchor) =>
-    pathname.startsWith(`/${anchor.url}`)
+    currentPathNoLeadingSlash.startsWith(anchor.url)
   );
 
   let navForDivision = getGroupsInDivision(nav, currentDivision?.url ? [currentDivision?.url] : []);
