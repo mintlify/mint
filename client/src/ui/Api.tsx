@@ -105,6 +105,7 @@ export function Api({
     value: string | number | boolean | File,
     path: string[]
   ) => {
+    console.log({ param, value });
     const newParamGroup = {
       ...inputData[paramGroup],
       ...set(inputData[paramGroup], [...path, param], value),

@@ -22,12 +22,16 @@ export default function ApiInput({
   path?: string[];
 }) {
   const [isExpandedProperties, setIsExpandedProperties] = useState(true);
+  const [inputArrays, setInputArrays] = useState<Param[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
   let InputField;
 
   // Todo: support multiple types
-  const lowerCaseParamType = typeof param.type === 'string' && param.type?.toLowerCase();
+  let lowerCaseParamType;
+  if (typeof param.type === 'string') {
+    lowerCaseParamType = param.type?.toLowerCase();
+  }
   const isObject = param.properties;
 
   if (lowerCaseParamType === 'boolean') {
@@ -110,16 +114,42 @@ export default function ApiInput({
       >
         <span className="fill-slate-500 dark:fill-slate-400 group-hover:fill-slate-700 dark:group-hover:fill-slate-200">
           {isExpandedProperties ? (
-            <svg className="h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z" />
+            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M473 7c-9.4-9.4-24.6-9.4-33.9 0l-87 87L313 55c-6.9-6.9-17.2-8.9-26.2-5.2S272 62.3 272 72V216c0 13.3 10.7 24 24 24H440c9.7 0 18.5-5.8 22.2-14.8s1.7-19.3-5.2-26.2l-39-39 87-87c9.4-9.4 9.4-24.6 0-33.9L473 7zM216 272H72c-9.7 0-18.5 5.8-22.2 14.8s-1.7 19.3 5.2 26.2l39 39L7 439c-9.4 9.4-9.4 24.6 0 33.9l32 32c9.4 9.4 24.6 9.4 33.9 0l87-87 39 39c6.9 6.9 17.2 8.9 26.2 5.2s14.8-12.5 14.8-22.2V296c0-13.3-10.7-24-24-24z" />
             </svg>
           ) : (
-            <svg className="h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path d="M344 0H488c13.3 0 24 10.7 24 24V168c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-39-39-87 87c-9.4 9.4-24.6 9.4-33.9 0l-32-32c-9.4-9.4-9.4-24.6 0-33.9l87-87L327 41c-6.9-6.9-8.9-17.2-5.2-26.2S334.3 0 344 0zM184 496H40c-13.3 0-24-10.7-24-24V328c0-9.7 5.8-18.5 14.8-22.2s19.3-1.7 26.2 5.2l39 39 87-87c9.4-9.4 24.6-9.4 33.9 0l32 32c9.4 9.4 9.4 24.6 0 33.9l-87 87 39 39c6.9 6.9 8.9 17.2 5.2 26.2s-12.5 14.8-22.2 14.8z" />
             </svg>
           )}
         </span>
       </button>
+    );
+  } else if (
+    lowerCaseParamType === 'array' ||
+    (lowerCaseParamType?.includes('[') && lowerCaseParamType.includes(']'))
+  ) {
+    InputField = (
+      <span className="relative flex items-center w-full h-6 justify-end fill-slate-500 dark:fill-slate-400 space-x-1.5">
+        {inputArrays?.length > 0 && (
+          <button
+            className="hover:fill-slate-700 dark:hover:fill-slate-200"
+            onClick={() => setInputArrays([...inputArrays.slice(0, inputArrays.length - 1)])}
+          >
+            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+            </svg>
+          </button>
+        )}
+        <button
+          className="hover:fill-slate-700 dark:hover:fill-slate-200"
+          onClick={() => setInputArrays([...inputArrays, { name: '' }])}
+        >
+          <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
+          </svg>
+        </button>
+      </span>
     );
   } else if (param.enum) {
     InputField = (
@@ -162,7 +192,7 @@ export default function ApiInput({
   return (
     <div
       className={clsx(
-        isObject &&
+        ((isObject && isExpandedProperties) || inputArrays.length > 0) &&
           'px-2 py-1 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
       )}
     >
@@ -188,6 +218,18 @@ export default function ApiInput({
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
               path={[...path, param.name]}
+            />
+          ))}
+        </div>
+      )}
+      {inputArrays.length > 0 && (
+        <div className="mt-1 border-t pt-2 pb-1 border-slate-100 dark:border-slate-700 space-y-2">
+          {inputArrays.map((input) => (
+            <ApiInput
+              param={input}
+              inputData={inputData}
+              currentActiveParamGroup={currentActiveParamGroup}
+              onChangeParam={onChangeParam}
             />
           ))}
         </div>
