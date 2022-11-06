@@ -9,6 +9,7 @@ export default function ApiInput({
   currentActiveParamGroup,
   onChangeParam,
   path = [],
+  onDelete,
 }: {
   param: Param;
   inputData: Record<string, any>;
@@ -20,9 +21,10 @@ export default function ApiInput({
     path: string[]
   ) => void;
   path?: string[];
+  onDelete?: () => void;
 }) {
   const [isExpandedProperties, setIsExpandedProperties] = useState(true);
-  const [inputArrays, setInputArrays] = useState<Param[]>([]);
+  const [inputArray, setInputArray] = useState<Param[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
   let InputField;
@@ -33,6 +35,9 @@ export default function ApiInput({
     lowerCaseParamType = param.type?.toLowerCase();
   }
   const isObject = param.properties;
+  const isArray =
+    lowerCaseParamType === 'array' ||
+    (lowerCaseParamType?.includes('[') && lowerCaseParamType.includes(']'));
 
   if (lowerCaseParamType === 'boolean') {
     InputField = (
@@ -125,32 +130,31 @@ export default function ApiInput({
         </span>
       </button>
     );
-  } else if (
-    lowerCaseParamType === 'array' ||
-    (lowerCaseParamType?.includes('[') && lowerCaseParamType.includes(']'))
-  ) {
-    InputField = (
-      <span className="relative flex items-center w-full h-6 justify-end fill-slate-500 dark:fill-slate-400 space-x-1.5">
-        {inputArrays?.length > 0 && (
+  } else if (isArray) {
+    if (inputArray.length === 0) {
+      InputField = (
+        <span className="relative flex items-center w-full h-6 justify-end fill-slate-500 dark:fill-slate-400 space-x-1.5">
           <button
             className="hover:fill-slate-700 dark:hover:fill-slate-200"
-            onClick={() => setInputArrays([...inputArrays.slice(0, inputArrays.length - 1)])}
+            onClick={() => setInputArray([...inputArray, { name: '' }])}
           >
-            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
             </svg>
           </button>
-        )}
-        <button
-          className="hover:fill-slate-700 dark:hover:fill-slate-200"
-          onClick={() => setInputArrays([...inputArrays, { name: '' }])}
-        >
-          <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
-          </svg>
-        </button>
-      </span>
-    );
+        </span>
+      );
+    } else {
+      InputField = (
+        <input
+          className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
+          type="text"
+          placeholder={param.placeholder}
+          value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
+          onChange={(e) => onChangeParam(activeParamGroupName, param.name, e.target.value, path)}
+        />
+      );
+    }
   } else if (param.enum) {
     InputField = (
       <div className="relative">
@@ -189,11 +193,13 @@ export default function ApiInput({
     );
   }
 
+  const shouldShowDelete = onDelete || (isArray && inputArray.length > 0);
+
   return (
     <div
       className={clsx(
-        ((isObject && isExpandedProperties) || inputArrays.length > 0) &&
-          'px-2 py-1 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
+        ((isObject && isExpandedProperties) || inputArray.length > 0) &&
+          'px-2 py-2 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
       )}
     >
       <div className={clsx('flex items-center space-x-2 group')}>
@@ -207,10 +213,22 @@ export default function ApiInput({
           {param.name}
           {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
         </div>
-        <div className="flex-initial w-1/3">{InputField}</div>
+        <div className={clsx('flex-initial', shouldShowDelete ? 'w-[calc(33%-1.25rem)]' : 'w-1/3')}>
+          {InputField}
+        </div>
+        {shouldShowDelete && (
+          <button
+            className="fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200"
+            onClick={onDelete}
+          >
+            <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M424 80C437.3 80 448 90.75 448 104C448 117.3 437.3 128 424 128H412.4L388.4 452.7C385.9 486.1 358.1 512 324.6 512H123.4C89.92 512 62.09 486.1 59.61 452.7L35.56 128H24C10.75 128 0 117.3 0 104C0 90.75 10.75 80 24 80H93.82L130.5 24.94C140.9 9.357 158.4 0 177.1 0H270.9C289.6 0 307.1 9.358 317.5 24.94L354.2 80H424zM177.1 48C174.5 48 171.1 49.34 170.5 51.56L151.5 80H296.5L277.5 51.56C276 49.34 273.5 48 270.9 48H177.1zM364.3 128H83.69L107.5 449.2C108.1 457.5 115.1 464 123.4 464H324.6C332.9 464 339.9 457.5 340.5 449.2L364.3 128z" />
+            </svg>
+          </button>
+        )}
       </div>
       {isExpandedProperties && param.properties && (
-        <div className="mt-1 border-t pt-2 pb-1 border-slate-100 dark:border-slate-700 space-y-2">
+        <div className="mt-1 pt-2 pb-1 border-t border-slate-100 dark:border-slate-700 space-y-2">
           {param.properties.map((property) => (
             <ApiInput
               param={property}
@@ -222,16 +240,32 @@ export default function ApiInput({
           ))}
         </div>
       )}
-      {inputArrays.length > 0 && (
-        <div className="mt-1 border-t pt-2 pb-1 border-slate-100 dark:border-slate-700 space-y-2">
-          {inputArrays.map((input) => (
+      {inputArray.length > 0 && (
+        <div className="pt-2 pb-1 space-y-2">
+          {inputArray.slice(1).map((input, i) => (
             <ApiInput
               param={input}
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
+              onDelete={() =>
+                setInputArray([
+                  ...inputArray.slice(0, i),
+                  ...inputArray.slice(i + 1, inputArray.length),
+                ])
+              }
             />
           ))}
+          <span className="relative flex items-center w-full h-5 justify-end fill-slate-500 dark:fill-slate-4005">
+            <button
+              className="hover:fill-slate-700 dark:hover:fill-slate-200"
+              onClick={() => setInputArray([...inputArray, { name: '' }])}
+            >
+              <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
+              </svg>
+            </button>
+          </span>
         </div>
       )}
     </div>
