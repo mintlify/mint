@@ -28,9 +28,6 @@ export default function ApiInput({
 
   const lowerCaseParamType = param.type?.toLowerCase();
 
-  console.log(lowerCaseParamType);
-  console.log(param.properties);
-
   switch (lowerCaseParamType) {
     case 'boolean':
       InputField = (
