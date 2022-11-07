@@ -201,10 +201,10 @@ export default function ApiInput({
     <div
       className={clsx(
         ((isObject && isExpandedProperties) || inputArray.length > 0) &&
-          'px-2 py-2 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
+          'px-3 py-2 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
       )}
     >
-      <div className={clsx('flex items-center space-x-2 group')}>
+      <div className="flex items-center space-x-2 group">
         <div
           className={clsx(
             'flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300',
