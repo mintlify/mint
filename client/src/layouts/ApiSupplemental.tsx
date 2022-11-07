@@ -168,19 +168,26 @@ export function ApiSupplemental({
     </pre>
   );
 
+  let requestExamples = mdxRequestExample;
+  if (
+    !apiComponents.some((apiComponent) => {
+      return apiComponent.type === Component.RequestExample;
+    })
+  ) {
+    requestExamples = generateRequestExamples(
+      endpointStr,
+      config?.api?.baseUrl,
+      apiBaseIndex,
+      paramGroups,
+      auth,
+      authName,
+      openApi
+    );
+  }
+
   return (
     <div className="space-y-6 pb-6">
-      {mdxRequestExample
-        ? mdxRequestExample
-        : generateRequestExamples(
-            endpointStr,
-            config?.api?.baseUrl,
-            apiBaseIndex,
-            paramGroups,
-            auth,
-            authName,
-            openApi
-          )}
+      {requestExamples}
       {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
       {highlightedExamples.length === 0 && mdxResponseExample}
       {highlightedExamples.length > 0 && (

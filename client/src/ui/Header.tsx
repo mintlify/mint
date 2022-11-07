@@ -8,11 +8,9 @@ import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
-import { useColors } from '@/hooks/useColors';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
-import { isDarkModeEnabled } from '@/utils/isDarkModeEnabled';
 
 import { TopbarCta } from '../types/config';
 import Icon from './Icon';
@@ -64,7 +62,7 @@ export function NavPopover({
         open={isOpen}
         onClose={setIsOpen}
       >
-        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-background-dark/80" />
+        <Dialog.Overlay className="fixed inset-0 bg-background-dark backdrop-blur-sm opacity-20 dark:opacity-80" />
         <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400 dark:highlight-white/5">
           <button
             type="button"
@@ -255,17 +253,15 @@ export function Header({
 
   return (
     <>
-      <div
-        className={clsx(
-          'sticky top-0 w-full backdrop-blur flex-none z-40 lg:border-b lg:border-slate-900/5 dark:border-slate-50/[0.06] lg:z-50',
-          isOpaque ? '' : 'bg-transparent dark:bg-transparent'
-        )}
-      >
+      <div className="sticky top-0 w-full backdrop-blur flex-none z-40 lg:border-b lg:border-slate-900/5 dark:border-slate-50/[0.06] lg:z-50">
         <div
-          className="absolute top-0 right-0 left-0 bottom-0 z-39 bg-background-light dark:bg-background-dark"
+          className={clsx(
+            'absolute top-0 right-0 left-0 bottom-0 bg-background-light dark:bg-background-dark',
+            isOpaque ? '' : 'bg-transparent dark:bg-transparent'
+          )}
           style={{ opacity: '80%' }}
         />
-        <div className="max-w-8xl mx-auto">
+        <div className="relative max-w-8xl mx-auto">
           <div
             className={clsx(
               'py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10',
