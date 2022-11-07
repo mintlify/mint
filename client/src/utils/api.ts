@@ -4,7 +4,7 @@ import isAbsoluteUrl from 'is-absolute-url';
 import { ParamProps } from '@/components/Param';
 import { Component } from '@/enums/components';
 import { ApiConfig } from '@/types/config';
-import { ApiComponent } from '@/ui/Api';
+import { ApiComponent } from '@/ui/ApiPlayground';
 
 export type Child = {
   props: ParamProps & { mdxType: string };

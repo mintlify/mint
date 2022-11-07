@@ -30,7 +30,7 @@ export type ApiComponent = {
 
 export const APIBASE_CONFIG_STORAGE = 'apiBaseIndex';
 
-export function Api({
+export function ApiPlayground({
   api,
   contentType = 'application/json',
   auth,
