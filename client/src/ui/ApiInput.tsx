@@ -23,7 +23,7 @@ export default function ApiInput({
   path?: string[];
   onDelete?: () => void;
 }) {
-  const [isExpandedProperties, setIsExpandedProperties] = useState(true);
+  const [isExpandedProperties, setIsExpandedProperties] = useState(false);
   const [inputArray, setInputArray] = useState<Param[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
@@ -133,16 +133,14 @@ export default function ApiInput({
   } else if (isArray) {
     if (inputArray.length === 0) {
       InputField = (
-        <span className="relative flex items-center w-full h-6 justify-end fill-slate-500 dark:fill-slate-400 space-x-1.5">
-          <button
-            className="hover:fill-slate-700 dark:hover:fill-slate-200"
-            onClick={() => setInputArray([...inputArray, { name: '' }])}
-          >
-            <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
-            </svg>
-          </button>
-        </span>
+        <button
+          className="relative flex items-center w-full h-6 justify-end fill-slate-500 dark:fill-slate-400 space-x-1.5 hover:fill-slate-700 dark:hover:fill-slate-200"
+          onClick={() => setInputArray([...inputArray, { name: '' }])}
+        >
+          <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+          </svg>
+        </button>
       );
     } else {
       InputField = (
