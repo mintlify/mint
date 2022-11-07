@@ -4,7 +4,8 @@ import { useContext } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 
 export function useCurrentPath() {
-  const { basePathMiddlewareRemoves } = useContext(ConfigContext);
+  const { subdomain } = useContext(ConfigContext);
+  const basePathMiddlewareRemoves = '/_sites/' + subdomain;
   const router = useRouter();
 
   // Mimic the middleware's rewriting the route to prevent hydration errors
