@@ -138,8 +138,8 @@ export default function ApiInput({
             className="hover:fill-slate-700 dark:hover:fill-slate-200"
             onClick={() => setInputArray([...inputArray, { name: '' }])}
           >
-            <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
+            <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
             </svg>
           </button>
         </span>
@@ -193,8 +193,12 @@ export default function ApiInput({
     );
   }
 
-  const shouldShowDelete = onDelete || (isArray && inputArray.length > 0);
+  const deleteFirstArrayField = () => {
+    setInputArray([...inputArray.slice(1, inputArray.length)]);
+  };
 
+  const shouldShowDelete = onDelete || (isArray && inputArray.length > 0);
+  const onDeleteArrayField = onDelete || deleteFirstArrayField;
   return (
     <div
       className={clsx(
@@ -218,11 +222,11 @@ export default function ApiInput({
         </div>
         {shouldShowDelete && (
           <button
-            className="fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200"
-            onClick={onDelete}
+            className="fill-red-500 dark:fill-red-400 hover:fill-red-700 dark:hover:fill-red-200"
+            onClick={onDeleteArrayField}
           >
-            <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M424 80C437.3 80 448 90.75 448 104C448 117.3 437.3 128 424 128H412.4L388.4 452.7C385.9 486.1 358.1 512 324.6 512H123.4C89.92 512 62.09 486.1 59.61 452.7L35.56 128H24C10.75 128 0 117.3 0 104C0 90.75 10.75 80 24 80H93.82L130.5 24.94C140.9 9.357 158.4 0 177.1 0H270.9C289.6 0 307.1 9.358 317.5 24.94L354.2 80H424zM177.1 48C174.5 48 171.1 49.34 170.5 51.56L151.5 80H296.5L277.5 51.56C276 49.34 273.5 48 270.9 48H177.1zM364.3 128H83.69L107.5 449.2C108.1 457.5 115.1 464 123.4 464H324.6C332.9 464 339.9 457.5 340.5 449.2L364.3 128z" />
+            <svg className="w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M160 400C160 408.8 152.8 416 144 416C135.2 416 128 408.8 128 400V192C128 183.2 135.2 176 144 176C152.8 176 160 183.2 160 192V400zM240 400C240 408.8 232.8 416 224 416C215.2 416 208 408.8 208 400V192C208 183.2 215.2 176 224 176C232.8 176 240 183.2 240 192V400zM320 400C320 408.8 312.8 416 304 416C295.2 416 288 408.8 288 400V192C288 183.2 295.2 176 304 176C312.8 176 320 183.2 320 192V400zM317.5 24.94L354.2 80H424C437.3 80 448 90.75 448 104C448 117.3 437.3 128 424 128H416V432C416 476.2 380.2 512 336 512H112C67.82 512 32 476.2 32 432V128H24C10.75 128 0 117.3 0 104C0 90.75 10.75 80 24 80H93.82L130.5 24.94C140.9 9.357 158.4 0 177.1 0H270.9C289.6 0 307.1 9.358 317.5 24.94H317.5zM151.5 80H296.5L277.5 51.56C276 49.34 273.5 48 270.9 48H177.1C174.5 48 171.1 49.34 170.5 51.56L151.5 80zM80 432C80 449.7 94.33 464 112 464H336C353.7 464 368 449.7 368 432V128H80V432z" />
             </svg>
           </button>
         )}
@@ -256,13 +260,13 @@ export default function ApiInput({
               }
             />
           ))}
-          <span className="relative flex items-center w-full h-5 justify-end fill-slate-500 dark:fill-slate-4005">
+          <span className="relative flex items-center w-full h-5 justify-end fill-slate-500 dark:fill-slate-400">
             <button
               className="hover:fill-slate-700 dark:hover:fill-slate-200"
               onClick={() => setInputArray([...inputArray, { name: '' }])}
             >
-              <svg className="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32H224V480c0 17.7 14.3 32 32 32s32-14.3 32-32V288l192 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-192 0 0-192z" />
+              <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
               </svg>
             </button>
           </span>
