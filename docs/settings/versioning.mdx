@@ -1,6 +1,6 @@
 ---
-title: "Versioned Docs"
-description: "Optionally, you can have separate v1 and v2 docs. Configuring versions only takes a few minutes."
+title: "Versioning"
+description: "Optionally, you can have separate versions for your docs. Configuring versions only takes a few minutes."
 ---
 
 Some times you release a V2 of your product and want to have entirely new docs. We let you hide content based on your docs version.
@@ -8,13 +8,6 @@ Some times you release a V2 of your product and want to have entirely new docs. 
 Not all content has to be hidden though! Any content without a version value shows up in every version so you never duplicate content!
 
 You can add version values to anchors, groups, or individual pages.
-
-<Frame>
-
-<img class="block h-8 dark:hidden" src="/docs/img/version-dropdown-light.png" />
-<img class="hidden h-8 dark:block" src="/docs/img/version-dropdown-dark.png" />
-
-</Frame>
 
 ## Required Setup
 
@@ -72,14 +65,14 @@ In the example below, pages in `Nested Group V1` only show up when `v1` docs are
         "pages": [
             {
                 "group": "Nested Group V1",
-                "pages": ["page-w-version", "page-w-version-2"],
+                "pages": ["page-with-version", "other-page-with-version"],
                 "version": "v1"
             },
             {
                 "group": "Nested Group Always Shows",
-                "pages": ["page", "page-2"],
+                "pages": ["nested-page", "other-nested-page"],
             },
-            "other-page"
+            "page"
         ]
     }
 ]

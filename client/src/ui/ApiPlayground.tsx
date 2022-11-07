@@ -1,5 +1,6 @@
 import axios from 'axios';
 import clsx from 'clsx';
+import set from 'lodash.set';
 import { useEffect, useState, useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
@@ -8,7 +9,6 @@ import {
   extractMethodAndEndpoint,
   getApiContext,
   getParamGroupsFromApiComponents,
-  Param,
   ParamGroup,
 } from '@/utils/api';
 import {
@@ -18,8 +18,11 @@ import {
   getMethodTextColor,
 } from '@/utils/openApiColors';
 
+import ApiInput from './ApiInput';
+
 export type ApiComponent = {
   type: string;
+  name?: string;
   children?: any;
   attributes?: {
     type: string;
@@ -99,9 +102,14 @@ export function ApiPlayground({
   const onChangeParam = (
     paramGroup: string,
     param: string,
-    value: string | number | boolean | File
+    value: string | number | boolean | File | string[] | number[] | boolean[] | File[],
+    path: string[]
   ) => {
-    setInputData({ ...inputData, [paramGroup]: { ...inputData[paramGroup], [param]: value } });
+    const newParamGroup = {
+      ...inputData[paramGroup],
+      ...set(inputData[paramGroup], [...path, param], value),
+    };
+    setInputData({ ...inputData, [paramGroup]: newParamGroup });
   };
 
   const makeApiRequest = async () => {
@@ -122,128 +130,9 @@ export function ApiPlayground({
     }
   };
 
-  const renderInput = (
-    paramGroup: ParamGroup,
-    param: Param,
-    type?: string,
-    enumValues?: string[]
-  ) => {
-    switch (type?.toLowerCase()) {
-      case 'boolean':
-        return (
-          <div className="relative">
-            <select
-              className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-              onChange={(e) => {
-                const selection = e.target.value;
-                if (selection === 'true') {
-                  onChangeParam(paramGroup.name, param.name, true);
-                } else {
-                  onChangeParam(paramGroup.name, param.name, false);
-                }
-              }}
-            >
-              <option disabled selected>
-                Select
-              </option>
-              <option>true</option>
-              <option>false</option>
-            </select>
-            <svg
-              className="absolute right-2 top-[7px] h-3 fill-slate-600 dark:fill-slate-400"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 384 512"
-            >
-              <path d="M192 384c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L192 306.8l137.4-137.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-160 160C208.4 380.9 200.2 384 192 384z" />
-            </svg>
-          </div>
-        );
-      case 'integer':
-      case 'number':
-        return (
-          <input
-            className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
-            type="number"
-            placeholder={param.placeholder}
-            value={inputData[paramGroup.name] ? inputData[paramGroup.name][param.name] : ''}
-            onChange={(e) =>
-              onChangeParam(paramGroup.name, param.name, parseInt(e.target.value, 10))
-            }
-          />
-        );
-      case 'file':
-      case 'files':
-        return (
-          <button className="relative flex items-center px-2 w-full h-7 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-dashed hover:bg-slate-50 dark:hover:bg-slate-800">
-            <input
-              className="z-10 absolute inset-0 opacity-0 cursor-pointer"
-              type="file"
-              onChange={(event) => {
-                if (event.target.files == null) {
-                  return;
-                }
-
-                onChangeParam(paramGroup.name, param.name, event.target.files[0]);
-              }}
-            />
-            <svg
-              className="absolute right-2 top-[7px] h-3 fill-slate-500 dark:fill-slate-400 bg-border-slate-700"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-            >
-              <path d="M105.4 182.6c12.5 12.49 32.76 12.5 45.25 .001L224 109.3V352c0 17.67 14.33 32 32 32c17.67 0 32-14.33 32-32V109.3l73.38 73.38c12.49 12.49 32.75 12.49 45.25-.001c12.49-12.49 12.49-32.75 0-45.25l-128-128C272.4 3.125 264.2 0 256 0S239.6 3.125 233.4 9.375L105.4 137.4C92.88 149.9 92.88 170.1 105.4 182.6zM480 352h-160c0 35.35-28.65 64-64 64s-64-28.65-64-64H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456z" />
-            </svg>
-            {inputData[paramGroup.name] != null &&
-            inputData[paramGroup.name][param.name] != null ? (
-              <span className="w-full truncate">{inputData[paramGroup.name][param.name].name}</span>
-            ) : (
-              'Choose file'
-            )}
-          </button>
-        );
-      default:
-        if (enumValues) {
-          return (
-            <div className="relative">
-              <select
-                className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
-                onChange={(e) => {
-                  const selection = e.target.value;
-                  onChangeParam(paramGroup.name, param.name, selection);
-                }}
-              >
-                <option disabled selected>
-                  Select
-                </option>
-                {enumValues.map((enumValue) => (
-                  <option>{enumValue}</option>
-                ))}
-              </select>
-              <svg
-                className="absolute right-2 top-[7px] h-3 fill-slate-600 dark:fill-slate-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 384 512"
-              >
-                <path d="M192 384c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L192 306.8l137.4-137.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-160 160C208.4 380.9 200.2 384 192 384z" />
-              </svg>
-            </div>
-          );
-        }
-        return (
-          <input
-            className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
-            type="text"
-            placeholder={param.placeholder}
-            value={inputData[paramGroup.name] ? inputData[paramGroup.name][param.name] : ''}
-            onChange={(e) => onChangeParam(paramGroup.name, param.name, e.target.value)}
-          />
-        );
-    }
-  };
-
   return (
     <div className="mt-4 border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 rounded-md truncate">
-      <div className="px-3 pt-3 pb-4">
+      <div className="px-3.5 pt-3.5 pb-4">
         <div className="text-sm md:text-base flex items-center space-x-2">
           {method && (
             <div
@@ -321,15 +210,13 @@ export function ApiPlayground({
           </div>
           <div className="mt-4 text-[0.84rem] space-y-2">
             {currentActiveParamGroup?.params.map((param) => (
-              <div className="flex items-center space-x-2" key={param.type + param.name}>
-                <div className="flex-1 font-mono text-slate-600 dark:text-slate-300">
-                  {param.name}
-                  {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
-                </div>
-                <div className="flex-initial w-1/3">
-                  {renderInput(currentActiveParamGroup, param, param.type, param.enum)}
-                </div>
-              </div>
+              <ApiInput
+                key={param.name}
+                param={param}
+                inputData={inputData}
+                currentActiveParamGroup={currentActiveParamGroup}
+                onChangeParam={onChangeParam}
+              />
             ))}
           </div>
           <button

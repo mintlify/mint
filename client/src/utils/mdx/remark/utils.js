@@ -235,13 +235,15 @@ export function highlightCode(code, prismLanguage) {
   if (highlightedLines.length && language !== 'demo') {
     let lines = normalizeTokens(Prism.util.encode(Prism.tokenize(code, grammar)));
 
+    // TO DO: We were using bg-primary-light/15 but we cannot set opacity through classes
+    // anymore. Instead, opacity has to be set through style={}. We are hardcoding another color instead.
     code = lines
       .map((line, index) =>
         stringify(
           line,
           `block${
             highlightedLines.includes(index)
-              ? ' -mx-5 pr-5 border-l-4 border-primary-light bg-primary-light/[0.15]'
+              ? ' -mx-5 pr-5 border-l-4 border-[#4ADE80] bg-[#4ADE80]/15'
               : ''
           }`
         )
