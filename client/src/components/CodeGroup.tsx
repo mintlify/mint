@@ -117,7 +117,7 @@ export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
       <Tab.Panels className="flex overflow-auto">
         {children.map((child: any) => (
           <Tab.Panel
-            key={child.props.filename + 'TabPanel'}
+            key={child.props.filename}
             className={clsx(
               'flex-none min-w-full p-5 text-slate-50 ligatures-none',
               isSmallText ? 'text-xs leading-5' : 'text-sm leading-6'

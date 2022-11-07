@@ -8,9 +8,11 @@ import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
+import { useColors } from '@/hooks/useColors';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
+import { isDarkModeEnabled } from '@/utils/isDarkModeEnabled';
 
 import { TopbarCta } from '../types/config';
 import Icon from './Icon';
@@ -255,12 +257,14 @@ export function Header({
     <>
       <div
         className={clsx(
-          'sticky top-0 w-full backdrop-blur flex-none transition-colors z-40 duration-500 lg:border-b lg:border-slate-900/5 dark:border-slate-50/[0.06] lg:z-50',
-          isOpaque
-            ? 'bg-background-light/90 supports-backdrop-blur:bg-background-light/90 dark:bg-background-dark/75'
-            : 'bg-transparent dark:bg-transparent'
+          'sticky top-0 w-full backdrop-blur flex-none z-40 lg:border-b lg:border-slate-900/5 dark:border-slate-50/[0.06] lg:z-50',
+          isOpaque ? '' : 'bg-transparent dark:bg-transparent'
         )}
       >
+        <div
+          className="absolute top-0 right-0 left-0 bottom-0 z-39 bg-background-light dark:bg-background-dark"
+          style={{ opacity: '80%' }}
+        />
         <div className="max-w-8xl mx-auto">
           <div
             className={clsx(
