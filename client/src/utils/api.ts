@@ -134,9 +134,10 @@ export const extractMethodAndEndpoint = (
 
   const startIndexOfMethod = foundMethod ? api.indexOf(foundMethod[0]) : 0;
   const endIndexOfMethod = foundMethod ? startIndexOfMethod + foundMethod[0].length - 1 : 0;
+  // filename is completely optional and only used for versioning.
   const filename = api.substring(0, startIndexOfMethod).trim();
 
-  // Filename is used when we have multiple openapi files. Filename will be an empty string
+  // Filename is used when we have multiple openapi files. Filename will be undefined
   // for non-openapi pages and openapi pages with a single file.
   return {
     method: foundMethod ? foundMethod[0].slice(0, -1).toUpperCase() : undefined,
