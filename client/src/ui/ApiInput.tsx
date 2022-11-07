@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Param, ParamGroup } from '@/utils/api';
 
@@ -26,6 +26,12 @@ export default function ApiInput({
   const [isExpandedProperties, setIsExpandedProperties] = useState(false);
   const [inputArray, setInputArray] = useState<Param[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
+
+  useEffect(() => {
+    if (param.required) {
+      setIsExpandedProperties(true);
+    }
+  }, []);
 
   let InputField;
 
