@@ -1,5 +1,5 @@
 import { UserFeedback } from '@/layouts/UserFeedback';
-import { Api, ApiComponent } from '@/ui/Api';
+import { ApiPlayground, ApiComponent } from '@/ui/ApiPlayground';
 
 type PageHeaderProps = {
   title?: string;
@@ -48,7 +48,7 @@ export function PageHeader({
         <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
       {api && (
-        <Api
+        <ApiPlayground
           api={api}
           children={children}
           auth={auth}

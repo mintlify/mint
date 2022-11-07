@@ -6,7 +6,7 @@ import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Editor } from '@/components/Editor';
 import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
-import { APIBASE_CONFIG_STORAGE } from '@/ui/Api';
+import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { generateRequestExamples } from '@/utils/generateAPIExamples';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';

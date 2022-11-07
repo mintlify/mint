@@ -5,7 +5,7 @@ import { ParamProps } from '@/components/Param';
 import { config } from '@/config';
 import { Component } from '@/enums/components';
 import { openApi } from '@/openapi';
-import { ApiComponent } from '@/ui/Api';
+import { ApiComponent } from '@/ui/ApiPlayground';
 
 export type Child = {
   props: ParamProps & { mdxType: string };

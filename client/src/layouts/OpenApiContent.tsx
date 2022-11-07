@@ -8,7 +8,7 @@ import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import { config } from '@/config';
 import { openApi } from '@/openapi';
-import { Api, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/Api';
+import { ApiPlayground, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/ApiPlayground';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
@@ -258,7 +258,12 @@ export function OpenApiContent({ openapi, auth }: OpenApiContentProps) {
 
   return (
     <div className="prose prose-slate dark:prose-dark">
-      <Api api={api} contentType={contentType} auth={auth} apiComponents={apiComponents} />
+      <ApiPlayground
+        api={api}
+        contentType={contentType}
+        auth={auth}
+        apiComponents={apiComponents}
+      />
       <div>
         {Parameters?.length > 0 && (
           <>
