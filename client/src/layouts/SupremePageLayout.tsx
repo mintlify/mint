@@ -10,6 +10,7 @@ import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContextController } from '@/context/VersionContext';
+import useProgressBar from '@/hooks/useProgressBar';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
 import { Config } from '@/types/config';
@@ -43,6 +44,7 @@ export default function SupremePageLayout({
   favicons: FaviconsProps;
   subdomain: string;
 }) {
+  useProgressBar(config?.colors?.primary);
   const { meta, section, metaTagsForSeo, title, nav } = parsedData;
   let [navIsOpen, setNavIsOpen] = useState(false);
   const analyticsConfig = getAnalyticsConfig(config);

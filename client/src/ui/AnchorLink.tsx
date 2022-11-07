@@ -18,7 +18,7 @@ type TopLevelProps = {
   as?: string;
 };
 
-const TopLevelAnchor = forwardRef(
+const Anchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color }: TopLevelProps, ref: any) => {
     const [hovering, setHovering] = useState(false);
     const usePrimaryColorForText = color == null || color.includes('linear-gradient');
@@ -65,12 +65,12 @@ const TopLevelAnchor = forwardRef(
   }
 );
 
-export function TopLevelLink({ ...props }: TopLevelProps) {
+export function AnchorLink({ ...props }: TopLevelProps) {
   const { href } = props;
   if (/^https?:\/\//.test(href)) {
     return (
       <li>
-        <TopLevelAnchor {...props} />
+        <Anchor {...props} />
       </li>
     );
   }
@@ -78,13 +78,13 @@ export function TopLevelLink({ ...props }: TopLevelProps) {
   return (
     <li>
       <Link href={href} passHref>
-        <TopLevelAnchor {...props} />
+        <Anchor {...props} />
       </Link>
     </li>
   );
 }
 
-export function StyledTopLevelLink({
+export function StyledAnchorLink({
   href,
   as,
   name,
@@ -107,7 +107,7 @@ export function StyledTopLevelLink({
       />
     );
   return (
-    <TopLevelLink
+    <AnchorLink
       {...props}
       as={as}
       href={href}
@@ -117,6 +117,6 @@ export function StyledTopLevelLink({
       color={color}
     >
       {name ?? href}
-    </TopLevelLink>
+    </AnchorLink>
   );
 }

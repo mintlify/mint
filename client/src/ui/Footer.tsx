@@ -103,13 +103,11 @@ export function Footer({ previous, next, hasBottomPadding = true }: FooterProps)
         )}
       >
         <div className="mb-6 sm:mb-0 sm:flex">
-          <p>
-            <Link href="https://mintlify.com">
-              <a target="_blank" className="hover:text-slate-900 dark:hover:text-slate-400">
-                Powered by Mintlify
-              </a>
-            </Link>
-          </p>
+          <Link href="https://mintlify.com" passHref>
+            <a target="_blank" className="hover:text-slate-900 dark:hover:text-slate-400">
+              Powered by Mintlify
+            </a>
+          </Link>
         </div>
         <div className="flex space-x-6">
           {config?.footerSocials &&

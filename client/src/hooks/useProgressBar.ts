@@ -2,11 +2,10 @@ import ProgressBar from '@badrap/bar-of-progress';
 import { Router } from 'next/router';
 import { useEffect } from 'react';
 
-import { useColors } from './useColors';
-
-export default function useProgressBar() {
-  const colors = useColors();
-
+/**
+ * @param color Hexadecimal color including the # at the start. Defaults to green if left undefined.
+ */
+export default function useProgressBar(color: string | undefined) {
   // This was previously used to fix Safari jumping to the bottom of the page
   // when closing the search modal using the `esc` key.
   // We commented it out when migrating to Vercel Platforms because we wanted to see if
@@ -21,7 +20,7 @@ export default function useProgressBar() {
   useEffect(() => {
     const progress = new ProgressBar({
       size: 2,
-      color: colors.primary,
+      color: color ?? '#16A34A',
       className: 'bar-of-progress',
       delay: 100,
     });

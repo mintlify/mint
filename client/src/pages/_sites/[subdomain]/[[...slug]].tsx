@@ -5,7 +5,6 @@ import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 
-import useProgressBar from '@/hooks/useProgressBar';
 import SupremePageLayout from '@/layouts/SupremePageLayout';
 import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
@@ -43,7 +42,6 @@ export default function Page({
   subdomain,
 }: PageProps) {
   try {
-    useProgressBar();
     const mdxSource = parse(stringifiedMdxSource);
     const parsedData = parse(stringifiedData) as ParsedDataProps;
     const config = JSON.parse(parsedData.stringifiedConfig) as Config;
