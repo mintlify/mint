@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
 import { SidebarContext } from '@/layouts/SidebarLayout';
 import { PageMetaTags, GroupPage, isGroup, flattenGroupPages } from '@/types/metadata';
+
+import { useCurrentPath } from './useCurrentPath';
 
 const getFirstNonGroupPage = (groupPage?: GroupPage): PageMetaTags | null => {
   if (groupPage == null) {
@@ -17,7 +18,7 @@ const getFirstNonGroupPage = (groupPage?: GroupPage): PageMetaTags | null => {
 };
 
 export function usePrevNext() {
-  let router = useRouter();
+  let currentPath = useCurrentPath();
   let { nav } = useContext(SidebarContext);
   let pages: PageMetaTags[] = nav.reduce(
     (acc: PageMetaTags[], currentGroup: { pages: PageMetaTags[] }) => {
@@ -26,7 +27,7 @@ export function usePrevNext() {
     []
   );
 
-  let pageIndex = pages.findIndex((page) => page?.href === router.pathname);
+  let pageIndex = pages.findIndex((page) => page?.href === currentPath);
   return {
     prev: pageIndex > -1 ? getFirstNonGroupPage(pages[pageIndex - 1]) : undefined,
     next: pageIndex > -1 ? getFirstNonGroupPage(pages[pageIndex + 1]) : undefined,
