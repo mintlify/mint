@@ -69,7 +69,7 @@ export function generateRequestExamples(
     <RequestExample>
       {snippets.map((snippet) => {
         return (
-          <Editor filename={snippet.filename}>
+          <Editor filename={snippet.filename} key={snippet.filename}>
             <pre>
               <CopyToClipboard />
               <code

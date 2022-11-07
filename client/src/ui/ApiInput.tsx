@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 
 import { Param, ParamGroup } from '@/utils/api';
 
+const checkIfIsArrayType = (paramType?: string) => {
+  return paramType === 'array' || (paramType?.includes('[') && paramType.includes(']'));
+};
+
 export default function ApiInput({
   param,
   inputData,
@@ -41,9 +45,7 @@ export default function ApiInput({
     lowerCaseParamType = param.type?.toLowerCase();
   }
   const isObject = param.properties;
-  const isArray =
-    lowerCaseParamType === 'array' ||
-    (lowerCaseParamType?.includes('[') && lowerCaseParamType.includes(']'));
+  const isArray = checkIfIsArrayType(lowerCaseParamType);
 
   if (lowerCaseParamType === 'boolean') {
     InputField = (
@@ -96,7 +98,6 @@ export default function ApiInput({
             if (event.target.files == null) {
               return;
             }
-
             onChangeParam(activeParamGroupName, param.name, event.target.files[0], path);
           }}
         />
@@ -221,12 +222,12 @@ export default function ApiInput({
           {param.name}
           {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
         </div>
-        <div className={clsx('flex-initial', shouldShowDelete ? 'w-[calc(33%-1.25rem)]' : 'w-1/3')}>
+        <div className={clsx('flex-initial', shouldShowDelete ? 'w-[calc(33%-1.2rem)]' : 'w-1/3')}>
           {InputField}
         </div>
         {shouldShowDelete && (
           <button
-            className="fill-red-500 dark:fill-red-400 hover:fill-red-700 dark:hover:fill-red-200"
+            className="fill-red-600 dark:fill-red-400 hover:fill-red-700 dark:hover:fill-red-300"
             onClick={onDeleteArrayField}
           >
             <svg className="w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -239,6 +240,7 @@ export default function ApiInput({
         <div className="mt-1 pt-2 pb-1 border-t border-slate-100 dark:border-slate-700 space-y-2">
           {param.properties.map((property) => (
             <ApiInput
+              key={property.name}
               param={property}
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
@@ -252,6 +254,7 @@ export default function ApiInput({
         <div className="pt-2 pb-1 space-y-2">
           {inputArray.slice(1).map((input, i) => (
             <ApiInput
+              key={i}
               param={input}
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
@@ -264,16 +267,14 @@ export default function ApiInput({
               }
             />
           ))}
-          <span className="relative flex items-center w-full h-5 justify-end fill-slate-500 dark:fill-slate-400">
-            <button
-              className="hover:fill-slate-700 dark:hover:fill-slate-200"
-              onClick={() => setInputArray([...inputArray, { name: '' }])}
-            >
-              <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
-              </svg>
-            </button>
-          </span>
+          <button
+            className="relative flex items-center w-full h-5 justify-end fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200"
+            onClick={() => setInputArray([...inputArray, { name: '' }])}
+          >
+            <svg className="h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+            </svg>
+          </button>
         </div>
       )}
     </div>

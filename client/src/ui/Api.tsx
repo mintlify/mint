@@ -102,10 +102,9 @@ export function Api({
   const onChangeParam = (
     paramGroup: string,
     param: string,
-    value: string | number | boolean | File,
+    value: string | number | boolean | File | string[] | number[] | boolean[] | File[],
     path: string[]
   ) => {
-    console.log({ param, value });
     const newParamGroup = {
       ...inputData[paramGroup],
       ...set(inputData[paramGroup], [...path, param], value),
@@ -212,6 +211,7 @@ export function Api({
           <div className="mt-4 text-[0.84rem] space-y-2">
             {currentActiveParamGroup?.params.map((param) => (
               <ApiInput
+                key={param.name}
                 param={param}
                 inputData={inputData}
                 currentActiveParamGroup={currentActiveParamGroup}
