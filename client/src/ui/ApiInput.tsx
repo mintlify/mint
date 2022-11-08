@@ -36,6 +36,7 @@ export default function ApiInput({
   inputData,
   currentActiveParamGroup,
   onChangeParam,
+  arrayItemIndex,
   onArrayItemChange,
   onDeleteArrayItem,
   path = [],
@@ -49,6 +50,7 @@ export default function ApiInput({
     value: string | number | boolean | File,
     path: string[]
   ) => void;
+  arrayItemIndex: number;
   onArrayItemChange?: (value: any) => void;
   onDeleteArrayItem?: () => void;
   path?: string[];
@@ -89,7 +91,7 @@ export default function ApiInput({
   const onAddArrayItem = () => {
     const newArray = [
       ...array,
-      { param: { ...param, type: getArrayType(param.type), name: '' }, value: null },
+      { param: { ...param, type: getArrayType(param.type) }, value: null },
     ];
     setArray(newArray);
     onInputChange(newArray.map((item) => item.value));
@@ -100,6 +102,11 @@ export default function ApiInput({
     let inputValue = newArray.length > 0 ? newArray : undefined;
     onInputChange(inputValue?.map((item) => item.value));
   };
+
+  let value = inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : '';
+  if (value && arrayItemIndex != null) {
+    value = value[arrayItemIndex];
+  }
 
   if (lowerCaseParamType === 'boolean') {
     InputField = (
@@ -132,7 +139,7 @@ export default function ApiInput({
         className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
         type="number"
         placeholder={param.placeholder}
-        value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
+        value={value}
         onChange={(e) => onInputChange(parseInt(e.target.value, 10))}
       />
     );
@@ -219,7 +226,7 @@ export default function ApiInput({
         className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200"
         type="text"
         placeholder={param.placeholder}
-        value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
+        value={value}
         onChange={(e) => onInputChange(e.target.value)}
       />
     );
@@ -284,6 +291,7 @@ export default function ApiInput({
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
+              arrayItemIndex={i}
               onArrayItemChange={(value: any) => onArrayInputChange(i, value)}
               onDeleteArrayItem={() => onUpdateArray(array.filter((_, j) => i !== j))}
             />
