@@ -91,11 +91,11 @@ Make a `PUT` request to `https://docs.mintlify.com/api/v1/sites/integrations/git
 
 The body should be a JSON object of the form:
 
-```json body
+```json JSON body
 {
-    accessToken: your gitlab access token,
-    projectId: your project ID,
-    deployBranch: "main" or "master" depending on your repository's default
+    "accessToken": your gitlab access token,
+    "projectId": your project ID,
+    "deployBranch": "main" or "master" depending on your repository's default
 }
 ```
 
