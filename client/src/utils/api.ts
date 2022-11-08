@@ -151,7 +151,10 @@ export const extractBaseAndPath = (
   openApi: any
 ) => {
   let fullEndpoint;
-  baseUrl = baseUrl ?? openApi?.servers?.map((server: { url: string }) => server.url);
+  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
+    return acc.concat(file.openapi.servers);
+  }, []);
+  baseUrl = baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
   if (isAbsoluteUrl(endpoint)) {
     fullEndpoint = endpoint;
   } else if (baseUrl) {
