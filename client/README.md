@@ -28,6 +28,15 @@ yarn
 yarn dev
 ```
 
+### Debugging in VS Code
+
+Navigate to the VS Code debugger and select "Next.js: debug full stack"
+![Next.js debugger in VS Code](./static/debugging-next.png)
+
+Use the debugger to place breakpoints in your code to see your variable values. This is particularly useful for debugging the remark/rehype plugins because you can utilize it to see the abstract syntax tree (AST).
+
+[Read more about debugging in VS Code](https://code.visualstudio.com/docs/editor/debugging)
+
 ### Formatting
 
 This project uses [prettier](https://prettier.io/) for code formatting. You can run prettier across the code by calling `yarn run format` from a terminal.
