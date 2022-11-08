@@ -1,4 +1,4 @@
-import { tomdxJsxFlowElement } from './utils.js';
+import { toMdxJsxFlowElement } from './utils.js';
 
 const withFrames = () => {
   return (tree) => {
@@ -39,7 +39,7 @@ const withFrames = () => {
         node.name = 'Frame';
       }
       if (node.type === 'jsx') {
-        node = tomdxJsxFlowElement(node.value);
+        node = toMdxJsxFlowElement(node.value);
       }
       return node;
     });

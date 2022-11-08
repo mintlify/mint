@@ -117,7 +117,7 @@ export const createMdxJsxAttribute = (key, value) => {
   };
 };
 
-export const tomdxJsxFlowElement = (input) => {
+export const toMdxJsxFlowElement = (input) => {
   const tree = fromMarkdown(input, {
     extensions: [mdxJsx({ acorn: acorn, addResult: true })],
     mdastExtensions: [mdxJsxFromMarkdown()],
