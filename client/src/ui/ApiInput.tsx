@@ -3,11 +3,40 @@ import { useEffect, useState } from 'react';
 
 import { Param, ParamGroup } from '@/utils/api';
 
+const getArrayType = (type: string) => {
+  if (type === 'array') {
+    return '';
+  }
+
+  return type.replaceAll(/\[\]/gi, '');
+};
+
+function AddArrayItemButton({ onClick }) {
+  return (
+    <div className="relative">
+      <button
+        className="w-full py-0.5 px-2 rounded text-left border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-500"
+        onClick={onClick}
+      >
+        Add Item
+      </button>
+      <svg
+        className="absolute right-2 top-[7px] h-3 fill-slate-500 dark:fill-slate-400"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 448 512"
+      >
+        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+      </svg>
+    </div>
+  );
+}
+
 export default function ApiInput({
   param,
   inputData,
   currentActiveParamGroup,
   onChangeParam,
+  onDeleteArrayItem,
   path = [],
 }: {
   param: Param;
@@ -19,9 +48,11 @@ export default function ApiInput({
     value: string | number | boolean | File,
     path: string[]
   ) => void;
+  onDeleteArrayItem?: () => void;
   path?: string[];
 }) {
   const [isExpandedProperties, setIsExpandedProperties] = useState(Boolean(param.required));
+  const [array, setArray] = useState<{ param: Param; value: any }[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
   let InputField;
@@ -32,6 +63,7 @@ export default function ApiInput({
     lowerCaseParamType = param.type?.toLowerCase();
   }
   const isObject = param.properties;
+  const isArray = param.type === 'array';
 
   if (lowerCaseParamType === 'boolean') {
     InputField = (
@@ -123,11 +155,22 @@ export default function ApiInput({
         </span>
       </button>
     );
+  } else if (isArray) {
+    InputField = array.length === 0 && (
+      <AddArrayItemButton
+        onClick={() =>
+          setArray([
+            ...array,
+            { param: { ...param, type: getArrayType(param.type), name: '' }, value: '' },
+          ])
+        }
+      />
+    );
   } else if (param.enum) {
     InputField = (
       <div className="relative">
         <select
-          className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
+          className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-500 cursor-pointer"
           onChange={(e) => {
             const selection = e.target.value;
             onChangeParam(activeParamGroupName, param.name, selection, path);
@@ -141,7 +184,7 @@ export default function ApiInput({
           ))}
         </select>
         <svg
-          className="absolute right-2 top-[7px] h-3 fill-slate-600 dark:fill-slate-400"
+          className="absolute right-2 top-[7px] h-3 fill-slate-500 dark:fill-slate-400"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 384 512"
         >
@@ -164,8 +207,7 @@ export default function ApiInput({
   return (
     <div
       className={clsx(
-        isObject &&
-          isExpandedProperties &&
+        ((isObject && isExpandedProperties) || array.length > 0) &&
           'px-3 py-2 -mx-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-md'
       )}
     >
@@ -180,8 +222,23 @@ export default function ApiInput({
           {param.name}
           {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
         </div>
-        <div className="flex-initial w-1/3">{InputField}</div>
+        <div
+          className={clsx('flex-initial', onDeleteArrayItem ? 'w-[calc(33%-1.05rem)]' : 'w-1/3')}
+        >
+          {InputField}
+        </div>
+        {onDeleteArrayItem && (
+          <button
+            className="py-1 fill-red-600 dark:fill-red-400 hover:fill-red-800 dark:hover:fill-red-200"
+            onClick={onDeleteArrayItem}
+          >
+            <svg className="h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M424 80C437.3 80 448 90.75 448 104C448 117.3 437.3 128 424 128H412.4L388.4 452.7C385.9 486.1 358.1 512 324.6 512H123.4C89.92 512 62.09 486.1 59.61 452.7L35.56 128H24C10.75 128 0 117.3 0 104C0 90.75 10.75 80 24 80H93.82L130.5 24.94C140.9 9.357 158.4 0 177.1 0H270.9C289.6 0 307.1 9.358 317.5 24.94L354.2 80H424zM177.1 48C174.5 48 171.1 49.34 170.5 51.56L151.5 80H296.5L277.5 51.56C276 49.34 273.5 48 270.9 48H177.1zM364.3 128H83.69L107.5 449.2C108.1 457.5 115.1 464 123.4 464H324.6C332.9 464 339.9 457.5 340.5 449.2L364.3 128z" />
+            </svg>
+          </button>
+        )}
       </div>
+      {/* Properties extension */}
       {isExpandedProperties && param.properties && (
         <div className="mt-1 pt-2 pb-1 border-t border-slate-100 dark:border-slate-700 space-y-2">
           {param.properties.map((property) => (
@@ -194,6 +251,28 @@ export default function ApiInput({
               path={[...path, param.name]}
             />
           ))}
+        </div>
+      )}
+      {/* Array extension */}
+      {array.length > 0 && (
+        <div className="mt-1 pt-2 pb-1 border-t border-slate-100 dark:border-slate-700 space-y-2">
+          {array.map((item, i) => (
+            <ApiInput
+              key={i}
+              param={item.param}
+              inputData={inputData}
+              currentActiveParamGroup={currentActiveParamGroup}
+              onChangeParam={onChangeParam}
+              onDeleteArrayItem={() => setArray(array.filter((_, j) => i !== j))}
+            />
+          ))}
+          <div className="flex items-center justify-end space-x-2 group">
+            <div className="flex-initial w-1/3">
+              <AddArrayItemButton
+                onClick={() => setArray([...array, { param: { name: '' }, value: '' }])}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>
