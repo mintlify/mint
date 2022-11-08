@@ -243,7 +243,8 @@ export default function ApiInput({
         <div
           className={clsx(
             'flex items-center flex-1 font-mono text-slate-600 dark:text-slate-300',
-            isObject && 'cursor-pointer'
+            isObject && 'cursor-pointer',
+            arrayItemIndex != null && 'invisible'
           )}
           onClick={() => isObject && setIsExpandedProperties(!isExpandedProperties)}
         >
