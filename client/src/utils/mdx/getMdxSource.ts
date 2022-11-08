@@ -33,7 +33,7 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
         [
           withSyntaxHighlighting,
           {
-            ignoreMissing: true,
+            ignoreMissing: true, // Ignore errors when on language is found
           },
         ],
         withCodeBlocks,
