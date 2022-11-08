@@ -36,6 +36,7 @@ export default function ApiInput({
   inputData,
   currentActiveParamGroup,
   onChangeParam,
+  onArrayItemChange,
   onDeleteArrayItem,
   path = [],
 }: {
@@ -48,6 +49,7 @@ export default function ApiInput({
     value: string | number | boolean | File,
     path: string[]
   ) => void;
+  onArrayItemChange?: (value: any) => void;
   onDeleteArrayItem?: () => void;
   path?: string[];
 }) {
@@ -65,6 +67,40 @@ export default function ApiInput({
   const isObject = param.properties;
   const isArray = param.type === 'array';
 
+  const onInputChange = (value: any) => {
+    if (onArrayItemChange != null) {
+      onArrayItemChange(value);
+      return;
+    }
+    onChangeParam(activeParamGroupName, param.name, value, path);
+  };
+
+  const onArrayInputChange = (arrayIndex: number, value: any) => {
+    const newArray = array.map((item, i) => {
+      if (arrayIndex === i) {
+        return { ...item, value };
+      }
+      return item;
+    });
+    setArray(newArray);
+    onInputChange(newArray.map((item) => item.value));
+  };
+
+  const onAddArrayItem = () => {
+    const newArray = [
+      ...array,
+      { param: { ...param, type: getArrayType(param.type), name: '' }, value: null },
+    ];
+    setArray(newArray);
+    onInputChange(newArray.map((item) => item.value));
+  };
+
+  const onUpdateArray = (newArray: any) => {
+    setArray(newArray);
+    let inputValue = newArray.length > 0 ? newArray : undefined;
+    onInputChange(inputValue?.map((item) => item.value));
+  };
+
   if (lowerCaseParamType === 'boolean') {
     InputField = (
       <div className="relative">
@@ -72,11 +108,7 @@ export default function ApiInput({
           className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
           onChange={(e) => {
             const selection = e.target.value;
-            if (selection === 'true') {
-              onChangeParam(activeParamGroupName, param.name, true, path);
-            } else {
-              onChangeParam(activeParamGroupName, param.name, false, path);
-            }
+            onInputChange(selection === 'true');
           }}
         >
           <option disabled selected>
@@ -101,9 +133,7 @@ export default function ApiInput({
         type="number"
         placeholder={param.placeholder}
         value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
-        onChange={(e) =>
-          onChangeParam(activeParamGroupName, param.name, parseInt(e.target.value, 10), path)
-        }
+        onChange={(e) => onInputChange(parseInt(e.target.value, 10))}
       />
     );
   } else if (lowerCaseParamType === 'file' || lowerCaseParamType === 'files') {
@@ -116,7 +146,7 @@ export default function ApiInput({
             if (event.target.files == null) {
               return;
             }
-            onChangeParam(activeParamGroupName, param.name, event.target.files[0], path);
+            onInputChange(event.target.files[0]);
           }}
         />
         <svg
@@ -156,16 +186,7 @@ export default function ApiInput({
       </button>
     );
   } else if (isArray) {
-    InputField = array.length === 0 && (
-      <AddArrayItemButton
-        onClick={() =>
-          setArray([
-            ...array,
-            { param: { ...param, type: getArrayType(param.type), name: '' }, value: '' },
-          ])
-        }
-      />
-    );
+    InputField = array.length === 0 && <AddArrayItemButton onClick={onAddArrayItem} />;
   } else if (param.enum) {
     InputField = (
       <div className="relative">
@@ -173,7 +194,7 @@ export default function ApiInput({
           className="w-full py-0.5 px-2 rounded border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-500 cursor-pointer"
           onChange={(e) => {
             const selection = e.target.value;
-            onChangeParam(activeParamGroupName, param.name, selection, path);
+            onInputChange(selection);
           }}
         >
           <option disabled selected>
@@ -199,7 +220,7 @@ export default function ApiInput({
         type="text"
         placeholder={param.placeholder}
         value={inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : ''}
-        onChange={(e) => onChangeParam(activeParamGroupName, param.name, e.target.value, path)}
+        onChange={(e) => onInputChange(e.target.value)}
       />
     );
   }
@@ -263,14 +284,13 @@ export default function ApiInput({
               inputData={inputData}
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
-              onDeleteArrayItem={() => setArray(array.filter((_, j) => i !== j))}
+              onArrayItemChange={(value: any) => onArrayInputChange(i, value)}
+              onDeleteArrayItem={() => onUpdateArray(array.filter((_, j) => i !== j))}
             />
           ))}
           <div className="flex items-center justify-end space-x-2 group">
             <div className="flex-initial w-1/3">
-              <AddArrayItemButton
-                onClick={() => setArray([...array, { param: { name: '' }, value: '' }])}
-              />
+              <AddArrayItemButton onClick={onAddArrayItem} />
             </div>
           </div>
         </div>

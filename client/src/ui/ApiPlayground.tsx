@@ -110,6 +110,7 @@ export function ApiPlayground({
       ...set(inputData[paramGroup], [...path, param], value),
     };
     setInputData({ ...inputData, [paramGroup]: newParamGroup });
+    console.log(inputData);
   };
 
   const makeApiRequest = async () => {
