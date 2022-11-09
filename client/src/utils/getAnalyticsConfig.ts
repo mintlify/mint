@@ -10,6 +10,7 @@ export default function getAnalyticsConfig(config: Config) {
     hotjar: config.analytics?.hotjar || config.__injected?.analytics?.hotjar,
     logrocket: config.analytics?.logrocket || config.__injected?.analytics?.logrocket,
     mixpanel: config.analytics?.mixpanel || config.__injected?.analytics?.mixpanel,
+    pirsch: config.analytics?.pirsch || config.__injected?.analytics?.pirsch,
     posthog: config.analytics?.posthog || config.__injected?.analytics?.posthog,
   };
 }

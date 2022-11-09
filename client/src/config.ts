@@ -5,6 +5,7 @@ import {
   HotjarConfigInterface,
   LogrocketConfigInterface,
   MixpanelConfigInterface,
+  PirschConfigInterface,
   PostHogConfigInterface,
 } from './analytics/AbstractAnalyticsImplementation';
 import configJSON from './mint.json';
@@ -51,6 +52,7 @@ type Analytics = {
   logrocket?: LogrocketConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;
+  pirsch?: PirschConfigInterface;
   posthog?: PostHogConfigInterface;
 };
 
