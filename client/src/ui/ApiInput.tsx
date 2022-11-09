@@ -21,7 +21,7 @@ function AddArrayItemButton({ onClick }) {
         Add Item
       </button>
       <svg
-        className="absolute right-2 top-[7px] h-3 fill-slate-500 dark:fill-slate-400"
+        className="hidden sm:block absolute right-2 top-[7px] h-3 fill-slate-500 dark:fill-slate-400"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 448 512"
       >
@@ -252,7 +252,10 @@ export default function ApiInput({
           {param.required && <span className="text-red-600 dark:text-red-400">*</span>}
         </div>
         <div
-          className={clsx('flex-initial', onDeleteArrayItem ? 'w-[calc(33%-1.05rem)]' : 'w-1/3')}
+          className={clsx(
+            'flex-initial',
+            onDeleteArrayItem ? 'w-[calc(40%-1.05rem)] sm:w-[calc(33%-1.05rem)]' : 'w-2/5 sm:w-1/3'
+          )}
         >
           {InputField}
         </div>
@@ -298,7 +301,7 @@ export default function ApiInput({
             />
           ))}
           <div className="flex items-center justify-end space-x-2 group">
-            <div className="flex-initial w-1/3">
+            <div className="flex-initial w-2/5 sm:w-1/3">
               <AddArrayItemButton onClick={onAddArrayItem} />
             </div>
           </div>
