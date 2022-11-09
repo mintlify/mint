@@ -105,7 +105,7 @@ function GitHubCta({ button }: { button: TopbarCta }) {
     axios.get(`https://api.github.com/repos/${github.user}/${github.repo}`).then(({ data }) => {
       setRepoData(data);
     });
-  }, [github]);
+  }, [github?.user, github?.repo]);
 
   if (github == null) {
     return null;

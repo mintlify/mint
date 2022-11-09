@@ -22,7 +22,7 @@
   "include": [
     "next-env.d.ts",
     "./src/index.d.ts",
-    "**/*.tsx",
+    "**/*.js",
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",

@@ -10,6 +10,7 @@ import {
   PostHogConfigInterface,
   GoogleAnalyticsConfigInterface,
   LogrocketConfigInterface,
+  PirschConfigInterface,
 } from '@/analytics/AbstractAnalyticsImplementation';
 import PostHogAnalytics from '@/analytics/implementations/posthog';
 
@@ -19,6 +20,7 @@ import GA4Analytics from './implementations/ga4';
 import HotjarAnalytics from './implementations/hotjar';
 import LogrocketAnalytics from './implementations/logrocket';
 import MixpanelAnalytics from './implementations/mixpanel';
+import PirschAnalytics from './implementations/pirsch';
 
 export type AnalyticsMediatorConstructorInterface = {
   amplitude?: AmplitudeConfigInterface;
@@ -27,6 +29,7 @@ export type AnalyticsMediatorConstructorInterface = {
   logrocket?: LogrocketConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;
+  pirsch?: PirschConfigInterface;
   posthog?: PostHogConfigInterface;
 };
 
@@ -41,6 +44,7 @@ export default class AnalyticsMediator implements AnalyticsMediatorInterface {
     const hotjarEnabled = Boolean(analytics?.hotjar?.hjid && analytics?.hotjar?.hjsv);
     const logrocketEnabled = Boolean(analytics?.logrocket?.appId);
     const mixpanelEnabled = Boolean(analytics?.mixpanel?.projectToken);
+    const pirschEnabled = Boolean(analytics?.pirsch?.id);
     const posthogEnabled = Boolean(analytics?.posthog?.apiKey);
     Sentry.setTag('amplitude_enabled', `${amplitudeEnabled}`);
     Sentry.setTag('fathom_enabled', `${fathomEnabled}`);
@@ -48,6 +52,7 @@ export default class AnalyticsMediator implements AnalyticsMediatorInterface {
     Sentry.setTag('hotjar_enabled', `${hotjarEnabled}`);
     Sentry.setTag('logrocket_enabled', `${logrocketEnabled}`);
     Sentry.setTag('mixpanel_enabled', `${mixpanelEnabled}`);
+    Sentry.setTag('pirschEnabled', `${pirschEnabled}`);
     Sentry.setTag('posthog_enabled', `${posthogEnabled}`);
 
     if (!analytics || Object.keys(analytics).length === 0) {
@@ -84,16 +89,22 @@ export default class AnalyticsMediator implements AnalyticsMediatorInterface {
       this.analyticsIntegrations.push(logrocket);
     }
 
-    if (posthogEnabled) {
-      const posthog = new PostHogAnalytics();
-      posthog.init(analytics.posthog!);
-      this.analyticsIntegrations.push(posthog);
-    }
-
     if (mixpanelEnabled) {
       const mixpanel = new MixpanelAnalytics();
       mixpanel.init(analytics.mixpanel!);
       this.analyticsIntegrations.push(mixpanel);
+    }
+
+    if (pirschEnabled) {
+      const pirsch = new PirschAnalytics();
+      pirsch.init(analytics.pirsch!);
+      this.analyticsIntegrations.push(pirsch);
+    }
+
+    if (posthogEnabled) {
+      const posthog = new PostHogAnalytics();
+      posthog.init(analytics.posthog!);
+      this.analyticsIntegrations.push(posthog);
     }
   }
 

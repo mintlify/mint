@@ -23,6 +23,10 @@ export type MixpanelConfigInterface = {
   projectToken?: string;
 };
 
+export type PirschConfigInterface = {
+  id?: string;
+};
+
 export type PostHogConfigInterface = {
   apiKey?: string;
   apiHost?: string;
@@ -35,6 +39,7 @@ export type ConfigInterface = AmplitudeConfigInterface &
   HotjarConfigInterface &
   LogrocketConfigInterface &
   MixpanelConfigInterface &
+  PirschConfigInterface &
   PostHogConfigInterface;
 
 // TypeScript doesn't recommend setting interfaces on constructors.

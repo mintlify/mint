@@ -208,8 +208,8 @@ export function ContentsLayout({
   // Avoid hydration errors
   const [mdxContent, setMdxContent] = useState(<></>);
   useEffect(() => {
-    setMdxContent(<MDXProvider components={{ Heading }}>{children}</MDXProvider>)
-  }, [children])
+    setMdxContent(<MDXProvider components={{ Heading }}>{children}</MDXProvider>);
+  }, [children]);
 
   return (
     <div

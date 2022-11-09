@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node",
+    "target": "es2020",
+    "lib": ["ES2020"],
+    "outDir": "bin",
+    "declaration": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"]
+}
