@@ -1,17 +1,17 @@
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Param, ParamGroup } from '@/utils/api';
 
-const getArrayType = (type: string) => {
-  if (type === 'array') {
+const getArrayType = (type?: string) => {
+  if (!type || type === 'array') {
     return '';
   }
 
   return type.replaceAll(/\[\]/gi, '');
 };
 
-function AddArrayItemButton({ onClick }) {
+function AddArrayItemButton({ onClick }: { onClick: () => void }) {
   return (
     <div className="relative">
       <button
@@ -36,6 +36,7 @@ export default function ApiInput({
   inputData,
   currentActiveParamGroup,
   onChangeParam,
+  onObjectPropertyChange,
   arrayItemIndex,
   onArrayItemChange,
   onDeleteArrayItem,
@@ -50,6 +51,7 @@ export default function ApiInput({
     value: string | number | boolean | File,
     path: string[]
   ) => void;
+  onObjectPropertyChange?: (value: any) => void;
   arrayItemIndex?: number;
   onArrayItemChange?: (value: any) => void;
   onDeleteArrayItem?: () => void;
@@ -58,6 +60,7 @@ export default function ApiInput({
   const [isExpandedProperties, setIsExpandedProperties] = useState(
     Boolean(param.required) || arrayItemIndex != null
   );
+  const [object, setObject] = useState<Record<string, any>>({});
   const [array, setArray] = useState<{ param: Param; value: any }[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
@@ -73,6 +76,10 @@ export default function ApiInput({
   const isArray = param.type === 'array';
 
   const onInputChange = (value: any) => {
+    if (onObjectPropertyChange != null) {
+      onObjectPropertyChange(value);
+      return;
+    }
     if (onArrayItemChange != null) {
       onArrayItemChange(value);
       return;
@@ -80,7 +87,13 @@ export default function ApiInput({
     onChangeParam(activeParamGroupName, param.name, value, path);
   };
 
-  const onArrayInputChange = (arrayIndex: number, value: any) => {
+  const onObjectParentChange = (property: string, value: any) => {
+    const newObj = { ...object, [property]: value };
+    setObject({ ...object, [property]: value });
+    onInputChange(newObj);
+  };
+
+  const onArrayParentChange = (arrayIndex: number, value: any) => {
     const newArray = array.map((item, i) => {
       if (arrayIndex === i) {
         return { ...item, value };
@@ -103,7 +116,7 @@ export default function ApiInput({
   const onUpdateArray = (newArray: any) => {
     setArray(newArray);
     let inputValue = newArray.length > 0 ? newArray : undefined;
-    onInputChange(inputValue?.map((item) => item.value));
+    onInputChange(inputValue?.map((item: any) => item.value));
   };
 
   let value = inputData[activeParamGroupName] ? inputData[activeParamGroupName][param.name] : '';
@@ -284,6 +297,7 @@ export default function ApiInput({
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
               path={[...path, param.name]}
+              onObjectPropertyChange={(value: any) => onObjectParentChange(property.name, value)}
             />
           ))}
         </div>
@@ -304,7 +318,7 @@ export default function ApiInput({
               currentActiveParamGroup={currentActiveParamGroup}
               onChangeParam={onChangeParam}
               arrayItemIndex={i}
-              onArrayItemChange={(value: any) => onArrayInputChange(i, value)}
+              onArrayItemChange={(value: any) => onArrayParentChange(i, value)}
               onDeleteArrayItem={() => onUpdateArray(array.filter((_, j) => i !== j))}
             />
           ))}
