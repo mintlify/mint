@@ -50,12 +50,14 @@ export default function ApiInput({
     value: string | number | boolean | File,
     path: string[]
   ) => void;
-  arrayItemIndex: number;
+  arrayItemIndex?: number;
   onArrayItemChange?: (value: any) => void;
   onDeleteArrayItem?: () => void;
   path?: string[];
 }) {
-  const [isExpandedProperties, setIsExpandedProperties] = useState(Boolean(param.required));
+  const [isExpandedProperties, setIsExpandedProperties] = useState(
+    Boolean(param.required) || arrayItemIndex != null
+  );
   const [array, setArray] = useState<{ param: Param; value: any }[]>([]);
   const activeParamGroupName = currentActiveParamGroup.name;
 
@@ -66,7 +68,8 @@ export default function ApiInput({
   if (typeof param.type === 'string') {
     lowerCaseParamType = param.type?.toLowerCase();
   }
-  const isObject = param.properties;
+
+  const isObject = param.properties != null;
   const isArray = param.type === 'array';
 
   const onInputChange = (value: any) => {
@@ -173,8 +176,8 @@ export default function ApiInput({
         )}
       </button>
     );
-  } else if (isObject) {
-    InputField = (
+  } else if (isObject && !isArray) {
+    InputField = arrayItemIndex == null && (
       <button
         className="relative flex items-center w-full h-6 justify-end "
         onClick={() => setIsExpandedProperties(!isExpandedProperties)}
@@ -287,7 +290,12 @@ export default function ApiInput({
       )}
       {/* Array extension */}
       {array.length > 0 && (
-        <div className="mt-1 pt-2 pb-1 border-t border-slate-100 dark:border-slate-700 space-y-2">
+        <div
+          className={clsx(
+            'mt-1 pt-2 pb-1 space-y-2',
+            !isObject && 'border-t border-slate-100 dark:border-slate-700'
+          )}
+        >
           {array.map((item, i) => (
             <ApiInput
               key={i}
