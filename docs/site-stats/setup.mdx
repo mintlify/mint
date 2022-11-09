@@ -11,6 +11,7 @@ description: "Mintlify integrates with a variety of analytics platforms."
 - HotJar
 - Logrocket
 - Mixpanel
+- Pirsch
 - PostHog
 
 When possible, we send custom documentation events in addition to the ones built-in to your analytics platform. For example, we send an event when a user opens or closes an [Accordion](../components/accordion).
@@ -43,6 +44,9 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
     },
     "mixpanel": {
         "projectToken": "required"
+    },
+    "pirsch": {
+        "id": "required" // Settings > Developer > Identification Code
     },
     "posthog": {
         "apiKey": "required",
