@@ -221,6 +221,9 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
       if (propertyValue.properties) {
         const properties = getProperties(propertyValue.properties);
         children = [createExpandable(properties)];
+      } else if (propertyValue.items?.properties) {
+        const properties = getProperties(propertyValue.items.properties);
+        children = [createExpandable(properties)];
       }
       const paramField = createParamField(
         {
