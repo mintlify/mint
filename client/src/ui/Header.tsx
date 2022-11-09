@@ -2,12 +2,14 @@ import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import clsx from 'clsx';
 import gh from 'github-url-to-object';
+import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
+import { useBasePath } from '@/hooks/useBasePath';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/Search';
 import getLogoHref from '@/utils/getLogoHref';
@@ -111,7 +113,7 @@ function GitHubCta({ button }: { button: TopbarCta }) {
 
   return (
     <li className="cursor-pointer">
-      <Link href={button.url}>
+      <a href={button.url} target="_blank" rel="noreferrer">
         <div className="group flex items-center space-x-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +158,7 @@ function GitHubCta({ button }: { button: TopbarCta }) {
             )}
           </div>
         </div>
-      </Link>
+      </a>
     </li>
   );
 }
@@ -203,17 +205,37 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
 
 export function NavItems() {
   const { config } = useContext(ConfigContext);
+  const basePath = useBasePath();
+
   return (
     <>
-      {config?.topbarLinks?.map((topbarLink) => (
-        <li key={topbarLink.name}>
-          <Link href={topbarLink.url}>
-            <a className="font-medium hover:text-primary dark:hover:text-primary-light">
-              {topbarLink.name}
-            </a>
-          </Link>
-        </li>
-      ))}
+      {config?.topbarLinks?.map((topbarLink) => {
+        const isAbsolute = isAbsoluteUrl(topbarLink.url);
+
+        if (isAbsolute) {
+          return (
+            <li key={topbarLink.name}>
+              <a
+                href={topbarLink.url}
+                className="font-medium hover:text-primary dark:hover:text-primary-light"
+              >
+                {topbarLink.name}
+              </a>
+            </li>
+          );
+        } else {
+          // Topbar links to our own pages need the basePath appended
+          return (
+            <li key={topbarLink.name}>
+              <Link href={basePath + topbarLink.url} passHref={true}>
+                <a className="font-medium hover:text-primary dark:hover:text-primary-light">
+                  {topbarLink.name}
+                </a>
+              </Link>
+            </li>
+          );
+        }
+      })}
       {config?.topbarCtaButton && <TopBarCtaButton button={config.topbarCtaButton} />}
     </>
   );

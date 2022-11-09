@@ -1682,14 +1682,15 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@mintlify/components@^0.1.36":
-  version "0.1.36"
-  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.36.tgz#eef866e1a3f136101e607bac6b6c886e8ead67ea"
-  integrity sha512-0xV8jkLlOHW8Y0th0FlWmmk9Vfxe9+B9qQKnhZ1UDGtIvcd1OHNywM/N39sdATSzf/t+njImkecYXG8WfmEgIA==
+"@mintlify/components@^0.1.37":
+  version "0.1.37"
+  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.37.tgz#df4efe4ffd8be46a798c10b4ec8efa4c56b27955"
+  integrity sha512-3+dbD8doHYYp5xN4XESGTfNRXsXZruiHZnvFBFXoaN7qNG9sni2JRIV+wERvIt82VrhXRx5sb+KrhtnPftdn0w==
   dependencies:
     "@headlessui/react" "^1.7.3"
     assert "^2.0.0"
     clsx "^1.1.1"
+    is-absolute-url "^4.0.1"
 
 "@next/bundle-analyzer@^12.3.1":
   version "12.3.2"
@@ -1957,7 +1958,7 @@
     localforage "^1.8.1"
     tslib "^1.9.3"
 
-"@sentry/nextjs@^7.9.0":
+"@sentry/nextjs@^7.18.0":
   version "7.18.0"
   resolved "https://registry.yarnpkg.com/@sentry/nextjs/-/nextjs-7.18.0.tgz#5f4d643afc74f470fb93ba2782b07e9075b0aba7"
   integrity sha512-VtD7hS/088IZW0qqUipltVawQiKmlHMv5mGrge6vVwliN+tzFNXrf+UrkTK/CZO3+92TvNwb+zxk5XNHRSknWQ==

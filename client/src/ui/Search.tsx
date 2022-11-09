@@ -17,8 +17,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useActionKey } from '@/hooks/useActionKey';
-import { pathToBreadcrumbs } from '@/utils/pathToBreadcrumbs';
-import { pathToVersionDict } from '@/utils/pathToVersionDict';
+import { pathToBreadcrumbs } from '@/utils/paths/pathToBreadcrumbs';
+import { pathToVersionDict } from '@/utils/paths/pathToVersionDict';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');

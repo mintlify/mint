@@ -1,4 +1,4 @@
-import { optionallyRemoveLeadingSlash } from '@/utils/leadingSlashHelpers';
+import { optionallyRemoveLeadingSlash } from '@/utils/paths/leadingSlashHelpers';
 
 describe('optionallyRemoveLeadingSlash', () => {
   test('only removes one leading slash', () => {

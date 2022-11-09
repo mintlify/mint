@@ -1,4 +1,4 @@
-import { pathToBreadcrumbs } from '@/utils/pathToBreadcrumbs';
+import { pathToBreadcrumbs } from '@/utils/paths/pathToBreadcrumbs';
 
 describe('pathToBreadcrumbs', () => {
   test('gets breadcrumbs recursively', () => {

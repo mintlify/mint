@@ -15,7 +15,16 @@ import withRemoveJavascript from './remark/withRemoveJavascript';
 import withRemoveUnknownJsx from './remark/withRemoveUnknownJsx';
 import withTableOfContents from './remark/withTableOfContents.js';
 
-const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
+const getMdxSource = async (
+  pageContents: string,
+  basePath: string,
+  data: Record<string, unknown>
+) => {
+  // Guarantee basePath has a slash at the start
+  if (!basePath.startsWith('/')) {
+    basePath = '/' + basePath;
+  }
+
   return serialize(pageContents, {
     scope: data,
     mdxOptions: {
@@ -26,7 +35,7 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
         withFrames,
         withTableOfContents,
         withSmartypants,
-        withNextLinks,
+        [withNextLinks, { basePath }],
         withRemoveImports,
       ],
       rehypePlugins: [

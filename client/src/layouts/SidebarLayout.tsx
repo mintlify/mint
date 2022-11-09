@@ -15,13 +15,13 @@ import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadat
 import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getAnchorsToDisplay } from '@/utils/getAnchorsToDisplay';
-import {
-  isEqualIgnoringLeadingSlash,
-  optionallyRemoveLeadingSlash,
-} from '@/utils/leadingSlashHelpers';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
+import {
+  isEqualIgnoringLeadingSlash,
+  optionallyRemoveLeadingSlash,
+} from '@/utils/paths/leadingSlashHelpers';
 
 import { Anchor, Config, findFirstNavigationEntry, Navigation } from '../types/config';
 import { StyledAnchorLink, AnchorLink } from '../ui/AnchorLink';
@@ -366,7 +366,7 @@ function TopLevelNav({
 
             return (
               <StyledAnchorLink
-                key={href}
+                key={href + anchor?.name}
                 mobile={mobile}
                 href={href || '/'}
                 name={anchor?.name}

@@ -1,4 +1,4 @@
-import { pathToVersionDict } from '@/utils/pathToVersionDict';
+import { pathToVersionDict } from '@/utils/paths/pathToVersionDict';
 
 describe('pathToVersionDict', () => {
   test('gets page version from group', () => {

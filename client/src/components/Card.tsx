@@ -4,30 +4,21 @@ import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
+import { useBasePath } from '@/hooks/useBasePath';
 import { ComponentIcon } from '@/ui/Icon';
 
-function DynamicLink({
-  href,
-  passHref,
-  children,
-}: {
-  href: string;
-  passHref?: boolean;
-  children?: ReactNode;
-}) {
+function DynamicLink({ href, children }: { href: string; children?: ReactNode }) {
   if (href && isAbsoluteUrl(href)) {
-    return (
-      <span className="not-prose">
-        <a href={href} target="_blank" rel="noreferrer">
-          {children}
-        </a>
-      </span>
-    );
+    return <span className="not-prose">{children}</span>;
   }
+
+  // next/link is used for internal links to avoid extra network calls
   return (
-    <Link href={href} passHref={passHref}>
-      {children}
-    </Link>
+    <span className="not-prose">
+      <Link href={href} passHref={true}>
+        {children}
+      </Link>
+    </span>
   );
 }
 
@@ -46,6 +37,12 @@ export function Card({
   href?: string;
   children: React.ReactNode;
 }) {
+  const basePath = useBasePath();
+  if (href && !isAbsoluteUrl(href)) {
+    // Add base path to the start of relative links
+    href = basePath + href;
+  }
+
   const Icon =
     typeof icon === 'string' ? (
       <ComponentIcon
@@ -59,28 +56,24 @@ export function Card({
       icon
     );
 
-  const Card = ({ forwardHref, onClick }: { forwardHref?: string; onClick?: any }) => (
+  const Card = () => (
     <GenericCard
-      className={clsx(
-        href && 'cursor-pointer hover:border-primary dark:hover:border-primary-light'
-      )}
+      className={clsx(href && 'hover:border-primary dark:hover:border-primary-light')}
       title={title}
       icon={Icon}
-      href={forwardHref}
-      onClick={onClick}
+      href={href}
     >
       {children}
     </GenericCard>
   );
 
-  // next/link is used for internal links to avoid extra network calls
   if (href) {
     return (
-      <DynamicLink href={href} passHref={true}>
+      <DynamicLink href={href}>
         <Card />
       </DynamicLink>
     );
   }
 
-  return <Card forwardHref={href} />;
+  return <Card />;
 }
