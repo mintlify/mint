@@ -2500,12 +2500,7 @@
   dependencies:
     "@types/unist" "*"
 
-"@types/node@*", "@types/node@^18.0.5":
-  version "18.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
-  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
-
-"@types/node@^18.7.23":
+"@types/node@*", "@types/node@^18.0.5", "@types/node@^18.7.23":
   version "18.11.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
   integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
@@ -7304,6 +7299,14 @@ pirates@^4.0.1, pirates@^4.0.4:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
   integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
+
+pirsch-sdk@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/pirsch-sdk/-/pirsch-sdk-2.0.0.tgz#7b63d2bf371223c0973b51f26a72f12dfbeb496a"
+  integrity sha512-Lk99IqOBxZwib1nw0Dy1buB+dG8k0YZ4ERMA8J1EJ/Te4Jx0QMHYTqmQ05yp58JuKGi+5WDzD9rjcJyngftSgw==
+  dependencies:
+    "@types/node" "^18.7.23"
+    axios "^0.27.2"
 
 pkg-dir@^4.2.0:
   version "4.2.0"
