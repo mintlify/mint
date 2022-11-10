@@ -20,12 +20,14 @@ export default withSentryConfig(
     swcMinify: true,
     pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx', 'md'],
     images: {
-      remotePatterns: {
-        protocol: 'https',
-        hostname: 'mintlify.s3-us-west-1.amazonaws.com',
-        port: '',
-        pathname: '**',
-      },
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'mintlify.s3-us-west-1.amazonaws.com',
+          port: '',
+          pathname: '**',
+        },
+      ],
       disableStaticImages: true,
     },
     staticPageGenerationTimeout: 1000,
