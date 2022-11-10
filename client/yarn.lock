@@ -1345,11 +1345,6 @@
   dependencies:
     client-only "^0.0.1"
 
-"@heroicons/react@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-1.0.6.tgz#35dd26987228b39ef2316db3b1245c42eb19e324"
-  integrity sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==
-
 "@humanwhocodes/config-array@^0.11.6":
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.7.tgz#38aec044c6c828f6ed51d5d7ae3d9b9faf6dbb0f"
@@ -1682,10 +1677,10 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@mintlify/components@^0.1.37":
-  version "0.1.37"
-  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.37.tgz#df4efe4ffd8be46a798c10b4ec8efa4c56b27955"
-  integrity sha512-3+dbD8doHYYp5xN4XESGTfNRXsXZruiHZnvFBFXoaN7qNG9sni2JRIV+wERvIt82VrhXRx5sb+KrhtnPftdn0w==
+"@mintlify/components@^0.1.38":
+  version "0.1.38"
+  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.38.tgz#e77bab0420a90b16da47cb08475b7eaae677d29d"
+  integrity sha512-WDnyYX0IDYv4QpbPN7+IqGxD4Es81aPDTAP4zj7kiTXumy41G9gC8G9OjJWQ2JyKQf61Kh+XrzuvrOqKKPufsg==
   dependencies:
     "@headlessui/react" "^1.7.3"
     assert "^2.0.0"

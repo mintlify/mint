@@ -1,5 +1,4 @@
 import { Combobox, Dialog, Transition } from '@headlessui/react';
-import { ChevronRightIcon, FolderIcon, SearchIcon } from '@heroicons/react/outline';
 import algoliasearch from 'algoliasearch';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -19,6 +18,8 @@ import { VersionContext } from '@/context/VersionContext';
 import { useActionKey } from '@/hooks/useActionKey';
 import { pathToBreadcrumbs } from '@/utils/paths/pathToBreadcrumbs';
 import { pathToVersionDict } from '@/utils/paths/pathToVersionDict';
+
+import Icon from './Icon';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
@@ -123,7 +124,19 @@ function SearchHit({
             ></div>
           </div>
         </div>
-        {active && <ChevronRightIcon className="h-4 w-4 ml-3 flex-none" />}
+        {/* Chevron Right Icon */}
+        {active && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+            className="h-4 w-4 ml-3 flex-none"
+            style={{
+              fill: 'currentColor',
+            }}
+          >
+            <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+          </svg>
+        )}
       </>
     );
   }
@@ -194,7 +207,19 @@ function SearchHit({
             ></div>
           </div>
         </div>
-        {active && <ChevronRightIcon className="h-4 w-4 ml-3 flex-none" />}
+        {/* Chevron Right Icon */}
+        {active && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+            className="h-4 w-4 ml-3 flex-none"
+            style={{
+              fill: 'currentColor',
+            }}
+          >
+            <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+          </svg>
+        )}
       </>
     );
   }
@@ -254,7 +279,19 @@ function SearchHit({
             <div dangerouslySetInnerHTML={{ __html: hit._snippetResult.content.value }}></div>
           )}
       </div>
-      {active && <ChevronRightIcon className="h-4 w-4 ml-3 flex-none" />}
+      {/* Chevron Right Icon */}
+      {active && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+          className="h-4 w-4 ml-3 flex-none"
+          style={{
+            fill: 'currentColor',
+          }}
+        >
+          <path d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+        </svg>
+      )}
     </>
   );
 }
@@ -367,9 +404,10 @@ export function SearchProvider({ subdomain, children }: { subdomain: string; chi
                 <Dialog.Panel className="mx-auto max-w-3xl transform divide-y divide-gray-500 divide-opacity-10 overflow-hidden rounded-md bg-white dark:bg-slate-900 bg-opacity-80 shadow-2xl backdrop-blur backdrop-filter transition-all">
                   <Combobox onChange={(option) => onSelectOption(option)} value={query}>
                     <div className="relative flex items-center">
-                      <SearchIcon
-                        className="pointer-events-none absolute left-4 h-5 w-5 text-slate-700 dark:text-slate-400"
-                        aria-hidden="true"
+                      <Icon
+                        icon="magnifying-glass"
+                        iconType="solid"
+                        className="pointer-events-none absolute left-[1.2rem] h-4 w-4 bg-slate-700 dark:bg-slate-400"
                       />
                       <Combobox.Input
                         className="h-14 w-full border-0 bg-transparent pl-11 pr-6 text-gray-900 dark:text-slate-100 placeholder-slate-400 focus:ring-0 sm:text-sm focus:outline-none"
@@ -416,9 +454,10 @@ export function SearchProvider({ subdomain, children }: { subdomain: string; chi
 
                     {query !== '' && hits.length === 0 && (
                       <div className="py-14 px-6 text-center sm:px-14">
-                        <FolderIcon
-                          className="mx-auto h-6 w-6 text-slate-900 dark:text-slate-400 text-opacity-40"
-                          aria-hidden="true"
+                        <Icon
+                          icon="folder"
+                          iconType="solid"
+                          className="mx-auto h-6 w-6 bg-slate-900 dark:bg-slate-400 opacity-40"
                         />
                         <p className="mt-4 text-sm text-slate-900 dark:text-slate-400">
                           We couldn't find any projects with that term. Please try again.

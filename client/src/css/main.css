@@ -1,4 +1,4 @@
-@import '../../node_modules/@mintlify/components/dist/main.css';
+@import '@mintlify/components';
 @import 'base.css';
 
 /*! purgecss start ignore */
