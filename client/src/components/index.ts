@@ -80,6 +80,7 @@ export const allowedComponents = [
   'Editor',
   'Frame',
   'Link',
+  'img',
 ];
 
 export default components;
