@@ -20,12 +20,12 @@ export default withSentryConfig(
     swcMinify: true,
     pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx', 'md'],
     images: {
+      dangerouslyAllowSVG: true,
+      contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
       remotePatterns: [
         {
           protocol: 'https',
-          hostname: 'mintlify.s3-us-west-1.amazonaws.com',
-          port: '',
-          pathname: '**',
+          hostname: '**.amazonaws.com',
         },
       ],
       disableStaticImages: true,
