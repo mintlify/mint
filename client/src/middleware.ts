@@ -18,7 +18,7 @@ export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = req.headers.get('host') || 'mintlify.dev';
+  const hostname = req.headers.get('host') || 'mintlify.app';
 
   /*  You have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
       You can also use wildcard subdomains on .vercel.app links that are associated with your Vercel team slug
@@ -26,7 +26,7 @@ export default function middleware(req: NextRequest) {
       still need to add "*.platformize.vercel.app" as a wildcard domain on your Vercel dashboard. */
   const currentHost =
     process.env.NODE_ENV === 'production' && process.env.VERCEL === '1'
-      ? hostname.replace(`.mintlify.dev`, '')
+      ? hostname.replace(`.mintlify.app`, '')
       : hostname.replace(`.localhost:3000`, '');
 
   // may need this for self hosting one day:
