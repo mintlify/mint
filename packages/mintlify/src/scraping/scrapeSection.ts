@@ -4,12 +4,19 @@ export async function scrapeSection(
   scrapeFunc: any,
   html: string,
   origin: string,
-  overwrite: boolean
+  overwrite: boolean,
+  version: string | undefined
 ) {
   console.log(
     `Started scraping${overwrite ? ", overwrite mode is on" : ""}...`
   );
-  const groupsConfig = await scrapeFunc(html, origin, process.cwd(), overwrite);
+  const groupsConfig = await scrapeFunc(
+    html,
+    origin,
+    process.cwd(),
+    overwrite,
+    version
+  );
   console.log("Finished scraping.");
   console.log("Add the following to your navigation in mint.json:");
   console.log(objToReadableString(groupsConfig));

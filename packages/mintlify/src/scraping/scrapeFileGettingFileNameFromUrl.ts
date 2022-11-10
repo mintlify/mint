@@ -12,13 +12,15 @@ export async function scrapeFileGettingFileNameFromUrl(
     html: string,
     origin: string,
     cliDir: string,
-    imageBaseDir: string
+    imageBaseDir: string,
+    version: string | undefined
   ) => Promise<{
     title?: string;
     description?: string;
     markdown?: string;
   }>,
   puppeteer = false,
+  version: string | undefined,
   baseToRemove?: string
 ) {
   // Skip scraping external links
@@ -53,7 +55,8 @@ export async function scrapeFileGettingFileNameFromUrl(
     html,
     origin,
     cliDir,
-    imageBaseDir
+    imageBaseDir,
+    version
   );
 
   // Check if page didn't have content

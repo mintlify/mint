@@ -3,14 +3,15 @@ import { NavigationEntry } from "../../navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import { scrapeGitBookPage } from "./scrapeGitBookPage.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
-import getLinksRecursively from "./getLinksRecursively.js";
+import getLinksRecursively from "./links-per-group/getLinksRecursively.js";
 import alternateGroupTitle from "./alternateGroupTitle.js";
 
 export async function scrapeGitBookSection(
   html: string,
   origin: string,
   cliDir: string,
-  overwrite: boolean
+  overwrite: boolean,
+  version: string | undefined
 ) {
   const $ = cheerio.load(html);
 
@@ -60,7 +61,8 @@ export async function scrapeGitBookSection(
         origin,
         overwrite,
         scrapeGitBookPage,
-        true
+        true,
+        version
       );
     })
   );

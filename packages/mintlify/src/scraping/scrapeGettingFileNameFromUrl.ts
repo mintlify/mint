@@ -10,13 +10,15 @@ export async function scrapeGettingFileNameFromUrl(
     html: string,
     origin: string,
     cliDir: string,
-    imageBaseDir: string
+    imageBaseDir: string,
+    version: string | undefined
   ) => Promise<{
     title?: string;
     description?: string;
     markdown?: string;
   }>,
   puppeteer = false,
+  version: string | undefined,
   baseToRemove?: string
 ): Promise<NavigationEntry> {
   if (isNavigation(navEntry)) {
@@ -30,6 +32,7 @@ export async function scrapeGettingFileNameFromUrl(
           overwrite,
           scrapePageFunc,
           puppeteer,
+          version,
           baseToRemove
         )
       );
@@ -45,6 +48,7 @@ export async function scrapeGettingFileNameFromUrl(
     overwrite,
     scrapePageFunc,
     puppeteer,
+    version,
     baseToRemove
   );
 }

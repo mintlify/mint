@@ -1,14 +1,15 @@
 import cheerio from "cheerio";
 import { scrapeReadMePage } from "./scrapeReadMePage.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
-import getLinksRecursively from "./getLinksRecursively.js";
+import getLinksRecursively from "./links-per-group/getLinksRecursively.js";
 import { NavigationEntry } from "../../navigation.js";
 
 export async function scrapeReadMeSection(
   html: string,
   origin: string,
   cliDir: string,
-  overwrite: boolean
+  overwrite: boolean,
+  version: string | undefined
 ) {
   const $ = cheerio.load(html);
 
@@ -53,6 +54,7 @@ export async function scrapeReadMeSection(
         overwrite,
         scrapeReadMePage,
         false,
+        version,
         "/docs"
       );
     })

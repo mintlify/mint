@@ -7,7 +7,8 @@ export async function scrapeReadMePage(
   html: string,
   origin: string,
   cliDir: string,
-  imageBaseDir: string
+  imageBaseDir: string,
+  _: string | undefined // version
 ) {
   const $ = cheerio.load(html);
 

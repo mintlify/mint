@@ -3,14 +3,14 @@ import { NavigationEntry } from "../..//navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
 import { scrapeDocusaurusPage } from "./scrapeDocusaurusPage.js";
-import getLinksRecursively from "./getLinksRecursively.js";
-import alternateGroupTitle from "./alternateGroupTitle.js";
+import { getDocusaurusLinksPerGroup } from "./links-per-group/getDocusaurusLinksPerGroup.js";
 
 export async function scrapeDocusaurusSection(
   html: string,
   origin: string,
   cliDir: string,
-  overwrite: boolean
+  overwrite: boolean,
+  version: string
 ) {
   const $ = cheerio.load(html);
 
@@ -18,36 +18,11 @@ export async function scrapeDocusaurusSection(
   const navigationSections = $(".theme-doc-sidebar-menu").first().children();
 
   // Get all links per group
-  const groupsConfig = navigationSections
-    .map((i, s) => {
-      const section = $(s);
-
-      // Links without a group
-      if (section.hasClass("theme-doc-sidebar-item-link")) {
-        const linkHref = section.find("a[href]").first().attr("href");
-        return {
-          group: "",
-          pages: [linkHref],
-        };
-      }
-
-      const firstLink = section
-        .find(".menu__list-item-collapsible")
-        .first()
-        .find("a[href]");
-
-      const sectionTitle = firstLink.text();
-      const firstHref = firstLink.attr("href");
-      const linkSections = section.children().eq(1).children();
-
-      const pages = getLinksRecursively(linkSections, $);
-
-      return {
-        group: sectionTitle || alternateGroupTitle(firstLink, pages),
-        pages: firstHref ? [firstHref, ...pages] : pages,
-      };
-    })
-    .toArray();
+  const groupsConfig = getDocusaurusLinksPerGroup(
+    navigationSections,
+    $,
+    version
+  );
 
   // Merge groups with empty titles together
   const reducedGroupsConfig = combineNavWithEmptyGroupTitles(groupsConfig);
@@ -67,6 +42,7 @@ export async function scrapeDocusaurusSection(
               overwrite,
               scrapeDocusaurusPage,
               false,
+              version,
               "/docs"
             )
           )
