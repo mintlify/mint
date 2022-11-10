@@ -309,30 +309,11 @@ export function Header({
                 <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-slate-400 rounded-md ring-1 ring-slate-500/10 shadow-sm py-1.5 pl-2 pr-3 bg-slate-50 hover:ring-slate-900/20 dark:bg-slate-800 dark:highlight-white/5 dark:hover:bg-slate-700">
                   {({ actionKey }: any) => (
                     <>
-                      <svg
-                        width="24"
-                        height="24"
-                        fill="none"
-                        aria-hidden="true"
-                        className="mr-3 flex-none"
-                      >
-                        <path
-                          d="m19 19-3.5-3.5"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <circle
-                          cx="11"
-                          cy="11"
-                          r="6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <Icon
+                        icon="magnifying-glass"
+                        iconType="solid"
+                        className="h-4 w-4 ml-1 mr-3 flex-none bg-slate-500 hover:bg-slate-600 dark:bg-slate-400 dark:hover:bg-slate-300"
+                      />
                       Search...
                       {actionKey && (
                         <span className="ml-auto flex-none text-xs font-semibold">
@@ -355,19 +336,11 @@ export function Header({
               </div>
               <SearchButton className="ml-auto text-slate-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-slate-600 lg:hidden dark:text-slate-400 dark:hover:text-slate-300">
                 <span className="sr-only">Search</span>
-                <svg
-                  width="24"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m19 19-3.5-3.5" />
-                  <circle cx="11" cy="11" r="6" />
-                </svg>
+                <Icon
+                  icon="magnifying-glass"
+                  iconType="solid"
+                  className="h-4 w-4 bg-slate-500 dark:bg-slate-400 hover:bg-slate-600 dark:hover:bg-slate-300"
+                />
               </SearchButton>
               <NavPopover className="ml-2 -my-1" display="lg:hidden" />
             </div>
