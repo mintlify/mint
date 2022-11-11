@@ -19,7 +19,8 @@ import { useActionKey } from '@/hooks/useActionKey';
 import { pathToBreadcrumbs } from '@/utils/paths/pathToBreadcrumbs';
 import { pathToVersionDict } from '@/utils/paths/pathToVersionDict';
 
-import Icon from './Icon';
+import Icon from '../Icon';
+import { HitLocation } from './HitLocation';
 
 const client = algoliasearch('M6VUKXZ4U5', '60f283c4bc8c9feb5c44da3df3c21ce3');
 const index = client.initIndex('docs');
@@ -58,6 +59,29 @@ function SearchHit({
   hit: Hit;
   breadcrumbs: string[];
 }) {
+  const breadcrumbComponents = breadcrumbs.map((breadcrumb) => (
+    <>
+      <span className="whitespace-nowrap">{breadcrumb}</span>
+      <svg
+        width="3"
+        height="6"
+        aria-hidden="true"
+        className={clsx(
+          'mx-3 overflow-visible',
+          active ? 'text-white' : 'text-slate-600 dark:text-slate-400'
+        )}
+      >
+        <path
+          d="M0 0L3 3L0 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    </>
+  ));
+
   if (hit._highlightResult.heading?.matchLevel === 'full') {
     return (
       <>
@@ -84,46 +108,12 @@ function SearchHit({
             ></path>
           </svg>
         </div>
-        <div className="ml-3 flex-auto">
-          <div className="flex items-center">
-            {breadcrumbs.map((breadcrumb) => (
-              <>
-                <span>{breadcrumb}</span>
-                <svg
-                  width="3"
-                  height="6"
-                  aria-hidden="true"
-                  className="mx-3 overflow-visible text-slate-400"
-                >
-                  <path
-                    d="M0 0L3 3L0 6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </>
-            ))}
-            {hit._highlightResult.title?.value && (
-              <div className="mr-2">
-                <span
-                  className={clsx(
-                    'rounded-full py-px px-2 text-xs',
-                    active
-                      ? 'bg-primary text-white'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                  )}
-                  dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-                ></span>
-              </div>
-            )}
-            <div
-              className="truncate"
-              dangerouslySetInnerHTML={{ __html: hit._highlightResult.heading?.value }}
-            ></div>
-          </div>
-        </div>
+        <HitLocation
+          active={active}
+          breadcrumbComponents={breadcrumbComponents}
+          hitHtml={hit._highlightResult.heading?.value}
+          bubbleHtml={hit._highlightResult.title.value}
+        />
         {/* Chevron Right Icon */}
         {active && (
           <svg
@@ -167,46 +157,12 @@ function SearchHit({
             ></path>
           </svg>
         </div>
-        <div className="ml-3 flex-auto">
-          <div className="flex items-center">
-            {breadcrumbs.map((breadcrumb) => (
-              <>
-                <span>{breadcrumb}</span>
-                <svg
-                  width="3"
-                  height="6"
-                  aria-hidden="true"
-                  className="mx-3 overflow-visible text-slate-400"
-                >
-                  <path
-                    d="M0 0L3 3L0 6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </>
-            ))}
-            {hit._highlightResult.title?.value && (
-              <div className="mr-2">
-                <span
-                  className={clsx(
-                    'rounded-full py-px px-2 text-xs',
-                    active
-                      ? 'bg-primary text-white'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                  )}
-                  dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-                ></span>
-              </div>
-            )}
-            <div
-              className="truncate"
-              dangerouslySetInnerHTML={{ __html: hit._highlightResult.subheading?.value }}
-            ></div>
-          </div>
-        </div>
+        <HitLocation
+          active={active}
+          breadcrumbComponents={breadcrumbComponents}
+          hitHtml={hit._highlightResult.subheading?.value}
+          bubbleHtml={hit._highlightResult.title?.value}
+        />
         {/* Chevron Right Icon */}
         {active && (
           <svg
@@ -247,38 +203,12 @@ function SearchHit({
           ></path>
         </svg>
       </div>
-      <div className="ml-3 flex-auto">
-        <div className="flex items-center">
-          {breadcrumbs.map((breadcrumb) => (
-            <>
-              <span>{breadcrumb}</span>
-              <svg
-                width="3"
-                height="6"
-                aria-hidden="true"
-                className="mx-3 overflow-visible text-slate-400"
-              >
-                <path
-                  d="M0 0L3 3L0 6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </>
-          ))}
-          <div
-            className="truncate"
-            dangerouslySetInnerHTML={{ __html: hit._highlightResult.title.value }}
-          ></div>
-        </div>
-
-        {hit._highlightResult.content?.matchLevel === 'full' &&
-          hit._snippetResult.content?.value && (
-            <div dangerouslySetInnerHTML={{ __html: hit._snippetResult.content.value }}></div>
-          )}
-      </div>
+      <HitLocation
+        active={active}
+        breadcrumbComponents={breadcrumbComponents}
+        hitHtml={hit._snippetResult.content.value}
+        bubbleHtml={hit._highlightResult.title.value}
+      />
       {/* Chevron Right Icon */}
       {active && (
         <svg
@@ -430,7 +360,7 @@ export function SearchProvider({ subdomain, children }: { subdomain: string; chi
                                   value={hit}
                                   className={({ active }) =>
                                     clsx(
-                                      'flex cursor-pointer select-none items-center px-3 py-2 rounded-md',
+                                      'flex cursor-pointer select-none items-center px-3 py-2 rounded-md w-full',
                                       active
                                         ? 'bg-primary-dark text-white dark:text-white'
                                         : 'dark:text-slate-500'

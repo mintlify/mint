@@ -18,7 +18,7 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { Header } from '@/ui/Header';
-import { SearchProvider } from '@/ui/Search';
+import { SearchProvider } from '@/ui/search/Search';
 import { Title } from '@/ui/Title';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 

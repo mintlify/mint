@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 import { useBasePath } from '@/hooks/useBasePath';
 import { Logo } from '@/ui/Logo';
-import { SearchButton } from '@/ui/Search';
+import { SearchButton } from '@/ui/search/Search';
 import getLogoHref from '@/utils/getLogoHref';
 
 import { TopbarCta } from '../types/config';
