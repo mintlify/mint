@@ -51,7 +51,7 @@ export function Heading({
       className={clsx('group flex whitespace-pre-wrap', className, {
         '-ml-4 pl-4': !hidden,
         'text-2xl sm:text-3xl': level === '1',
-        'mb-2 text-sm leading-6 text-primary font-semibold tracking-normal dark:text-primary-light':
+        'mb-2 text-sm leading-6 text-primary font-semibold tracking-normal dark:!text-primary-light':
           level === '2' && nextElementDepth > level,
       })}
       id={id}
