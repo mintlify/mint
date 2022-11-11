@@ -30,8 +30,6 @@ export default withSentryConfig(
       ],
       disableStaticImages: true,
     },
-    basePath: process.env.NODE_ENV === 'production' ? 'https://mintlify.app' : '',
-    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://mintlify.app' : '',
     staticPageGenerationTimeout: 1000,
     experimental: {
       largePageDataBytes: 128 * 10000, // 1280KB instead of the default 128Kb
