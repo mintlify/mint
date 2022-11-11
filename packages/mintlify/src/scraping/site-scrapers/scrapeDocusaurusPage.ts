@@ -7,34 +7,46 @@ export async function scrapeDocusaurusPage(
   html: string,
   origin: string,
   cliDir: string,
-  imageBaseDir: string
+  imageBaseDir: string,
+  version: string | undefined // expects "2", or "3". Have not written support for "1" yet
 ) {
   const $ = cheerio.load(html);
 
-  const content = $(".theme-doc-markdown").first();
+  const article =
+    version === "3" ? $(".theme-doc-markdown").first() : $("article").first();
 
-  // Index pages with no additional text don't have the markdown class
-  if (content.length === 0) {
+  if (article.length === 0) {
+    // Index pages with no additional text don't have the markdown class
     return {};
   }
 
-  const titleComponent = content.find("h1");
+  const titleComponent = article.find("h1");
   const title = titleComponent.text().trim();
 
   // Do not include title in the content when we insert it in our metadata
   titleComponent.remove();
 
+  const markdownContent =
+    version === "3" ? article : article.find(".markdown").first();
+
   const origToWritePath = await downloadAllImages(
     $,
-    content,
+    markdownContent,
     origin,
     imageBaseDir
   );
 
-  const contentHtml = content.html();
+  const markdownHtml = markdownContent.html();
 
   const nhm = new NodeHtmlMarkdown();
-  let markdown = nhm.translate(contentHtml);
+  let markdown = nhm.translate(markdownHtml);
+
+  if (markdown == null) {
+    console.error(
+      "We do not support scraping this page. Content will be empty"
+    );
+    return { title, description: null, markdown: "" };
+  }
 
   // Description only exists in meta tags. The code is commented out because its prone to incorrectly
   // including a description if the first line of text had markdown annotations like `.

@@ -126,7 +126,7 @@ export function ApiSupplemental({
   }, [openApiResponseExamples]);
 
   useEffect(() => {
-    // Hacky approach to wait 1ms until document loads
+    // Hacky approach to wait 50ms until document loads
     setTimeout(() => {
       document.querySelectorAll('.copy-to-clipboard').forEach((item) => {
         item.addEventListener(

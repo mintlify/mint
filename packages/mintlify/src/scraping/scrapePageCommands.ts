@@ -19,16 +19,20 @@ function validateFramework(framework) {
   }
 }
 
-export async function scrapePageWrapper(argv, scrapeFunc, puppeteer = false) {
+export async function scrapePageWrapper(
+  argv: any,
+  scrapeFunc: any,
+  options?: { version?: string; puppeteer?: boolean }
+) {
   const href = getHrefFromArgs(argv);
   let html: string;
-  if (puppeteer) {
+  if (options.puppeteer) {
     html = await getHtmlWithPuppeteer(href);
   } else {
     const res = await axios.default.get(href);
     html = res.data;
   }
-  await scrapePage(scrapeFunc, href, html, argv.overwrite);
+  await scrapePage(scrapeFunc, href, html, argv.overwrite, options.version);
   process.exit(0);
 }
 
@@ -36,16 +40,16 @@ export async function scrapePageAutomatically(argv: any) {
   const href = getHrefFromArgs(argv);
   const res = await axios.default.get(href);
   const html = res.data;
-  const framework = detectFramework(html);
+  const { framework, version } = detectFramework(html);
 
   validateFramework(framework);
 
   console.log("Detected framework: " + framework);
 
   if (framework === Frameworks.DOCUSAURUS) {
-    await scrapePageWrapper(argv, scrapeDocusaurusPage);
+    await scrapePageWrapper(argv, scrapeDocusaurusPage, { version });
   } else if (framework === Frameworks.GITBOOK) {
-    await scrapePageWrapper(argv, scrapeGitBookPage, true);
+    await scrapePageWrapper(argv, scrapeGitBookPage, { puppeteer: true });
   } else if (framework === Frameworks.README) {
     await scrapePageWrapper(argv, scrapeReadMePage);
   }

@@ -6,11 +6,13 @@ export async function scrapePage(
     html: string,
     origin: string,
     cliDir: string,
-    imageBaseDir: string
+    imageBaseDir: string,
+    version: string | undefined
   ) => Promise<any>,
   href: string,
   html: string,
-  overwrite: boolean
+  overwrite: boolean,
+  version: string | undefined
 ) {
   const origin = getOrigin(href);
   const imageBaseDir = path.join(process.cwd(), "images");
@@ -18,7 +20,8 @@ export async function scrapePage(
     html,
     origin,
     process.cwd(),
-    imageBaseDir
+    imageBaseDir,
+    version
   );
   createPage(title, description, markdown, overwrite, process.cwd());
 }

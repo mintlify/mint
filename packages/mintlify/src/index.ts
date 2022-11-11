@@ -55,14 +55,6 @@ yargs(hideBin(process.argv))
     }
   )
   .command(
-    "scrape-docusaurus-page [url]",
-    "Scrapes a Docusaurus page",
-    () => {},
-    async (argv) => {
-      await scrapePageWrapper(argv, scrapeDocusaurusPage);
-    }
-  )
-  .command(
     "scrape-gitbook-page [url]",
     "Scrapes a GitBook page",
     () => {},
@@ -84,14 +76,6 @@ yargs(hideBin(process.argv))
     () => {},
     async (argv) => {
       await scrapeSectionAutomatically(argv);
-    }
-  )
-  .command(
-    "scrape-docusaurus-section [url]",
-    "Scrapes the Docusaurus section",
-    () => {},
-    async (argv) => {
-      await scrapeDocusaurusSectionCommand(argv);
     }
   )
   .command(

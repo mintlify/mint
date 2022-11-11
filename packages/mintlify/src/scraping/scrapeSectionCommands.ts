@@ -13,15 +13,25 @@ export async function scrapeSectionAxiosWrapper(argv: any, scrapeFunc: any) {
   const href = getHrefFromArgs(argv);
   const res = await axios.default.get(href);
   const html = res.data;
-  await scrapeSection(scrapeFunc, html, getOrigin(href), argv.overwrite);
+  await scrapeSection(
+    scrapeFunc,
+    html,
+    getOrigin(href),
+    argv.overwrite,
+    undefined
+  );
   process.exit(0);
 }
 
-export async function scrapeDocusaurusSectionCommand(argv: any) {
+export async function scrapeDocusaurusSectionCommand(
+  argv: any,
+  version: string // "1" | "2" | "3"
+) {
   await scrapeSectionOpeningAllNested(
     argv,
     openNestedDocusaurusMenus,
-    scrapeDocusaurusSection
+    scrapeDocusaurusSection,
+    version
   );
 }
 
@@ -36,7 +46,8 @@ export async function scrapeGitbookSectionCommand(argv: any) {
 async function scrapeSectionOpeningAllNested(
   argv: any,
   openLinks: any,
-  scrapeFunc: any
+  scrapeFunc: any,
+  version?: string
 ) {
   const href = getHrefFromArgs(argv);
 
@@ -48,7 +59,13 @@ async function scrapeSectionOpeningAllNested(
 
   const html = await openLinks(page);
   browser.close();
-  await scrapeSection(scrapeFunc, html, getOrigin(href), argv.overwrite);
+  await scrapeSection(
+    scrapeFunc,
+    html,
+    getOrigin(href),
+    argv.overwrite,
+    version
+  );
   process.exit(0);
 }
 
@@ -56,14 +73,14 @@ export async function scrapeSectionAutomatically(argv: any) {
   const href = getHrefFromArgs(argv);
   const res = await axios.default.get(href);
   const html = res.data;
-  const framework = detectFramework(html);
+  const { framework, version } = detectFramework(html);
 
   validateFramework(framework);
 
   console.log("Detected framework: " + framework);
 
   if (framework === Frameworks.DOCUSAURUS) {
-    await scrapeDocusaurusSectionCommand(argv);
+    await scrapeDocusaurusSectionCommand(argv, version);
   } else if (framework === Frameworks.GITBOOK) {
     await scrapeGitbookSectionCommand(argv);
   } else if (framework === Frameworks.README) {
