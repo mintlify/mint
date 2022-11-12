@@ -39,13 +39,13 @@ const getMdxSource = async (
         withRemoveImports,
       ],
       rehypePlugins: [
+        withCodeBlocks,
         [
           withSyntaxHighlighting,
           {
             ignoreMissing: true, // Ignore errors when on language is found
           },
         ],
-        withCodeBlocks,
         withListRoles,
         withApiComponents,
         withRawComponents,
