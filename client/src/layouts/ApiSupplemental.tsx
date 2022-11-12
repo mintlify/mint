@@ -223,8 +223,8 @@ export function ApiSupplemental({
     <div className="space-y-6 pb-6">
       {requestExamples}
       {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
-      {openApiResponseExamples.length === 0 && mdxResponseExample}
-      {openApiResponseExamples.length > 0 && (
+      {mdxResponseExample}
+      {!mdxResponseExample && openApiResponseExamples.length > 0 && (
         <ResponseExample
           children={{
             props: {
