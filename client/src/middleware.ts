@@ -26,8 +26,9 @@ export default function middleware(req: NextRequest) {
       still need to add "*.platformize.vercel.app" as a wildcard domain on your Vercel dashboard. */
   const isProd = process.env.NODE_ENV === 'production' && process.env.VERCEL === '1';
   const currentHost = isProd
-    ? hostname.replace(`.mintlify.app`, '')
-    : hostname.replace(`.localhost:3000`, '');
+    ? // Replace both mintlify.app and mintlify.dev because both domains are used for hosting by Mintlify
+      hostname.replace('.mintlify.app', '').replace('.mintlify.dev', '')
+    : hostname.replace('.localhost:3000', '');
 
   // may need this for self hosting one day:
   // rewrites for app pages
