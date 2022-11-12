@@ -13,14 +13,73 @@ import { generateRequestExamples } from '@/utils/generateAPIExamples';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 import { htmlToReactComponent } from '@/utils/htmlToReactComponent';
 
-const responseHasExample = (response: any) => {
-  return (
-    response?.content &&
-    response?.content.hasOwnProperty('application/json') &&
-    response?.content['application/json']?.examples &&
-    response?.content['application/json']?.examples.hasOwnProperty(['example-1']) &&
-    response?.content['application/json']?.examples['example-1']?.value
+const responseHasSimpleExample = (response: any): boolean => {
+  if (response?.content == null) {
+    return false;
+  }
+
+  return Boolean(
+    response.content &&
+      response.content.hasOwnProperty('application/json') &&
+      response.content['application/json']?.examples &&
+      response.content['application/json']?.examples.hasOwnProperty(['example-1']) &&
+      response.content['application/json']?.examples['example-1']?.value
   );
+};
+
+const recursivelyConstructExample = (schema: any, result = {}): any => {
+  if (schema.example) {
+    return schema.example;
+  }
+
+  if (schema.properties) {
+    const propertiesWithExamples: Record<string, any> = {};
+
+    Object.entries(schema.properties).forEach(([propertyName, propertyValue]): any => {
+      propertiesWithExamples[propertyName] = recursivelyConstructExample(propertyValue);
+    });
+
+    return { ...result, ...propertiesWithExamples };
+  }
+
+  if (schema.items) {
+    return [recursivelyConstructExample(schema.items)];
+  }
+
+  return schema.type ?? null;
+};
+
+const recursivelyCheckIfHasExample = (schema: any) => {
+  if (schema.example) {
+    return true;
+  }
+
+  if (schema.properties) {
+    return Object.values(schema.properties).some((propertyValue): any => {
+      return recursivelyCheckIfHasExample(propertyValue);
+    });
+  }
+
+  return false;
+};
+
+const generatedNestedExample = (response: any) => {
+  if (
+    response?.content?.hasOwnProperty('application/json') == null ||
+    response.content['application/json']?.schema == null
+  ) {
+    return '';
+  }
+
+  const schema = response.content['application/json'].schema;
+  const constructedExample = recursivelyConstructExample(schema);
+  const hasExample = recursivelyCheckIfHasExample(schema);
+
+  if (hasExample) {
+    return constructedExample;
+  }
+
+  return '';
 };
 
 type ApiComponent = {
@@ -49,16 +108,19 @@ export function ApiSupplemental({
     }
   }, []);
 
-  const { operation, path } =
+  const { operation } =
     endpointStr != null && openApi != null
       ? getOpenApiOperationMethodAndEndpoint(endpointStr, openApi)
-      : { operation: undefined, path: undefined };
+      : { operation: undefined };
   //const parameters = getAllOpenApiParameters(path, operation);
   const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth);
 
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
   const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
+  // Open API generated response examples
+  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
+
   useEffect(() => {
     const requestComponentSkeleton = apiComponents.find((apiComponent) => {
       return apiComponent.type === Component.RequestExample;
@@ -88,8 +150,6 @@ export function ApiSupplemental({
 
     setMdxResponseExample(response);
   }, [apiComponents]);
-  // Open API generated response examples
-  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
 
   useEffect(() => {
     if (endpointStr == null) {
@@ -98,11 +158,11 @@ export function ApiSupplemental({
 
     if (operation?.responses != null) {
       const responseExamplesOpenApi = Object.values(operation?.responses)
-        .map((resp: any) => {
-          if (responseHasExample(resp)) {
-            return resp?.content['application/json']?.examples['example-1']?.value;
+        .map((res: any) => {
+          if (responseHasSimpleExample(res)) {
+            return res?.content['application/json']?.examples['example-1']?.value;
           }
-          return '';
+          return generatedNestedExample(res);
         })
         .filter((example) => example !== '');
       if (responseExamplesOpenApi != null) {
@@ -175,8 +235,8 @@ export function ApiSupplemental({
     <div className="space-y-6 pb-6">
       {requestExamples}
       {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
-      {openApiResponseExamples.length === 0 && mdxResponseExample}
-      {openApiResponseExamples.length > 0 && (
+      {mdxResponseExample}
+      {!mdxResponseExample && openApiResponseExamples.length > 0 && (
         <ResponseExample
           children={{
             props: {
