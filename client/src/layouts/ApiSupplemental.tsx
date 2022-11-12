@@ -64,12 +64,14 @@ const recursivelyCheckIfHasExample = (schema: any) => {
 };
 
 const generatedNestedExample = (response: any) => {
-  if (response?.content['application/json']?.schema == null) {
+  if (
+    response?.content?.hasOwnProperty('application/json') == null ||
+    response.content['application/json']?.schema == null
+  ) {
     return '';
   }
 
   const schema = response.content['application/json'].schema;
-  console.log(schema);
   const constructedExample = recursivelyConstructExample(schema);
   const hasExample = recursivelyCheckIfHasExample(schema);
 
