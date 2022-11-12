@@ -14,8 +14,8 @@ export function useCurrentPath() {
   // from the server not knowing the link is supposed to be active by comparing
   // the original path.
   if (typeof window === 'undefined' && router.asPath.startsWith(basePathMiddlewareRemoves)) {
-    return router.asPath.substring(basePathMiddlewareRemoves.length);
+    return router.asPath.substring(basePathMiddlewareRemoves.length).split('#')[0];
   }
 
-  return router.asPath;
+  return router.asPath.split('#')[0];
 }
