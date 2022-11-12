@@ -13,14 +13,46 @@ import { generateRequestExamples } from '@/utils/generateAPIExamples';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 import { htmlToReactComponent } from '@/utils/htmlToReactComponent';
 
-const responseHasExample = (response: any) => {
-  return (
-    response?.content &&
-    response?.content.hasOwnProperty('application/json') &&
-    response?.content['application/json']?.examples &&
-    response?.content['application/json']?.examples.hasOwnProperty(['example-1']) &&
-    response?.content['application/json']?.examples['example-1']?.value
+const responseHasSimpleExample = (response: any): boolean => {
+  if (response?.content == null) {
+    return false;
+  }
+
+  return Boolean(
+    response.content &&
+      response.content.hasOwnProperty('application/json') &&
+      response.content['application/json']?.examples &&
+      response.content['application/json']?.examples.hasOwnProperty(['example-1']) &&
+      response.content['application/json']?.examples['example-1']?.value
   );
+};
+
+const recursivelyConstructExample = (schema: any, result = {}) => {
+  if (schema.example) {
+    return schema.example;
+  }
+
+  if (schema.properties) {
+    const propertiesWithExamples: Record<string, any> = {};
+
+    Object.entries(schema.properties).forEach(([propertyName, propertyValue]): any => {
+      propertiesWithExamples[propertyName] = recursivelyConstructExample(propertyValue);
+    });
+
+    return { result, ...propertiesWithExamples };
+  }
+
+  return result;
+};
+
+const generatedNestedExample = (response: any) => {
+  if (response?.content['application/json']?.schema == null) {
+    return '';
+  }
+
+  const schema = response.content['application/json'].schema;
+
+  return recursivelyConstructExample(schema);
 };
 
 type ApiComponent = {
@@ -50,16 +82,15 @@ export function ApiSupplemental({
     }
   }, []);
 
-  const { operation, path } =
-    openapi != null
-      ? getOpenApiOperationMethodAndEndpoint(openapi)
-      : { operation: undefined, path: undefined };
   //const parameters = getAllOpenApiParameters(path, operation);
   const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth);
 
   // Response and Request Examples from MDX
   const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
   const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
+  // Open API generated response examples
+  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
+
   useEffect(() => {
     const requestComponentSkeleton = apiComponents.find((apiComponent) => {
       return apiComponent.type === Component.RequestExample;
@@ -89,8 +120,6 @@ export function ApiSupplemental({
 
     setMdxResponseExample(response);
   }, [apiComponents]);
-  // Open API generated response examples
-  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
 
   useEffect(() => {
     if (openapi == null) {
@@ -99,11 +128,11 @@ export function ApiSupplemental({
     const { operation } = getOpenApiOperationMethodAndEndpoint(openapi);
     if (operation?.responses != null) {
       const responseExamplesOpenApi = Object.values(operation?.responses)
-        .map((resp: any) => {
-          if (responseHasExample(resp)) {
-            return resp?.content['application/json']?.examples['example-1']?.value;
+        .map((res: any) => {
+          if (responseHasSimpleExample(res)) {
+            return res?.content['application/json']?.examples['example-1']?.value;
           }
-          return '';
+          return generatedNestedExample(res);
         })
         .filter((example) => example !== '');
       if (responseExamplesOpenApi != null) {
