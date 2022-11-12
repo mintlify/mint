@@ -198,17 +198,7 @@ function nearestScrollableContainer(el: any) {
   return el;
 }
 
-function Nav({
-  nav,
-  basePathForAnchors,
-  children,
-  mobile = false,
-}: {
-  nav: any;
-  basePathForAnchors: string;
-  children?: any;
-  mobile?: boolean;
-}) {
+function Nav({ nav, children, mobile = false }: { nav: any; children?: any; mobile?: boolean }) {
   const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
@@ -263,9 +253,7 @@ function Nav({
         )}
       </div>
       <ul>
-        {config?.anchors != null && config.anchors.length > 0 && (
-          <TopLevelNav basePathForAnchors={basePathForAnchors} mobile={mobile} />
-        )}
+        {config?.anchors != null && config.anchors.length > 0 && <TopLevelNav mobile={mobile} />}
         {children}
         {nav &&
           numPages > 0 &&
@@ -302,23 +290,15 @@ function Nav({
   );
 }
 
-function TopLevelNav({
-  basePathForAnchors,
-  mobile,
-}: {
-  basePathForAnchors: string;
-  mobile: boolean;
-}) {
+function TopLevelNav({ mobile }: { mobile: boolean }) {
   const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
   const colors = useColors();
 
-  const isRootAnchorActive =
-    currentPath.startsWith('/') &&
-    !config?.anchors?.some((anchor: Anchor) =>
-      currentPath.startsWith(`/${basePathForAnchors}${anchor.url}`)
-    );
+  const isRootAnchorActive = !config?.anchors?.some((anchor: Anchor) =>
+    currentPath.startsWith(`/${anchor.url}`)
+  );
   return (
     <>
       <AnchorLink
@@ -343,7 +323,7 @@ function TopLevelNav({
         {config?.topAnchor?.name ?? 'Documentation'}
       </AnchorLink>
       {config?.anchors &&
-        getAnchorsToDisplay(config.anchors, selectedVersion, currentPath, basePathForAnchors).map(
+        getAnchorsToDisplay(config.anchors, selectedVersion, currentPath).map(
           (anchor: Anchor, i: number) => {
             const isAbsolute = isAbsoluteUrl(anchor.url);
             let href;
@@ -351,7 +331,7 @@ function TopLevelNav({
               href = anchor.url;
             } else {
               config.navigation?.every((nav: Navigation) => {
-                const page = findFirstNavigationEntry(nav, `${basePathForAnchors}${anchor.url}/`);
+                const page = findFirstNavigationEntry(nav, `${anchor.url}/`);
                 if (page) {
                   if (typeof page === 'string') {
                     href = `/${page}`;
@@ -372,7 +352,7 @@ function TopLevelNav({
                 name={anchor?.name}
                 icon={anchor?.icon}
                 color={colors.anchors[i + 1]}
-                isActive={currentPath.startsWith(`/${basePathForAnchors}${anchor.url}`)}
+                isActive={currentPath.startsWith(`/${anchor.url}`)}
               />
             );
           }
@@ -407,9 +387,8 @@ export function SidebarLayout({
 }) {
   const { config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
-  const basePathForAnchors = getBasePathForAnchors(config?.basePath);
 
-  const navForDivision = getNavForDivision(nav, config, basePathForAnchors, useCurrentPath());
+  const navForDivision = getNavForDivision(nav, config, useCurrentPath());
   const navForDivisionInVersion = getGroupsInVersion(navForDivision, selectedVersion);
 
   return (
@@ -417,7 +396,7 @@ export function SidebarLayout({
       <Wrapper allowOverflow={allowOverflow}>
         <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="hidden lg:block fixed z-20 top-[3.8125rem] bottom-0 left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
-            <Nav nav={navForDivisionInVersion} basePathForAnchors={basePathForAnchors} />
+            <Nav nav={navForDivisionInVersion} />
           </div>
           <div className="lg:pl-[20rem]">{children}</div>
         </div>
@@ -446,47 +425,28 @@ export function SidebarLayout({
               />
             </svg>
           </button>
-          <Nav
-            nav={navForDivisionInVersion}
-            basePathForAnchors={basePathForAnchors}
-            mobile={true}
-          />
+          <Nav nav={navForDivisionInVersion} mobile={true} />
         </div>
       </Dialog>
     </SidebarContext.Provider>
   );
 }
 
-function getBasePathForAnchors(basePath: string | undefined) {
-  // We need to add basePath to anchor paths because all page paths have it at the
-  // beggining when its set
-  basePath = optionallyRemoveLeadingSlash(basePath ?? '');
-  return basePath ? basePath + '/' : '';
-}
-
-function getNavForDivision(
-  nav: Groups,
-  config: Config | undefined,
-  basePathOrEmptyString: string,
-  currentPath: string
-) {
+function getNavForDivision(nav: Groups, config: Config | undefined, currentPath: string) {
   const currentPathNoLeadingSlash = optionallyRemoveLeadingSlash(currentPath);
 
   const currentDivision = config?.anchors?.find((anchor: Anchor) =>
-    currentPathNoLeadingSlash.startsWith(basePathOrEmptyString + anchor.url)
+    currentPathNoLeadingSlash.startsWith(anchor.url)
   );
 
-  let navForDivision = getGroupsInDivision(
-    nav,
-    currentDivision?.url ? [basePathOrEmptyString + currentDivision?.url] : []
-  );
+  let navForDivision = getGroupsInDivision(nav, currentDivision?.url ? [currentDivision?.url] : []);
 
   if (navForDivision.length === 0) {
     // Base docs include everything NOT in an anchor
     const divisions = config?.anchors?.filter((anchor: Anchor) => !isAbsoluteUrl(anchor.url)) || [];
     navForDivision = getGroupsNotInDivision(
       nav,
-      divisions.map((division: Anchor) => basePathOrEmptyString + division.url)
+      divisions.map((division: Anchor) => division.url)
     );
   }
 

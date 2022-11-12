@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { useBasePath } from '@/hooks/useBasePath';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import Icon from '@/ui/Icon';
 
@@ -32,11 +31,10 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
 };
 
 export function UserFeedback({ title }: { title: string }) {
-  const basePath = useBasePath();
   const path = useCurrentPath();
   return (
     <div className="flex items-center space-x-2">
-      <Link href={`${basePath}/api/suggest?path=${path}`}>
+      <Link href={`/api/suggest?path=${path}`}>
         <a
           className="relative w-fit flex items-center p-1.5 group"
           target="_blank"

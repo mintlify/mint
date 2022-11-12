@@ -117,7 +117,7 @@ export function ApiPlayground({
 
     try {
       const apiContext = getApiContext(apiBase, path, inputData, contentType, config?.api);
-      const { data } = await axios.post(`${config?.basePath ?? ''}/api/request`, {
+      const { data } = await axios.post('/api/request', {
         method,
         ...apiContext,
       });

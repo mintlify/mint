@@ -12,7 +12,6 @@ import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import { cleanBasePath } from '@/utils/paths/cleanBasePath';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -139,23 +138,14 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     } = data;
     let mdxSource: any = '';
 
-    // Base path defaults to an empty string when config.basePath is not set and when the config parsing errors
-    let config = {} as Config;
     try {
-      config = JSON.parse(stringifiedConfig) as Config;
-    } catch (err) {
-      console.log('⚠️ Warning: Failed to parse stringified config', err);
-    }
-    const basePath = cleanBasePath(config?.basePath);
-
-    try {
-      const response = await getMdxSource(content, basePath, {
+      const response = await getMdxSource(content, {
         section,
         meta,
       });
       mdxSource = response;
     } catch (err) {
-      mdxSource = await getMdxSource('🚧 Content under construction', basePath, { section, meta }); // placeholder content for when there is a syntax error.
+      mdxSource = await getMdxSource('🚧 Content under construction', { section, meta }); // placeholder content for when there is a syntax error.
       console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
     }
 

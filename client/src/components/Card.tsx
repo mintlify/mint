@@ -4,7 +4,6 @@ import isAbsoluteUrl from 'is-absolute-url';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import { useBasePath } from '@/hooks/useBasePath';
 import { ComponentIcon } from '@/ui/Icon';
 
 function DynamicLink({ href, children }: { href: string; children?: ReactNode }) {
@@ -37,12 +36,6 @@ export function Card({
   href?: string;
   children: React.ReactNode;
 }) {
-  const basePath = useBasePath();
-  if (href && !isAbsoluteUrl(href)) {
-    // Add base path to the start of relative links
-    href = basePath + href;
-  }
-
   const Icon =
     typeof icon === 'string' ? (
       <ComponentIcon

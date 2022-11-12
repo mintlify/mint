@@ -2,9 +2,7 @@ import isAbsoluteUrl from 'is-absolute-url';
 import type { Root } from 'mdast';
 import { map } from 'unist-util-map';
 
-// This is a regular function with a single param for options,
-// but we are unwrapping the parameter to get basePath directly.
-const withNextLinks = ({ basePath }: { basePath: string }) => {
+const withNextLinks = () => {
   return (tree: Root) => {
     return map(tree, (node: any) => {
       if (node.type === 'link') {
@@ -47,7 +45,7 @@ const withNextLinks = ({ basePath }: { basePath: string }) => {
               {
                 type: 'mdxJsxAttribute',
                 name: 'href',
-                value: basePath + url,
+                value: url,
               },
               {
                 type: 'mdxJsxAttribute',

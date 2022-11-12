@@ -9,7 +9,6 @@ import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
-import { useBasePath } from '@/hooks/useBasePath';
 import { Logo } from '@/ui/Logo';
 import { SearchButton } from '@/ui/search/Search';
 import getLogoHref from '@/utils/getLogoHref';
@@ -205,7 +204,6 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
 
 export function NavItems() {
   const { config } = useContext(ConfigContext);
-  const basePath = useBasePath();
 
   return (
     <>
@@ -224,10 +222,9 @@ export function NavItems() {
             </li>
           );
         } else {
-          // Topbar links to our own pages need the basePath appended
           return (
             <li key={topbarLink.name}>
-              <Link href={basePath + topbarLink.url} passHref={true}>
+              <Link href={topbarLink.url} passHref={true}>
                 <a className="font-medium hover:text-primary dark:hover:text-primary-light">
                   {topbarLink.name}
                 </a>
