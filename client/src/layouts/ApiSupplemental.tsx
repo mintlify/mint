@@ -45,14 +45,34 @@ const recursivelyConstructExample = (schema: any, result = {}) => {
   return result;
 };
 
+const recursivelyCheckIfHasExample = (schema: any) => {
+  if (schema.example) {
+    return true;
+  }
+
+  if (schema.properties) {
+    return Object.values(schema.properties).some((propertyValue): any => {
+      return recursivelyCheckIfHasExample(propertyValue);
+    });
+  }
+
+  return false;
+};
+
 const generatedNestedExample = (response: any) => {
   if (response?.content['application/json']?.schema == null) {
     return '';
   }
 
   const schema = response.content['application/json'].schema;
+  const constructedExample = recursivelyConstructExample(schema);
+  const hasExample = recursivelyCheckIfHasExample(schema);
 
-  return recursivelyConstructExample(schema);
+  if (hasExample) {
+    return constructedExample;
+  }
+
+  return '';
 };
 
 type ApiComponent = {
