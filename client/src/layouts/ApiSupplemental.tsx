@@ -27,7 +27,7 @@ const responseHasSimpleExample = (response: any): boolean => {
   );
 };
 
-const recursivelyConstructExample = (schema: any, result = {}) => {
+const recursivelyConstructExample = (schema: any, result = {}): any => {
   if (schema.example) {
     return schema.example;
   }
@@ -39,10 +39,14 @@ const recursivelyConstructExample = (schema: any, result = {}) => {
       propertiesWithExamples[propertyName] = recursivelyConstructExample(propertyValue);
     });
 
-    return { result, ...propertiesWithExamples };
+    return { ...result, ...propertiesWithExamples };
   }
 
-  return result;
+  if (schema.items) {
+    return [recursivelyConstructExample(schema.items)];
+  }
+
+  return schema.type ?? null;
 };
 
 const recursivelyCheckIfHasExample = (schema: any) => {
@@ -65,6 +69,7 @@ const generatedNestedExample = (response: any) => {
   }
 
   const schema = response.content['application/json'].schema;
+  console.log(schema);
   const constructedExample = recursivelyConstructExample(schema);
   const hasExample = recursivelyCheckIfHasExample(schema);
 
