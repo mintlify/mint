@@ -1,4 +1,5 @@
 import { ResizeObserver } from '@juggle/resize-observer';
+import * as Sentry from '@sentry/nextjs';
 import { stringify, parse } from 'flatted';
 import 'focus-visible';
 import 'intersection-observer';
@@ -12,6 +13,8 @@ import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+
+import { ResizeObserver } from '@juggle/resize-observer';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -104,8 +107,19 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { subdomain, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
+  Sentry.setContext("site", {
+    subdomain,
+    slug,
+  });
+
   // The entire build will fail when data is undefined
   const { data, status } = await getPage(subdomain, path);
+  if (data == null) {
+    Sentry.captureException('Page data is missing');
+    return {
+      notFound: true,
+    };
+  }
 
   if (status === 404) {
     return {
