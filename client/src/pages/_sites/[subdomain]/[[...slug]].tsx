@@ -13,6 +13,7 @@ import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+import { ErrorPage } from '@/pages/404';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -59,23 +60,7 @@ export default function Page({
       />
     );
   } catch (e) {
-    return (
-      <div>
-        <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-md mx-auto py-12 sm:py-20">
-            <div className="text-center">
-              <p className="text-xl font-semibold text-primary dark:text-primary-light">500</p>
-              <h1 className="mt-2 text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight sm:text-4xl sm:tracking-tight">
-                Page building error
-              </h1>
-              <p className="mt-2 text-lg text-slate-500 dark:text-slate-400">
-                We could not generate this page
-              </p>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <ErrorPage />;
   }
 }
 
