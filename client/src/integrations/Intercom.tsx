@@ -1,6 +1,6 @@
 import { IntercomProvider } from 'react-use-intercom';
 
-export default function (props: any) {
+export default function Intercom(props: any) {
   const { appId, children } = props;
 
   if (!appId) {

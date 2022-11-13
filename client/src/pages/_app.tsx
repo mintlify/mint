@@ -11,7 +11,6 @@ if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
 }
 
-// TODO - figure out what to put in the App vs. [[...slug]].tsx
 export default function App(props: any) {
   const { Component, pageProps } = props;
 
