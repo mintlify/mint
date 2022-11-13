@@ -29,13 +29,6 @@ const withNextLinks = () => {
                 value: 'noopener',
               },
             ],
-            children: [
-              {
-                type: 'mdxJsxFlowElement',
-                name: 'a',
-                children,
-              },
-            ],
           };
         } else {
           return {
