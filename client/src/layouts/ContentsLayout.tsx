@@ -2,6 +2,7 @@ import { MDXProvider } from '@mdx-js/react';
 import clsx from 'clsx';
 import { useState, useEffect, createContext, Fragment, useCallback, useContext } from 'react';
 
+import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
 import { usePrevNext } from '@/hooks/usePrevNext';
@@ -232,7 +233,7 @@ export function ContentsLayout({
       />
       <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
         <div id="content-wrapper" className="relative z-20 prose prose-slate mt-8 dark:prose-dark">
-          <MDXProvider components={{ Heading }}>{children}</MDXProvider>
+          <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
         </div>
       </ContentsContext.Provider>
 

@@ -1,25 +1,10 @@
 import { Card as GenericCard } from '@mintlify/components';
 import clsx from 'clsx';
-import isAbsoluteUrl from 'is-absolute-url';
-import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { ComponentIcon } from '@/ui/Icon';
 
-function DynamicLink({ href, children }: { href: string; children?: ReactNode }) {
-  if (href && isAbsoluteUrl(href)) {
-    return <span className="not-prose">{children}</span>;
-  }
-
-  // next/link is used for internal links to avoid extra network calls
-  return (
-    <span className="not-prose">
-      <Link href={href} passHref={true}>
-        {children}
-      </Link>
-    </span>
-  );
-}
+import { DynamicLink } from './DynamicLink';
 
 export function Card({
   title,
@@ -54,7 +39,6 @@ export function Card({
       className={clsx(href && 'hover:border-primary dark:hover:border-primary-light')}
       title={title}
       icon={Icon}
-      href={href}
     >
       {children}
     </GenericCard>
@@ -62,9 +46,11 @@ export function Card({
 
   if (href) {
     return (
-      <DynamicLink href={href}>
-        <Card />
-      </DynamicLink>
+      <div className="not-prose">
+        <DynamicLink href={href}>
+          <Card />
+        </DynamicLink>
+      </div>
     );
   }
 

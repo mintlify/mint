@@ -9,7 +9,6 @@ import withListRoles from './rehype/withListRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
-import withNextLinks from './remark/withNextLinks';
 import withRemoveImports from './remark/withRemoveImports';
 import withRemoveJavascript from './remark/withRemoveJavascript';
 import withRemoveUnknownJsx from './remark/withRemoveUnknownJsx';
@@ -26,7 +25,6 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
         withFrames,
         withTableOfContents,
         withSmartypants,
-        withNextLinks,
         withRemoveImports,
       ],
       rehypePlugins: [
