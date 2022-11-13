@@ -29,6 +29,7 @@ const withNextLinks = () => {
                 value: 'noopener',
               },
             ],
+            children,
           };
         } else {
           return {
