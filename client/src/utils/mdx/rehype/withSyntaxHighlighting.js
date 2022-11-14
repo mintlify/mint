@@ -1,17 +1,6 @@
 import { toString } from 'hast-util-to-string';
-import { refractor } from 'refractor';
-import dart from 'refractor/lang/dart.js';
-import docker from 'refractor/lang/docker.js';
-import jsx from 'refractor/lang/jsx.js';
-import protobuf from 'refractor/lang/protobuf.js';
-import tsx from 'refractor/lang/tsx.js';
+import { refractor } from 'refractor/lib/all';
 import visit from 'unist-util-visit';
-
-refractor.register(jsx);
-refractor.register(docker);
-refractor.register(protobuf);
-refractor.register(dart);
-refractor.register(tsx);
 
 const withSyntaxHighlighting = (options) => {
   options = options || {};

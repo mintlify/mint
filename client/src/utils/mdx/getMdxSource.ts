@@ -32,7 +32,7 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
         [
           withSyntaxHighlighting,
           {
-            ignoreMissing: true, // Ignore errors when on language is found
+            ignoreMissing: true, // Ignore errors when no language is found
           },
         ],
         withListRoles,
