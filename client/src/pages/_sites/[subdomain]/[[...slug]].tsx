@@ -9,11 +9,11 @@ import type { ParsedUrlQuery } from 'querystring';
 import SupremePageLayout from '@/layouts/SupremePageLayout';
 import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
+import { ErrorPage } from '@/pages/404';
 import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import { ErrorPage } from '@/pages/404';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
@@ -88,9 +88,10 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (!params) throw new Error('No path parameters found');
 
   const { subdomain, slug } = params;
+  console.log(slug);
   const path = slug ? slug.join('/') : 'index';
 
-  Sentry.setContext("site", {
+  Sentry.setContext('site', {
     subdomain,
     slug,
   });
