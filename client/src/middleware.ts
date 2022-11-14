@@ -9,7 +9,10 @@ export const config = {
      * 3. /fonts (inside /public)
      * 4. /examples (inside /public)
      * 5. all root files inside /public (e.g. /favicon.ico)
+     * Note: Currently the basePath is hard-coded.
+     * Seek solution based on env vars
      */
+    '/docs/((?!api|_next|fonts|examples|[\\w-]+\\.\\w+).*)',
     '/((?!api|_next|fonts|examples|[\\w-]+\\.\\w+).*)',
   ],
 };
