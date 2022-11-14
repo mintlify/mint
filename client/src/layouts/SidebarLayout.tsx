@@ -117,7 +117,7 @@ const GroupDropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const path = useCurrentPath();
+  const currentPath = useCurrentPath();
   const { group: name, pages } = group;
 
   if (!name || !pages) {
@@ -135,7 +135,7 @@ const GroupDropdown = ({
       !isOpen &&
       !isGroup(pages[0]) &&
       pages[0]?.href &&
-      !isPathInGroupPages(path, pages)
+      !isPathInGroupPages(currentPath, pages)
     ) {
       // Navigate to the first page if it exists
       router.push(pages[0].href);

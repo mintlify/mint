@@ -44,7 +44,7 @@ export const getPaths = async () => {
     data: { id },
   }: { data: { id: string } } = await axios.post(
     `${process.env.API_ENDPOINT}/api/v1/admin/build/paths`,
-    null,
+    { basePath: process.env.BASE_PATH },
     REQUEST_ADMIN_OPTIONS
   );
   const paths = await monitorGetPathsStatus(id);

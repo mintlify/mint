@@ -18,8 +18,8 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { Header } from '@/ui/Header';
-import { SearchProvider } from '@/ui/search/Search';
 import { Title } from '@/ui/Title';
+import { SearchProvider } from '@/ui/search/Search';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 
 // First Layout used by every page inside [[..slug]]
@@ -118,7 +118,7 @@ export default function SupremePageLayout({
             <GA4Script ga4={analyticsConfig.ga4} />
             <SearchProvider subdomain={subdomain}>
               <div
-                className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
+                className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
                 // Add background image
                 {...(config.backgroundImage && {
                   style: {
