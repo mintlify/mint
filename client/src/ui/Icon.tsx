@@ -252,6 +252,7 @@ function isBrandsIcon(icon?: string): boolean {
     'google-plus-g',
     'google-plus-square',
     'google-wallet',
+    'golang',
     'gratipay',
     'grav',
     'gripfire',
