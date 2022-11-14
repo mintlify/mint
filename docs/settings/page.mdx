@@ -60,27 +60,25 @@ openapi: "GET /users"
 
 You can show a description that shows directly under the title with the `description` metadata.
 
+```md Description Example
+description: "Your description goes here."
+```
+
 ## Sidebar Title
 
 You can show a different title in the navigation with the `sidebarTitle` metadata. This is useful if your title is long and you want something shorter in the navigation links.
 
-Here is an example:
-
-<CodeGroup>
-
-```md Schema
+```md Sidebar Title Example
 ---
-title: "Long title for the page"
-sidebarTitle: "Short for sidebar"
+title: "Your very long page title you want to shorten"
+sidebarTitle: "Short title"
 ---
-```  
-  
-</CodeGroup>
-  
+```
+
 ## Search Engine Optimization
 
 You can set meta tags like the image set when shared on social media by passing them into your page's metadata. Meta tags with colons need to be wrapped in quotes.
 
-```md Example
+```md Meta Tags Example
 "twitter:image": "/images/your-photo.jpg"
 ```
