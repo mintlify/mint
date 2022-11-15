@@ -1,4 +1,10 @@
+import { Config } from "../../../client/src/config";
 import { validateNavigation } from "./utils/validateNavigation";
+import { validateName } from "./utils/validateName";
+import { validateFavicon } from "./utils/validateFavicon";
+import { validateAnchors } from "./utils/validateAnchors";
+import { validateColors } from "./utils/validateColors";
+import { validateAnalytics } from "./utils/validateAnalytics";
 
 export type MintValidation = {
   status: "success" | "error";
@@ -6,7 +12,7 @@ export type MintValidation = {
   errors: string[];
 };
 
-export function validateMintConfig(config: any): MintValidation {
+export function validateMintConfig(config: Config): MintValidation {
   if (config == null) {
     return {
       status: "error",
@@ -16,7 +22,6 @@ export function validateMintConfig(config: any): MintValidation {
   }
 
   // TO DO: Verify config is an object and not a string, array, etc. If it is not an object, return an error.
-
   // TO DO: Write validation for other config fields.
   // Make each type of validation its own function under /utils/
   // 1. Name must be a string and cannot be missing.
@@ -40,14 +45,27 @@ export function validateMintConfig(config: any): MintValidation {
   // Notice how the pages can be a string OR another group.
   // Always warn if a page array is left empty.
   // If "version" is set on a group inside navigation, warn if the version doesn't exist in config.versions
-  validateNavigation(config.navigation);
+
+  // Can we have more than one navigation array? according to the config type we can.
+  const validateNavigationResult = validateNavigation(config.navigation);
 
   // TO DO: If multiple validation steps fail, merge the warnings and errors arrays.
   // You can probably keep appending all the messages to an array, then fall .flat() at the end.
 
+  // const validateNameResult = validateName(config.name);
+  // const validateFaviconResult = validateFavicon(config.favicon);
+  // const validateAnchorsResult = validateAnchors(config.anchors);
+  // const validateColorsResult = validateColors(config.colors);
+  const validateAnalyticsResult = validateAnalytics(config.analytics);
+
+  const mergedResults = {
+    ...validateNavigationResult,
+    ...validateAnalyticsResult,
+  };
+
   return {
-    status: "success",
-    warnings: [],
-    errors: [],
+    status: mergedResults.errors.length ? "error" : "success",
+    warnings: mergedResults.warnings,
+    errors: mergedResults.errors,
   };
 }

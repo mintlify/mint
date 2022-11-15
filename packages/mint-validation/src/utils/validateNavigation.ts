@@ -1,4 +1,6 @@
-export function validateNavigation(navigation: any) {
+import { Navigation } from "../../../../client/src/config";
+
+export function validateNavigation(navigation: Navigation[]) {
   if (navigation == null) {
     return {
       warnings: ["Navigation is missing"],
@@ -16,6 +18,8 @@ export function validateNavigation(navigation: any) {
       warnings: ["Navigation is an empty array, no pages will be shown"],
     };
   }
+
+  // TODO: Go over all the navigation  and sub navigation objects checking the same conditions
 
   return {};
 }
