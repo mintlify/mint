@@ -46,11 +46,22 @@ const recursivelyConstructExample = (schema: any, result = {}): any => {
     return [recursivelyConstructExample(schema.items)];
   }
 
-  return schema.type ?? null;
+  let returnValue = null;
+  if (schema.default) {
+    returnValue = schema.default;
+  }
+  else if (schema.enum?.length > 0) {
+    returnValue = schema.enum[0];
+  }
+  else if (schema.type) {
+    returnValue = schema.type;
+  }
+
+  return returnValue;
 };
 
 const recursivelyCheckIfHasExample = (schema: any) => {
-  if (schema.example) {
+  if (schema.example || schema.type) {
     return true;
   }
 
