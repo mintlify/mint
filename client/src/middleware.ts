@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const config = {
-  matcher: [
-    /*
-     * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /fonts (inside /public)
-     * 4. /examples (inside /public)
-     * 5. all root files inside /public (e.g. /favicon.ico)
-     */
-    '/((?!api/|_next/).*)',
-  ],
-};
-
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
+  const { pathname } = url;
+
+  const shouldNotApplyMiddleware = pathname.includes('/api/') || pathname.includes('/_next/') || pathname.includes('/fonts/');
+
+  if (shouldNotApplyMiddleware) {
+    return;
+  }
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   // process.env.HOST_NAME must be set when deploying a multi-tenant setup
