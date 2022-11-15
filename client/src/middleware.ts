@@ -12,7 +12,6 @@ export const config = {
      * Note: Currently the basePath is hard-coded.
      * Seek solution based on env vars
      */
-    '/docs/((?!api/|_next/|fonts/|examples/|[\\w-]+\\.\\w+).*)',
     '/((?!api/|_next/|fonts/|examples/|[\\w-]+\\.\\w+).*)',
   ],
 };

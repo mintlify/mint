@@ -35,6 +35,18 @@ export default withSentryConfig(
       largePageDataBytes: 128 * 10000, // 1280KB instead of the default 128Kb
     },
     basePath: process.env.BASE_PATH,
+    async redirects() {
+      return process.env.BASE_PATH
+        ? [
+            {
+              source: '/',
+              destination: process.env.BASE_PATH,
+              basePath: false, // you can't write '/' as the source if you auto-prefix the base path to it
+              permanent: true,
+            },
+          ]
+        : [];
+    },
     webpack(config) {
       config.module.rules.push({
         test: /\.(png|jpe?g|gif|webp|avif|mp4)$/i,
