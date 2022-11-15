@@ -13,7 +13,6 @@ export default function middleware(req: NextRequest) {
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   // process.env.HOST_NAME must be set when deploying a multi-tenant setup
   const hostname = req.headers.get('host') || process.env.HOST_NAME || '';
-
   const isProd = process.env.NODE_ENV === 'production' && process.env.VERCEL === '1';
   const currentHost = isProd
     ? // Replace both mintlify.app and mintlify.dev because both domains are used for hosting by Mintlify
