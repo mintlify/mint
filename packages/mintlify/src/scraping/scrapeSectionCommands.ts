@@ -91,11 +91,8 @@ export async function scrapeSectionAutomatically(argv: any) {
 function validateFramework(framework: Frameworks | undefined) {
   if (!framework) {
     console.log(
-      "Could not detect the framework automatically. Please use one of:"
+      "Could not detect the framework automatically. We only support Docusaurus (V2 and V3), GitBook, and ReadMe."
     );
-    console.log("scrape-page-docusaurus");
-    console.log("scrape-page-gitbook");
-    console.log("scrape-page-readme");
-    return process.exit(1);
+    process.exit();
   }
 }

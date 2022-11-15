@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function TabAdornment({ className }: { className: string }) {
   return <div className={clsx('pointer-events-none absolute inset-0', className)} />;
@@ -81,7 +81,12 @@ export type CodeGroupProps = { children: any; isSmallText?: boolean };
  * @param {CodeBlock[]} props.children
  */
 export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
-  let [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   if (!Array.isArray(children)) {
     children = [children];
@@ -123,7 +128,7 @@ export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
               isSmallText ? 'text-xs leading-5' : 'text-sm leading-6'
             )}
           >
-            {child.props.children}
+            {hydrated ? child.props.children : null}
           </Tab.Panel>
         ))}
       </Tab.Panels>
