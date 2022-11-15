@@ -51,7 +51,8 @@
       "pages": [
         "settings/customization",
         "settings/page",
-        "settings/versioning"
+        "settings/versioning",
+        "settings/subdirectory-hosting"
       ]
     },
     {

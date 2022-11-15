@@ -36,7 +36,6 @@ interface ParsedDataProps {
   stringifiedOpenApi?: string;
 }
 
-// TODO - handle incorrect urls
 export default function Page({
   stringifiedMdxSource,
   stringifiedData,
@@ -88,7 +87,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (!params) throw new Error('No path parameters found');
 
   const { subdomain, slug } = params;
-  console.log(slug);
   const path = slug ? slug.join('/') : 'index';
 
   Sentry.setContext('site', {
@@ -145,7 +143,10 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       });
       mdxSource = response;
     } catch (err) {
-      mdxSource = await getMdxSource('🚧 Content under construction', { section, meta }); // placeholder content for when there is a syntax error.
+      mdxSource = await getMdxSource(
+        '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
+        { section, meta }
+      ); // placeholder content for when there is a syntax error.
       console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
     }
 

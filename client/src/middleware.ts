@@ -19,7 +19,7 @@ export const config = {
 
 export default function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  console.log({ url });
+
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   // process.env.HOST_NAME must be set when deploying a multi-tenant setup
   const hostname = req.headers.get('host') || process.env.HOST_NAME || '';
