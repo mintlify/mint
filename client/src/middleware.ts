@@ -9,10 +9,8 @@ export const config = {
      * 3. /fonts (inside /public)
      * 4. /examples (inside /public)
      * 5. all root files inside /public (e.g. /favicon.ico)
-     * Note: Currently the basePath is hard-coded.
-     * Seek solution based on env vars
      */
-    '/((?!api/|_next/|fonts/|examples/|[\\w-]+\\.\\w+).*)',
+    '/((?!api/|_next/).*)',
   ],
 };
 
@@ -47,5 +45,6 @@ export default function middleware(req: NextRequest) {
 
   // rewrite everything else to `/_sites/[site] dynamic route
   url.pathname = `/_sites/${currentHost}${url.pathname}`;
+
   return NextResponse.rewrite(url);
 }
