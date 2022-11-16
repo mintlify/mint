@@ -9,6 +9,7 @@ export type ParamProps = {
   default?: string;
   type?: string;
   required?: boolean;
+  optional?: boolean;
   hidden?: boolean;
 
   // Used to flow data to the API Playground
@@ -32,7 +33,10 @@ export function ParamField({
   default: defaultValue,
   type,
   required = false,
+  optional = false,
   hidden = false,
+
+  // Do not delete. Used to flow data to the API Playground
   last,
   placeholder,
   enum: enumValues,
@@ -49,6 +53,7 @@ export function ParamField({
       defaultValue={defaultValue}
       type={type}
       required={required}
+      optional={optional}
       hidden={hidden}
       nameClasses="text-primary dark:text-primary-light"
     >
