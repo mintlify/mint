@@ -21,7 +21,6 @@ type TopLevelProps = {
 const Anchor = forwardRef(
   ({ children, href, className, icon, isActive, onClick, color }: TopLevelProps, ref: any) => {
     const [hovering, setHovering] = useState(false);
-    const usePrimaryColorForText = color == null || color.includes('linear-gradient');
 
     return (
       <a
@@ -30,15 +29,11 @@ const Anchor = forwardRef(
         onClick={onClick}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
-        style={isActive && !usePrimaryColorForText ? { color: color } : {}}
         className={clsx(
           'group flex items-center lg:text-sm lg:leading-6',
           className,
           isActive
-            ? [
-                'font-semibold',
-                usePrimaryColorForText ? 'text-primary dark:text-primary-light' : '',
-              ]
+            ? ['font-semibold', 'text-primary dark:text-primary-light']
             : 'font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300'
         )}
       >
