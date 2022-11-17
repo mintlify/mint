@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
 import Link from 'next/link';
+import { createContext, useContext } from 'react';
 
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import Icon from '@/ui/Icon';
@@ -82,21 +82,23 @@ export function UserFeedback({ title }: { title: string }) {
   );
 }
 
-
-export function FeedbackProvider({subdomain, children}: { subdomain: string, children: any }) {
+export function FeedbackProvider({ subdomain, children }: { subdomain: string; children: any }) {
   const createSuggestHref = (path: string) => {
-    return `https://docs.mintlify.com/api/v1/app/suggest/${subdomain}?path=${path}.mdx`
-  }
+    return `https://docs.mintlify.com/api/v1/app/suggest/${subdomain}?path=${path}.mdx`;
+  };
 
   const createIssueHref = (path: string, title: string) => {
-    return `https://docs.mintlify.com/api/v1/app/issue/${subdomain}?path=${path}.mdx&title=${title}`
-  }
-  return <FeedbackContext.Provider
-  value={{
-    createSuggestHref,
-    createIssueHref
-  }}
->
-  {children}
-</FeedbackContext.Provider>
+    return `https://docs.mintlify.com/api/v1/app/issue/${subdomain}?path=${path}.mdx&title=${title}`;
+  };
+
+  return (
+    <FeedbackContext.Provider
+      value={{
+        createSuggestHref,
+        createIssueHref,
+      }}
+    >
+      {children}
+    </FeedbackContext.Provider>
+  );
 }
