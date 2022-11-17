@@ -1,18 +1,23 @@
 import Link from 'next/link';
 
-export function DynamicLink(props: any) {
-  if ((props.href && props.href.startsWith('/')) || props.href.startsWith('#')) {
+export function DynamicLink({ href, children }: { href?: string; children?: any }) {
+  if (href?.startsWith('/') || href?.startsWith('#')) {
     // next/link is used for internal links to avoid extra network calls
     return (
-      <Link href={props.href} passHref={true}>
-        <a>{props.children}</a>
+      <Link href={href} passHref={true}>
+        <a>{children}</a>
       </Link>
     );
   }
 
+  if (href?.startsWith('./') || href?.startsWith('../')) {
+    // Cannot use a Link, it doesn't work because it would be relative to the [[...slug]] file
+    return <a href={href}>{children}</a>;
+  }
+
   return (
-    <a href={props.href} target="_blank" rel="noreferrer">
-      {props.children}
+    <a href={href} target="_blank" rel="noreferrer">
+      {children}
     </a>
   );
 }
