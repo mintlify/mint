@@ -240,7 +240,7 @@ export function ApiPlayground({
         </div>
       </div>
       {!isSendingRequest && apiResponse && (
-        <div className="py-3 px-3 max-h-48 whitespace-pre overflow-scroll border-t border-slate-200 dark:border-slate-700  dark:text-slate-300 font-mono text-xs leading-5">
+        <div className="py-3 px-3 max-h-60 whitespace-pre overflow-scroll border-t border-slate-200 dark:border-slate-700  dark:text-slate-300 font-mono text-xs leading-5">
           <span
             className="language-json max-h-72 overflow-scroll"
             dangerouslySetInnerHTML={{
