@@ -28,7 +28,7 @@ export function DocumentationLayout({
     setSelectedVersion(meta.version);
   }
 
-  const title = meta.sidebarTitle || meta.title || slugToTitle(meta.href);
+  const title = meta.sidebarTitle || meta.title || slugToTitle(meta.href || '');
 
   return (
     <>
