@@ -83,6 +83,7 @@ export const allowedComponents = [
   'img',
   'iframe',
   'video',
+  'div',
 ];
 
 export default components;

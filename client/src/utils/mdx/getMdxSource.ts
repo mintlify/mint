@@ -7,11 +7,11 @@ import withCodeBlocks from './rehype/withCodeBlocks.js';
 import withLayouts from './rehype/withLayouts.js';
 import withListRoles from './rehype/withListRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
+import withRemoveUnknownJsx from './rehype/withRemoveUnknownJsx';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
 import withRemoveImports from './remark/withRemoveImports';
 import withRemoveJavascript from './remark/withRemoveJavascript';
-import withRemoveUnknownJsx from './remark/withRemoveUnknownJsx';
 import withTableOfContents from './remark/withTableOfContents.js';
 
 const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
@@ -21,13 +21,13 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
       remarkPlugins: [
         remarkGfm,
         withRemoveJavascript,
-        withRemoveUnknownJsx,
         withFrames,
         withTableOfContents,
         withSmartypants,
         withRemoveImports,
       ],
       rehypePlugins: [
+        withRemoveUnknownJsx,
         withCodeBlocks,
         [
           withSyntaxHighlighting,
