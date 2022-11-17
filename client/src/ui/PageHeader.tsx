@@ -1,4 +1,4 @@
-import { UserFeedback } from '@/layouts/UserFeedback';
+import { UserFeedback } from '@/ui/Feedback';
 import { ApiPlayground, ApiComponent } from '@/ui/ApiPlayground';
 
 type PageHeaderProps = {

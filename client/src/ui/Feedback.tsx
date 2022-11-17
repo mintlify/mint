@@ -1,7 +1,11 @@
+import { createContext, useContext } from "react";
 import Link from 'next/link';
 
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import Icon from '@/ui/Icon';
+
+// @ts-ignore
+const FeedbackContext = createContext();
 
 const FeedbackTooltip = ({ message }: { message: string }) => {
   return (
@@ -32,9 +36,11 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
 
 export function UserFeedback({ title }: { title: string }) {
   const path = useCurrentPath();
+  const { createSuggestHref, createIssueHref } = useContext(FeedbackContext) as any;
+
   return (
     <div className="flex items-center space-x-2">
-      <Link href={`/api/suggest?path=${path}`}>
+      <Link href={createSuggestHref(path)}>
         <a
           className="relative w-fit flex items-center p-1.5 group"
           target="_blank"
@@ -53,7 +59,7 @@ export function UserFeedback({ title }: { title: string }) {
           <FeedbackTooltip message="Edit this page" />
         </a>
       </Link>
-      <Link href={`/api/issue?path=${path}&title=${title}`}>
+      <Link href={createIssueHref(path, title)}>
         <a
           className="relative w-fit flex items-center p-1.5 group fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200 dark:hover:text-slate-300"
           target="_blank"
@@ -74,4 +80,23 @@ export function UserFeedback({ title }: { title: string }) {
       </Link>
     </div>
   );
+}
+
+
+export function FeedbackProvider({subdomain, children}: { subdomain: string, children: any }) {
+  const createSuggestHref = (path: string) => {
+    return `https://docs.mintlify.com/api/v1/app/suggest/${subdomain}?path=${path}.mdx`
+  }
+
+  const createIssueHref = (path: string, title: string) => {
+    return `https://docs.mintlify.com/api/v1/app/issue/${subdomain}?path=${path}.mdx&title=${title}`
+  }
+  return <FeedbackContext.Provider
+  value={{
+    createSuggestHref,
+    createIssueHref
+  }}
+>
+  {children}
+</FeedbackContext.Provider>
 }

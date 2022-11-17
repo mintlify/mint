@@ -21,6 +21,7 @@ import { Header } from '@/ui/Header';
 import { Title } from '@/ui/Title';
 import { SearchProvider } from '@/ui/search/Search';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
+import { FeedbackProvider } from '@/ui/Feedback';
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
@@ -116,6 +117,7 @@ export default function SupremePageLayout({
               }}
             />
             <GA4Script ga4={analyticsConfig.ga4} />
+            <FeedbackProvider subdomain={subdomain}>
             <SearchProvider subdomain={subdomain}>
               <div
                 className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
@@ -143,6 +145,7 @@ export default function SupremePageLayout({
                 </DocumentationLayout>
               </div>
             </SearchProvider>
+            </FeedbackProvider>
           </AnalyticsContext.Provider>
         </ConfigContext.Provider>
       </VersionContextController>
