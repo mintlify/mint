@@ -8,7 +8,10 @@ export default class Document extends NextDocument {
 
   render() {
     return (
-      <Html lang="en" className="dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem]">
+      <Html
+        lang="en"
+        className="dark [--scroll-mt:9.875rem] lg:[--scroll-mt:6.3125rem] bg-background-light bg-background-dark"
+      >
         <Head />
         <Main />
         <NextScript />
