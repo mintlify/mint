@@ -5,10 +5,12 @@ import { useState, useEffect, createContext, Fragment, useCallback, useContext }
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { SidebarContext } from '@/layouts/SidebarLayout';
 import { Footer } from '@/ui/Footer';
 import { PageHeader } from '@/ui/PageHeader';
+import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 import { ApiSupplemental } from './ApiSupplemental';
 import { OpenApiContent } from './OpenApiContent';
@@ -200,6 +202,7 @@ export function ContentsLayout({
   section,
   apiComponents,
 }: ContentsLayoutProps) {
+  const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const toc = [...tableOfContents];
 
@@ -221,7 +224,7 @@ export function ContentsLayout({
       )}
     >
       <PageHeader
-        title={meta.title}
+        title={meta.title || slugToTitle(currentPath)}
         description={meta.description}
         api={meta.api}
         openapi={meta.openapi}
