@@ -22,6 +22,7 @@ import {
   isEqualIgnoringLeadingSlash,
   optionallyRemoveLeadingSlash,
 } from '@/utils/paths/leadingSlashHelpers';
+import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 import { Anchor, Config, findFirstNavigationEntry, Navigation } from '../types/config';
 import { StyledAnchorLink, AnchorLink } from '../ui/AnchorLink';
@@ -75,7 +76,7 @@ const NavItem = forwardRef(
     const isActive = isEqualIgnoringLeadingSlash(groupPage.href, currentPath);
 
     const endpointStr = pageApi || openapi;
-    const title = groupPage.sidebarTitle || groupPage.title;
+    const title = groupPage.sidebarTitle || groupPage.title || slugToTitle(href || '');
 
     return (
       <li ref={ref}>
@@ -371,7 +372,6 @@ function Wrapper({
   return <div className={allowOverflow ? undefined : 'overflow-hidden'}>{children}</div>;
 }
 
-// TODO: Set remaining types
 export function SidebarLayout({
   navIsOpen,
   setNavIsOpen,

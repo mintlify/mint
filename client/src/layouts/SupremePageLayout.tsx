@@ -17,11 +17,10 @@ import { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
+import { FeedbackProvider } from '@/ui/Feedback';
 import { Header } from '@/ui/Header';
-import { Title } from '@/ui/Title';
 import { SearchProvider } from '@/ui/search/Search';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
-import { FeedbackProvider } from '@/ui/Feedback';
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
@@ -38,7 +37,6 @@ export default function SupremePageLayout({
     meta: PageMetaTags;
     section: string | undefined;
     metaTagsForSeo: PageMetaTags;
-    title: string;
   };
   config: Config;
   openApi: any;
@@ -46,7 +44,7 @@ export default function SupremePageLayout({
   subdomain: string;
 }) {
   useProgressBar(config?.colors?.primary);
-  const { meta, section, metaTagsForSeo, title, nav } = parsedData;
+  const { meta, section, metaTagsForSeo, nav } = parsedData;
   let [navIsOpen, setNavIsOpen] = useState(false);
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
@@ -68,7 +66,6 @@ export default function SupremePageLayout({
         <ConfigContext.Provider value={{ config, nav, openApi, subdomain }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />
-            <Title suffix={config.name}>{title}</Title>
             <Head>
               {favicons.icons.map((favicon) => (
                 <link
@@ -118,33 +115,33 @@ export default function SupremePageLayout({
             />
             <GA4Script ga4={analyticsConfig.ga4} />
             <FeedbackProvider subdomain={subdomain}>
-            <SearchProvider subdomain={subdomain}>
-              <div
-                className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
-                // Add background image
-                {...(config.backgroundImage && {
-                  style: {
-                    background: `url('${config.backgroundImage}') no-repeat fixed top right`,
-                  },
-                })}
-              >
-                <Header
-                  hasNav={Boolean(config.navigation?.length)}
-                  navIsOpen={navIsOpen}
-                  onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                  title={meta?.title}
-                  section={section}
-                />
-                <DocumentationLayout
-                  nav={nav}
-                  navIsOpen={navIsOpen}
-                  setNavIsOpen={setNavIsOpen}
-                  meta={meta}
+              <SearchProvider subdomain={subdomain}>
+                <div
+                  className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
+                  // Add background image
+                  {...(config.backgroundImage && {
+                    style: {
+                      background: `url('${config.backgroundImage}') no-repeat fixed top right`,
+                    },
+                  })}
                 >
-                  <MDXRemote components={components} {...mdxSource} />
-                </DocumentationLayout>
-              </div>
-            </SearchProvider>
+                  <Header
+                    hasNav={Boolean(config.navigation?.length)}
+                    navIsOpen={navIsOpen}
+                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+                    title={meta?.title}
+                    section={section}
+                  />
+                  <DocumentationLayout
+                    nav={nav}
+                    navIsOpen={navIsOpen}
+                    setNavIsOpen={setNavIsOpen}
+                    meta={meta}
+                  >
+                    <MDXRemote components={components} {...mdxSource} />
+                  </DocumentationLayout>
+                </div>
+              </SearchProvider>
             </FeedbackProvider>
           </AnalyticsContext.Provider>
         </ConfigContext.Provider>

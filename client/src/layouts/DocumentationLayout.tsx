@@ -6,6 +6,7 @@ import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { SidebarLayout } from '@/layouts/SidebarLayout';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
+import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 export function DocumentationLayout({
   navIsOpen,
@@ -27,7 +28,7 @@ export function DocumentationLayout({
     setSelectedVersion(meta.version);
   }
 
-  const title = meta.sidebarTitle || meta.title;
+  const title = meta.sidebarTitle || meta.title || slugToTitle(meta.href);
 
   return (
     <>

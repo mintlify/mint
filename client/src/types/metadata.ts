@@ -9,7 +9,7 @@ export const META_TAGS_FOR_LAYOUT = [
 ];
 
 export type PageMetaTags = {
-  title?: string;
+  title?: string; // Can use slugToTitle(href) as a default when title is undefined
   sidebarTitle?: string;
   description?: string;
   api?: string;

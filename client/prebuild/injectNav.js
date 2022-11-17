@@ -3,8 +3,8 @@ import matter from 'gray-matter';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+import { slugToTitle } from '../src/utils/titleText/slugToTitle.js';
 import { getOpenApiTitleAndDescription } from './getOpenApiContext.js';
-import { slugToTitle } from './slugToTitle.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
