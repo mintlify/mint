@@ -117,7 +117,7 @@ export default function SupremePageLayout({
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div
-                  className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
+                  className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
                   // Add background image
                   {...(config.backgroundImage && {
                     style: {
