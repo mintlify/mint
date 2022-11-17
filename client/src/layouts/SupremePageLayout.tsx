@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
+import GTMScript from '@/analytics/GTMScript';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
