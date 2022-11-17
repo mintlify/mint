@@ -11,13 +11,6 @@ html {
 
 body {
   min-height: 100%;
-  background: var(--background-light);
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: var(--background-dark);
-  }
 }
 
 abbr[title] {
