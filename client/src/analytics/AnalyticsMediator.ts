@@ -11,6 +11,7 @@ import {
   GoogleAnalyticsConfigInterface,
   LogrocketConfigInterface,
   PirschConfigInterface,
+  GoogleTagManagerConfigInterface,
 } from '@/analytics/AbstractAnalyticsImplementation';
 import PostHogAnalytics from '@/analytics/implementations/posthog';
 
@@ -26,6 +27,7 @@ export type AnalyticsMediatorConstructorInterface = {
   amplitude?: AmplitudeConfigInterface;
   fathom?: FathomConfigInterface;
   ga4?: GoogleAnalyticsConfigInterface;
+  gtm?: GoogleTagManagerConfigInterface;
   logrocket?: LogrocketConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;

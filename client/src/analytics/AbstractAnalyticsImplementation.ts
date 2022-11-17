@@ -10,6 +10,10 @@ export type GoogleAnalyticsConfigInterface = {
   measurementId?: string;
 };
 
+export type GoogleTagManagerConfigInterface = {
+  tagId?: string;
+};
+
 export type HotjarConfigInterface = {
   hjid?: string;
   hjsv?: string;
@@ -36,6 +40,7 @@ export type PostHogConfigInterface = {
 export type ConfigInterface = AmplitudeConfigInterface &
   FathomConfigInterface &
   GoogleAnalyticsConfigInterface &
+  GoogleTagManagerConfigInterface &
   HotjarConfigInterface &
   LogrocketConfigInterface &
   MixpanelConfigInterface &

@@ -114,6 +114,7 @@ export default function SupremePageLayout({
               }}
             />
             <GA4Script ga4={analyticsConfig.ga4} />
+            <GTMScript gtm={analyticsConfig.gtm} />
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div
