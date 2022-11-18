@@ -2,6 +2,7 @@ import {
   AmplitudeConfigInterface,
   FathomConfigInterface,
   GoogleAnalyticsConfigInterface,
+  GoogleTagManagerConfigInterface,
   HotjarConfigInterface,
   LogrocketConfigInterface,
   MixpanelConfigInterface,
@@ -47,6 +48,7 @@ type Analytics = {
   amplitude?: AmplitudeConfigInterface;
   fathom?: FathomConfigInterface;
   ga4?: GoogleAnalyticsConfigInterface;
+  gtm?: GoogleTagManagerConfigInterface;
   logrocket?: LogrocketConfigInterface;
   hotjar?: HotjarConfigInterface;
   mixpanel?: MixpanelConfigInterface;

@@ -91,7 +91,8 @@
           "pages": [
             "site-stats/set-up/amplitude",
             "site-stats/set-up/fathom",
-            "site-stats/set-up/ga4",
+            "site-stats/set-up/google-analytics",
+            "site-stats/set-up/google-tag-manager",
             "site-stats/set-up/hotjar",
             "site-stats/set-up/logrocket",
             "site-stats/set-up/mixpanel",

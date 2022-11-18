@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
+import GTMScript from '@/analytics/GTMScript';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
@@ -114,17 +115,19 @@ export default function SupremePageLayout({
               }}
             />
             <GA4Script ga4={analyticsConfig.ga4} />
+            <GTMScript gtm={analyticsConfig.gtm} />
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div
-                  className="antialiased bg-background-light dark:bg-background-dark min-h-screen text-slate-500 dark:text-slate-400"
-                  // Add background image
+                  className="relative antialiased text-slate-500 dark:text-slate-400"
+                >
+                  <span className="fixed inset-0 bg-background-light dark:bg-background-dark"></span>
+                  <span className="z-0 fixed inset-0"
                   {...(config.backgroundImage && {
                     style: {
                       background: `url('${config.backgroundImage}') no-repeat fixed top right`,
                     },
-                  })}
-                >
+                  })}></span>
                   <Header
                     hasNav={Boolean(config.navigation?.length)}
                     navIsOpen={navIsOpen}

@@ -1,5 +1,5 @@
-import { UserFeedback } from '@/ui/Feedback';
 import { ApiPlayground, ApiComponent } from '@/ui/ApiPlayground';
+import { UserFeedback } from '@/ui/Feedback';
 
 type PageHeaderProps = {
   title?: string;

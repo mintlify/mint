@@ -5,7 +5,8 @@ description: "Mintlify integrates with a variety of analytics platforms."
 
 - [Amplitude](/site-stats/set-up/amplitude)
 - [Fathom](/site-stats/set-up/fathom)
-- [Google Analytics 4 (GA4)](/site-stats/set-up/ga4)
+- [Google Analytics 4 (GA4)](/site-stats/set-up/google-analytics)
+- [Google Tag Manager](/site-stats/set-up/google-tag-manager)
 - [HotJar](/site-stats/set-up/hotjar)
 - [Logrocket](/site-stats/set-up/logrocket)
 - [Mixpanel](/site-stats/set-up/mixpanel)
@@ -32,7 +33,10 @@ The syntax for `mint.json` is below. You only need to include entries for the pl
     },
     "ga4": {
         "measurementId": "required"
-    }
+    },
+    "gtm": {
+        "tagId": "required"
+    },
     "hotjar": {
         "hjid": "required",
         "hjsv": "required"
