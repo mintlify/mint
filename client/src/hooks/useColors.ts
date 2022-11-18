@@ -8,7 +8,7 @@ export function useColors(): Colors {
 
   const primaryColor = config?.colors?.primary ?? '#16A34A';
 
-  const defaultAnchorColor = colorToBackground(config?.colors?.anchors) ?? primaryColor;
+  const defaultAnchorColor = colorToBackground(config?.colors?.anchors);
   const firstAnchorColor = colorToBackground(config?.topAnchor?.color) ?? defaultAnchorColor;
 
   // Include the color for the first anchor even though the config object
