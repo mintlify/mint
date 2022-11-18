@@ -105,7 +105,7 @@ export function StyledAnchorLink({
           isActive ? 'dark:bg-white' : 'dark:bg-slate-500'
         )}
       />
-    );
+    ); 
   return (
     <AnchorLink
       {...props}
