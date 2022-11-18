@@ -120,13 +120,13 @@ export default function SupremePageLayout({
               <SearchProvider subdomain={subdomain}>
                 <div
                   className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
-                  // Add background image
+                >
+                  <span className="absolute inset-0"
                   {...(config.backgroundImage && {
                     style: {
                       background: `url('${config.backgroundImage}') no-repeat fixed top right`,
                     },
-                  })}
-                >
+                  })}></span>
                   <Header
                     hasNav={Boolean(config.navigation?.length)}
                     navIsOpen={navIsOpen}
