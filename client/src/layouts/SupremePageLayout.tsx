@@ -119,9 +119,10 @@ export default function SupremePageLayout({
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div
-                  className="antialiased bg-background-light dark:bg-background-dark text-slate-500 dark:text-slate-400"
+                  className="relative antialiased text-slate-500 dark:text-slate-400"
                 >
-                  <span className="fixed inset-0"
+                  <span className="fixed inset-0 bg-background-light dark:bg-background-dark"></span>
+                  <span className="z-0 fixed inset-0"
                   {...(config.backgroundImage && {
                     style: {
                       background: `url('${config.backgroundImage}') no-repeat fixed top right`,
