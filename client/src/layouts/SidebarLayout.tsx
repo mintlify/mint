@@ -25,7 +25,7 @@ import {
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 import { Anchor, Config, findFirstNavigationEntry, Navigation } from '../types/config';
-import { StyledAnchorLink, AnchorLink } from '../ui/AnchorLink';
+import { StyledAnchorLink } from '../ui/AnchorLink';
 
 type SidebarContextType = {
   nav: any;
@@ -300,27 +300,17 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
   );
   return (
     <>
-      <AnchorLink
+      <StyledAnchorLink
         mobile={mobile}
         href="/"
         key="/"
         isActive={isRootAnchorActive}
         className="mb-4"
-        shadow="group-hover:shadow-primary-ultralight dark:group-hover:bg-primary"
         color={colors.anchors[0]}
-        icon={
-          <Icon
-            icon="book-open"
-            iconType="duotone"
-            className={clsx(
-              `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
-              isRootAnchorActive ? 'dark:bg-white' : 'dark:bg-slate-500'
-            )}
-          />
-        }
+        icon={config?.topAnchor?.icon || "book-open"}        
+        name={config?.topAnchor?.name ?? 'Documentation'}
       >
-        {config?.topAnchor?.name ?? 'Documentation'}
-      </AnchorLink>
+      </StyledAnchorLink>
       {config?.anchors &&
         getAnchorsToDisplay(config.anchors, selectedVersion, currentPath).map(
           (anchor: Anchor, i: number) => {

@@ -100,9 +100,7 @@ export type Config = {
   topbarCtaButton?: NavbarLink;
   topbarLinks?: NavbarLink[];
   navigation?: Navigation[];
-  topAnchor?: {
-    name: string;
-  };
+  topAnchor?: Anchor;
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
   backgroundImage?: string;
