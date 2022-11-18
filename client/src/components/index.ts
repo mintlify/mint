@@ -85,6 +85,7 @@ export const allowedComponents = [
   'video',
   'div',
   'source',
+  'a',
 ];
 
 export default components;
