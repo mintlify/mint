@@ -5,7 +5,7 @@ description: "Display inline code and code blocks"
 
 ## Basic
 
-### Inline code
+### Inline Code
 
 To denote a `word` or `phrase` as code, enclose it in backticks (`).
 
@@ -13,7 +13,7 @@ To denote a `word` or `phrase` as code, enclose it in backticks (`).
 To denote a `word` or `phrase` as code, enclose it in backticks (`).
 ```
 
-### Code block
+### Code Block
 
 Use [fenced code blocks](https://www.markdownguide.org/extended-syntax/#fenced-code-blocks) by enclosing code by three backticks and follow the leading ticks with the programming language of your snippet to get syntax highlighting.
 
@@ -36,6 +36,18 @@ class HelloWorld {
 }
 ```
 ````
+
+### Syntax Highlighting
+
+````md Add Syntax Highlighting by Writing the Language
+```your-programming-language-goes-here
+
+```
+````
+
+We use [Prism](https://prismjs.com/#supported-languages) for syntax highlighting. [Test Drive Prism](https://prismjs.com/test.html#language=markup) lists all the languages supported.
+
+Code snippets without a language will use one color for everything.
 
 ## Advanced
 
@@ -89,7 +101,7 @@ class HelloWorld {
 </CodeGroup>
 ````
 
-### Highlight lines
+### Highlight Lines
 
 Add `>` to the start of a line in a [code block](#code-block) to have it highlighted
 

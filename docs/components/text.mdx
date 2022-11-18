@@ -1,55 +1,48 @@
 ---
-title: "Simple Text"
+title: "Rich Text"
 description: "Text, title, and styling in standard markdown"
 ---
 
-## Title
+## Titles
 
-Best used for section headers
+Best used for section headers.
 
 ```md
-## Title
+## Titles
 ```
 
-### Subtitle
+### Subtitles
 
-Best use to subsection headers
+Best use to subsection headers.
 
 ```md
-### Subtitle
+### Subtitles
 ```
 
 <Tip>
 
-Each **title** and **subtitle** creates an anchor and also shows up on the table of contents on the right
+Each **title** and **subtitle** creates an anchor and also shows up on the table of contents on the right.
 
 </Tip>
 
-## Styling
+## Text Formatting
 
-### Bold
+We support most markdown formatting. Simply add `**`, `_`, or `~` around text to format it.
 
-I just love **bold text**.
+| Style         | How to write it   | Result          |
+| ------------- | ----------------- | --------------- |
+| Bold          | `**bold**`        | **bold**        |
+| Italic        | `_italic_`        | _italic_        |
+| Strikethrough | `~strikethrough~` | ~strikethrough~ |
 
-```md
-I just love **bold text**.
-```
+You can combine these. For example, write `**_bold and italic_**` to get **_bold and italic_** text.
 
-### Italic
+You need to use HTML to write superscript and subscript text. That is, add `<sup>` or `<sub>` around your text.
 
-Italicized text is the _cat's meow_.
-
-```md
-Italicized text is the _cat's meow_.
-```
-
-### Bold and Italic
-
-This text is **_really important_**.
-
-```md
-This text is **_really important_**.
-```
+| Text Size   | How to write it          | Result                 |
+| ----------- | ------------------------ | ---------------------- |
+| Superscript | `<sup>superscript</sup>` | <sup>superscript</sup> |
+| Subscript   | `<sub>subscript</sub>`   | <sub>subscript</sub>   |
 
 ## Blockquotes
 
