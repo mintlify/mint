@@ -105,11 +105,6 @@ export type Config = {
   };
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
-  classes?: {
-    topbarCtaButton?: string;
-    navigationItem?: string;
-    logo?: string;
-  };
   backgroundImage?: string;
   analytics?: Analytics;
   integrations?: Integrations;

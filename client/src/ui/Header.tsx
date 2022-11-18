@@ -163,8 +163,6 @@ function GitHubCta({ button }: { button: TopbarCta }) {
 }
 
 function TopBarCtaButton({ button }: { button: TopbarCta }) {
-  const { config } = useContext(ConfigContext);
-
   if (button.type === 'github') {
     return <GitHubCta button={button} />;
   }
@@ -174,28 +172,18 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
       <Link href={button.url}>
         <a
           target="_blank"
-          className={clsx(
-            config?.classes?.topbarCtaButton ||
-              'relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5'
-          )}
+          className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5"
         >
           <span>{button.name}</span>
-          {!config?.classes?.topbarCtaButton && (
-            <svg
-              width="6"
-              height="3"
-              className="h-2 overflow-visible -rotate-90"
-              aria-hidden="true"
-            >
-              <path
-                d="M0 0L3 3L6 0"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          )}
+          <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">
+            <path
+              d="M0 0L3 3L6 0"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
         </a>
       </Link>
     </li>

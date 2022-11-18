@@ -61,7 +61,6 @@ const NavItem = forwardRef(
     ref: any
   ) => {
     const currentPath = useCurrentPath();
-    const { config } = useContext(ConfigContext);
 
     if (groupPage == null) {
       return null;
@@ -87,8 +86,7 @@ const NavItem = forwardRef(
               isActive
                 ? 'text-primary border-current font-semibold dark:text-primary-light'
                 : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
-              getPaddingByLevel(level),
-              config?.classes?.navigationItem
+              getPaddingByLevel(level)
             )}
           >
             {endpointStr && (
