@@ -91,6 +91,8 @@ export const allowedComponents = [
   'a',
   'li',
   'br',
+  'ol',
+  'ul',
 ];
 
 export default components;
