@@ -32,7 +32,7 @@
       "name": "Community",
       "icon": "comments",
       "color": "#2564eb",
-      "url": "https://discord.gg/b499CK8P9g"
+      "url": "https://discord.gg/4mgCwRchR6"
     },
     {
       "name": "GitHub",
@@ -44,7 +44,7 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["quickstart"]
+      "pages": ["quickstart", "local-testing"]
     },
     {
       "group": "Settings",
