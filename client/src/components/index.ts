@@ -89,6 +89,8 @@ export const allowedComponents = [
   'sup',
   'sub',
   'a',
+  'li',
+  'br',
 ];
 
 export default components;
