@@ -263,7 +263,7 @@ export function SearchProvider({ subdomain, children }: { subdomain: string; chi
     }
 
     const { hits } = await index.search(query, {
-      filters: `orgID:${subdomain}`,
+      filters: `orgID:${subdomain} OR customDomains:${subdomain}`,
     });
 
     setHits(filterHitsToCurrentVersion(hits as Hit[], selectedVersion, pathToVersion));
