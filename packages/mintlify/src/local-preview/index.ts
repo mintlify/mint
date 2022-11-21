@@ -12,32 +12,12 @@ import {
   CLIENT_PATH,
   HOME_DIR,
   DOT_MINTLIFY,
-  LAST_INVOCATION_PATH_FILE_LOCATION,
 } from "../constants.js";
 import { injectFavicons } from "./utils/injectFavicons.js";
 import listener from "./utils/listener.js";
 import { createPage, createMetadataFileFromPages } from "./utils/metadata.js";
 import { updateConfigFile } from "./utils/mintConfigFile.js";
 import { buildLogger, ensureYarn } from "../util.js";
-import clearCommand from "./helper-commands/clearCommand.js";
-
-const saveInvocationPath = async () => {
-  await fse.outputFile(LAST_INVOCATION_PATH_FILE_LOCATION, CMD_EXEC_PATH);
-};
-
-const cleanOldFiles = async () => {
-  const lastInvocationPathExists = await pathExists(
-    LAST_INVOCATION_PATH_FILE_LOCATION
-  );
-  if (!lastInvocationPathExists) return;
-  const lastInvocationPath = (
-    await readFile(LAST_INVOCATION_PATH_FILE_LOCATION)
-  ).toString();
-  if (lastInvocationPath !== CMD_EXEC_PATH) {
-    // clean if invoked in new location
-    await clearCommand({});
-  }
-};
 
 const { readFile } = _promises;
 
@@ -133,7 +113,6 @@ const promptForYarn = async () => {
 
 const dev = async () => {
   shell.cd(HOME_DIR);
-  await cleanOldFiles();
   await promptForYarn();
   const logger = buildLogger("Starting a local Mintlify instance...");
   await fse.ensureDir(path.join(DOT_MINTLIFY, "mint"));
@@ -195,7 +174,6 @@ const dev = async () => {
     `);
     process.exit(1);
   }
-  await saveInvocationPath();
   await copyFiles(logger);
   run();
 };

@@ -8,19 +8,16 @@ import {
   scrapePageAutomatically,
   scrapePageWrapper,
 } from "./scraping/scrapePageCommands.js";
-import { scrapeDocusaurusPage } from "./scraping/site-scrapers/scrapeDocusaurusPage.js";
 import { scrapeGitBookPage } from "./scraping/site-scrapers/scrapeGitBookPage.js";
 import { scrapeReadMePage } from "./scraping/site-scrapers/scrapeReadMePage.js";
 import {
   scrapeSectionAutomatically,
   scrapeSectionAxiosWrapper,
   scrapeGitbookSectionCommand,
-  scrapeDocusaurusSectionCommand,
 } from "./scraping/scrapeSectionCommands.js";
 import { scrapeReadMeSection } from "./scraping/site-scrapers/scrapeReadMeSection.js";
 import dev from "./local-preview/index.js";
 import installDepsCommand from "./local-preview/helper-commands/installDepsCommand.js";
-import clearCommand from "./local-preview/helper-commands/clearCommand.js";
 
 // TODO - add descriptions to the command options https://github.com/yargs/yargs/blob/HEAD/docs/api.md#commandmodule
 yargs(hideBin(process.argv))
@@ -37,12 +34,6 @@ yargs(hideBin(process.argv))
     "Install dependencies for local Mintlify",
     () => {},
     installDepsCommand
-  )
-  .command(
-    "clear",
-    "Clear cache",
-    () => {},
-    (args) => clearCommand(args)
   )
   .command("init", "Generate a mintlify template", () => {}, initCommand)
   .command("page", "Generate a new page", () => {}, generatePageTemplate)
