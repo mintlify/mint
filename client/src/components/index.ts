@@ -93,6 +93,11 @@ export const allowedComponents = [
   'br',
   'ol',
   'ul',
+  'head',
+  'script',
+  'link',
+  // Custom tags
+  'zapier-zap-templates',
 ];
 
 export default components;
