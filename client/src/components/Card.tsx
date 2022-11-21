@@ -19,7 +19,7 @@ export function Card({
   iconType?: string;
   color?: string;
   href?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   const Icon =
     typeof icon === 'string' ? (
