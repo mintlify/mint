@@ -1,10 +1,10 @@
 import { Card as GenericCard } from '@mintlify/components';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { ReactNode } from 'react';
+import React from 'react';
 
 import { ComponentIcon } from '@/ui/Icon';
-
-import { DynamicLink } from './DynamicLink';
 
 export function Card({
   title,
@@ -39,18 +39,19 @@ export function Card({
       className={clsx(href && 'hover:border-primary dark:hover:border-primary-light')}
       title={title}
       icon={Icon}
+      href={href}
     >
       {children}
     </GenericCard>
   );
 
-  if (href) {
+  // We don't use DynamicLink because we cannot wrap the Card in an extra <a> tag without
+  // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
+  if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
     return (
-      <div className="not-prose">
-        <DynamicLink href={href}>
-          <Card />
-        </DynamicLink>
-      </div>
+      <Link href={href}>
+        <Card />
+      </Link>
     );
   }
 
