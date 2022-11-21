@@ -3,7 +3,7 @@ import 'prismjs/components/prism-json';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
-import { Editor } from '@/components/Editor';
+import { CodeSnippet } from '@/components/CodeSnippet';
 import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
@@ -49,11 +49,9 @@ const recursivelyConstructExample = (schema: any, result = {}): any => {
   let returnValue = null;
   if (schema.default) {
     returnValue = schema.default;
-  }
-  else if (schema.enum?.length > 0) {
+  } else if (schema.enum?.length > 0) {
     returnValue = schema.enum[0];
-  }
-  else if (schema.type) {
+  } else if (schema.type) {
     returnValue = schema.type;
   }
 
@@ -144,7 +142,9 @@ export function ApiSupplemental({
     const request: JSX.Element | undefined = requestComponentSkeleton && (
       <RequestExample
         children={requestComponentSkeleton.children.map((child) => {
-          return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
+          return (
+            <CodeSnippet filename={child.filename}>{htmlToReactComponent(child.html)}</CodeSnippet>
+          );
         })}
       />
     );
@@ -154,7 +154,9 @@ export function ApiSupplemental({
     const response: JSX.Element | undefined = responseComponentSkeleton && (
       <ResponseExample
         children={responseComponentSkeleton.children.map((child) => {
-          return <Editor filename={child.filename}>{htmlToReactComponent(child.html)}</Editor>;
+          return (
+            <CodeSnippet filename={child.filename}>{htmlToReactComponent(child.html)}</CodeSnippet>
+          );
         })}
       />
     );

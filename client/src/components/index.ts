@@ -16,7 +16,7 @@ import { Accordion, AccordionGroup } from '@/components/Accordion';
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Card } from '@/components/Card';
 import { CodeGroup, SnippetGroup } from '@/components/CodeGroup';
-import { Editor } from '@/components/Editor';
+import { CodeSnippet } from '@/components/CodeSnippet';
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { Param, ParamField } from '@/components/Param';
@@ -29,6 +29,7 @@ const components: any = {
   AccordionGroup,
   Heading,
   CodeGroup,
+  CodeSnippet,
   SnippetGroup,
   RequestSimple,
   RequestExample,
@@ -48,7 +49,6 @@ const components: any = {
   Tab,
   Tooltip,
   ContentsLayout,
-  Editor,
   Frame,
   Link,
 };
@@ -58,6 +58,7 @@ export const allowedComponents = [
   'AccordionGroup',
   'Heading',
   'CodeGroup',
+  'CodeSnippet',
   'SnippetGroup',
   'RequestSimple',
   'RequestExample',
@@ -77,7 +78,6 @@ export const allowedComponents = [
   'Tab',
   'Tooltip',
   'ContentsLayout',
-  'Editor',
   'Frame',
   'Link',
   'img',

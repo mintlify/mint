@@ -27,19 +27,19 @@ const withCodeBlocks = () => {
         node.children[0].data.meta = filename;
       }
 
+      // Used by CodeGroups to show multiple file names side by side
       if (code.data?.meta) {
         filename = code.data.meta;
       }
-      if (filename) {
-        const wrap = {
-          type: 'mdxJsxFlowElement',
-          name: 'Editor',
-          attributes: [{ type: 'mdxJsxAttribute', name: 'filename', value: filename }],
-          data: { _mdxExplicitJsx: true },
-        };
-        wrap.children = [node];
-        parent.children[i] = wrap;
-      }
+
+      const wrap = {
+        type: 'mdxJsxFlowElement',
+        name: 'CodeSnippet',
+        attributes: [{ type: 'mdxJsxAttribute', name: 'filename', value: filename ?? '' }],
+        data: { _mdxExplicitJsx: true },
+      };
+      wrap.children = [node];
+      parent.children[i] = wrap;
     });
     tree.children = [...preTree.children, ...tree.children];
   };

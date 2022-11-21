@@ -3,7 +3,7 @@ import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-python';
 
 import { RequestExample } from '@/components/ApiExample';
-import { Editor } from '@/components/Editor';
+import { CodeSnippet } from '@/components/CodeSnippet';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
 
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from './api';
@@ -71,7 +71,7 @@ export function generateRequestExamples(
     <RequestExample>
       {snippets.map((snippet) => {
         return (
-          <Editor filename={snippet.filename} key={snippet.filename}>
+          <CodeSnippet filename={snippet.filename} key={snippet.filename}>
             <pre>
               <CopyToClipboard />
               <code
@@ -84,7 +84,7 @@ export function generateRequestExamples(
                 }}
               />
             </pre>
-          </Editor>
+          </CodeSnippet>
         );
       })}
     </RequestExample>

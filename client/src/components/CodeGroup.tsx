@@ -82,11 +82,6 @@ export type CodeGroupProps = { children: any; isSmallText?: boolean };
  */
 export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   if (!Array.isArray(children)) {
     children = [children];
@@ -128,7 +123,7 @@ export function CodeGroup({ children, isSmallText }: CodeGroupProps) {
               isSmallText ? 'text-xs leading-5' : 'text-sm leading-6'
             )}
           >
-            {hydrated ? child.props.children : null}
+            {child.props.children}
           </Tab.Panel>
         ))}
       </Tab.Panels>
