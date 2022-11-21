@@ -36,7 +36,12 @@ export function Card({
 
   const Card = () => (
     <GenericCard
-      className={clsx(href && 'hover:border-primary dark:hover:border-primary-light')}
+      className={clsx(
+        // We need to set these as important because mint adds an underline to links with a border
+        // that overrides our own border color.
+        '!border-slate-200 dark:!border-slate-800',
+        href && 'hover:!border-primary dark:hover:!border-primary-light'
+      )}
       title={title}
       icon={Icon}
       href={href}
