@@ -307,10 +307,9 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
         isActive={isRootAnchorActive}
         className="mb-4"
         color={colors.anchors[0]}
-        icon={config?.topAnchor?.icon || "book-open"}        
+        icon={config?.topAnchor?.icon || 'book-open'}
         name={config?.topAnchor?.name ?? 'Documentation'}
-      >
-      </StyledAnchorLink>
+      ></StyledAnchorLink>
       {config?.anchors &&
         getAnchorsToDisplay(config.anchors, selectedVersion, currentPath).map(
           (anchor: Anchor, i: number) => {
