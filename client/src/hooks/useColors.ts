@@ -8,15 +8,15 @@ export function useColors(): Colors {
 
   const primaryColor = config?.colors?.primary ?? '#16A34A';
 
-  const defaultAnchorColor = colorToBackground(config?.colors?.anchors) ?? primaryColor;
-  const firstAnchorColor = colorToBackground(config?.topAnchor?.color);
+  const defaultAnchorColor = colorToBackground(config?.colors?.anchors);
+  const firstAnchorColor = colorToBackground(config?.topAnchor?.color) ?? defaultAnchorColor;
 
   // Include the color for the first anchor even though the config object
   // doesn't define it explicitly
   const anchors = [firstAnchorColor];
 
   config?.anchors?.forEach((anchor) => {
-    const anchorColor = colorToBackground(anchor.color);
+    const anchorColor = colorToBackground(anchor.color) ?? defaultAnchorColor;
     if (!anchorColor) return;
 
     anchors.push(anchorColor);
