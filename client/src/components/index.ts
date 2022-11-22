@@ -83,7 +83,12 @@ export const allowedComponents = [
   'img',
   'iframe',
   'video',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
   'div',
+  'span',
   'section',
   'source',
   'sup',
@@ -96,6 +101,8 @@ export const allowedComponents = [
   'head',
   'script',
   'link',
+  'svg',
+  'path',
   // Custom tags
   'zapier-zap-templates',
 ];
