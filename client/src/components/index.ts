@@ -15,8 +15,8 @@ import Link from 'next/link';
 import { Accordion, AccordionGroup } from '@/components/Accordion';
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { Card } from '@/components/Card';
+import { CodeBlock } from '@/components/CodeBlock';
 import { CodeGroup, SnippetGroup } from '@/components/CodeGroup';
-import { CodeSnippet } from '@/components/CodeSnippet';
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { Param, ParamField } from '@/components/Param';
@@ -29,7 +29,7 @@ const components: any = {
   AccordionGroup,
   Heading,
   CodeGroup,
-  CodeSnippet,
+  CodeBlock,
   SnippetGroup,
   RequestSimple,
   RequestExample,
@@ -58,7 +58,7 @@ export const allowedComponents = [
   'AccordionGroup',
   'Heading',
   'CodeGroup',
-  'CodeSnippet',
+  'CodeBlock',
   'SnippetGroup',
   'RequestSimple',
   'RequestExample',

@@ -3,7 +3,7 @@ import 'prismjs/components/prism-json';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { RequestExample, ResponseExample } from '@/components/ApiExample';
-import { CodeSnippet } from '@/components/CodeSnippet';
+import { CodeBlock } from '@/components/CodeBlock';
 import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
 import { CopyToClipboard } from '@/icons/CopyToClipboard';
@@ -143,7 +143,7 @@ export function ApiSupplemental({
       <RequestExample
         children={requestComponentSkeleton.children.map((child) => {
           return (
-            <CodeSnippet filename={child.filename}>{htmlToReactComponent(child.html)}</CodeSnippet>
+            <CodeBlock filename={child.filename}>{htmlToReactComponent(child.html)}</CodeBlock>
           );
         })}
       />
@@ -155,7 +155,7 @@ export function ApiSupplemental({
       <ResponseExample
         children={responseComponentSkeleton.children.map((child) => {
           return (
-            <CodeSnippet filename={child.filename}>{htmlToReactComponent(child.html)}</CodeSnippet>
+            <CodeBlock filename={child.filename}>{htmlToReactComponent(child.html)}</CodeBlock>
           );
         })}
       />

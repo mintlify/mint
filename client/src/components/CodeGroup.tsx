@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function TabAdornment({ className }: { className: string }) {
   return <div className={clsx('pointer-events-none absolute inset-0', className)} />;
