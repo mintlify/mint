@@ -1,10 +1,11 @@
+import type { Root } from 'mdast';
 import visit from 'unist-util-visit';
 
 const withCodeBlocks = () => {
-  return (tree) => {
+  return (tree: Root) => {
     let preTree = { children: [] };
 
-    visit(tree, 'element', (node, i, parent) => {
+    visit(tree, 'element', (node: any, i: number, parent: any) => {
       if (node?.tagName !== 'pre') return node;
       if (node?.children && node?.children[0]?.tagName !== 'code') return node;
       const code = node.children[0];
@@ -27,7 +28,7 @@ const withCodeBlocks = () => {
         name: 'CodeBlock',
         attributes: [{ type: 'mdxJsxAttribute', name: 'filename', value: filename ?? '' }],
         data: { _mdxExplicitJsx: true },
-      };
+      } as any;
       wrap.children = [node];
       parent.children[i] = wrap;
     });

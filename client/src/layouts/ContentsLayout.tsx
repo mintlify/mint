@@ -145,33 +145,6 @@ function useTableOfContents(tableOfContents: Section[]) {
     };
   }, [headings, tableOfContents]);
 
-  useEffect(() => {
-    // Wait 50ms to load
-    setTimeout(() => {
-      document.querySelectorAll('.copy-to-clipboard').forEach((item) => {
-        item.addEventListener('click', () => {
-          const codeElement = item.nextSibling;
-          if (!codeElement || !window.getSelection) {
-            return;
-          }
-          const selection = window.getSelection();
-          const range = document.createRange();
-          range.selectNodeContents(codeElement);
-          selection?.removeAllRanges();
-          selection?.addRange(range);
-
-          navigator.clipboard.writeText(selection?.toString() || '');
-
-          const tooltip = item.getElementsByClassName('tooltip')[0];
-          tooltip.classList.remove('hidden');
-          setTimeout(() => {
-            tooltip.classList.add('hidden');
-          }, 2000);
-        });
-      });
-    }, 50);
-  }, []);
-
   return { currentSection, registerHeading, unregisterHeading };
 }
 

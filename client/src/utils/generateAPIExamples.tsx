@@ -72,8 +72,9 @@ export function generateRequestExamples(
       {snippets.map((snippet) => {
         return (
           <CodeBlock filename={snippet.filename} key={snippet.filename}>
+            {/* CodeBlock cannot copy text added with dangerouslySetInnerHTML */}
+            <div className="hidden">{snippet.code}</div>
             <pre>
-              <CopyToClipboard />
               <code
                 dangerouslySetInnerHTML={{
                   __html: Prism.highlight(

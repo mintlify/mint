@@ -6,7 +6,6 @@ import { RequestExample, ResponseExample } from '@/components/ApiExample';
 import { CodeBlock } from '@/components/CodeBlock';
 import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
-import { CopyToClipboard } from '@/icons/CopyToClipboard';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { generateRequestExamples } from '@/utils/generateAPIExamples';
@@ -184,40 +183,10 @@ export function ApiSupplemental({
     }
   }, [endpointStr, openApi]);
 
-  useEffect(() => {
-    // Hacky approach to wait 50ms until document loads
-    setTimeout(() => {
-      document.querySelectorAll('.copy-to-clipboard').forEach((item) => {
-        item.addEventListener(
-          'click',
-          () => {
-            const codeElement = item.nextSibling;
-            if (!codeElement || !window.getSelection) {
-              return;
-            }
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(codeElement);
-            selection?.removeAllRanges();
-            selection?.addRange(range);
-
-            navigator.clipboard.writeText(selection?.toString() || '');
-
-            const tooltip = item.getElementsByClassName('tooltip')[0];
-            tooltip.classList.remove('hidden');
-            setTimeout(() => {
-              tooltip.classList.add('hidden');
-            }, 2000);
-          },
-          true
-        );
-      });
-    }, 50);
-  }, []);
-
   const ResponseExampleChild = ({ code }: { code: string }) => (
     <pre className="language-json">
-      <CopyToClipboard />
+      {/* CodeBlock cannot copy text added with dangerouslySetInnerHTML */}
+      <div className="hidden">{code}</div>
       <code
         className="language-json"
         dangerouslySetInnerHTML={{

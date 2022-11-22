@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm';
 import withSmartypants from 'remark-smartypants';
 
 import withApiComponents from './rehype/withApiComponents.js';
-import withCodeBlocks from './rehype/withCodeBlocks.js';
+import withCodeBlocks from './rehype/withCodeBlocks';
 import withLayouts from './rehype/withLayouts.js';
 import withListRoles from './rehype/withListRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
