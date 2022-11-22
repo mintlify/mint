@@ -34,7 +34,7 @@ export function Card({
       icon
     );
 
-  const Card = () => (
+  const Card = ({ href }: { href?: string }) => (
     <GenericCard
       className={clsx(
         // We need to set these as important because mint adds an underline to links with a border
@@ -54,7 +54,7 @@ export function Card({
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
   if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
     return (
-      <Link href={href}>
+      <Link href={href} passHref>
         <Card />
       </Link>
     );
