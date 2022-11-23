@@ -4,7 +4,6 @@ import 'prismjs/components/prism-python';
 
 import { RequestExample } from '@/components/ApiExample';
 import { CodeBlock } from '@/components/CodeBlock';
-import { CopyToClipboard } from '@/icons/CopyToClipboard';
 
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from './api';
 
