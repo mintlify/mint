@@ -8,7 +8,7 @@ import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { getParamGroupsFromApiComponents } from '@/utils/api';
-import { generateRequestExamples } from '@/utils/generateAPIExamples';
+import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateAPIExamples';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 import { htmlToReactComponent } from '@/utils/htmlToReactComponent';
 
