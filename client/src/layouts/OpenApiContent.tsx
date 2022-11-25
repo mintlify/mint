@@ -1,6 +1,6 @@
 // TODO: Refactor this file to improve readability
 import { Tab, Tabs } from '@mintlify/components';
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import { Expandable } from '@/components/Expandable';
@@ -8,8 +8,9 @@ import { Heading } from '@/components/Heading';
 import { ParamField } from '@/components/Param';
 import { ResponseField } from '@/components/ResponseField';
 import { ConfigContext } from '@/context/ConfigContext';
-import { ApiPlayground, APIBASE_CONFIG_STORAGE, ApiComponent } from '@/ui/ApiPlayground';
-import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
+import { ApiComponent } from '@/ui/ApiPlayground';
+import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
+import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
 type OpenApiContentProps = {
@@ -23,13 +24,6 @@ const MarkdownComponents = {
 
 export const getAllOpenApiParameters = (path: any, operation: any) => {
   return (path.parameters || []).concat(operation.parameters || []);
-};
-
-const getType = (schema: any) => {
-  if (schema.type === 'string' && schema.format === 'binary') {
-    return 'file';
-  }
-  return schema.type;
 };
 
 const getTypeName = (type: string[] | string) => {
@@ -166,19 +160,9 @@ function ExpandableFields({ schema }: any) {
   );
 }
 
-export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
-  const { config, openApi } = useContext(ConfigContext);
-  const [apiBaseIndex, setApiBaseIndex] = useState(0);
-  const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(
-    endpointStr,
-    openApi
-  );
-  useEffect(() => {
-    const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
-    if (configuredApiBaseIndex != null) {
-      setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
-    }
-  }, [openApi]);
+export function OpenApiContent({ endpointStr }: OpenApiContentProps) {
+  const { openApi } = useContext(ConfigContext);
+  const { operation, path } = getOpenApiOperationMethodAndEndpoint(endpointStr, openApi);
 
   if (operation == null) {
     return null;
@@ -188,17 +172,9 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
 
   const parameters = getAllOpenApiParameters(path, operation);
   const Parameters = parameters.map((parameter: any, i: number) => {
-    const { name, description, required, schema, in: paramType, example } = parameter;
+    const { name, description, required, schema, in: paramType } = parameter;
     const paramName = { [paramType]: name };
-    const type = schema == null ? parameter?.type : getType(schema);
-    const paramField = createParamField({
-      [paramType]: name,
-      required,
-      type,
-      default: schema?.default,
-      placeholder: example || schema?.enum,
-    });
-    apiComponents.push(paramField);
+    const type = schema == null ? parameter?.type : getParameterType(schema);
     return (
       <ParamField
         key={i}
@@ -223,7 +199,7 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
     bodySchema?.properties &&
     Object.entries(bodySchema.properties)?.map(([property, propertyValue]: any, i: number) => {
       const required = bodySchema.required?.includes(property);
-      const type = getType(propertyValue);
+      const type = getParameterType(propertyValue);
       const bodyDefault = bodySchema.example
         ? JSON.stringify(bodySchema.example[property])
         : undefined;
@@ -265,50 +241,33 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
     });
 
   let responseSchema = operation.responses?.['200']?.content?.['application/json']?.schema;
-  // endpoint in OpenAPI refers to the path
-  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
-    return acc.concat(file.openapi.servers);
-  }, []);
-  const configBaseUrl =
-    config?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
-  const baseUrl =
-    configBaseUrl && Array.isArray(configBaseUrl) ? configBaseUrl[apiBaseIndex] : configBaseUrl;
-  const api = `${method} ${baseUrl}${endpoint}`;
 
   return (
-    <div className="prose prose-slate dark:prose-dark">
-      <ApiPlayground
-        api={api}
-        contentType={contentType}
-        auth={auth}
-        apiComponents={apiComponents}
-      />
-      <div>
-        {Parameters?.length > 0 && (
-          <>
-            <Heading level={3} id="parameters" nextElement={null}>
-              Parameters
-            </Heading>
-            {Parameters}
-          </>
-        )}
-        {Body?.length > 0 && (
-          <>
-            <Heading level={3} id="body" nextElement={null}>
-              Body
-            </Heading>
-            <ExpandableFields schema={bodySchema} />
-          </>
-        )}
-        {responseSchema && (
-          <>
-            <Heading level={3} id="response" nextElement={null}>
-              Response
-            </Heading>
-            <ExpandableFields schema={responseSchema} />
-          </>
-        )}
-      </div>
+    <div>
+      {Parameters?.length > 0 && (
+        <>
+          <Heading level={3} id="parameters">
+            Parameters
+          </Heading>
+          {Parameters}
+        </>
+      )}
+      {Body?.length > 0 && (
+        <>
+          <Heading level={3} id="body">
+            Body
+          </Heading>
+          <ExpandableFields schema={bodySchema} />
+        </>
+      )}
+      {responseSchema && (
+        <>
+          <Heading level={3} id="response">
+            Response
+          </Heading>
+          <ExpandableFields schema={responseSchema} />
+        </>
+      )}
     </div>
   );
 }

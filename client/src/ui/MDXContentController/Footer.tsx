@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 
-import Icon from './Icon';
+import Icon from '../Icon';
 
 type FooterProps = {
   children?: React.ReactChild;

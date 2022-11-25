@@ -2,7 +2,7 @@ const withLayouts = () => {
   return (tree) => {
     tree.children.push({
       type: 'mdxjsEsm',
-      value: `export default (props) => <ContentsLayout {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} section={section} meta={meta}>{props.children}</ContentsLayout>`,
+      value: `export default (props) => <MDXContentController {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} section={section} meta={meta}>{props.children}</MDXContentController>`,
       data: {
         estree: {
           type: 'Program',
@@ -40,7 +40,7 @@ const withLayouts = () => {
                     type: 'JSXClosingElement',
                     name: {
                       type: 'JSXIdentifier',
-                      name: 'ContentsLayout',
+                      name: 'MDXContentController',
                     },
                   },
                   openingElement: {
@@ -48,7 +48,7 @@ const withLayouts = () => {
                     selfClosing: false,
                     name: {
                       type: 'JSXIdentifier',
-                      name: 'ContentsLayout',
+                      name: 'MDXContentController',
                     },
                     attributes: [
                       {

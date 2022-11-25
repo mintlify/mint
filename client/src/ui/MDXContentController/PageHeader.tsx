@@ -4,10 +4,9 @@ type PageHeaderProps = {
   title?: string;
   description?: string;
   section: string;
-  children: any;
 };
 
-export function PageHeader({ title, description, section, children }: PageHeaderProps) {
+export function PageHeader({ title, description, section }: PageHeaderProps) {
   if (!title && !description) return null;
 
   return (
@@ -32,7 +31,6 @@ export function PageHeader({ title, description, section, children }: PageHeader
       {description && (
         <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
-      {children}
     </header>
   );
 }

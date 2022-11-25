@@ -22,7 +22,7 @@ import { Heading } from '@/components/Heading';
 import { Param, ParamField } from '@/components/Param';
 import { RequestSimple } from '@/components/Request';
 import { ResponseField } from '@/components/ResponseField';
-import { ContentsLayout } from '@/layouts/ContentsLayout';
+import { MDXContentController } from '@/ui/MDXContentController/MDXContentController';
 
 const components: any = {
   Accordion,
@@ -48,7 +48,7 @@ const components: any = {
   Tabs,
   Tab,
   Tooltip,
-  ContentsLayout,
+  MDXContentController,
   Frame,
   Link,
 };
@@ -77,7 +77,7 @@ export const allowedComponents = [
   'Tabs',
   'Tab',
   'Tooltip',
-  'ContentsLayout',
+  'MDXContentController',
   'Frame',
   'Link',
   'img',
