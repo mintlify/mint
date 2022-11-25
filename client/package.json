@@ -94,6 +94,7 @@
     "react-hotjar": "^5.1.0",
     "react-hotkeys-hook": "^3.4.7",
     "react-intersection-observer": "^8.29.0",
+    "react-markdown": "^8.0.3",
     "react-use-intercom": "^2.0.0",
     "react-use-rect": "^2.0.4",
     "redent": "^3.0.0",
