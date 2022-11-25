@@ -1,28 +1,13 @@
-import { ApiPlayground, ApiComponent } from '@/ui/ApiPlayground';
 import { UserFeedback } from '@/ui/Feedback';
 
 type PageHeaderProps = {
   title?: string;
   description?: string;
-  api?: string;
-  openapi?: string;
-  contentType?: string;
-  auth?: string;
   section: string;
   children: any;
-  apiComponents: ApiComponent[];
 };
 
-export function PageHeader({
-  title,
-  description,
-  section,
-  api,
-  contentType, // TODO: Add documentation
-  auth,
-  children,
-  apiComponents,
-}: PageHeaderProps) {
+export function PageHeader({ title, description, section, children }: PageHeaderProps) {
   if (!title && !description) return null;
 
   return (
@@ -47,15 +32,7 @@ export function PageHeader({
       {description && (
         <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
-      {api && (
-        <ApiPlayground
-          api={api}
-          children={children}
-          auth={auth}
-          apiComponents={apiComponents}
-          contentType={contentType}
-        />
-      )}
+      {children}
     </header>
   );
 }

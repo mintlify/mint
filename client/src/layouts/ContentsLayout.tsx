@@ -8,6 +8,7 @@ import { ConfigContext } from '@/context/ConfigContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { SidebarContext } from '@/layouts/SidebarLayout';
+import { ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/Footer';
 import { PageHeader } from '@/ui/PageHeader';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
@@ -199,14 +200,18 @@ export function ContentsLayout({
       <PageHeader
         title={meta.title || slugToTitle(currentPath)}
         description={meta.description}
-        api={meta.api}
-        openapi={meta.openapi}
-        contentType={meta.contentType}
-        auth={meta.auth}
         section={section}
-        children={children}
-        apiComponents={apiComponents}
-      />
+      >
+        {meta.api ? (
+          <ApiPlayground
+            api={meta.api}
+            children={children}
+            auth={meta.auth}
+            apiComponents={apiComponents}
+            contentType={meta.contentType}
+          />
+        ) : null}
+      </PageHeader>
       <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
         <div id="content-wrapper" className="relative z-20 prose prose-slate mt-8 dark:prose-dark">
           <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
