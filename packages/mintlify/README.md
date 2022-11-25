@@ -52,7 +52,9 @@ Note - `mintlify dev` requires `yarn` and it's recommended you install it as a g
 
 #### Troubleshooting
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
+Make sure you are using Node v18 or higher.
+
+If Mintlify dev is still not running, run `mintlify install` to re-install dependencies.
 
 ### 🏃 Get Started
 

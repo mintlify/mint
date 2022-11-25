@@ -59,16 +59,22 @@
       "group": "Components",
       "pages": [
         "components/overview",
-        "components/accordion",
-        "components/callout",
-        "components/card",
-        "components/code",
-        "components/embed",
-        "components/image",
-        "components/frame",
-        "components/list",
         "components/text",
-        "components/table"
+        "components/image",
+        "components/list",
+        "components/code",
+        "components/callout",
+        "components/embed",
+        "components/table",
+        {
+          "group": "Advanced Components",
+          "pages": [
+            "components/advanced/accordion",
+            "components/advanced/card",
+            "components/advanced/frame",
+            "components/advanced/tooltip"
+          ]
+        }
       ]
     },
     {
