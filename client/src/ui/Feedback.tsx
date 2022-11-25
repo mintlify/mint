@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createContext, useContext } from 'react';
 
+import { ConfigContext } from '@/context/ConfigContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 
 // @ts-ignore
@@ -35,7 +36,12 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
 
 export function UserFeedback({ title }: { title: string }) {
   const path = useCurrentPath();
+  const { config } = useContext(ConfigContext);
   const { createSuggestHref, createIssueHref } = useContext(FeedbackContext) as any;
+
+  if (config?.hideFeedbackSuggestions === true) {
+    return null;
+  }
 
   return (
     <div className="flex items-center space-x-2">
