@@ -1,6 +1,7 @@
 // TODO: Refactor this file to improve readability
 import { Tab, Tabs } from '@mintlify/components';
 import { useEffect, useState, useContext } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
@@ -14,6 +15,10 @@ import { createExpandable, createParamField, getProperties } from '@/utils/opena
 type OpenApiContentProps = {
   endpointStr: string;
   auth?: string;
+};
+
+const MarkdownComponents = {
+  p: (props: any) => <p className="m-0" {...props} />,
 };
 
 export const getAllOpenApiParameters = (path: any, operation: any) => {
@@ -72,7 +77,7 @@ function ExpandableFields({ schema }: any) {
     return (
       <ResponseField name={name} type={schema.items.type}>
         <>
-          {schema.description}
+          <ReactMarkdown components={MarkdownComponents}>{schema.description}</ReactMarkdown>
           <Expandable
             title="properties"
             defaultOpen={false}
@@ -121,7 +126,9 @@ function ExpandableFields({ schema }: any) {
                 {/* Is array nested */}
                 {value.items && !isArrayExpandable ? (
                   <div className="mt-2">
-                    {value.description}
+                    <ReactMarkdown components={MarkdownComponents}>
+                      {value.description}
+                    </ReactMarkdown>
                     <Expandable
                       title={value.items.type || 'properties'}
                       onChange={(open) => {
@@ -134,7 +141,9 @@ function ExpandableFields({ schema }: any) {
                   </div>
                 ) : (
                   <>
-                    {value.description || value.title || getEnumDescription(value.enum)}
+                    <ReactMarkdown components={MarkdownComponents}>
+                      {value.description || value.title || getEnumDescription(value.enum)}
+                    </ReactMarkdown>
                     {value.properties && (
                       <div className="mt-2">
                         <Expandable
@@ -199,7 +208,9 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
         default={schema?.default}
         enum={schema?.enum}
       >
-        {description || schema?.description || schema?.title}
+        <ReactMarkdown components={MarkdownComponents}>
+          {description || schema?.description || schema?.title}
+        </ReactMarkdown>
       </ParamField>
     );
   });
@@ -246,7 +257,9 @@ export function OpenApiContent({ endpointStr, auth }: OpenApiContentProps) {
           enum={propertyValue.enum}
           last={last}
         >
-          {propertyValue.description || propertyValue.title}
+          <ReactMarkdown components={MarkdownComponents}>
+            {propertyValue.description || propertyValue.title}
+          </ReactMarkdown>
         </ParamField>
       );
     });
