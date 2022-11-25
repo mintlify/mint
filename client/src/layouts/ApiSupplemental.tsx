@@ -9,8 +9,8 @@ import { Component } from '@/enums/components';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateAPIExamples';
-import { getOpenApiOperationMethodAndEndpoint } from '@/utils/getOpenApiContext';
 import { htmlToReactComponent } from '@/utils/htmlToReactComponent';
+import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 
 const responseHasSimpleExample = (response: any): boolean => {
   if (response?.content == null) {

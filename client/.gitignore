@@ -17,7 +17,6 @@
 /build
 
 # generated files
-openapi
 /public/*
 /src/pages/*
 !/src/pages/api

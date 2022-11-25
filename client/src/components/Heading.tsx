@@ -3,7 +3,7 @@ import { useEffect, useContext, useState } from 'react';
 import { Rect, useRect } from 'react-use-rect';
 
 import { useTop } from '@/hooks/useTop';
-import { ContentsContext } from '@/layouts/ContentsLayout';
+import { ContentsContext } from '@/ui/MDXContentController/MDXContentController';
 
 type HeadingProps = {
   level: string;
