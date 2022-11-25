@@ -260,8 +260,9 @@ pre[class^='language-diff-'] > code {
   @apply flex-none min-w-full;
 }
 
+/* Lines of code outside code blocks. Generated when you use single ticks: `example` */
 :not(pre) > code {
-  @apply rounded-sm px-1 bg-slate-200/60 dark:bg-slate-700/60;
+  @apply break-words rounded-sm px-1 bg-slate-200/60 dark:bg-slate-700/60;
 }
 
 :not(pre) > code:before,
