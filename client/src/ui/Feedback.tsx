@@ -39,7 +39,7 @@ export function UserFeedback({ title }: { title: string }) {
   const { config } = useContext(ConfigContext);
   const { createSuggestHref, createIssueHref } = useContext(FeedbackContext) as any;
 
-  if (config?.hideFeedbackSuggestions === true) {
+  if (config?.hideFeedbackButtons === true) {
     return null;
   }
 

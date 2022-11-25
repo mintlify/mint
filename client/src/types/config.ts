@@ -104,7 +104,7 @@ export type Config = {
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
   backgroundImage?: string;
-  hideFeedbackSuggestions?: boolean;
+  hideFeedbackButtons?: boolean;
   analytics?: Analytics;
   integrations?: Integrations;
   __injected?: {
