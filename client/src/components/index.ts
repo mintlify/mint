@@ -93,6 +93,8 @@ export const allowedComponents = [
   'source',
   'sup',
   'sub',
+  'p',
+  'b',
   'a',
   'li',
   'br',
