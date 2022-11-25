@@ -115,9 +115,11 @@ export function ApiPlayground({
   const makeApiRequest = async () => {
     setIsSendingResponse(true);
 
+    const basePath = config?.basePath || '';
+
     try {
       const apiContext = getApiContext(apiBase, path, inputData, contentType, config?.api);
-      const { data } = await axios.post('/api/request', {
+      const { data } = await axios.post(`${basePath}/api/request`, {
         method,
         ...apiContext,
       });
