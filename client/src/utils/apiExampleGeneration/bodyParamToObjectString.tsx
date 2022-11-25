@@ -1,4 +1,4 @@
-import { Param } from '@mintlify/components';
+import { Param } from '../api';
 
 export function bodyParamsToObjectString(bodyParams?: Param[]) {
   if (!bodyParams?.length) {
