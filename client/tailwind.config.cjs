@@ -315,7 +315,8 @@ module.exports = {
   safelist: [
     'm-0', 'my-0.5', 'ml-8', 'ml-12', 'ml-16',
     'aspect-video',
-    'h-6', 'h-32', 'h-80', 'h-96',
+    'w-7',
+    'h-6', 'h-7', 'h-8', 'h-32', 'h-80', 'h-96',
     'w-10', 'w-6/12',
     'space-x-1',
     'flex-wrap',
