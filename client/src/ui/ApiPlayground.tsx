@@ -1,6 +1,7 @@
 import axios from 'axios';
 import clsx from 'clsx';
 import set from 'lodash.set';
+import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
@@ -46,6 +47,7 @@ export function ApiPlayground({
   children?: any;
   apiComponents?: ApiComponent[];
 }) {
+  const { basePath } = useRouter();
   const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
@@ -115,11 +117,9 @@ export function ApiPlayground({
   const makeApiRequest = async () => {
     setIsSendingResponse(true);
 
-    const basePath = config?.basePath || '';
-
     try {
       const apiContext = getApiContext(apiBase, path, inputData, contentType, config?.api);
-      const { data } = await axios.post(`${basePath}/api/request`, {
+      const { data } = await axios.post(`${basePath || ''}/api/request`, {
         method,
         ...apiContext,
       });
