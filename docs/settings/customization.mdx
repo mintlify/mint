@@ -9,7 +9,7 @@ All `mint.json` properties are optional except for `name` and `navigation`.
 
 ## Properties
 
-<ResponseField name="name" type="string">
+<ResponseField name="name" type="string" required>
 Name of your project. Used for the global title.
 
 Example: `mintlify`
@@ -84,7 +84,7 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
-<ResponseField name="navigation" type="Navigation[]">
+<ResponseField name="navigation" type="Navigation[]" required>
   An array of groups with all the pages within that group
   <Expandable title="Navigation">
     <ResponseField name="group" type="string">
@@ -203,7 +203,7 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
-## Example
+## Example Configuration
 
 ```json Example mint.json
 {
