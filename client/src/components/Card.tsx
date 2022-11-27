@@ -34,7 +34,7 @@ export function Card({
       icon
     );
 
-  const Card = ({ href }: { href?: string }) => (
+  const Card = () => (
     <GenericCard
       className={clsx(
         // We need to set these as important because mint adds an underline to links with a border
