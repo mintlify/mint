@@ -89,7 +89,7 @@ const NavItem = forwardRef(
               getPaddingByLevel(level)
             )}
           >
-            {endpointStr && (
+            {endpointStr && groupPage?.hideApiMarker !== true && (
               <div
                 className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
                   'bg-primary dark:bg-primary-light': isActive,

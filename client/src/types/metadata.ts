@@ -19,6 +19,7 @@ export type PageMetaTags = {
   auth?: string;
   size?: string;
   version?: string;
+  hideApiMarker?: boolean;
 };
 
 export type Groups = Group[];
