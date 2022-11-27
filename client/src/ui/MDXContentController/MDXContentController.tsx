@@ -72,7 +72,7 @@ export function MDXContentController({
   }
 
   return (
-    <div className={clsx('relative max-w-3xl mx-auto pt-10 xl:max-w-none xl:ml-0', contentWidth)}>
+    <div className={clsx('relative max-w-3xl mx-auto pt-9 xl:max-w-none xl:ml-0', contentWidth)}>
       <PageHeader
         title={meta.title || slugToTitle(currentPath)}
         description={meta.description}
