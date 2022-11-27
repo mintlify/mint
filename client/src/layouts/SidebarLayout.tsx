@@ -12,7 +12,6 @@ import { useColors } from '@/hooks/useColors';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags, Group, Groups, GroupPage, isGroup } from '@/types/metadata';
-import Icon from '@/ui/Icon';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { getAnchorsToDisplay } from '@/utils/getAnchorsToDisplay';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
