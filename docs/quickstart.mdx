@@ -1,22 +1,19 @@
 ---
 title: "Quickstart"
-description: "Get up and running with your existing workflow"
+description: "Build beautiful documentation that converts users"
 ---
 
-Mintlify is in a private beta. [Sign up](https://mintlify.com/start) on our waitlist to get access.
+![Hero Image](/docs/img/hero.png)
 
-## Setup
+## Basic Configuration
 
-### Basic Configuration
+Every Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at [global settings guide](/settings/customization).
 
-Every Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at the [customization guide](/settings/customization).
-
-### Automatic Deployments
+## Deployments
 
 Once the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.
 
 <Tabs>
-
 <Tab title="GitHub Setup Guide">
 
 ### Open a Public Repo
@@ -28,7 +25,7 @@ Create a public repo where you would like to host the documentation.
   and raising issues.
 </Tip>
 
-### Add Files
+## Add Files
 
 The onboarding team will provide a zip file with the contents of the documentation. Unzip the file and add the contents into a `/docs` directory of the repo.
 
@@ -36,7 +33,7 @@ The result should look something like this.
 
 <img className="rounded" src="/docs/img/docs-repo.png" />
 
-### Install the GitHub Bot
+## Install the GitHub Bot
 
 Install the Mintlify GitHub Bot using request link provided by the onboarding team. Make sure it's granted access to the repo with the documentation.
 
@@ -68,11 +65,11 @@ Make a `PUT` request to `https://docs.mintlify.com/api/v1/sites/integrations/git
 
 The body should be a JSON object of the form:
 
-```json JSON body
+```json
 {
-    "accessToken": your gitlab access token,
-    "projectId": your project ID,
-    "deployBranch": "main" or "master" depending on your repository's default
+  "accessToken": your gitlab access token,
+  "projectId": your project ID,
+  "deployBranch": 'main' or 'master' depending on your repository's default
 }
 ```
 
@@ -83,5 +80,4 @@ You can always update your access token by making `PUT` requests to the endpoint
 On your project page go to Settings > Webhooks. Enter `https://docs.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.
 
 </Tab>
-
 </Tabs>

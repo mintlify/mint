@@ -1,31 +1,28 @@
 ---
-title: "Overview"
+title: "Playground"
 description: "Enable users interact with your API"
 api: "GET https://docs.mintlify.com/api/v1/demo"
+hideApiMarker: true
 ---
 
 <ParamField query="message" type="string" required>
-
+  The message to be used in the query
 </ParamField>
 
-## API Playground
-
-### Introduction
+## Introduction
 
 The API playground lets you create an interactive environment to make requests and preview your API endpoints.
 
-See our [analytics](/analytics/posthog) endpoint for a real use case of the API playground in action.
-
 ## Setting the API metadata
 
-The `api` field in the page's metadata must be set to enable the API playground.
+Set the `api` field in the page's metadata to automatically enable the API playground.
 
 <CodeGroup>
 
 ```md Example
 ---
-title: "Create new user"
-api: "POST https://api.mintlify.com/user"
+title: Create new user
+api: POST https://api.mintlify.com/user
 ---
 ```
 

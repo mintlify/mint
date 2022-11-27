@@ -23,7 +23,9 @@ title: "Page"
 
 </CodeGroup>
 
-We will use the name of the file if you forget to include a title.
+<br />
+
+<Tip>We will use the name of the file if you forget to include a title.</Tip>
 
 Other metadata goes in between the same `---` lines. For example, this page uses this metadata:
 
@@ -38,7 +40,7 @@ description: "Metadata is important for API pages and SEO optimization"
 
 API pages lets you build an interactive API playground. To create an API page, you must set an `api` or `openapi` property in the page metadata.
 
-Learn more about setting up a page for the API playground in [API components](/api-components/overview).
+Learn more about setting up a page for the API playground in [API Components](/api-components/overview).
 
 <CodeGroup>
 
@@ -68,13 +70,17 @@ description: "Your description goes here."
 
 You can show a different title in the navigation with the `sidebarTitle` metadata. This is useful if your title is long and you want something shorter in the navigation links.
 
-```md Sidebar Title Example
+<CodeGroup>
+
+```md Schema
 ---
 title: "Your very long page title you want to shorten"
 sidebarTitle: "Short title"
 ---
 ```
 
+</CodeGroup>
+  
 ## Search Engine Optimization
 
 You can set meta tags like the image set when shared on social media by passing them into your page's metadata. Meta tags with colons need to be wrapped in quotes.

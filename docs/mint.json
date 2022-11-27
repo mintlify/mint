@@ -51,7 +51,7 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["quickstart", "local-testing"]
+      "pages": ["quickstart", "development"]
     },
     {
       "group": "Settings",
@@ -72,16 +72,17 @@
         "components/code",
         "components/callout",
         "components/embed",
-        "components/table",
-        {
-          "group": "Advanced Components",
-          "pages": [
-            "components/advanced/accordion",
-            "components/advanced/card",
-            "components/advanced/frame",
-            "components/advanced/tooltip"
-          ]
-        }
+        "components/table"
+      ]
+    },
+    {
+      "group": "Advanced Components",
+      "pages": [
+        "components/advanced/accordion",
+        "components/advanced/card",
+        "components/advanced/frame",
+        "components/advanced/tabs",
+        "components/advanced/tooltip"
       ]
     },
     {
