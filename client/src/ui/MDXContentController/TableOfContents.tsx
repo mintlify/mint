@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useContext, Fragment } from 'react';
 
-import { SidebarContext } from '@/layouts/SidebarLayout';
+import { SidebarContext } from '@/layouts/Sidebar';
 import { TableOfContentsSection } from '@/types/TableOfContentsSection';
 
 export function TableOfContents({ tableOfContents, currentSection }: any) {

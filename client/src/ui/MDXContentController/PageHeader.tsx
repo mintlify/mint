@@ -4,9 +4,10 @@ type PageHeaderProps = {
   title?: string;
   description?: string;
   section: string;
+  isBlogMode?: boolean;
 };
 
-export function PageHeader({ title, description, section }: PageHeaderProps) {
+export function PageHeader({ title, description, section, isBlogMode }: PageHeaderProps) {
   if (!title && !description) return null;
 
   return (
@@ -20,7 +21,9 @@ export function PageHeader({ title, description, section }: PageHeaderProps) {
               </p>
             )}
           </div>
-          <UserFeedback title="" />
+          {
+            !isBlogMode && <UserFeedback />
+          }
         </div>
         <div className="flex items-center">
           <h1 className="inline-block text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">

@@ -23,8 +23,8 @@ import {
 } from '@/utils/paths/leadingSlashHelpers';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
-import { Anchor, Config, findFirstNavigationEntry, Navigation } from '../types/config';
-import { StyledAnchorLink } from '../ui/AnchorLink';
+import { Anchor, Config, findFirstNavigationEntry, Navigation } from '../../types/config';
+import { StyledAnchorLink } from '../../ui/AnchorLink';
 
 type SidebarContextType = {
   nav: any;
@@ -196,12 +196,16 @@ function nearestScrollableContainer(el: any) {
   return el;
 }
 
-function Nav({ nav, children, mobile = false }: { nav: any; children?: any; mobile?: boolean }) {
+function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTags; mobile?: boolean }) {
   const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
   const previousActiveItemRef: any = useRef();
   const scrollRef: any = useRef();
+
+  const blogMode = meta === 'blog';
+
+  console.log({blogMode});
 
   let numPages = 0;
   if (nav) {
@@ -252,7 +256,6 @@ function Nav({ nav, children, mobile = false }: { nav: any; children?: any; mobi
       </div>
       <ul>
         {config?.anchors != null && config.anchors.length > 0 && <TopLevelNav mobile={mobile} />}
-        {children}
         {nav &&
           numPages > 0 &&
           nav
@@ -363,12 +366,14 @@ export function SidebarLayout({
   setNavIsOpen,
   nav,
   layoutProps: { allowOverflow = true } = {},
+  meta,
   children,
 }: {
   navIsOpen: boolean;
   setNavIsOpen: any;
   nav: Groups;
   layoutProps?: any;
+  meta: PageMetaTags;
   children: ReactNode;
 }) {
   const { config } = useContext(ConfigContext);
@@ -382,7 +387,7 @@ export function SidebarLayout({
       <Wrapper allowOverflow={allowOverflow}>
         <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="hidden lg:block fixed z-20 top-[3.8125rem] bottom-0 left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
-            <Nav nav={navForDivisionInVersion} />
+            <Nav nav={navForDivisionInVersion} meta={meta}/>
           </div>
           <div className="lg:pl-[20rem]">{children}</div>
         </div>
@@ -411,7 +416,7 @@ export function SidebarLayout({
               />
             </svg>
           </button>
-          <Nav nav={navForDivisionInVersion} mobile={true} />
+          <Nav nav={navForDivisionInVersion} meta={meta} mobile={true} />
         </div>
       </Dialog>
     </SidebarContext.Provider>

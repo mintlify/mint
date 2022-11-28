@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { SidebarContext } from '@/layouts/SidebarLayout';
+import { SidebarContext } from '@/layouts/Sidebar';
 import { PageMetaTags, GroupPage, isGroup, flattenGroupPages } from '@/types/metadata';
 
 import { useCurrentPath } from './useCurrentPath';

@@ -3,7 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
-import { SidebarLayout } from '@/layouts/SidebarLayout';
+import { SidebarLayout } from '@/layouts/Sidebar';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
@@ -33,7 +33,7 @@ export function DocumentationLayout({
   return (
     <>
       <Title suffix={currentPath === '/' ? '' : config?.name ?? ''}>{title}</Title>
-      <SidebarLayout nav={nav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen}>
+      <SidebarLayout nav={nav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
         {children}
       </SidebarLayout>
     </>

@@ -34,7 +34,7 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
   );
 };
 
-export function UserFeedback({ title }: { title: string }) {
+export function UserFeedback() {
   const path = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const { createSuggestHref, createIssueHref } = useContext(FeedbackContext) as any;
@@ -68,7 +68,7 @@ export function UserFeedback({ title }: { title: string }) {
           <FeedbackTooltip message="Edit this page" />
         </a>
       </Link>
-      <Link href={createIssueHref(path, title)}>
+      <Link href={createIssueHref(path)}>
         <a
           className="relative w-fit flex items-center p-1.5 group fill-slate-500 dark:fill-slate-400 hover:fill-slate-700 dark:hover:fill-slate-200 dark:hover:text-slate-300"
           target="_blank"
@@ -100,8 +100,8 @@ export function FeedbackProvider({ subdomain, children }: { subdomain: string; c
     return `https://docs.mintlify.com/api/v1/app/suggest/${subdomain}?path=${path}.mdx`;
   };
 
-  const createIssueHref = (path: string, title: string) => {
-    return `https://docs.mintlify.com/api/v1/app/issue/${subdomain}?path=${path}.mdx&title=${title}`;
+  const createIssueHref = (path: string) => {
+    return `https://docs.mintlify.com/api/v1/app/issue/${subdomain}?path=${path}.mdx`;
   };
 
   return (

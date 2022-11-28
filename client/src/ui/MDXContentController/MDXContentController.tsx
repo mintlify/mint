@@ -72,12 +72,15 @@ export function MDXContentController({
     contentWidth = 'xl:pr-20 xl:mr-[12rem]';
   }
 
+  const isBlogMode = meta.mode === 'blog';
+
   return (
     <div className={clsx('relative max-w-3xl mx-auto pt-9 xl:max-w-none xl:ml-0', contentWidth)}>
       <PageHeader
         title={meta.title || slugToTitle(currentPath)}
         description={meta.description}
         section={section}
+        isBlogMode={isBlogMode}
       />
 
       {isApi ? (
@@ -107,7 +110,7 @@ export function MDXContentController({
             : 'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto'
         )}
       >
-        {!isApi && toc.length > 0 && !isWideSize && (
+        {!isApi && toc.length > 0 && !isWideSize && !isBlogMode && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         )}
         {isApi && (
