@@ -63,7 +63,8 @@ export function MDXContentController({
 
   // The user can hide the table of contents by marking the size as wide, but the API
   // overrides that to show request and response examples on the side.
-  const isWideSize = meta.size === 'wide';
+  // TODO: Remove meta.size
+  const isWideSize = meta.mode === 'wide' || meta.size === 'wide';
   let contentWidth = 'xl:pr-20 xl:mr-[18rem]';
   if (isApi) {
     contentWidth = 'xl:pr-12 xl:mr-[28rem]';

@@ -6,8 +6,10 @@ export type Meta = {
   api?: string;
   openapi?: string;
   contentType?: string;
-  size?: 'wide';
   version?: string;
+  mode?: 'wide' | 'blog';
+  // To be depreciated
+  size?: 'wide';
 };
 
 export type MDXContentControllerProps = {
