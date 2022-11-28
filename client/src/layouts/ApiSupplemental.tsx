@@ -2,14 +2,15 @@ import Prism from 'prismjs';
 import 'prismjs/components/prism-json';
 import React, { useState, useEffect, useContext } from 'react';
 
-import { RequestExample, ResponseExample } from '@/components/ApiExample';
+import { ResponseExample } from '@/components/ApiExample';
 import { CodeBlock } from '@/components/CodeBlock';
+import { CodeGroup } from '@/components/CodeGroup';
 import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
+import { ApiComponent } from '@/types/apiComponent';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateAPIExamples';
-import { htmlToReactComponent } from '@/utils/htmlToReactComponent';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 
 const responseHasSimpleExample = (response: any): boolean => {
@@ -90,21 +91,18 @@ const generatedNestedExample = (response: any) => {
   return '';
 };
 
-type ApiComponent = {
-  type: string;
-  children: { filename: string; html: string }[];
-};
-
 export function ApiSupplemental({
   apiComponents,
   endpointStr,
   auth,
   authName,
+  userDefinedResponseExample,
 }: {
   apiComponents: ApiComponent[];
   endpointStr?: string;
   auth?: string;
   authName?: string;
+  userDefinedResponseExample: any;
 }) {
   const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
@@ -123,45 +121,8 @@ export function ApiSupplemental({
   //const parameters = getAllOpenApiParameters(path, operation);
   const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth);
 
-  // Response and Request Examples from MDX
-  const [mdxRequestExample, setMdxRequestExample] = useState<JSX.Element | undefined>(undefined);
-  const [mdxResponseExample, setMdxResponseExample] = useState<JSX.Element | undefined>(undefined);
   // Open API generated response examples
   const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
-
-  useEffect(() => {
-    const requestComponentSkeleton = apiComponents.find((apiComponent) => {
-      return apiComponent.type === Component.RequestExample;
-    });
-
-    const responseComponentSkeleton = apiComponents.find((apiComponent) => {
-      return apiComponent.type === Component.ResponseExample;
-    });
-
-    const request: JSX.Element | undefined = requestComponentSkeleton && (
-      <RequestExample
-        children={requestComponentSkeleton.children.map((child) => {
-          return (
-            <CodeBlock filename={child.filename}>{htmlToReactComponent(child.html)}</CodeBlock>
-          );
-        })}
-      />
-    );
-
-    setMdxRequestExample(request);
-
-    const response: JSX.Element | undefined = responseComponentSkeleton && (
-      <ResponseExample
-        children={responseComponentSkeleton.children.map((child) => {
-          return (
-            <CodeBlock filename={child.filename}>{htmlToReactComponent(child.html)}</CodeBlock>
-          );
-        })}
-      />
-    );
-
-    setMdxResponseExample(response);
-  }, [apiComponents]);
 
   useEffect(() => {
     if (endpointStr == null) {
@@ -196,7 +157,7 @@ export function ApiSupplemental({
     </pre>
   );
 
-  let requestExamples = mdxRequestExample;
+  let requestExamples = null;
   if (
     !apiComponents.some((apiComponent) => {
       return apiComponent.type === Component.RequestExample;
@@ -213,26 +174,35 @@ export function ApiSupplemental({
     );
   }
 
+  let responseChildren = [] as any;
+  if (userDefinedResponseExample && userDefinedResponseExample.props.children) {
+    responseChildren = responseChildren.concat(userDefinedResponseExample.props.children);
+  }
+
+  // We only include the first example because people tend to duplicate them
+  const openApiExample = openApiResponseExamples.length > 0 ? openApiResponseExamples[0] : null;
+  if (openApiExample) {
+    const stringifiedCode = JSON.stringify(openApiExample, null, 2);
+    responseChildren.push(
+      <CodeBlock filename="Response" key={`example-response`}>
+        <pre className="language-json">
+          {/* CodeBlock cannot copy text added with dangerouslySetInnerHTML */}
+          <div className="hidden">{stringifiedCode}</div>
+          <code
+            className="language-json"
+            dangerouslySetInnerHTML={{
+              __html: Prism.highlight(stringifiedCode, Prism.languages.json, 'json'),
+            }}
+          />
+        </pre>
+      </CodeBlock>
+    );
+  }
+
   return (
-    <div className="space-y-6 pb-6">
+    <>
       {requestExamples}
-      {/* TODO - Make it so that you can see both the openapi and response example in 1 view if they're both defined */}
-      {mdxResponseExample}
-      {!mdxResponseExample && openApiResponseExamples.length > 0 && (
-        <ResponseExample
-          children={{
-            props: {
-              filename: 'Response Example',
-              children: openApiResponseExamples.map((code, i) => {
-                if (code === '') return null;
-                return (
-                  <ResponseExampleChild code={JSON.stringify(code, null, 2)} key={`example-${i}`} />
-                );
-              }),
-            },
-          }}
-        />
-      )}
-    </div>
+      {responseChildren.length > 0 && <CodeGroup isSmallText>{responseChildren}</CodeGroup>}
+    </>
   );
 }

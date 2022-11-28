@@ -28,6 +28,11 @@ export function TableOfContents({ tableOfContents, currentSection }: any) {
     (section: TableOfContentsSection) => section.children.length > 0
   );
 
+  // Hide table of contents when its empty
+  if (!Array.isArray(tableOfContents) || tableOfContents.length === 0) {
+    return null;
+  }
+
   return (
     <ul className="text-slate-700 text-sm leading-6">
       {tableOfContents.map((section: TableOfContentsSection) => {
