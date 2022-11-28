@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import React from 'react';
 
 import { ComponentIcon } from '@/ui/Icon';
+import { useRouter } from 'next/router';
 
 export function Card({
   title,
@@ -34,7 +35,7 @@ export function Card({
       icon
     );
 
-  const Card = () => (
+  const CardComponent = ({href}: {href?: string}) => (
     <GenericCard
       className={clsx(
         // We need to set these as important because mint adds an underline to links with a border
@@ -53,12 +54,15 @@ export function Card({
   // We don't use DynamicLink because we cannot wrap the Card in an extra <a> tag without
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
   if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
+    // TODO: Seek native solution to use basePaths
+    const { basePath } = useRouter();
+    const adjustedHref = `${basePath || ''}${href}`;
     return (
       <Link href={href} passHref>
-        <Card />
+        <CardComponent href={adjustedHref} />
       </Link>
     );
   }
 
-  return <Card />;
+  return <CardComponent href={href} />;
 }
