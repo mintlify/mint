@@ -1,11 +1,11 @@
 import { Card as GenericCard } from '@mintlify/components';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import React from 'react';
 
 import { ComponentIcon } from '@/ui/Icon';
-import { useRouter } from 'next/router';
 
 export function Card({
   title,
@@ -22,7 +22,6 @@ export function Card({
   href?: string;
   children?: React.ReactNode;
 }) {
-  const { basePath } = useRouter();
   const Icon =
     typeof icon === 'string' ? (
       <ComponentIcon
@@ -36,7 +35,7 @@ export function Card({
       icon
     );
 
-  const CardComponent = ({href}: {href?: string}) => (
+  const CardComponent = ({ href }: { href?: string }) => (
     <GenericCard
       className={clsx(
         // We need to set these as important because mint adds an underline to links with a border
@@ -55,11 +54,9 @@ export function Card({
   // We don't use DynamicLink because we cannot wrap the Card in an extra <a> tag without
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
   if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
-    // TODO: Seek native solution to use basePaths
-    const adjustedHref = `${basePath || ''}${href}`;
     return (
       <Link href={href} passHref>
-        <CardComponent href={adjustedHref} />
+        <CardComponent />
       </Link>
     );
   }
