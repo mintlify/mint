@@ -22,6 +22,7 @@ export function Card({
   href?: string;
   children?: React.ReactNode;
 }) {
+  const { basePath } = useRouter();
   const Icon =
     typeof icon === 'string' ? (
       <ComponentIcon
@@ -55,7 +56,6 @@ export function Card({
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
   if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
     // TODO: Seek native solution to use basePaths
-    const { basePath } = useRouter();
     const adjustedHref = `${basePath || ''}${href}`;
     return (
       <Link href={href} passHref>
