@@ -49,7 +49,7 @@ export function TableOfContents({ tableOfContents, currentSection, meta }: any) 
       <div className="space-y-2">
         <span className="text-sm font-medium text-slate-400 dark:text-slate-500">Authors</span>
         {
-          meta._generated?.authors?.map((author: any) => (
+          meta._context?.authors?.map((author: any) => (
             <AuthorProfile name={author.name} image={author.image} />
           ))
         }
