@@ -11,11 +11,3 @@ export type Meta = {
   // To be depreciated
   size?: 'wide';
 };
-
-export type MDXContentControllerProps = {
-  children: any;
-  meta: Meta;
-  tableOfContents: any;
-  section: string;
-  apiComponents: any;
-};

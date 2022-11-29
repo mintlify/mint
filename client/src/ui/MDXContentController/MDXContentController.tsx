@@ -8,7 +8,6 @@ import { ConfigContext } from '@/context/ConfigContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
-import { MDXContentControllerProps } from '@/types/MDXContentControllerTypes';
 import { Config } from '@/types/config';
 import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
@@ -17,12 +16,21 @@ import { TableOfContents } from '@/ui/MDXContentController/TableOfContents';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
-import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 import { ApiSupplemental } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiContent } from '../../layouts/OpenApiContent';
+import { Meta } from '@/types/MDXContentControllerTypes';
 
 export const ContentsContext = createContext(undefined);
+
+type MDXContentControllerProps = {
+  children: any;
+  meta: Meta;
+  tableOfContents: any;
+  section: string;
+  apiComponents: any;
+};
+
 
 export function MDXContentController({
   children,
@@ -31,7 +39,6 @@ export function MDXContentController({
   section,
   apiComponents,
 }: MDXContentControllerProps) {
-  const currentPath = useCurrentPath();
   const { config, openApi } = useContext(ConfigContext);
   const toc = [...tableOfContents];
 
@@ -77,10 +84,8 @@ export function MDXContentController({
   return (
     <div className={clsx('relative max-w-3xl mx-auto pt-9 xl:max-w-none xl:ml-0', contentWidth)}>
       <PageHeader
-        title={meta.title || slugToTitle(currentPath)}
-        description={meta.description}
+        meta={meta}
         section={section}
-        isBlogMode={isBlogMode}
       />
 
       {isApi ? (

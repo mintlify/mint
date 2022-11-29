@@ -131,7 +131,7 @@ export function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTag
   }, [currentPath]);
 
   if (isBlogMode) {
-    return <BlogNav nav={nav} />
+    return <BlogNav />
   }
 
   return (
