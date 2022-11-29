@@ -48,8 +48,11 @@ export function TableOfContents({ tableOfContents, currentSection, meta }: any) 
     return <div className="space-y-6">
       <div className="space-y-2">
         <span className="text-sm font-medium text-slate-400 dark:text-slate-500">Authors</span>
-        <AuthorProfile name="Han Wang" image="https://mintlify.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdeclan.70da18ee.jpeg&w=96&q=75" />
-        <AuthorProfile name="Hahnbee Lee" image="https://mintlify.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmaayan.47175657.jpeg&w=96&q=75" />
+        {
+          meta._generated?.authors?.map((author: any) => (
+            <AuthorProfile name={author.name} image={author.image} />
+          ))
+        }
       </div>
       <div>
         <span className="text-sm font-medium text-slate-400 dark:text-slate-500">Share</span>
