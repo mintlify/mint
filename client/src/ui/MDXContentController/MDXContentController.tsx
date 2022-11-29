@@ -69,7 +69,9 @@ export function MDXContentController({
   // TODO: Remove meta.size
   const isWideSize = meta.mode === 'wide' || meta.size === 'wide';
   let contentWidth = 'max-w-3xl xl:max-w-[43rem]';
-  if (isWideSize) {
+  if (isApi || requestExample || responseExample) {
+    contentWidth = 'max-w-3xl xl:max-w-[min(100% - 31rem, 43rem)]';
+  } else if (isWideSize) {
     contentWidth = 'max-w-4xl';
   }
 
