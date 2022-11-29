@@ -1,11 +1,12 @@
+import date from 'date-and-time';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
-import { Meta } from '@/types/MDXContentControllerTypes';
+import { PageMetaTags } from '@/types/metadata';
 import { UserFeedback } from '@/ui/Feedback';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 type PageHeaderProps = {
   section: string;
-  meta: Meta;
+  meta: PageMetaTags;
 };
 
 export function PageHeader({ section, meta }: PageHeaderProps) {
@@ -15,6 +16,8 @@ export function PageHeader({ section, meta }: PageHeaderProps) {
   if (!title && !description) return null;
 
   const isBlogMode = meta.mode === 'blog';
+  const createdDate = isBlogMode && meta._context?.createdDate ? new Date(Date.parse(meta._context?.createdDate)) : new Date();
+  const createdDateReadable = date.format(createdDate, 'MMM D, YYYY'); ;
 
   return (
     <header id="header" className="relative z-20">
@@ -23,7 +26,7 @@ export function PageHeader({ section, meta }: PageHeaderProps) {
           <div className="flex-1">
             {section && (
               <p className="mb-2 text-sm leading-6 font-semibold text-primary dark:text-primary-light">
-                {section}
+                {isBlogMode ? createdDateReadable : section }
               </p>
             )}
           </div>

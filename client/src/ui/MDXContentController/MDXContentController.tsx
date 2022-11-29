@@ -19,13 +19,13 @@ import { createExpandable, createParamField, getProperties } from '@/utils/opena
 
 import { ApiSupplemental } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiContent } from '../../layouts/OpenApiContent';
-import { Meta } from '@/types/MDXContentControllerTypes';
+import { PageMetaTags } from '@/types/metadata';
 
 export const ContentsContext = createContext(undefined);
 
 type MDXContentControllerProps = {
   children: any;
-  meta: Meta;
+  meta: PageMetaTags;
   tableOfContents: any;
   section: string;
   apiComponents: any;
