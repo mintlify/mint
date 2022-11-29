@@ -130,6 +130,10 @@ export function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTag
     }
   }, [currentPath]);
 
+  if (isBlogMode) {
+    return <BlogNav nav={nav} />
+  }
+
   return (
     <nav ref={scrollRef} id="nav" className="lg:text-sm lg:leading-6 relative">
       <div className="sticky top-0 -ml-0.5 pointer-events-none">
@@ -145,7 +149,7 @@ export function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTag
       </div>
       <ul>
         {config?.anchors != null && config.anchors.length > 0 && <TopLevelNav mobile={mobile} />}
-        { isBlogMode ? <BlogNav nav={nav} /> : <DocNav nav={nav} mobile={mobile} /> }
+        <DocNav nav={nav} mobile={mobile} />
       </ul>
     </nav>
   );
