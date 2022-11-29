@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { secret, urlPath } = req.body;
-  if (secret !== process.env.ADMIN_TOKEN) {
+  if (secret !== process.env.MINTLIFY_ADMIN_TOKEN) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 
