@@ -14,8 +14,11 @@ const withCodeBlocks = () => {
       if (['RequestExample', 'ResponseExample'].includes(parent.name)) {
         const parentType = parent.name.slice(0, -7);
         filename = i === 0 ? parentType : `${parentType} ${i + 1}`;
-        if (node.children[0]?.data?.meta) {
-          node.children[0].data.meta = filename;
+        if (!node.children[0]?.data?.meta) {
+          node.children[0].data = {
+            ...node.children[0].data,
+            meta: filename,
+          };
         }
       }
 
