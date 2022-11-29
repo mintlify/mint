@@ -115,7 +115,7 @@ export function MDXContentController({
             : 'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto'
         )}
       >
-        {!isApi && toc.length > 0 && !isWideSize && !isBlogMode && (
+        {!isApi && toc.length > 0 && !isWideSize && (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         )}
         {isApi && (
