@@ -3,6 +3,7 @@ import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { PageMetaTags } from '@/types/metadata';
 import { UserFeedback } from '@/ui/Feedback';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
+import { AuthorProfile } from '../Blog';
 
 type PageHeaderProps = {
   section: string;
@@ -43,6 +44,15 @@ export function PageHeader({ section, meta }: PageHeaderProps) {
       {description && (
         <p className="mt-2 text-lg text-slate-700 dark:text-slate-400">{description}</p>
       )}
+      {
+        isBlogMode && <div className="mt-4 flex space-x-5">
+        {
+          meta._context?.authors?.map((author: any) => (
+            <AuthorProfile name={author.name} image={author.image} />
+          ))
+        }
+      </div>
+      }
     </header>
   );
 }
