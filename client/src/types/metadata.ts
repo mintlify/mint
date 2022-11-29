@@ -19,6 +19,8 @@ export type PageMetaTags = {
   auth?: string;
   size?: string;
   version?: string;
+  mode?: string;
+  // Undocumented
   hideApiMarker?: boolean;
 };
 
