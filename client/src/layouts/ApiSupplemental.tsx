@@ -144,19 +144,6 @@ export function ApiSupplemental({
     }
   }, [endpointStr, openApi]);
 
-  const ResponseExampleChild = ({ code }: { code: string }) => (
-    <pre className="language-json">
-      {/* CodeBlock cannot copy text added with dangerouslySetInnerHTML */}
-      <div className="hidden">{code}</div>
-      <code
-        className="language-json"
-        dangerouslySetInnerHTML={{
-          __html: Prism.highlight(code, Prism.languages.json, 'json'),
-        }}
-      />
-    </pre>
-  );
-
   let requestExamples = null;
   if (
     !apiComponents.some((apiComponent) => {
@@ -179,9 +166,10 @@ export function ApiSupplemental({
     responseChildren = responseChildren.concat(userDefinedResponseExample.props.children);
   }
 
+  // We only include OpenAPI response examples when the user didn't define any
   // We only include the first example because people tend to duplicate them
   const openApiExample = openApiResponseExamples.length > 0 ? openApiResponseExamples[0] : null;
-  if (openApiExample) {
+  if (openApiExample && responseChildren.length === 0) {
     const stringifiedCode = JSON.stringify(openApiExample, null, 2);
     responseChildren.push(
       <CodeBlock filename="Response" key={`example-response`}>
