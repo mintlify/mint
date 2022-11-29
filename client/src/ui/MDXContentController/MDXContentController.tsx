@@ -5,9 +5,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
-import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
+import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
 import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
@@ -18,7 +18,8 @@ import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
 import { ApiSupplemental } from '../../layouts/ApiSupplemental';
-import { getAllOpenApiParameters, OpenApiContent } from '../../layouts/OpenApiContent';
+import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
+import { createUserDefinedExamples } from './createUserDefinedExamples';
 import { PageMetaTags } from '@/types/metadata';
 
 export const ContentsContext = createContext(undefined);
@@ -67,68 +68,69 @@ export function MDXContentController({
   );
 
   const isApi = (meta.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
+  const { requestExample, responseExample } = createUserDefinedExamples(apiComponents);
 
   // The user can hide the table of contents by marking the size as wide, but the API
   // overrides that to show request and response examples on the side.
   // TODO: Remove meta.size
   const isWideSize = meta.mode === 'wide' || meta.size === 'wide';
-  let contentWidth = 'xl:pr-20 xl:mr-[18rem]';
-  if (isApi) {
-    contentWidth = 'xl:pr-12 xl:mr-[28rem]';
-  } else if (isWideSize) {
-    contentWidth = 'xl:pr-20 xl:mr-[12rem]';
+  let contentWidth = 'max-w-3xl xl:max-w-[43rem]';
+  if (isWideSize) {
+    contentWidth = 'max-w-4xl';
   }
 
   const isBlogMode = meta.mode === 'blog';
 
   return (
-    <div className={clsx('relative max-w-3xl mx-auto pt-9 xl:max-w-none xl:ml-0', contentWidth)}>
+    <div className="flex flex-row pt-9 gap-12 items-stretch">
+      <div className={clsx('relative grow mx-auto xl:mx-0', contentWidth)}>
       <PageHeader
         meta={meta}
         section={section}
       />
 
-      {isApi ? (
-        <ApiPlayground
-          api={openApiPlaygroundProps.api ?? meta.api ?? ''}
-          auth={meta.auth}
-          apiComponents={openApiPlaygroundProps.apiComponents ?? apiComponents}
-          contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
-          children={children}
-        />
-      ) : null}
+        {isApi ? (
+          <ApiPlayground
+            api={openApiPlaygroundProps.api ?? meta.api ?? ''}
+            auth={meta.auth}
+            apiComponents={openApiPlaygroundProps.apiComponents ?? apiComponents}
+            contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
+            children={children}
+          />
+        ) : null}
 
-      {/* The MDXProvider here renders the MDX for the page */}
-      <div className="relative z-20 prose prose-slate mt-8 dark:prose-dark">
-        <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
-          <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
-        </ContentsContext.Provider>
-        {meta.openapi && <OpenApiContent endpointStr={meta.openapi} auth={meta.auth} />}
+        {/* The MDXProvider here renders the MDX for the page */}
+        <div className="relative z-20 prose prose-slate mt-8 dark:prose-dark">
+          <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
+            <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
+          </ContentsContext.Provider>
+          {meta.openapi && <OpenApiParameters endpointStr={meta.openapi} auth={meta.auth} />}
+        </div>
+
+        <Footer previous={prev} next={next} hasBottomPadding={!isApi} />
       </div>
 
-      <Footer previous={prev} next={next} hasBottomPadding={!isApi} />
-      <div
-        className={clsx(
-          'z-10 hidden xl:block pr-8',
-          isApi
-            ? 'w-[30rem] absolute top-[7.6rem] left-full h-full'
-            : 'fixed pl-8 w-[21rem] top-[3.8rem] bottom-0 right-[max(0px,calc(50%-45rem))] py-10 overflow-auto'
-        )}
-      >
-        {!isApi && toc.length > 0 && !isWideSize && (
-          <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
-        )}
-        {isApi && (
-          <div className="sticky top-[6rem] left-0">
-            <ApiSupplemental
-              apiComponents={apiComponents}
-              endpointStr={meta.openapi || meta.api}
-              auth={meta.auth ?? config?.api?.auth?.method}
-              authName={config?.api?.auth?.name}
-            />
-          </div>
-        )}
-      </div>
+      {!isWideSize &&
+        (isApi || requestExample || responseExample ? (
+          <ContentSideLayout sticky>
+            <div className="space-y-6 pb-6 w-[28rem]">
+              {requestExample}
+              <ApiSupplemental
+                apiComponents={apiComponents}
+                endpointStr={meta.openapi || meta.api}
+                auth={meta.auth ?? config?.api?.auth?.method}
+                authName={config?.api?.auth?.name}
+                userDefinedResponseExample={responseExample}
+              />
+            </div>
+          </ContentSideLayout>
+        ) : (
+          <ContentSideLayout>
+            <div className="fixed">
+              <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
+            </div>
+          </ContentSideLayout>
+        ))}
     </div>
   );
 }

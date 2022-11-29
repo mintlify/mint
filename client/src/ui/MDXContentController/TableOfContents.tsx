@@ -32,6 +32,10 @@ export function TableOfContents({ tableOfContents, currentSection, meta }: any) 
   if (meta.mode === 'blog') {
     return <BlogSidebar />
   }
+  
+  if (!Array.isArray(tableOfContents) || tableOfContents.length === 0) {
+    return null;
+  }
 
   return (
     <ul className="text-slate-700 text-sm leading-6">

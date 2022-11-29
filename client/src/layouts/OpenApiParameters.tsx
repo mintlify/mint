@@ -160,7 +160,7 @@ function ExpandableFields({ schema }: any) {
   );
 }
 
-export function OpenApiContent({ endpointStr }: OpenApiContentProps) {
+export function OpenApiParameters({ endpointStr }: OpenApiContentProps) {
   const { openApi } = useContext(ConfigContext);
   const { operation, path } = getOpenApiOperationMethodAndEndpoint(endpointStr, openApi);
 
