@@ -86,7 +86,7 @@ export function MDXContentController({
     <div className="flex flex-row pt-9 gap-12 items-stretch">
       <div className={clsx('relative grow mx-auto xl:mx-0', contentWidth)}>
         {
-          meta.mode === 'blog' ? <BlogHeader meta={meta} /> : <PageHeader
+          isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader
           meta={meta}
           section={section}
         />
