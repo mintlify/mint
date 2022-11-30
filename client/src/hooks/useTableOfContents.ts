@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-import { TableOfContentsSection } from '@/types/TableOfContentsSection';
+import { TableOfContentsSection } from '@/types/tableOfContentsSection';
 
 export function useTableOfContents(tableOfContents: TableOfContentsSection[]) {
   let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug);

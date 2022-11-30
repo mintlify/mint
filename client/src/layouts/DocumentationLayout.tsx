@@ -3,7 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
-import { SidebarLayout } from '@/layouts/Sidebar';
+import { SidebarLayout } from '@/layouts/NavSidebar';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { Title } from '@/ui/Title';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';

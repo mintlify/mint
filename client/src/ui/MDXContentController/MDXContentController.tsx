@@ -11,7 +11,7 @@ import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
 import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
-import { PageHeader } from '@/ui/MDXContentController/PageHeader';
+import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
 import { TableOfContents } from '@/ui/MDXContentController/TableOfContents';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
@@ -21,6 +21,7 @@ import { ApiSupplemental } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
 import { createUserDefinedExamples } from './createUserDefinedExamples';
 import { PageMetaTags } from '@/types/metadata';
+import { BlogContext } from '../Blog';
 
 export const ContentsContext = createContext(undefined);
 
@@ -66,8 +67,8 @@ export function MDXContentController({
     openApi,
     meta.openapi
   );
-
   const isApi = (meta.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
+  const isBlogMode = meta.mode === 'blog';
   const { requestExample, responseExample } = createUserDefinedExamples(apiComponents);
 
   // The user can hide the table of contents by marking the size as wide, but the API
@@ -79,15 +80,15 @@ export function MDXContentController({
     contentWidth = 'max-w-4xl';
   }
 
-  const isBlogMode = meta.mode === 'blog';
-
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
       <div className={clsx('relative grow mx-auto xl:mx-0', contentWidth)}>
-      <PageHeader
-        meta={meta}
-        section={section}
-      />
+        {
+          meta.mode === 'blog' ? <BlogHeader meta={meta} /> : <PageHeader
+          meta={meta}
+          section={section}
+        />
+        }
 
         {isApi ? (
           <ApiPlayground
@@ -124,7 +125,13 @@ export function MDXContentController({
               />
             </div>
           </ContentSideLayout>
-        ) : (
+        ) : isBlogMode ?
+          <ContentSideLayout>
+            <div className="fixed">
+              <BlogContext />
+            </div>
+          </ContentSideLayout>
+        : (
           <ContentSideLayout>
             <div className="fixed">
               <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />

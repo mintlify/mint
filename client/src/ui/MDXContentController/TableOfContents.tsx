@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import { useContext, Fragment } from 'react';
 
-import { SidebarContext } from '@/layouts/Sidebar';
-import { TableOfContentsSection } from '@/types/TableOfContentsSection';
-import { BlogSidebar } from '../Blog';
+import { SidebarContext } from '@/layouts/NavSidebar';
+import { TableOfContentsSection } from '@/types/tableOfContentsSection';
 
 export function TableOfContents({ tableOfContents, currentSection, meta }: any) {
   let sidebarContext = useContext(SidebarContext);
@@ -28,10 +27,6 @@ export function TableOfContents({ tableOfContents, currentSection, meta }: any) 
   let pageHasSubsections = tableOfContents.some(
     (section: TableOfContentsSection) => section.children.length > 0
   );
-
-  if (meta.mode === 'blog') {
-    return <BlogSidebar />
-  }
   
   if (!Array.isArray(tableOfContents) || tableOfContents.length === 0) {
     return null;
