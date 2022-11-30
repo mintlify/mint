@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "module": "node16",
     "moduleResolution": "node",
     "target": "es2020",
@@ -9,7 +10,13 @@
     "allowJs": true,
     "esModuleInterop": true,
     "emitDeclarationOnly": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/utils/*": ["src/utils/*"],
+      "@/types/*": ["src/types/*"],
+      "@/schemas/*": ["src/schemas/*"]
+    }
   },
   "include": ["src/**/*"]
 }
