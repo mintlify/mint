@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { useContext, Fragment } from 'react';
 
-import { SidebarContext } from '@/layouts/SidebarLayout';
-import { TableOfContentsSection } from '@/types/TableOfContentsSection';
+import { SidebarContext } from '@/layouts/NavSidebar';
+import { TableOfContentsSection } from '@/types/tableOfContentsSection';
 
-export function TableOfContents({ tableOfContents, currentSection }: any) {
+export function TableOfContents({ tableOfContents, currentSection, meta }: any) {
   let sidebarContext = useContext(SidebarContext);
   let isMainNav = Boolean(sidebarContext);
 
@@ -27,8 +27,7 @@ export function TableOfContents({ tableOfContents, currentSection }: any) {
   let pageHasSubsections = tableOfContents.some(
     (section: TableOfContentsSection) => section.children.length > 0
   );
-
-  // Hide table of contents when its empty
+  
   if (!Array.isArray(tableOfContents) || tableOfContents.length === 0) {
     return null;
   }

@@ -5,26 +5,34 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
-import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
-import { MDXContentControllerProps } from '@/types/MDXContentControllerTypes';
 import { Config } from '@/types/config';
 import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
-import { PageHeader } from '@/ui/MDXContentController/PageHeader';
+import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
 import { TableOfContents } from '@/ui/MDXContentController/TableOfContents';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
-import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
 import { ApiSupplemental } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
 import { createUserDefinedExamples } from './createUserDefinedExamples';
+import { PageMetaTags } from '@/types/metadata';
+import { BlogContext } from '../Blog';
 
 export const ContentsContext = createContext(undefined);
+
+type MDXContentControllerProps = {
+  children: any;
+  meta: PageMetaTags;
+  tableOfContents: any;
+  section: string;
+  apiComponents: any;
+};
+
 
 export function MDXContentController({
   children,
@@ -33,7 +41,6 @@ export function MDXContentController({
   section,
   apiComponents,
 }: MDXContentControllerProps) {
-  const currentPath = useCurrentPath();
   const { config, openApi } = useContext(ConfigContext);
   const toc = [...tableOfContents];
 
@@ -60,8 +67,8 @@ export function MDXContentController({
     openApi,
     meta.openapi
   );
-
   const isApi = (meta.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
+  const isBlogMode = meta.mode === 'blog';
   const { requestExample, responseExample } = createUserDefinedExamples(apiComponents);
 
   // The user can hide the table of contents by marking the size as wide, but the API
@@ -78,11 +85,12 @@ export function MDXContentController({
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
       <div className={clsx('relative grow mx-auto xl:mx-0', contentWidth)}>
-        <PageHeader
-          title={meta.title || slugToTitle(currentPath)}
-          description={meta.description}
+        {
+          meta.mode === 'blog' ? <BlogHeader meta={meta} /> : <PageHeader
+          meta={meta}
           section={section}
         />
+        }
 
         {isApi ? (
           <ApiPlayground
@@ -119,7 +127,13 @@ export function MDXContentController({
               />
             </div>
           </ContentSideLayout>
-        ) : (
+        ) : isBlogMode ?
+          <ContentSideLayout>
+            <div className="fixed">
+              <BlogContext />
+            </div>
+          </ContentSideLayout>
+        : (
           <ContentSideLayout>
             <div className="fixed">
               <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
