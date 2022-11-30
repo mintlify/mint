@@ -20,11 +20,9 @@ export type PageMetaTags = {
   size?: string;
   version?: string;
   mode?: string;
-  _context?: {
-    authors: any;
-    lastUpdatedDate: string;
-    createdDate: string;
-  }
+  authors?: any;
+  lastUpdatedDate?: string;
+  createdDate?: string;
   // Undocumented
   hideApiMarker?: boolean;
 };

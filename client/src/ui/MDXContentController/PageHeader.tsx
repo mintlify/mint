@@ -17,7 +17,7 @@ export function PageHeader({ section, meta }: PageHeaderProps) {
   if (!title && !description) return null;
 
   const isBlogMode = meta.mode === 'blog';
-  const createdDate = isBlogMode && meta._context?.createdDate ? new Date(Date.parse(meta._context?.createdDate)) : new Date();
+  const createdDate = isBlogMode && meta.createdDate ? new Date(Date.parse(meta.createdDate)) : new Date();
   const createdDateReadable = date.format(createdDate, 'MMM D, YYYY'); ;
 
   return (
@@ -47,7 +47,7 @@ export function PageHeader({ section, meta }: PageHeaderProps) {
       {
         isBlogMode && <div className="mt-4 flex space-x-5">
         {
-          meta._context?.authors?.map((author: any) => (
+          meta.authors?.map((author: any) => (
             <AuthorProfile name={author.name} image={author.image} />
           ))
         }
