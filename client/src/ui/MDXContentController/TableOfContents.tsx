@@ -33,8 +33,8 @@ export function TableOfContents({ tableOfContents, currentSection, meta }: any) 
   }
 
   return (
-    <div className="xl:pl-8 fixed">
-    <ul className="w-[17rem] text-slate-700 text-sm leading-6">
+    <div className="hidden xl:flex flex-none z-10 pl-10 w-[19rem]">
+    <ul className="text-slate-700 text-sm leading-6">
       {tableOfContents.map((section: TableOfContentsSection) => {
         let prevDepth = section.depth;
         let prevMargin = 0;

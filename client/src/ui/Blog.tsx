@@ -10,7 +10,7 @@ export function AuthorProfile({ image, name }: { image: string, name: string }) 
 const SHARE_ICONS_CLASSNAMES = "h-5 fill-slate-400 dark:fill-slate-500 hover:fill-slate-500 dark:hover:fill-slate-400 cursor-pointer"
 
 export function BlogContext() {
-  return <div className="fixed">
+  return <div className="hidden xl:flex flex-none z-10 pl-10">
     <div className="space-y-6">
     <div>
       <span className="text-sm font-medium text-slate-400 dark:text-slate-500">Share</span>

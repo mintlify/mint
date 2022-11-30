@@ -127,13 +127,9 @@ export function MDXContentController({
             </div>
           </ContentSideLayout>
         ) : isBlogMode ?
-          <ContentSideLayout>
             <BlogContext />
-          </ContentSideLayout>
         : (
-          <ContentSideLayout>
-            <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
-          </ContentSideLayout>
+          <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         ))}
     </div>
   );
