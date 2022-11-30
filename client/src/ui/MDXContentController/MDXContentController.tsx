@@ -91,7 +91,6 @@ export function MDXContentController({
           section={section}
         />
         }
-
         {isApi ? (
           <ApiPlayground
             api={openApiPlaygroundProps.api ?? meta.api ?? ''}
@@ -129,15 +128,11 @@ export function MDXContentController({
           </ContentSideLayout>
         ) : isBlogMode ?
           <ContentSideLayout>
-            <div className="fixed">
-              <BlogContext />
-            </div>
+            <BlogContext />
           </ContentSideLayout>
         : (
           <ContentSideLayout>
-            <div className="fixed">
-              <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
-            </div>
+            <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
           </ContentSideLayout>
         ))}
     </div>
