@@ -1,17 +1,9 @@
 ---
 title: "Versioning"
-description: "Optionally, you can have separate versions for your docs. Configuring versions only takes a few minutes."
+description: "Optionally, you can have separate versions for your docs. Mintlify lets you toggle content based on your docs version."
 ---
 
-Some times you release a V2 of your product and want to have entirely new docs. We let you hide content based on your docs version.
-
-Not _all_ content has to be hidden though! Any content without a version value shows up in every version so you never duplicate content!
-
-You can add version values to anchors, groups, or individual pages.
-
-## Required Setup
-
-### List All Possible Versions
+## Setup
 
 Add `"versions": ["v2", "v1"]` to your `mint.json` file where "v1" and "v2" are the names of your versions. You can put any number of versions in this array.
 
@@ -23,7 +15,9 @@ Add `"versions": ["v2", "v1"]` to your `mint.json` file where "v1" and "v2" are 
 
 ## Versioning Options
 
-### Versioning Anchors
+You can add version values to anchors, groups, or individual pages.
+
+### Anchors
 
 You can hide an entire anchor based on a version. This is useful when you have dozens of pages you want to hide. For example, for an API reference section.
 
@@ -50,7 +44,7 @@ Simply add `version` to your anchor. Anchors without a version value are shown i
 
 You don't need to add `v1/` or `v2/` to the start of your URLs, but some customers do it to keep their doc files organized.
 
-### Versioning Groups
+### Groups
 
 You can version specific groups. This is useful when a few pages changed but everything else stayed the same.
 
@@ -65,20 +59,20 @@ In the example below, pages in `Nested Group V1` only show up when `v1` docs are
         "pages": [
             {
                 "group": "Nested Group V1",
-                "pages": ["page-w-version", "page-w-version-2"],
+                "pages": ["page-with-version", "other-page-with-version"],
                 "version": "v1"
             },
             {
                 "group": "Nested Group Always Shows",
-                "pages": ["page", "page-2"],
+                "pages": ["nested-page", "other-nested-page"],
             },
-            "other-page"
+            "page"
         ]
     }
 ]
 ```
 
-### Versioning Pages
+### Pages
 
 You can version a single page. Add `version` to the top of your page metadata like so:
 
@@ -92,14 +86,23 @@ version: "v1"
 
 Your navigation config in `mint.json` should include the page like normal, but the page will only show up when the correct version is selected.
 
+### Reusable Pages
+
+Not _all_ content has to be hidden though! Any content without a version value shows up in every version so you never duplicate content!
+
 ## Troubleshooting
 
-### Pages Show Up In Wrong Version
+Common errors and how to fix them
 
+<Accordion title="Pages Show Up In Wrong Version" icon="circle-exclamation">
 You likely nested a version inside of another. For example, your group had version "v1" but your page had version "v2".
 
 We do not recommend nesting versions inside of each other because it's hard to maintain your docs later.
 
-### Missing Pages
+</Accordion>
 
-If you add versions to your docs and the pages disappeared from your navigation, make sure you spelled the version the same as in your `versions` array in `mint.json`.
+<Accordion title="Missing Pages" icon="circle-exclamation">
+  If you add versions to your docs and the pages disappeared from your
+  navigation, make sure you spelled the version the same as in your `versions`
+  array in `mint.json`.
+</Accordion>

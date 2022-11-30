@@ -1,19 +1,34 @@
 ---
 title: "Global Settings (mint.json)"
-description: "Mintlify gives you complete control over the look and feel of your documentation."
+description: "Mintlify gives you complete control over the look and feel of your documentation using the mint.json file"
 ---
-
-The `mint.json` file defines your documentation's navigation, colors, logos, favicon, footer socials, and more.
-
-All `mint.json` properties are optional except for `name` and `navigation`.
 
 ## Properties
 
-<ResponseField name="name" type="string">
+<ResponseField name="name" type="string" required>
 Name of your project. Used for the global title.
 
 Example: `mintlify`
 
+</ResponseField>
+
+<ResponseField name="navigation" type="Navigation[]" required>
+  An array of groups with all the pages within that group
+  <Expandable title="Navigation">
+    <ResponseField name="group" type="string">
+    The name of the group.
+
+    Example: `Settings`
+
+    </ResponseField>
+    <ResponseField name="pages" type="string[]">
+    The relative paths to the markdown files that will serve as pages.
+
+    Example: `["customization", "page"]`
+
+    </ResponseField>
+
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="logo" type="string or object">
@@ -84,36 +99,9 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
-<ResponseField name="navigation" type="Navigation[]">
-  An array of groups with all the pages within that group
-  <Expandable title="Navigation">
-    <ResponseField name="group" type="string">
-    The name of the group.
-
-    Example: `Settings`
-
-    </ResponseField>
-    <ResponseField name="pages" type="string[]">
-    The relative paths to the markdown files that will serve as pages.
-
-    Example: `["customization", "page"]`
-
-    </ResponseField>
-
-  </Expandable>
-</ResponseField>
-
 <ResponseField name="versions" type="string[]">
   Array of version names. Only use this if you want to show different versions
   of docs with a dropdown in the navigation bar.
-  <img
-    class="block h-8 dark:hidden"
-    src="/docs/img/version-dropdown-light.png"
-  />
-  <img
-    class="hidden h-8 dark:block"
-    src="/docs/img/version-dropdown-dark.png"
-  />
 </ResponseField>
 
 <ResponseField name="anchors" type="Anchor[]">
@@ -188,7 +176,13 @@ Example: `mintlify`
 <ResponseField name="footerSocials" type="FooterSocials">
   An object of social media accounts where the key:property pair represents the social media platform and the account url.
   
-  Example: `{ "twitter": "https://twitter.com/mintlify", "website": "https://mintlify.com" }`
+  Example: 
+  ```json
+  {
+    "twitter": "https://twitter.com/mintlify",
+    "website": "https://mintlify.com"
+  }
+  ```
   <Expandable title="FooterSocials">
     <ResponseField name="[key]" type="string">
     One of the following values `website`, `facebook`, `twitter`, `discord`, `slack`, `github`, `linkedin`, `instagram`, `hacker-news`
@@ -203,7 +197,17 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
-## Example
+<ResponseField name="hideFeedbackButtons" type="boolean" default="false">
+  Whether or not to hide the edit suggestion and raise and issue buttons at the
+  top of every page. Defaults to `false`
+</ResponseField>
+
+<ResponseField name="backgroundImage" type="string">
+  A background image to be displayed behind every page. See example with
+  [Infisical](https://infisical.com/docs) and [FRPC](https://frpc.io).
+</ResponseField>
+
+<Accordion title="View Example Configuration">
 
 ```json mint.json
 {
@@ -277,3 +281,5 @@ Example: `mintlify`
   }
 }
 ```
+
+</Accordion>

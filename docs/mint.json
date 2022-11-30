@@ -8,66 +8,81 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#4ADE80",
-    "dark": "#166534",
-    "ultraLight": "#DCFCE7",
-    "ultraDark": "#14532D",
+    "primary": "#2AB673",
+    "light": "#55D799",
+    "dark": "#117866",
+    "ultraLight": "#CCEFE9",
+    "ultraDark": "#0D5E4F",
     "background": {
-      "dark": "#151515"
+      "dark": "#171717"
+    },
+    "anchors": {
+      "from": "#117866",
+      "to": "#2AB673"
     }
   },
   "topbarLinks": [
     {
-      "name": "Contact Sales",
-      "url": "mailto:hi@mintlify.com"
+      "name": "Community",
+      "url": "https://mintlify.com/community"
     }
   ],
   "topbarCtaButton": {
-    "name": "Get Started",
+    "name": "Request Access",
     "url": "https://mintlify.com/start"
   },
   "anchors": [
     {
+      "name": "Showcase",
+      "icon": "trophy-star",
+      "url": "https://mintlify.com/showcase"
+    },
+    {
       "name": "Community",
-      "icon": "comments",
-      "color": "#2564eb",
-      "url": "https://discord.gg/4mgCwRchR6"
+      "icon": "discord",
+      "url": "https://mintlify.com/community"
     },
     {
       "name": "GitHub",
       "icon": "github",
-      "color": "#333333",
       "url": "https://github.com/mintlify/mint"
     }
   ],
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["quickstart", "local-testing"]
+      "pages": ["quickstart", "development"]
     },
     {
       "group": "Settings",
       "pages": [
         "settings/customization",
         "settings/page",
-        "settings/versioning"
+        "settings/versioning",
+        "settings/subdirectory-hosting"
       ]
     },
     {
       "group": "Components",
       "pages": [
         "components/overview",
-        "components/accordion",
-        "components/callout",
-        "components/card",
-        "components/code",
-        "components/embed",
-        "components/image",
-        "components/frame",
-        "components/list",
         "components/text",
+        "components/image",
+        "components/list",
+        "components/code",
+        "components/callout",
+        "components/embed",
         "components/table"
+      ]
+    },
+    {
+      "group": "Advanced Components",
+      "pages": [
+        "components/advanced/accordion",
+        "components/advanced/card",
+        "components/advanced/frame",
+        "components/advanced/tabs",
+        "components/advanced/tooltip"
       ]
     },
     {
@@ -110,9 +125,6 @@
   "analytics": {
     "fathom": {
       "siteId": "YSVUHCAK"
-    },
-    "pirsch": {
-      "id": "8KM7OKxBstsOjnKGZa7P9DayUgmVYvGp"
     }
   }
 }
