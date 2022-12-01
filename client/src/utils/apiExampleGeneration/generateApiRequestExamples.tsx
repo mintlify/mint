@@ -8,7 +8,6 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from '../api';
 import { bodyParamsToObjectString } from './bodyParamToObjectString';
 import { fillPathVariables } from './fillPathVariables';
-import { getAuthParamName } from './getAuthParamName';
 
 export function generateRequestExamples(
   endpointStr: string | undefined,
@@ -23,9 +22,6 @@ export function generateRequestExamples(
   if (endpointStr == null) {
     return null;
   }
-
-  const authValue =
-    apiPlaygroundInputs.Authorization?.[getAuthParamName(authName, auth)] || 'YOUR_AUTH';
 
   const { endpoint, method } = extractMethodAndEndpoint(endpointStr);
   const { base, path: endpointPath } = extractBaseAndPath(
@@ -138,7 +134,7 @@ function assembleUserInputHeaders(
       ) {
         headers.push([headerParam.name, apiPlaygroundInputs.Authorization[headerParam.name]]);
       } else if (headerParam.required) {
-        headers.push([headerParam.name, 'HEADER_VALUE']);
+        headers.push([headerParam.name, 'AUTH_VALUE']);
       }
     }
   }
