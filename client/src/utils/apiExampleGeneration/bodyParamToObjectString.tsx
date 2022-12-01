@@ -44,7 +44,8 @@ function displayableInput(param: Param, input: any, indentation: number) {
     input = `"${input}"`;
   } else if (param.type === 'array') {
     input = JSON.stringify(input);
-  } else if (param.type === 'object') {
+  } else if (param.properties != null) {
+    // Parameters with properties are objects
     input = bodyParamsToObjectString(param.properties, input, indentation + 1);
     input.replace(/ "/g, '  "');
   }
