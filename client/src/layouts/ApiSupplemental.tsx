@@ -1,7 +1,7 @@
 import { CodeGroup } from '@mintlify/components';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-json';
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { CodeBlock } from '@/components/CodeBlock';
 import { ConfigContext } from '@/context/ConfigContext';
