@@ -1,16 +1,14 @@
+import { CodeGroup } from '@mintlify/components';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-json';
 import React, { useState, useEffect, useContext } from 'react';
 
-import { ResponseExample } from '@/components/ApiExample';
 import { CodeBlock } from '@/components/CodeBlock';
-import { CodeGroup } from '@/components/CodeGroup';
 import { ConfigContext } from '@/context/ConfigContext';
 import { Component } from '@/enums/components';
-import { ApiComponent } from '@/types/apiComponent';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
-import { getParamGroupsFromApiComponents } from '@/utils/api';
-import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateAPIExamples';
+import { Param } from '@/utils/api';
+import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateApiRequestExamples';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 
 const responseHasSimpleExample = (response: any): boolean => {
@@ -91,18 +89,18 @@ const generatedNestedExample = (response: any) => {
   return '';
 };
 
-export function ApiSupplemental({
-  apiComponents,
+export function GeneratedRequestExamples({
+  paramGroupDict,
+  apiPlaygroundInputs,
   endpointStr,
   auth,
   authName,
-  userDefinedResponseExample,
 }: {
-  apiComponents: ApiComponent[];
+  paramGroupDict: Record<string, Param[]>;
+  apiPlaygroundInputs: Record<string, Record<string, any>>;
   endpointStr?: string;
   auth?: string;
   authName?: string;
-  userDefinedResponseExample: any;
 }) {
   const { config, openApi } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
@@ -114,15 +112,26 @@ export function ApiSupplemental({
     }
   }, []);
 
+  return generateRequestExamples(
+    endpointStr,
+    config?.api?.baseUrl,
+    apiBaseIndex,
+    paramGroupDict,
+    auth,
+    authName,
+    apiPlaygroundInputs,
+    openApi
+  );
+}
+
+export function OpenApiResponseExample({ endpointStr }: { endpointStr?: string }) {
+  const { openApi } = useContext(ConfigContext);
+  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
+
   const { operation } =
     endpointStr != null && openApi != null
       ? getOpenApiOperationMethodAndEndpoint(endpointStr, openApi)
       : { operation: undefined };
-  //const parameters = getAllOpenApiParameters(path, operation);
-  const paramGroups = getParamGroupsFromApiComponents(apiComponents, auth);
-
-  // Open API generated response examples
-  const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
 
   useEffect(() => {
     if (endpointStr == null) {
@@ -144,33 +153,12 @@ export function ApiSupplemental({
     }
   }, [endpointStr, openApi]);
 
-  let requestExamples = null;
-  if (
-    !apiComponents.some((apiComponent) => {
-      return apiComponent.type === Component.RequestExample;
-    })
-  ) {
-    requestExamples = generateRequestExamples(
-      endpointStr,
-      config?.api?.baseUrl,
-      apiBaseIndex,
-      paramGroups,
-      auth,
-      authName,
-      openApi
-    );
-  }
-
   let responseChildren = [] as any;
-  if (userDefinedResponseExample && userDefinedResponseExample.props.children) {
-    responseChildren = responseChildren.concat(userDefinedResponseExample.props.children);
-  }
 
-  // We only include OpenAPI response examples when the user didn't define any
-  // We only include the first example because people tend to duplicate them
-  const openApiExample = openApiResponseExamples.length > 0 ? openApiResponseExamples[0] : null;
-  if (openApiExample && responseChildren.length === 0) {
-    const stringifiedCode = JSON.stringify(openApiExample, null, 2);
+  const openApiResponseExample = openApiResponseExamples[0];
+
+  if (openApiResponseExample) {
+    const stringifiedCode = JSON.stringify(openApiResponseExample, null, 2);
     responseChildren.push(
       <CodeBlock filename="Response" key={`example-response`}>
         <pre className="language-json">
@@ -187,10 +175,5 @@ export function ApiSupplemental({
     );
   }
 
-  return (
-    <>
-      {requestExamples}
-      {responseChildren.length > 0 && <CodeGroup isSmallText>{responseChildren}</CodeGroup>}
-    </>
-  );
+  return <CodeGroup isSmallText>{responseChildren}</CodeGroup>;
 }

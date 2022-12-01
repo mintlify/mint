@@ -1,18 +1,16 @@
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { forwardRef, useContext, useState } from 'react';
 
+import { ConfigContext } from '@/context/ConfigContext';
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { Group, GroupPage, isGroup, PageMetaTags } from '@/types/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
-import {
-  isEqualIgnoringLeadingSlash,
-} from '@/utils/paths/leadingSlashHelpers';
+import { isEqualIgnoringLeadingSlash } from '@/utils/paths/leadingSlashHelpers';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
-import { ConfigContext } from "@/context/ConfigContext";
-import clsx from "clsx";
-import { forwardRef, useContext, useState } from "react";
-import { useCurrentPath } from '@/hooks/useCurrentPath';
 
 const getPaddingByLevel = (level: number) => {
   switch (level) {
@@ -145,12 +143,15 @@ const GroupDropdown = ({
         </svg>
       </span>
       {isOpen &&
-        pages.map((subpage) => <NavItem groupPage={subpage} level={level + 1} mobile={mobile} />)}
+        pages.map((subpage) => {
+          const key = isGroup(subpage) ? subpage.group : subpage.sidebarTitle || subpage.title;
+          return <NavItem groupPage={subpage} level={level + 1} mobile={mobile} key={key} />;
+        })}
     </>
   );
 };
 
-export function DocNav({ nav, mobile }: { nav: any, mobile: boolean }) {
+export function DocNav({ nav, mobile }: { nav: any; mobile: boolean }) {
   const { config } = useContext(ConfigContext);
 
   let numPages = 0;
@@ -160,36 +161,38 @@ export function DocNav({ nav, mobile }: { nav: any, mobile: boolean }) {
     });
   }
 
-  return <>
-  {nav &&
-    numPages > 0 &&
-    nav
-      .map(({ group, pages }: { group: string; pages: PageMetaTags[] }, i: number) => {
-        return (
-          <li
-            key={i}
-            className={clsx({
-              'mt-12 lg:mt-8': !Boolean(
-                i === 0 && (config?.anchors == null || config.anchors?.length === 0)
-              ),
-            })}
-          >
-            <h5 className="mb-8 lg:mb-3 font-semibold text-slate-900 dark:text-slate-200">
-              {group}
-            </h5>
-            <ul
-              className={clsx(
-                'space-y-6 lg:space-y-2 border-l border-slate-100',
-                mobile ? 'dark:border-slate-700' : 'dark:border-slate-800'
-              )}
-            >
-              {pages.map((page, i: number) => {
-                return <NavItem key={i} groupPage={page} mobile={mobile} />;
-              })}
-            </ul>
-          </li>
-        );
-      })
-      .filter(Boolean)}
-</>
+  return (
+    <>
+      {nav &&
+        numPages > 0 &&
+        nav
+          .map(({ group, pages }: { group: string; pages: PageMetaTags[] }, i: number) => {
+            return (
+              <li
+                key={i}
+                className={clsx({
+                  'mt-12 lg:mt-8': !Boolean(
+                    i === 0 && (config?.anchors == null || config.anchors?.length === 0)
+                  ),
+                })}
+              >
+                <h5 className="mb-8 lg:mb-3 font-semibold text-slate-900 dark:text-slate-200">
+                  {group}
+                </h5>
+                <ul
+                  className={clsx(
+                    'space-y-6 lg:space-y-2 border-l border-slate-100',
+                    mobile ? 'dark:border-slate-700' : 'dark:border-slate-800'
+                  )}
+                >
+                  {pages.map((page, i: number) => {
+                    return <NavItem key={i} groupPage={page} mobile={mobile} />;
+                  })}
+                </ul>
+              </li>
+            );
+          })
+          .filter(Boolean)}
+    </>
+  );
 }

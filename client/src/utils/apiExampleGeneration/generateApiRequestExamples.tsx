@@ -7,6 +7,8 @@ import { CodeBlock } from '@/components/CodeBlock';
 
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from '../api';
 import { bodyParamsToObjectString } from './bodyParamToObjectString';
+import { fillPathVariables } from './fillPathVariables';
+import { getAuthParamName } from './getAuthParamName';
 
 export function generateRequestExamples(
   endpointStr: string | undefined,
@@ -15,21 +17,32 @@ export function generateRequestExamples(
   params: Record<string, Param[]>,
   auth: string | undefined,
   authName: string | undefined,
+  apiPlaygroundInputs: Record<string, Record<string, any>>,
   openApi: any
 ): JSX.Element | undefined {
   if (endpointStr == null) {
     return undefined;
   }
 
-  // TO DO: QUERY AND PATH VARIABLES TOO
-  const bodyParamsString = bodyParamsToObjectString(params.Body);
-  //const currentAuth = params.Auth?.find((param) => param.name === authName)
-  // TO DO, GET VALUE FROM PARAMS
-  const authValue = 'YOUR_AUTH';
+  // TO DO: QUERY VARIABLES TOO
+  const bodyParamsString = bodyParamsToObjectString(
+    params.Body?.filter(
+      (param) => param.required || Object.keys(apiPlaygroundInputs.Body || {}).includes(param.name)
+    ),
+    apiPlaygroundInputs.Body,
+    1
+  );
+
+  const authValue =
+    apiPlaygroundInputs.Authorization?.[getAuthParamName(authName, auth)] || 'YOUR_AUTH';
 
   const { endpoint, method } = extractMethodAndEndpoint(endpointStr);
   const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex, baseUrl, openApi);
-  const fullEndpoint = base + endpointPath;
+  const fullEndpoint = fillPathVariables(
+    base + endpointPath,
+    params.Path,
+    apiPlaygroundInputs.Path
+  );
 
   // \ symbols are escaped otherwise they escape the ` at ends the string
   let curlAuthHeader = '';

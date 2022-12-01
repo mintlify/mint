@@ -1677,15 +1677,16 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@mintlify/components@^0.1.54":
-  version "0.1.54"
-  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.54.tgz#c808e2c8b5086673ee7b9d7fd3b74c8f6f461467"
-  integrity sha512-2vYNPtzmjKcNAJ0gxMEX3xfisb7bFsrS1kiuIZRxkQ53xvWroVYq8/yglBERJ6bzP2PYIIgUZcjwUB2/DYMr9A==
+"@mintlify/components@^0.1.55":
+  version "0.1.55"
+  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.1.55.tgz#80681cc63bf5cb655ed514a752508082b9744f57"
+  integrity sha512-DLzfUe2zbYBKa8WdDM+fPcycMPqJvj4K7pa2ec4/eVWX1LiJiyFmDIO8oqKt+NoWcDjc26Th0BY840nonvGa/Q==
   dependencies:
     "@headlessui/react" "^1.7.3"
     assert "^2.0.0"
     clsx "^1.1.1"
     is-absolute-url "^4.0.1"
+    lodash.set "^4.3.2"
 
 "@next/bundle-analyzer@^12.3.1":
   version "12.3.2"
@@ -2439,18 +2440,6 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
-
-"@types/lodash.set@^4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@types/lodash.set/-/lodash.set-4.3.7.tgz#784fccea3fbef4d0949d1897a780f592da700942"
-  integrity sha512-bS5Wkg/nrT82YUfkNYPSccFrNZRL+irl7Yt4iM6OTSQ0VZJED2oUIVm15NkNtUAQ8SRhCe+axqERUV6MJgkeEg==
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*":
-  version "4.14.188"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.188.tgz#e4990c4c81f7c9b00c5ff8eae389c10f27980da5"
-  integrity sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==
 
 "@types/logrocket-react@^3.0.0":
   version "3.0.0"

@@ -9,19 +9,20 @@ import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
+import { PageMetaTags } from '@/types/metadata';
 import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
 import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
 import { TableOfContents } from '@/ui/MDXContentController/TableOfContents';
+import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
 
-import { ApiSupplemental } from '../../layouts/ApiSupplemental';
+import { GeneratedRequestExamples, OpenApiResponseExample } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
-import { createUserDefinedExamples } from './createUserDefinedExamples';
-import { PageMetaTags } from '@/types/metadata';
 import { BlogContext } from '../Blog';
+import { createUserDefinedExamples } from './createUserDefinedExamples';
 
 export const ContentsContext = createContext(undefined);
 
@@ -33,7 +34,6 @@ type MDXContentControllerProps = {
   apiComponents: any;
 };
 
-
 export function MDXContentController({
   children,
   meta,
@@ -42,6 +42,7 @@ export function MDXContentController({
   apiComponents,
 }: MDXContentControllerProps) {
   const { config, openApi } = useContext(ConfigContext);
+  const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
   const toc = [...tableOfContents];
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
@@ -82,22 +83,28 @@ export function MDXContentController({
     contentWidth = 'max-w-4xl';
   }
 
+  const paramGroupDict = getParamGroupsFromApiComponents(
+    openApiPlaygroundProps.apiComponents ?? apiComponents,
+    meta.auth,
+    config?.api
+  );
+  const paramGroups = Object.entries(paramGroupDict).map(([groupName, params]) => {
+    return {
+      name: groupName,
+      params,
+    };
+  });
+
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
       <div className={clsx('relative grow mx-auto xl:-mx-1 overflow-auto px-1', contentWidth)}>
-        {
-          isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader
-          meta={meta}
-          section={section}
-        />
-        }
+        {isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader meta={meta} section={section} />}
         {isApi ? (
           <ApiPlayground
             api={openApiPlaygroundProps.api ?? meta.api ?? ''}
-            auth={meta.auth}
-            apiComponents={openApiPlaygroundProps.apiComponents ?? apiComponents}
+            paramGroups={paramGroups}
             contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
-            children={children}
+            onInputDataChange={setApiPlaygroundInputs}
           />
         ) : null}
 
@@ -117,18 +124,26 @@ export function MDXContentController({
           <ContentSideLayout sticky>
             <div className="space-y-6 pb-6 w-[28rem]">
               {requestExample}
-              <ApiSupplemental
-                apiComponents={apiComponents}
-                endpointStr={meta.openapi || meta.api}
-                auth={meta.auth ?? config?.api?.auth?.method}
-                authName={config?.api?.auth?.name}
-                userDefinedResponseExample={responseExample}
-              />
+              {!requestExample && (
+                <GeneratedRequestExamples
+                  paramGroupDict={paramGroupDict}
+                  apiPlaygroundInputs={apiPlaygroundInputs}
+                  endpointStr={openApiPlaygroundProps.api ?? meta.api ?? ''}
+                  auth={meta.auth ?? config?.api?.auth?.method}
+                  authName={config?.api?.auth?.name}
+                />
+              )}
+              {responseExample}
+              {!responseExample && (
+                <OpenApiResponseExample
+                  endpointStr={openApiPlaygroundProps.api ?? meta.api ?? ''}
+                />
+              )}
             </div>
           </ContentSideLayout>
-        ) : isBlogMode ?
-            <BlogContext />
-        : (
+        ) : isBlogMode ? (
+          <BlogContext />
+        ) : (
           <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
         ))}
     </div>
