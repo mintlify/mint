@@ -12,7 +12,7 @@ import { getAuthParamName } from './getAuthParamName';
 
 export function generateRequestExamples(
   endpointStr: string | undefined,
-  baseUrl: string[] | string | undefined,
+  baseUrlConfig: string[] | string | undefined,
   apiBaseIndex: number,
   params: Record<string, Param[]>,
   auth: string | undefined,
@@ -24,7 +24,18 @@ export function generateRequestExamples(
     return null;
   }
 
-  // TO DO: QUERY VARIABLES TOO
+  const authValue =
+    apiPlaygroundInputs.Authorization?.[getAuthParamName(authName, auth)] || 'YOUR_AUTH';
+
+  const { endpoint, method } = extractMethodAndEndpoint(endpointStr);
+  const { base, path: endpointPath } = extractBaseAndPath(
+    endpoint,
+    apiBaseIndex,
+    baseUrlConfig,
+    openApi
+  );
+
+  // Generate body parameters
   const bodyParamsString = bodyParamsToObjectString(
     params.Body?.filter(
       (param) => param.required || Object.keys(apiPlaygroundInputs.Body || {}).includes(param.name)
@@ -33,31 +44,31 @@ export function generateRequestExamples(
     1
   );
 
-  const authValue =
-    apiPlaygroundInputs.Authorization?.[getAuthParamName(authName, auth)] || 'YOUR_AUTH';
+  // Generate query parameters
+  const queryParams = new URLSearchParams(apiPlaygroundInputs.Query ?? {}).toString();
+  const queryPostfix = queryParams ? '?' + queryParams : '';
 
-  const { endpoint, method } = extractMethodAndEndpoint(endpointStr);
-  const { base, path: endpointPath } = extractBaseAndPath(endpoint, apiBaseIndex, baseUrl, openApi);
-  const fullEndpoint = fillPathVariables(
-    base + endpointPath,
-    params.Path,
-    apiPlaygroundInputs.Path
-  );
+  // Fill in path parameters and append query parameters
+  const fullEndpoint =
+    fillPathVariables(base + endpointPath, params.Path, apiPlaygroundInputs.Path) + queryPostfix;
 
-  // \ symbols are escaped otherwise they escape the ` at ends the string
-  let curlAuthHeader = '';
-  if (auth === 'bearer') {
-    curlAuthHeader = ` \\\n     --header 'Authorization: ${authName ?? 'Bearer'} ${authValue}'`;
-  } else if (auth === 'key') {
-    curlAuthHeader = ` \\\n     --header '${authName ?? 'key'}: ${authValue}'`;
+  // Generate headers including user defined ones
+  const headers = assembleUserInputHeaders(params, apiPlaygroundInputs, auth, authName, authValue);
+
+  // Add default Content-Type header if the user didn't define it and we have body content
+  if (!headers.find((header) => header[0] === 'Content-Type') && bodyParamsString) {
+    headers.push(['Content-Type', 'application/json']);
   }
+
+  const curlHeaders = headers
+    .map((header) => `     --header '${header[0]}: ${header[1]}'`)
+    .join(' \\\n');
   const curlSnippet = {
     filename: 'cURL',
     code:
       `curl --request ${method} \\\n` +
       `     --url ${fullEndpoint} \\\n` +
-      `     --header 'accept: application/json'` +
-      curlAuthHeader +
+      curlHeaders +
       (bodyParamsString ? ` \\\n     --data '${bodyParamsString}'` : ''),
     prism: {
       grammar: Prism.languages.bash,
@@ -65,17 +76,9 @@ export function generateRequestExamples(
     },
   };
 
+  const pythonHeaders = headers.map((header) => `\n "${header[0]}": "${header[1]}"`).join(',');
   const pythonBodyLine = bodyParamsString ? `body = ${bodyParamsString}\n` : '';
-  let pythonAuthHeader = '';
-  if (auth === 'bearer') {
-    pythonAuthHeader = `, "Authorization": "${authName ?? 'Bearer'} ${authValue}"'`;
-  } else if (auth === 'key') {
-    pythonAuthHeader = `, "${authName ?? 'key'}": "${authValue}"'`;
-  }
-  const pythonHeaderLine =
-    params.Body?.length > 0 || pythonAuthHeader
-      ? `headers = {"content-type": "application/json"${pythonAuthHeader}}\n`
-      : '';
+  const pythonHeaderLine = headers.length > 0 ? `headers = {${pythonHeaders}\n}\n` : '';
 
   const pythonSnippet = {
     filename: 'Python',
@@ -118,4 +121,33 @@ export function generateRequestExamples(
       })}
     </RequestExample>
   );
+}
+
+function assembleUserInputHeaders(
+  params: Record<string, Param[]>,
+  apiPlaygroundInputs: Record<string, Record<string, any>>,
+  auth: string | undefined,
+  authName: string | undefined,
+  authValue: string | undefined
+) {
+  const headers = [];
+
+  if (auth === 'bearer') {
+    headers.push(['Authorization', `${authName ?? 'Bearer'} ${authValue}`]);
+  } else if (auth === 'key') {
+    headers.push([`${authName ?? 'key'}`, authValue]);
+  }
+
+  if (params.Header) {
+    for (const headerParam of params.Header) {
+      if (headerParam.required || apiPlaygroundInputs.Headers[headerParam.name]) {
+        headers.push([
+          headerParam.name,
+          apiPlaygroundInputs.Header?.[headerParam.name] ?? 'HEADER_VALUE',
+        ]);
+      }
+    }
+  }
+
+  return headers;
 }

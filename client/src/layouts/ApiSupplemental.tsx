@@ -109,7 +109,7 @@ export function GeneratedRequestExamples({
     if (configuredApiBaseIndex != null) {
       setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
     }
-  }, []);
+  }, [endpointStr]);
 
   return generateRequestExamples(
     endpointStr,

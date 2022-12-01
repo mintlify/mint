@@ -56,7 +56,7 @@ export function MDXContentController({
     if (configuredApiBaseIndex != null) {
       const parsedIndex = parseInt(configuredApiBaseIndex, 10);
       // Prevent out-of-index errors
-      if (parsedIndex <= baseUrlArrayLength) {
+      if (parsedIndex > 0 && parsedIndex <= baseUrlArrayLength) {
         setApiBaseIndex(parsedIndex);
       }
     }
