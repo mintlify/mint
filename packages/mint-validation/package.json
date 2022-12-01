@@ -1,5 +1,5 @@
 {
-  "name": "@mintlify/mint-validator",
+  "name": "@mintlify/mint-validation",
   "version": "0.0.1",
   "description": "Validates mint.json files",
   "keywords": [
@@ -8,7 +8,16 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "publish-package": "npm run build && npm publish --access public"
+  },
+  "jest": {
+    "verbose": true,
+    "moduleNameMapper": {
+      "@/utils/(.*)": "<rootDir>/src/utils/$1",
+      "@/schemas/(.*)": "<rootDir>/src/schemas/$1",
+      "@/types/(.*)": "<rootDir>/src/types/$1"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,5 +36,8 @@
     "babel-jest": "^29.3.1",
     "jest": "^29.3.1",
     "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "zod": "^3.19.1"
   }
 }
