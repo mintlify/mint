@@ -53,7 +53,7 @@ export function generateRequestExamples(
     fillPathVariables(base + endpointPath, params.Path, apiPlaygroundInputs.Path) + queryPostfix;
 
   // Generate headers including user defined ones
-  const headers = assembleUserInputHeaders(params, apiPlaygroundInputs, auth, authName, authValue);
+  const headers = assembleUserInputHeaders(params, apiPlaygroundInputs);
 
   // Add default Content-Type header if the user didn't define it and we have body content
   if (!headers.find((header) => header[0] === 'Content-Type') && bodyParamsString) {
@@ -125,17 +125,22 @@ export function generateRequestExamples(
 
 function assembleUserInputHeaders(
   params: Record<string, Param[]>,
-  apiPlaygroundInputs: Record<string, Record<string, any>>,
-  auth: string | undefined,
-  authName: string | undefined,
-  authValue: string | undefined
+  apiPlaygroundInputs: Record<string, Record<string, any>>
 ) {
   const headers = [];
 
-  if (auth === 'bearer') {
-    headers.push(['Authorization', `${authName ?? 'Bearer'} ${authValue}`]);
-  } else if (auth === 'key') {
-    headers.push([`${authName ?? 'key'}`, authValue]);
+  // These two loops should be the same
+  if (params.Authorization) {
+    for (const headerParam of params.Authorization) {
+      if (
+        apiPlaygroundInputs.Authorization &&
+        apiPlaygroundInputs.Authorization[headerParam.name]
+      ) {
+        headers.push([headerParam.name, apiPlaygroundInputs.Authorization[headerParam.name]]);
+      } else if (headerParam.required) {
+        headers.push([headerParam.name, 'HEADER_VALUE']);
+      }
+    }
   }
 
   if (params.Header) {
