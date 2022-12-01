@@ -9,7 +9,6 @@ import {
   extractBaseAndPath,
   extractMethodAndEndpoint,
   getApiContext,
-  getParamGroupsFromApiComponents,
   ParamGroup,
 } from '@/utils/api';
 import { getAuthParamName } from '@/utils/apiExampleGeneration/getAuthParamName';

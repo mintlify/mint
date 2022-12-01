@@ -19,9 +19,9 @@ export function generateRequestExamples(
   authName: string | undefined,
   apiPlaygroundInputs: Record<string, Record<string, any>>,
   openApi: any
-): JSX.Element | undefined {
+): JSX.Element | null {
   if (endpointStr == null) {
-    return undefined;
+    return null;
   }
 
   // TO DO: QUERY VARIABLES TOO

@@ -5,7 +5,6 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { CodeBlock } from '@/components/CodeBlock';
 import { ConfigContext } from '@/context/ConfigContext';
-import { Component } from '@/enums/components';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { Param } from '@/utils/api';
 import { generateRequestExamples } from '@/utils/apiExampleGeneration/generateApiRequestExamples';
