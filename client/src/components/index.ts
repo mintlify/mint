@@ -20,7 +20,6 @@ import { CodeGroup, SnippetGroup } from '@/components/CodeGroup';
 import { Expandable } from '@/components/Expandable';
 import { Heading } from '@/components/Heading';
 import { Param, ParamField } from '@/components/Param';
-import { RequestSimple } from '@/components/Request';
 import { ResponseField } from '@/components/ResponseField';
 import { MDXContentController } from '@/ui/MDXContentController/MDXContentController';
 
@@ -31,7 +30,6 @@ const components: any = {
   CodeGroup,
   CodeBlock,
   SnippetGroup,
-  RequestSimple,
   RequestExample,
   ResponseExample,
   Param,
@@ -60,7 +58,6 @@ export const allowedComponents = [
   'CodeGroup',
   'CodeBlock',
   'SnippetGroup',
-  'RequestSimple',
   'RequestExample',
   'ResponseExample',
   'Param',
