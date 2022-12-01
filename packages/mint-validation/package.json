@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "publish-package": "npm run build && npm publish --access public"
   },
   "jest": {
     "verbose": true,
