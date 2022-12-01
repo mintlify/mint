@@ -140,11 +140,10 @@ function assembleUserInputHeaders(
 
   if (params.Header) {
     for (const headerParam of params.Header) {
-      if (headerParam.required || apiPlaygroundInputs.Headers[headerParam.name]) {
-        headers.push([
-          headerParam.name,
-          apiPlaygroundInputs.Header?.[headerParam.name] ?? 'HEADER_VALUE',
-        ]);
+      if (apiPlaygroundInputs.Header && apiPlaygroundInputs.Header[headerParam.name]) {
+        headers.push([headerParam.name, apiPlaygroundInputs.Header[headerParam.name]]);
+      } else if (headerParam.required) {
+        headers.push([headerParam.name, 'HEADER_VALUE']);
       }
     }
   }
