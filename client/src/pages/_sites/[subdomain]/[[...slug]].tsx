@@ -79,7 +79,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
   );
   return {
     paths,
-    fallback: 'blocking',
+    fallback: true,
   };
 };
 
@@ -165,6 +165,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         stringifiedFavicons: stringify(favicons),
         subdomain,
       },
+      revalidate: 60,
     };
   }
   return {
