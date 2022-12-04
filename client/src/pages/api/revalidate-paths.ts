@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +11,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   paths.forEach((path) => {
-    res.revalidate(path);
+    axios.post(`https://${process.env.VERCEL_URL}/api/revalidate`, {
+      secret: process.env.ADMIN_TOKEN,
+      urlPath: path,
+    });
   });
 
   // 202 because we guarantee we started the async process, but do not know if it worked
