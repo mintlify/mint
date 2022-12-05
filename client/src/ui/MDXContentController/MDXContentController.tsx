@@ -116,7 +116,11 @@ export function MDXContentController({
           {meta.openapi && <OpenApiParameters endpointStr={meta.openapi} auth={meta.auth} />}
         </div>
 
-        <Footer previous={prev} next={next} hasBottomPadding={!isApi} />
+        <Footer
+          previous={meta.hideFooterPagination ? null : prev}
+          next={meta.hideFooterPagination ? null : next}
+          hasBottomPadding={!isApi}
+        />
       </div>
 
       {!isWideSize &&
