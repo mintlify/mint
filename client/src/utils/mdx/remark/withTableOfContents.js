@@ -1,8 +1,12 @@
-import slugify from '@sindresorhus/slugify';
+import { slugifyWithCounter } from '@sindresorhus/slugify';
 
 import { addExport, createMdxJsxAttribute } from './utils.js';
 
 const withTableOfContents = () => {
+  // slugifyWithCounter adds a counter (eg. slug, slug-2, slug-3) to the end of the slug if the header
+  // already exists. No counter is added for the first occurence.
+  const slugify = slugifyWithCounter();
+
   return (tree) => {
     const contents = [];
     let hasTopLayer = false;
@@ -21,18 +25,8 @@ const withTableOfContents = () => {
           )
           .map((node) => node.value)
           .join('');
-        let slug = slugify(title);
 
-        // if a header with the exact same title shows up - make the slug unique
-        let allOtherSlugs = contents.flatMap((entry) => [
-          entry.slug,
-          ...entry.children?.map(({ slug }) => slug),
-        ]);
-        let slugIndex = 1;
-        while (allOtherSlugs.indexOf(slug) > -1) {
-          slug = `${slugify(title)}-${slugIndex}`;
-          slugIndex++;
-        }
+        const slug = slugify(title, { decamelize: false });
 
         let mdxJsxAttributes = [
           createMdxJsxAttribute('level', level),
