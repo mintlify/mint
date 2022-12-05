@@ -76,7 +76,6 @@ const __injectedSchema = z
 export const configSchema = z.object({
   mintlify: z.string().optional(),
   name: nameSchema,
-  basePath: z.string().optional(),
   logo: logoSchema,
   favicon: faviconSchema,
   openApi: z.string().optional(),

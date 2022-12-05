@@ -1,6 +1,5 @@
 {
   "name": "Mintlify",
-  "basePath": "/docs",
   "logo": {
     "light": "/docs/logo/light.svg",
     "dark": "/docs/logo/dark.svg",
