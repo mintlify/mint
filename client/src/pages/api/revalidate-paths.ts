@@ -9,7 +9,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'No paths provided' });
   }
 
-  paths.forEach((path) => res.revalidate(path));
+  console.time();
+  paths.forEach(async (path) => {
+    await res.revalidate(path).catch(console.error);
+  });
+  console.timeEnd();
+
+  // paths.forEach((path) => res.revalidate(path));
 
   // 202 because we guarantee we started the async process, but do not know if it worked
   return res.status(202);
