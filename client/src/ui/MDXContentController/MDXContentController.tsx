@@ -80,7 +80,7 @@ export function MDXContentController({
   if (isApi || requestExample || responseExample) {
     contentWidth = 'max-w-3xl xl:max-w-[min(100% - 31rem, 43rem)]';
   } else if (isWideSize) {
-    contentWidth = 'max-w-4xl';
+    contentWidth = 'max-w-3xl';
   }
 
   const paramGroupDict = getParamGroupsFromApiComponents(
