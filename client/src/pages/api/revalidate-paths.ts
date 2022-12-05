@@ -12,5 +12,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   paths.forEach((path) => res.revalidate(path));
 
   // 202 because we guarantee we started the async process, but do not know if it worked
-  return res.status(202);
+  return res.status(202).send({ success: 'Revalidation started' });
 }
