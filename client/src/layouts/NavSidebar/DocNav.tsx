@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { forwardRef, useContext, useState } from 'react';
+import { forwardRef, useContext, useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
@@ -9,6 +9,7 @@ import { Group, GroupPage, isGroup, PageMetaTags } from '@/types/metadata';
 import { extractMethodAndEndpoint } from '@/utils/api';
 import { isPathInGroupPages } from '@/utils/nav';
 import { getMethodDotsColor } from '@/utils/openApiColors';
+import { isPathInGroup } from '@/utils/paths/isPathInGroup';
 import { isEqualIgnoringLeadingSlash } from '@/utils/paths/leadingSlashHelpers';
 import { slugToTitle } from '@/utils/titleText/slugToTitle';
 
@@ -86,10 +87,19 @@ const GroupDropdown = ({
   level: number;
   mobile: boolean;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const currentPath = useCurrentPath();
+  const [isOpen, setIsOpen] = useState(false);
   const { group: name, pages } = group;
+
+  // Open the menu when we navigate to a page in the group.
+  // We use useEffect instead of modifying the useState default
+  // value so we can open menus even after the page has loaded.
+  useEffect(() => {
+    if (isPathInGroup(currentPath, group)) {
+      setIsOpen(true);
+    }
+  }, [currentPath, group]);
 
   if (!name || !pages) {
     return null;

@@ -74,7 +74,6 @@ export type ApiConfig = {
 export type Config = {
   mintlify?: string;
   name: string;
-  basePath?: string;
   logo?: Logo;
   favicon?: string;
   openApi?: string;

@@ -23,8 +23,7 @@ export type PageMetaTags = {
   authors?: any;
   lastUpdatedDate?: string;
   createdDate?: string;
-  // Undocumented
-  hideApiMarker?: boolean;
+  hideApiMarker?: boolean; // Undocumented
 };
 
 export type Groups = Group[];
