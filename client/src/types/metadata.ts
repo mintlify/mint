@@ -23,7 +23,7 @@ export type PageMetaTags = {
   authors?: any;
   lastUpdatedDate?: string;
   createdDate?: string;
-  hideFooterPagination?: string;
+  hideFooterPagination?: boolean;
   hideApiMarker?: boolean; // Undocumented
 };
 
