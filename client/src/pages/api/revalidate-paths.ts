@@ -4,10 +4,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { secret, paths }: { secret: string; paths: string[] } = req.body;
   if (secret !== process.env.ADMIN_TOKEN) {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ revalidating: false, error: 'Invalid token' });
   }
   if (!paths) {
-    return res.status(400).json({ error: 'No paths provided' });
+    return res.status(400).json({ revalidating: false, error: 'No paths provided' });
   }
 
   paths.forEach((path) => {
@@ -18,5 +18,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 
   // 202 because we guarantee we started the async process, but do not know if it worked
-  return res.status(202).json({ success: 'Revalidation started' });
+  return res.status(202).json({ revalidating: true });
 }
