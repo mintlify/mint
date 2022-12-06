@@ -123,17 +123,17 @@ export function GeneratedRequestExamples({
   );
 }
 
-export function OpenApiResponseExample({ endpointStr }: { endpointStr?: string }) {
+export function OpenApiResponseExample({ openapi }: { openapi?: string }) {
   const { openApi } = useContext(ConfigContext);
   const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
 
   const { operation } =
-    endpointStr != null && openApi != null
-      ? getOpenApiOperationMethodAndEndpoint(endpointStr, openApi)
+    openapi != null && openApi != null
+      ? getOpenApiOperationMethodAndEndpoint(openapi, openApi)
       : { operation: undefined };
 
   useEffect(() => {
-    if (endpointStr == null) {
+    if (openapi == null) {
       return;
     }
 
@@ -150,12 +150,11 @@ export function OpenApiResponseExample({ endpointStr }: { endpointStr?: string }
         setOpenApiResponseExamples(responseExamplesOpenApi);
       }
     }
-  }, [endpointStr, openApi]);
+  }, [openapi, openApi]);
 
   let responseChildren = [] as any;
 
   const openApiResponseExample = openApiResponseExamples[0];
-
   if (openApiResponseExample) {
     const stringifiedCode = JSON.stringify(openApiResponseExample, null, 2);
     responseChildren.push(

@@ -95,13 +95,15 @@ export function MDXContentController({
     };
   });
 
+  const api = openApiPlaygroundProps.api ?? meta.api ?? '';
+
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
       <div className={clsx('relative grow mx-auto xl:-mx-1 overflow-auto px-1', contentWidth)}>
         {isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader meta={meta} section={section} />}
         {isApi ? (
           <ApiPlayground
-            api={openApiPlaygroundProps.api ?? meta.api ?? ''}
+            api={api}
             paramGroups={paramGroups}
             contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
             onInputDataChange={setApiPlaygroundInputs}
@@ -132,17 +134,13 @@ export function MDXContentController({
                 <GeneratedRequestExamples
                   paramGroupDict={paramGroupDict}
                   apiPlaygroundInputs={apiPlaygroundInputs}
-                  endpointStr={openApiPlaygroundProps.api ?? meta.api ?? ''}
+                  endpointStr={api}
                   auth={meta.auth ?? config?.api?.auth?.method}
                   authName={config?.api?.auth?.name}
                 />
               )}
               {responseExample}
-              {!responseExample && (
-                <OpenApiResponseExample
-                  endpointStr={openApiPlaygroundProps.api ?? meta.api ?? ''}
-                />
-              )}
+              {!responseExample && <OpenApiResponseExample openapi={meta.openapi} />}
             </div>
           </ContentSideLayout>
         ) : isBlogMode ? (
