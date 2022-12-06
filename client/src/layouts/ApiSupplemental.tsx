@@ -1,9 +1,9 @@
-import { CodeGroup } from '@mintlify/components';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-json';
 import { useState, useEffect, useContext } from 'react';
 
 import { CodeBlock } from '@/components/CodeBlock';
+import { CodeGroup } from '@/components/CodeGroup';
 import { ConfigContext } from '@/context/ConfigContext';
 import { APIBASE_CONFIG_STORAGE } from '@/ui/ApiPlayground';
 import { Param } from '@/utils/api';
@@ -91,33 +91,21 @@ const generatedNestedExample = (response: any) => {
 export function GeneratedRequestExamples({
   paramGroupDict,
   apiPlaygroundInputs,
+  apiBaseIndex,
   endpointStr,
-  auth,
-  authName,
 }: {
   paramGroupDict: Record<string, Param[]>;
   apiPlaygroundInputs: Record<string, Record<string, any>>;
+  apiBaseIndex: number;
   endpointStr?: string;
-  auth?: string;
-  authName?: string;
 }) {
   const { config, openApi } = useContext(ConfigContext);
-  const [apiBaseIndex, setApiBaseIndex] = useState(0);
-
-  useEffect(() => {
-    const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
-    if (configuredApiBaseIndex != null) {
-      setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
-    }
-  }, [endpointStr]);
 
   return generateRequestExamples(
     endpointStr,
     config?.api?.baseUrl,
     apiBaseIndex,
     paramGroupDict,
-    auth,
-    authName,
     apiPlaygroundInputs,
     openApi
   );

@@ -1,6 +1,6 @@
 import { MDXProvider } from '@mdx-js/react';
 import clsx from 'clsx';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
@@ -10,7 +10,7 @@ import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
 import { PageMetaTags } from '@/types/metadata';
-import { APIBASE_CONFIG_STORAGE, ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
+import { ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
 import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
 import { TableOfContents } from '@/ui/MDXContentController/TableOfContents';
@@ -43,24 +43,11 @@ export function MDXContentController({
 }: MDXContentControllerProps) {
   const { config, openApi } = useContext(ConfigContext);
   const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
+  const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const toc = [...tableOfContents];
 
   const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
   let { prev, next } = usePrevNext();
-
-  // Control the API Base URL index
-  const baseUrlArrayLength = getBaseUrlLength(config);
-  const [apiBaseIndex, setApiBaseIndex] = useState(0);
-  useEffect(() => {
-    const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
-    if (configuredApiBaseIndex != null) {
-      const parsedIndex = parseInt(configuredApiBaseIndex, 10);
-      // Prevent out-of-index errors
-      if (parsedIndex > 0 && parsedIndex <= baseUrlArrayLength) {
-        setApiBaseIndex(parsedIndex);
-      }
-    }
-  }, [openApi, baseUrlArrayLength]);
 
   const openApiPlaygroundProps = getOpenApiPlaygroundProps(
     apiBaseIndex,
@@ -107,6 +94,7 @@ export function MDXContentController({
             paramGroups={paramGroups}
             contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
             onInputDataChange={setApiPlaygroundInputs}
+            onApiBaseIndexChange={setApiBaseIndex}
           />
         ) : null}
 
@@ -134,9 +122,8 @@ export function MDXContentController({
                 <GeneratedRequestExamples
                   paramGroupDict={paramGroupDict}
                   apiPlaygroundInputs={apiPlaygroundInputs}
+                  apiBaseIndex={apiBaseIndex}
                   endpointStr={api}
-                  auth={meta.auth ?? config?.api?.auth?.method}
-                  authName={config?.api?.auth?.name}
                 />
               )}
               {responseExample}
@@ -243,12 +230,4 @@ function getOpenApiPlaygroundProps(
     apiComponents,
     contentType,
   };
-}
-
-// Return the length of the array if baseUrl is an array, otherwise return 0
-function getBaseUrlLength(config: Config | undefined) {
-  if (config?.api?.baseUrl && Array.isArray(config.api?.baseUrl)) {
-    return config?.api?.baseUrl.length;
-  }
-  return 0;
 }

@@ -14,8 +14,6 @@ export function generateRequestExamples(
   baseUrlConfig: string[] | string | undefined,
   apiBaseIndex: number,
   params: Record<string, Param[]>,
-  auth: string | undefined,
-  authName: string | undefined,
   apiPlaygroundInputs: Record<string, Record<string, any>>,
   openApi: any
 ): JSX.Element | null {

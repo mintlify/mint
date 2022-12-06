@@ -31,11 +31,13 @@ export function ApiPlayground({
   paramGroups,
   contentType = 'application/json',
   onInputDataChange,
+  onApiBaseIndexChange,
 }: {
   api: string;
   paramGroups: ParamGroup[];
   contentType?: string;
   onInputDataChange?: (newInputData: Record<string, Record<string, any>>) => void;
+  onApiBaseIndexChange: (apiBaseIndex: number) => void;
 }) {
   const { basePath } = useRouter();
   const { config, openApi } = useContext(ConfigContext);
@@ -61,7 +63,9 @@ export function ApiPlayground({
   useEffect(() => {
     const configuredApiBaseIndex = window.localStorage.getItem(APIBASE_CONFIG_STORAGE);
     if (configuredApiBaseIndex != null) {
-      setApiBaseIndex(parseInt(configuredApiBaseIndex, 10));
+      const storedApiBaseIndex = parseInt(configuredApiBaseIndex, 10);
+      setApiBaseIndex(storedApiBaseIndex);
+      onApiBaseIndexChange(storedApiBaseIndex);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
@@ -71,8 +75,11 @@ export function ApiPlayground({
       return;
     }
     const index = config.api.baseUrl.indexOf(base);
-    window.localStorage.setItem(APIBASE_CONFIG_STORAGE, index.toString());
-    setApiBase(base);
+    if (index >= 0) {
+      window.localStorage.setItem(APIBASE_CONFIG_STORAGE, index.toString());
+      setApiBase(base);
+      onApiBaseIndexChange(index);
+    }
   };
 
   const makeApiRequest = async () => {
