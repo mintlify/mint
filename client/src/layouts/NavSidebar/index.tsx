@@ -1,16 +1,14 @@
 import { Dialog } from '@headlessui/react';
 import isAbsoluteUrl from 'is-absolute-url';
 import { ReactNode, useContext } from 'react';
-import { createContext} from 'react';
+import { createContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { VersionContext } from '@/context/VersionContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { PageMetaTags, Groups } from '@/types/metadata';
 import { getGroupsInDivision, getGroupsInVersion, getGroupsNotInDivision } from '@/utils/nav';
-import {
-  optionallyRemoveLeadingSlash,
-} from '@/utils/paths/leadingSlashHelpers';
+import { optionallyRemoveLeadingSlash } from '@/utils/paths/leadingSlashHelpers';
 
 import { Anchor, Config } from '../../types/config';
 import { Nav } from './Nav';
@@ -64,7 +62,7 @@ export function SidebarLayout({
       <Wrapper allowOverflow={allowOverflow}>
         <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="hidden lg:block fixed z-20 top-[3.8125rem] bottom-0 left-[max(0px,calc(50%-45rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
-            <Nav nav={navForDivisionInVersion} meta={meta}/>
+            <Nav nav={navForDivisionInVersion} meta={meta} />
           </div>
           <div className="lg:pl-[20rem]">{children}</div>
         </div>
@@ -75,8 +73,8 @@ export function SidebarLayout({
         onClose={() => setNavIsOpen(false)}
         className="fixed z-50 inset-0 overflow-y-auto lg:hidden"
       >
-        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-slate-900/80" />
-        <div className="relative bg-white w-80 min-h-full max-w-[calc(100%-3rem)] p-6 dark:bg-slate-800">
+        <Dialog.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm dark:bg-background-dark/80" />
+        <div className="relative bg-white w-80 min-h-full max-w-[calc(100%-3rem)] p-6 dark:bg-background-dark">
           <button
             type="button"
             onClick={() => setNavIsOpen(false)}

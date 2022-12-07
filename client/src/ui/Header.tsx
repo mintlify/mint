@@ -64,7 +64,7 @@ export function NavPopover({
         onClose={setIsOpen}
       >
         <Dialog.Overlay className="fixed inset-0 bg-background-dark backdrop-blur-sm opacity-20 dark:opacity-80" />
-        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 dark:bg-slate-800 dark:text-slate-400 dark:highlight-white/5">
+        <div className="fixed top-4 right-4 w-full max-w-xs bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 dark:bg-background-dark dark:text-slate-400 ring-slate-600/50 dark:ring-2">
           <button
             type="button"
             className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
