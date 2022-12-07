@@ -52,9 +52,12 @@ Note - `mintlify dev` requires `yarn` and it's recommended you install it as a g
 
 #### Troubleshooting
 
-Make sure you are using Node v18 or higher.
+Steps you can take if the dev CLI is not working (After each step try to run `mintlify dev` again):
 
-If Mintlify dev is still not running, run `mintlify install` to re-install dependencies.
+- Make sure you are using Node v18 or higher.
+- Run `mintlify install` to re-install dependencies.
+- Navigate to the `.mintlify` folder in your home directory and delete its contents.
+- If all else fails navigate to `~/.mintlify` and `git clone https://github.com/mintlify/mint.git --branch legacy-components-import`
 
 ### 🏃 Get Started
 
