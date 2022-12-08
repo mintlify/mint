@@ -18,3 +18,11 @@ export const getFileList = async (dirName: string, og = dirName) => {
 
   return files;
 };
+
+export const getExtension = (path: string) => {
+  return path.substring(path.lastIndexOf('.') + 1, path.length) || path;
+};
+
+export const removeExtension = (path: string) => {
+  return path.substring(0, path.lastIndexOf('.'));
+};

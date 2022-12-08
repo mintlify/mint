@@ -10,7 +10,7 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
-import { getFileList } from '@/utils/local/files';
+import { getPaths } from '@/utils/local/getPaths';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
@@ -22,13 +22,8 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const files = await getFileList(path.join('content'));
+  const files = await getPaths(path.join('content'));
   console.log(files);
-  // const paths = files.map(filename => ({
-  //   params: {
-  //     slug: filename.replace('.mdx', '')
-  //   }
-  // }))
   return {
     paths: [
       {
