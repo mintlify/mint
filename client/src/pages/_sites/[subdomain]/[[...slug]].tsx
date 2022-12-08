@@ -1,66 +1,21 @@
 import { ResizeObserver } from '@juggle/resize-observer';
 import * as Sentry from '@sentry/nextjs';
-import { stringify, parse } from 'flatted';
+import { stringify } from 'flatted';
 import 'focus-visible';
 import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 
-import SupremePageLayout from '@/layouts/SupremePageLayout';
 import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
-import { ErrorPage } from '@/pages/404';
-import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
+import { PageProps } from '@/types/page';
+import Page from '@/ui/Page';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
   window.ResizeObserver = ResizeObserver;
-}
-
-interface PageProps {
-  stringifiedMdxSource: string;
-  stringifiedData: string;
-  stringifiedFavicons: string;
-  subdomain: string;
-}
-
-interface ParsedDataProps {
-  nav: Groups;
-  meta: PageMetaTags;
-  section: string | undefined;
-  metaTagsForSeo: PageMetaTags;
-  title: string;
-  stringifiedConfig: string;
-  stringifiedOpenApi?: string;
-}
-
-export default function Page({
-  stringifiedMdxSource,
-  stringifiedData,
-  stringifiedFavicons,
-  subdomain,
-}: PageProps) {
-  try {
-    const mdxSource = parse(stringifiedMdxSource);
-    const parsedData = parse(stringifiedData) as ParsedDataProps;
-    const config = JSON.parse(parsedData.stringifiedConfig) as Config;
-    const openApi = parsedData.stringifiedOpenApi ? JSON.parse(parsedData.stringifiedOpenApi) : {};
-    const favicons = parse(stringifiedFavicons);
-    return (
-      <SupremePageLayout
-        mdxSource={mdxSource}
-        parsedData={parsedData}
-        config={config}
-        openApi={openApi}
-        favicons={favicons}
-        subdomain={subdomain}
-      />
-    );
-  } catch (e) {
-    return <ErrorPage />;
-  }
 }
 
 interface PathProps extends ParsedUrlQuery {
@@ -120,7 +75,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       section,
       meta,
       metaTagsForSeo,
-      title,
       stringifiedOpenApi,
       favicons,
     }: {
@@ -130,7 +84,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       section: string;
       meta: PageMetaTags;
       metaTagsForSeo: PageMetaTags;
-      title: string;
       stringifiedOpenApi?: string;
       favicons: FaviconsProps;
     } = data;
@@ -158,7 +111,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           meta,
           section,
           metaTagsForSeo,
-          title,
           stringifiedConfig,
           stringifiedOpenApi,
         }),
@@ -172,3 +124,5 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     notFound: true,
   };
 };
+
+export default Page;
