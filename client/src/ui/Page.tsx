@@ -14,6 +14,7 @@ export default function Page({
   try {
     const mdxSource = parse(stringifiedMdxSource);
     const parsedData = parse(stringifiedData) as ParsedDataProps;
+    console.log({ parsedData });
     const config = JSON.parse(parsedData.stringifiedConfig) as Config;
     const openApi = parsedData.stringifiedOpenApi ? JSON.parse(parsedData.stringifiedOpenApi) : {};
     const favicons = parse(stringifiedFavicons);
@@ -24,7 +25,7 @@ export default function Page({
         config={config}
         openApi={openApi}
         favicons={favicons}
-        subdomain={subdomain ?? ''}
+        subdomain={subdomain}
       />
     );
   } catch (e) {

@@ -4,7 +4,7 @@ export interface PageProps {
   stringifiedMdxSource: string;
   stringifiedData: string;
   stringifiedFavicons: string;
-  subdomain?: string;
+  subdomain: string;
 }
 
 export interface ParsedDataProps {

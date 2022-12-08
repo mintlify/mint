@@ -1,7 +1,6 @@
 import { ResizeObserver } from '@juggle/resize-observer';
 import { stringify } from 'flatted';
 import 'focus-visible';
-import fs from 'fs';
 import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import path from 'path';
@@ -11,6 +10,7 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
+import { getFileList } from '@/utils/local/files';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 
 if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
@@ -22,7 +22,7 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const files = fs.readdirSync(path.join('content'));
+  const files = await getFileList(path.join('content'));
   console.log(files);
   // const paths = files.map(filename => ({
   //   params: {
@@ -231,7 +231,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         stringifiedOpenApi,
       }),
       stringifiedFavicons: stringify(favicons),
-      subdomain: process.env.SUBDOMAIN,
+      subdomain: process.env.SUBDOMAIN ?? '',
     },
     revalidate: 60,
   };

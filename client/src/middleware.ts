@@ -20,21 +20,11 @@ export default function middleware(req: NextRequest) {
       hostname.replace('.' + process.env.HOST_NAME, '')
     : hostname.replace('.localhost:3000', '');
 
-  // may need this for self hosting one day:
-  // rewrites for app pages
-  // if (currentHost == 'app') {
-  //   if (
-  //     url.pathname === '/login' &&
-  //     (req.cookies.get('next-auth.session-token') ||
-  //       req.cookies.get('__Secure-next-auth.session-token'))
-  //   ) {
-  //     url.pathname = '/';
-  //     return NextResponse.redirect(url);
-  //   }
-
-  //   url.pathname = `/app${url.pathname}`;
-  //   return NextResponse.rewrite(url);
-  // }
+  // rewrite root application to main folder
+  if (hostname === 'localhost:3000' || hostname === 'platformize.vercel.app') {
+    // TODO: change so it detects if it's at a subdomain or not
+    return NextResponse.rewrite(url);
+  }
 
   // rewrite everything else to `/_sites/[site] dynamic route
   url.pathname = `/_sites/${currentHost}${url.pathname}`;
