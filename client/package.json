@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "local": "node scripts/local",
+    "preconfigure": "node preconfigure",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

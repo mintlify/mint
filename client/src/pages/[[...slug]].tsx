@@ -1,9 +1,10 @@
 import { ResizeObserver } from '@juggle/resize-observer';
 import { stringify } from 'flatted';
 import 'focus-visible';
+import fs from 'fs';
 import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import path from 'path';
+import { join } from 'path';
 import type { ParsedUrlQuery } from 'querystring';
 
 import { FaviconsProps } from '@/types/favicons';
@@ -22,13 +23,13 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const files = await getPaths(path.join('content'));
+  const files = await getPaths(join('content'));
   console.log(files);
   return {
     paths: [
       {
         params: {
-          slug: ['getting-started'],
+          slug: ['api-reference', 'home-feeds', 'items'],
         },
       },
     ],
@@ -40,8 +41,11 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (!params) throw new Error('No path parameters found');
 
   const { slug } = params;
-  const path = slug ? slug.join('/') : 'index';
-
+  const path = slug ? slug.join('/') : 'index'; // TODO index logic
+  // TODO: look for md
+  // error handling
+  const markdownWithMeta = fs.readFileSync(join('content', path + '.mdx'), 'utf-8');
+  console.log(markdownWithMeta);
   const {
     content,
     stringifiedConfig,

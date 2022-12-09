@@ -26,3 +26,10 @@ export const getExtension = (path: string) => {
 export const removeExtension = (path: string) => {
   return path.substring(0, path.lastIndexOf('.'));
 };
+
+export const getPathsByExtension = (files: string[], ...extensions: string[]): string[] => {
+  return files.filter((file) => {
+    const extension = getExtension(file);
+    return extensions.includes(extension);
+  });
+};
