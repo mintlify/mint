@@ -1,7 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
 import { stringify, parse } from 'flatted';
-import 'focus-visible';
-import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 

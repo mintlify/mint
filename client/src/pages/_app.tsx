@@ -1,5 +1,4 @@
 import 'focus-visible';
-import 'intersection-observer';
 
 import ErrorBoundary from '@/ui/ErrorBoundary';
 
