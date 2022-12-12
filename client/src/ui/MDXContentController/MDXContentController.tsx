@@ -5,6 +5,7 @@ import { createContext, useContext, useState } from 'react';
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
@@ -18,6 +19,7 @@ import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
+import { getSectionTitle } from '@/utils/paths/getSectionTitle';
 
 import { GeneratedRequestExamples, OpenApiResponseExample } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
@@ -30,7 +32,6 @@ type MDXContentControllerProps = {
   children: any;
   meta: PageMetaTags;
   tableOfContents: any;
-  section: string;
   apiComponents: any;
 };
 
@@ -38,15 +39,16 @@ export function MDXContentController({
   children,
   meta,
   tableOfContents,
-  section,
   apiComponents,
 }: MDXContentControllerProps) {
   const { config, openApi } = useContext(ConfigContext);
   const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
+  const currentPath = useCurrentPath();
   const toc = [...tableOfContents];
 
-  const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
+  const { currentTableOfContentsSection, registerHeading, unregisterHeading } =
+    useTableOfContents(toc);
   let { prev, next } = usePrevNext();
 
   const openApiPlaygroundProps = getOpenApiPlaygroundProps(
@@ -92,7 +94,14 @@ export function MDXContentController({
           contentWidth
         )}
       >
-        {isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader meta={meta} section={section} />}
+        {isBlogMode ? (
+          <BlogHeader meta={meta} />
+        ) : (
+          <PageHeader
+            meta={meta}
+            section={getSectionTitle(currentPath, config?.navigation ?? [])}
+          />
+        )}
         {isApi ? (
           <ApiPlayground
             api={api}
@@ -138,7 +147,11 @@ export function MDXContentController({
         ) : isBlogMode ? (
           <BlogContext />
         ) : (
-          <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
+          <TableOfContents
+            tableOfContents={toc}
+            currentSection={currentTableOfContentsSection}
+            meta={meta}
+          />
         ))}
     </div>
   );

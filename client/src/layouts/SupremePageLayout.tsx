@@ -19,7 +19,6 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { FeedbackProvider } from '@/ui/Feedback';
-import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/search/Search';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 
@@ -36,7 +35,6 @@ export default function SupremePageLayout({
   parsedData: {
     nav: Groups;
     meta: PageMetaTags;
-    section: string | undefined;
     metaTagsForSeo: PageMetaTags;
   };
   config: Config;
@@ -45,7 +43,7 @@ export default function SupremePageLayout({
   subdomain: string;
 }) {
   useProgressBar(config?.colors?.primary);
-  const { meta, section, metaTagsForSeo, nav } = parsedData;
+  const { meta, metaTagsForSeo, nav } = parsedData;
   let [navIsOpen, setNavIsOpen] = useState(false);
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
@@ -131,13 +129,6 @@ export default function SupremePageLayout({
                       },
                     })}
                   ></span>
-                  <Header
-                    hasNav={Boolean(config.navigation?.length)}
-                    navIsOpen={navIsOpen}
-                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                    title={meta?.title}
-                    section={section}
-                  />
                   <DocumentationLayout
                     nav={nav}
                     navIsOpen={navIsOpen}

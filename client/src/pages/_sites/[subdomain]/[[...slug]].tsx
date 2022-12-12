@@ -22,7 +22,6 @@ interface PageProps {
 interface ParsedDataProps {
   nav: Groups;
   meta: PageMetaTags;
-  section: string | undefined;
   metaTagsForSeo: PageMetaTags;
   title: string;
   stringifiedConfig: string;
@@ -110,7 +109,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       content,
       stringifiedConfig,
       nav,
-      section,
       meta,
       metaTagsForSeo,
       title,
@@ -120,7 +118,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       content: string;
       stringifiedConfig: string;
       nav: Groups;
-      section: string;
       meta: PageMetaTags;
       metaTagsForSeo: PageMetaTags;
       title: string;
@@ -131,14 +128,13 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
 
     try {
       const response = await getMdxSource(content, {
-        section,
         meta,
       });
       mdxSource = response;
     } catch (err) {
       mdxSource = await getMdxSource(
         '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
-        { section, meta }
+        { meta }
       ); // placeholder content for when there is a syntax error.
       console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
     }
@@ -149,7 +145,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         stringifiedData: stringify({
           nav,
           meta,
-          section,
           metaTagsForSeo,
           title,
           stringifiedConfig,

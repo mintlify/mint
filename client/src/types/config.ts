@@ -19,6 +19,12 @@ export type Navigation = {
   version?: string;
 };
 
+export function isNavigation(navigation: Navigation | NavigationEntry): navigation is Navigation {
+  return Boolean(
+    navigation && navigation.hasOwnProperty('group') && navigation.hasOwnProperty('pages')
+  );
+}
+
 type Logo = string | { light: string; dark: string; href?: string };
 
 type NavbarLink = {
