@@ -20,6 +20,7 @@ import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { FeedbackProvider } from '@/ui/Feedback';
 import { SearchProvider } from '@/ui/search/Search';
+import { getAllMetaTags } from '@/utils/getAllMetaTags';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 import PlausibleScript from '@/analytics/PlausibleScript';
 
@@ -34,9 +35,8 @@ export default function SupremePageLayout({
 }: {
   mdxSource: any;
   parsedData: {
-    nav: Groups;
-    meta: PageMetaTags;
-    metaTagsForSeo: PageMetaTags;
+    navWithMetadata: Groups;
+    pageMetadata: PageMetaTags;
   };
   config: Config;
   openApi: any;
@@ -44,7 +44,7 @@ export default function SupremePageLayout({
   subdomain: string;
 }) {
   useProgressBar(config?.colors?.primary);
-  const { meta, metaTagsForSeo, nav } = parsedData;
+  const { navWithMetadata, pageMetadata } = parsedData;
   let [navIsOpen, setNavIsOpen] = useState(false);
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
@@ -60,10 +60,12 @@ export default function SupremePageLayout({
     };
   }, [navIsOpen]);
 
+  const metaTagsDict = getAllMetaTags(pageMetadata, config.metadata || {});
+
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
       <VersionContextController versionOptions={config?.versions}>
-        <ConfigContext.Provider value={{ config, nav, openApi, subdomain }}>
+        <ConfigContext.Provider value={{ config, navWithMetadata, openApi, subdomain }}>
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />
             <Head>
@@ -89,7 +91,8 @@ export default function SupremePageLayout({
                   }
                   return <meta key={key} name={key} content={value as any} />;
                 })}
-              {Object.entries(metaTagsForSeo).map(([key, value]) => (
+              <title>{metaTagsDict['og:title']}</title>
+              {Object.entries(metaTagsDict).map(([key, value]) => (
                 <meta key={key} name={key} content={value as any} />
               ))}
             </Head>
@@ -132,10 +135,10 @@ export default function SupremePageLayout({
                     })}
                   ></span>
                   <DocumentationLayout
-                    nav={nav}
+                    navWithMetadata={navWithMetadata}
                     navIsOpen={navIsOpen}
                     setNavIsOpen={setNavIsOpen}
-                    meta={meta}
+                    pageMetadata={pageMetadata}
                   >
                     <MDXRemote components={components} {...mdxSource} />
                   </DocumentationLayout>

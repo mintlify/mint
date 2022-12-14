@@ -30,14 +30,14 @@ export const ContentsContext = createContext(undefined);
 
 type MDXContentControllerProps = {
   children: any;
-  meta: PageMetaTags;
+  pageMetadata: PageMetaTags;
   tableOfContents: any;
   apiComponents: any;
 };
 
 export function MDXContentController({
   children,
-  meta,
+  pageMetadata,
   tableOfContents,
   apiComponents,
 }: MDXContentControllerProps) {
@@ -55,16 +55,17 @@ export function MDXContentController({
     apiBaseIndex,
     config,
     openApi,
-    meta.openapi
+    pageMetadata.openapi
   );
-  const isApi = (meta.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
-  const isBlogMode = meta.mode === 'blog';
+  const isApi =
+    (pageMetadata.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
+  const isBlogMode = pageMetadata.mode === 'blog';
   const { requestExample, responseExample } = createUserDefinedExamples(apiComponents);
 
   // The user can hide the table of contents by marking the size as wide, but the API
   // overrides that to show request and response examples on the side.
   // TODO: Remove meta.size
-  const isWideSize = meta.mode === 'wide' || meta.size === 'wide';
+  const isWideSize = pageMetadata.mode === 'wide' || pageMetadata.size === 'wide';
   let contentWidth = 'max-w-3xl xl:max-w-[47rem]';
   if (isApi || requestExample || responseExample) {
     contentWidth = 'max-w-3xl xl:max-w-[min(100% - 31rem, 44rem)]';
@@ -74,7 +75,7 @@ export function MDXContentController({
 
   const paramGroupDict = getParamGroupsFromApiComponents(
     openApiPlaygroundProps.apiComponents ?? apiComponents,
-    meta.auth,
+    pageMetadata.auth,
     config?.api
   );
   const paramGroups = Object.entries(paramGroupDict).map(([groupName, params]) => {
@@ -84,7 +85,7 @@ export function MDXContentController({
     };
   });
 
-  const api = openApiPlaygroundProps.api ?? meta.api ?? '';
+  const api = openApiPlaygroundProps.api ?? pageMetadata.api ?? '';
 
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
@@ -95,10 +96,10 @@ export function MDXContentController({
         )}
       >
         {isBlogMode ? (
-          <BlogHeader meta={meta} />
+          <BlogHeader pageMetadata={pageMetadata} />
         ) : (
           <PageHeader
-            meta={meta}
+            pageMetadata={pageMetadata}
             section={getSectionTitle(currentPath, config?.navigation ?? [])}
           />
         )}
@@ -106,7 +107,7 @@ export function MDXContentController({
           <ApiPlayground
             api={api}
             paramGroups={paramGroups}
-            contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
+            contentType={openApiPlaygroundProps.contentType ?? pageMetadata.contentType}
             onInputDataChange={setApiPlaygroundInputs}
             onApiBaseIndexChange={setApiBaseIndex}
           />
@@ -117,12 +118,14 @@ export function MDXContentController({
           <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
             <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
           </ContentsContext.Provider>
-          {meta.openapi && <OpenApiParameters endpointStr={meta.openapi} auth={meta.auth} />}
+          {pageMetadata.openapi && (
+            <OpenApiParameters endpointStr={pageMetadata.openapi} auth={pageMetadata.auth} />
+          )}
         </div>
 
         <Footer
-          previous={meta.hideFooterPagination ? null : prev}
-          next={meta.hideFooterPagination ? null : next}
+          previous={pageMetadata.hideFooterPagination ? null : prev}
+          next={pageMetadata.hideFooterPagination ? null : next}
           hasBottomPadding={!isApi}
         />
       </div>
@@ -141,7 +144,7 @@ export function MDXContentController({
                 />
               )}
               {responseExample}
-              {!responseExample && <OpenApiResponseExample openapi={meta.openapi} />}
+              {!responseExample && <OpenApiResponseExample openapi={pageMetadata.openapi} />}
             </div>
           </ContentSideLayout>
         ) : isBlogMode ? (
@@ -150,7 +153,7 @@ export function MDXContentController({
           <TableOfContents
             tableOfContents={toc}
             currentSection={currentTableOfContentsSection}
-            meta={meta}
+            meta={pageMetadata}
           />
         ))}
     </div>

@@ -228,9 +228,9 @@ function SearchHit({
 
 export function SearchProvider({ subdomain, children }: { subdomain: string; children: any }) {
   const router = useRouter();
-  const { config, nav } = useContext(ConfigContext);
+  const { config, navWithMetadata } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
-  const pathToVersion = pathToVersionDict(nav ?? [], config ?? { name: '' });
+  const pathToVersion = pathToVersionDict(navWithMetadata ?? [], config ?? { name: '' });
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [hits, setHits] = useState<Hit[]>([]);

@@ -19,9 +19,8 @@ interface PageProps {
 }
 
 interface ParsedDataProps {
-  nav: Groups;
-  meta: PageMetaTags;
-  metaTagsForSeo: PageMetaTags;
+  navWithMetadata: Groups;
+  pageMetadata: PageMetaTags;
   title: string;
   stringifiedConfig: string;
   stringifiedOpenApi?: string;
@@ -101,34 +100,32 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   if (status === 200) {
     const {
       content,
-      stringifiedConfig,
-      nav,
-      meta,
-      metaTagsForSeo,
+      mintConfig,
+      navWithMetadata,
+      pageMetadata,
       title,
-      stringifiedOpenApi,
+      openApi,
       favicons,
     }: {
       content: string;
-      stringifiedConfig: string;
-      nav: Groups;
-      meta: PageMetaTags;
-      metaTagsForSeo: PageMetaTags;
+      mintConfig: string;
+      navWithMetadata: Groups;
+      pageMetadata: PageMetaTags;
       title: string;
-      stringifiedOpenApi?: string;
+      openApi?: string;
       favicons: FaviconsProps;
     } = data;
     let mdxSource: any = '';
 
     try {
       const response = await getMdxSource(content, {
-        meta,
+        pageMetadata,
       });
       mdxSource = response;
     } catch (err) {
       mdxSource = await getMdxSource(
         '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
-        { meta }
+        { pageMetadata }
       ); // placeholder content for when there is a syntax error.
       console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
     }
@@ -137,12 +134,11 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       props: {
         stringifiedMdxSource: stringify(mdxSource),
         stringifiedData: stringify({
-          nav,
-          meta,
-          metaTagsForSeo,
+          navWithMetadata,
+          pageMetadata,
           title,
-          stringifiedConfig,
-          stringifiedOpenApi,
+          mintConfig,
+          openApi,
         }),
         stringifiedFavicons: stringify(favicons),
         subdomain,

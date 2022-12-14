@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { SidebarContext } from '@/layouts/NavSidebar';
+import { ConfigContext } from '@/context/ConfigContext';
 import { PageMetaTags, GroupPage, isGroup, flattenGroupPages } from '@/types/metadata';
 
 import { useCurrentPath } from './useCurrentPath';
@@ -19,8 +19,12 @@ const getFirstNonGroupPage = (groupPage?: GroupPage): PageMetaTags | null => {
 
 export function usePrevNext() {
   let currentPath = useCurrentPath();
-  let { nav } = useContext(SidebarContext);
-  let pages: PageMetaTags[] = nav.reduce(
+  let { navWithMetadata } = useContext(ConfigContext);
+  if (!navWithMetadata || !Array.isArray(navWithMetadata)) {
+    return { prev: undefined, next: undefined };
+  }
+
+  let pages: PageMetaTags[] = navWithMetadata.reduce(
     (acc: PageMetaTags[], currentGroup: { pages: PageMetaTags[] }) => {
       return acc.concat(...flattenGroupPages(currentGroup.pages));
     },
