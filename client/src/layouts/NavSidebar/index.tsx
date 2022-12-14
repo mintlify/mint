@@ -14,14 +14,11 @@ import { Anchor, Config } from '../../types/config';
 import { Nav } from './Nav';
 
 type SidebarContextType = {
-  nav: any;
   navIsOpen: boolean;
   setNavIsOpen: (navIsOpen: boolean) => void;
 };
 
-// @ts-ignore
 export const SidebarContext = createContext<SidebarContextType>({
-  nav: [],
   navIsOpen: false,
   setNavIsOpen: () => {},
 });
@@ -39,30 +36,30 @@ function Wrapper({
 export function SidebarLayout({
   navIsOpen,
   setNavIsOpen,
-  nav,
+  navWithMetadata,
   layoutProps: { allowOverflow = true } = {},
-  meta,
+  pageMetadata,
   children,
 }: {
   navIsOpen: boolean;
   setNavIsOpen: any;
-  nav: Groups;
+  navWithMetadata: Groups;
   layoutProps?: any;
-  meta: PageMetaTags;
+  pageMetadata: PageMetaTags;
   children: ReactNode;
 }) {
   const { config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
 
-  const navForDivision = getNavForDivision(nav, config, useCurrentPath());
+  const navForDivision = getNavForDivision(navWithMetadata, config, useCurrentPath());
   const navForDivisionInVersion = getGroupsInVersion(navForDivision, selectedVersion);
 
   return (
-    <SidebarContext.Provider value={{ nav, navIsOpen, setNavIsOpen }}>
+    <SidebarContext.Provider value={{ navIsOpen, setNavIsOpen }}>
       <Wrapper allowOverflow={allowOverflow}>
         <div className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="hidden lg:block fixed z-20 top-[3.8125rem] bottom-0 left-[max(0px,calc(50%-46rem))] right-auto w-[19.5rem] pb-10 px-8 overflow-y-auto">
-            <Nav nav={navForDivisionInVersion} meta={meta} />
+            <Nav nav={navForDivisionInVersion} pageMetadata={pageMetadata} />
           </div>
           <div className="lg:pl-[20rem]">{children}</div>
         </div>
@@ -91,7 +88,7 @@ export function SidebarLayout({
               />
             </svg>
           </button>
-          <Nav nav={navForDivisionInVersion} meta={meta} mobile={true} />
+          <Nav nav={navForDivisionInVersion} pageMetadata={pageMetadata} mobile={true} />
         </div>
       </Dialog>
     </SidebarContext.Provider>

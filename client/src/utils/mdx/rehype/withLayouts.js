@@ -2,7 +2,7 @@ const withLayouts = () => {
   return (tree) => {
     tree.children.push({
       type: 'mdxjsEsm',
-      value: `export default (props) => <MDXContentController {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} meta={meta}>{props.children}</MDXContentController>`,
+      value: `export default (props) => <MDXContentController {...props} tableOfContents={tableOfContents} apiComponents={apiComponents} pageMetadata={pageMetadata}>{props.children}</MDXContentController>`,
       data: {
         estree: {
           type: 'Program',
@@ -90,13 +90,13 @@ const withLayouts = () => {
                         type: 'JSXAttribute',
                         name: {
                           type: 'JSXIdentifier',
-                          name: 'meta',
+                          name: 'pageMetadata',
                         },
                         value: {
                           type: 'JSXExpressionContainer',
                           expression: {
                             type: 'Identifier',
-                            name: 'meta',
+                            name: 'pageMetadata',
                           },
                         },
                       },

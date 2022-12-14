@@ -1,17 +1,19 @@
+import clsx from 'clsx';
+import isAbsoluteUrl from 'is-absolute-url';
 import { useContext, useRef } from 'react';
+
+import { ConfigContext } from '@/context/ConfigContext';
+import { VersionContext } from '@/context/VersionContext';
 import { useColors } from '@/hooks/useColors';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 import { PageMetaTags } from '@/types/metadata';
 import { getAnchorsToDisplay } from '@/utils/getAnchorsToDisplay';
+
 import { Anchor, findFirstNavigationEntry, Navigation } from '../../types/config';
 import { StyledAnchorLink } from '../../ui/AnchorLink';
-import { ConfigContext } from '@/context/ConfigContext';
-import { VersionContext } from '@/context/VersionContext';
-import isAbsoluteUrl from 'is-absolute-url';
-import clsx from 'clsx';
-import { DocNav } from './DocNav';
 import { BlogNav } from './BlogNav';
+import { DocNav } from './DocNav';
 
 function nearestScrollableContainer(el: any) {
   function isScrollable(el: Element) {
@@ -94,14 +96,22 @@ function TopLevelNav({ mobile }: { mobile: boolean }) {
   );
 }
 
-export function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTags; mobile?: boolean }) {
+export function Nav({
+  nav,
+  pageMetadata,
+  mobile = false,
+}: {
+  nav: any;
+  pageMetadata: PageMetaTags;
+  mobile?: boolean;
+}) {
   const currentPath = useCurrentPath();
   const { config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
   const previousActiveItemRef: any = useRef();
   const scrollRef: any = useRef();
 
-  const isBlogMode = meta.mode === 'blog';
+  const isBlogMode = pageMetadata.mode === 'blog';
 
   useIsomorphicLayoutEffect(() => {
     function updatePreviousRef() {
@@ -131,7 +141,7 @@ export function Nav({ nav, meta, mobile = false }: { nav: any; meta: PageMetaTag
   }, [currentPath]);
 
   if (isBlogMode) {
-    return <BlogNav />
+    return <BlogNav />;
   }
 
   return (

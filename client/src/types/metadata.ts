@@ -25,6 +25,9 @@ export type PageMetaTags = {
   createdDate?: string;
   hideFooterPagination?: boolean;
   hideApiMarker?: boolean; // Undocumented
+
+  // Arbitrary number of SEO tags. See getAllMetaTags
+  [key: string]: any;
 };
 
 export type Groups = Group[];
