@@ -27,6 +27,7 @@
 /src/config.json
 /src/openapi.json
 /src/metadata.json
+/content
 
 # misc
 .DS_Store
