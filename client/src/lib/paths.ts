@@ -10,7 +10,7 @@ const sleep = (ms: number) => {
 
 const checkGetPathsStatus = async (id: string): Promise<any> => {
   const status = await axios.get(
-    `${process.env.API_ENDPOINT}/api/v1/admin/build/paths/${id}`,
+    `${process.env.API_ENDPOINT}/api/v2/internal/queue-status/fetch-all-paths/${id}`,
     REQUEST_ADMIN_OPTIONS
   );
   return status.data;
@@ -43,7 +43,7 @@ export const getPaths = async () => {
   const {
     data: { id },
   }: { data: { id: string } } = await axios.post(
-    `${process.env.API_ENDPOINT}/api/v1/admin/build/paths`,
+    `${process.env.API_ENDPOINT}/api/v2/internal/all-deployments/paths`,
     { basePath: process.env.BASE_PATH },
     REQUEST_ADMIN_OPTIONS
   );
