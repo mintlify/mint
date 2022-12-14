@@ -197,11 +197,11 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
 }
 
 export function NavItems() {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   return (
     <>
-      {config?.topbarLinks?.map((topbarLink) => {
+      {mintConfig?.topbarLinks?.map((topbarLink) => {
         const isAbsolute = isAbsoluteUrl(topbarLink.url);
 
         if (isAbsolute) {
@@ -227,7 +227,7 @@ export function NavItems() {
           );
         }
       })}
-      {config?.topbarCtaButton && <TopBarCtaButton button={config.topbarCtaButton} />}
+      {mintConfig?.topbarCtaButton && <TopBarCtaButton button={mintConfig.topbarCtaButton} />}
     </>
   );
 }
@@ -245,7 +245,7 @@ export function Header({
   title?: string;
   section?: string;
 }) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   let [isOpaque, setIsOpaque] = useState(false);
 
   useEffect(() => {
@@ -283,14 +283,14 @@ export function Header({
           >
             <div className="relative flex items-center">
               <div className="flex-1 flex items-center space-x-3">
-                <Link href={getLogoHref(config!)}>
+                <Link href={getLogoHref(mintConfig!)}>
                   <a
                     onContextMenu={(e) => {
                       e.preventDefault();
                       Router.push(getLogoHref(config!));
                     }}
                   >
-                    <span className="sr-only">{config?.name} home page</span>
+                    <span className="sr-only">{mintConfig?.name} home page</span>
                     <Logo />
                   </a>
                 </Link>

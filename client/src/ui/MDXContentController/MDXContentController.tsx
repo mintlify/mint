@@ -41,7 +41,7 @@ export function MDXContentController({
   tableOfContents,
   apiComponents,
 }: MDXContentControllerProps) {
-  const { config, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApi } = useContext(ConfigContext);
   const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const currentPath = useCurrentPath();
@@ -53,7 +53,7 @@ export function MDXContentController({
 
   const openApiPlaygroundProps = getOpenApiPlaygroundProps(
     apiBaseIndex,
-    config,
+    mintConfig,
     openApi,
     pageMetadata.openapi
   );
@@ -76,7 +76,7 @@ export function MDXContentController({
   const paramGroupDict = getParamGroupsFromApiComponents(
     openApiPlaygroundProps.apiComponents ?? apiComponents,
     pageMetadata.auth,
-    config?.api
+    mintConfig?.api
   );
   const paramGroups = Object.entries(paramGroupDict).map(([groupName, params]) => {
     return {
@@ -100,7 +100,7 @@ export function MDXContentController({
         ) : (
           <PageHeader
             pageMetadata={pageMetadata}
-            section={getSectionTitle(currentPath, config?.navigation ?? [])}
+            section={getSectionTitle(currentPath, mintConfig?.navigation ?? [])}
           />
         )}
         {isApi ? (
@@ -162,7 +162,7 @@ export function MDXContentController({
 
 function getOpenApiPlaygroundProps(
   apiBaseIndex: number,
-  config: Config | undefined,
+  mintConfig: Config | undefined,
   openApi: any,
   openApiEndpoint: string | undefined
 ) {
@@ -187,7 +187,7 @@ function getOpenApiPlaygroundProps(
     return acc.concat(file.openapi.servers);
   }, []);
   const configBaseUrl =
-    config?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
+    mintConfig?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
   const baseUrl =
     configBaseUrl && Array.isArray(configBaseUrl) ? configBaseUrl[apiBaseIndex] : configBaseUrl;
   const api = `${method} ${baseUrl}${endpoint}`;

@@ -23,7 +23,7 @@ export function DocumentationLayout({
 }) {
   const currentPath = useCurrentPath();
   const { setSelectedVersion } = useContext(VersionContext);
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   if (pageMetadata.version) {
     setSelectedVersion(pageMetadata.version);
@@ -32,11 +32,11 @@ export function DocumentationLayout({
   return (
     <>
       <Header
-        hasNav={Boolean(config?.navigation?.length)}
+        hasNav={Boolean(mintConfig?.navigation?.length)}
         navIsOpen={navIsOpen}
         onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
         title={pageMetadata?.title}
-        section={getSectionTitle(currentPath, config?.navigation ?? [])}
+        section={getSectionTitle(currentPath, mintConfig?.navigation ?? [])}
       />
       <SidebarLayout
         navWithMetadata={navWithMetadata}

@@ -36,10 +36,10 @@ const FeedbackTooltip = ({ message }: { message: string }) => {
 
 export function UserFeedback() {
   const path = useCurrentPath();
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   const { createSuggestHref, createIssueHref } = useContext(FeedbackContext) as any;
 
-  if (config?.hideFeedbackButtons === true) {
+  if (mintConfig?.hideFeedbackButtons === true) {
     return null;
   }
 

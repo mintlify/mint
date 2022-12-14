@@ -49,7 +49,7 @@ const Social = ({ type, url }: SocialProps) => {
 };
 
 export function Footer({ previous, next, hasBottomPadding = true }: FooterProps) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   return (
     <footer className={clsx('text-sm leading-6', previous || next ? 'mt-12' : 'mt-16')}>
       {(previous || next) && (
@@ -113,14 +113,14 @@ export function Footer({ previous, next, hasBottomPadding = true }: FooterProps)
           </a>
         </div>
         <div className="flex space-x-6">
-          {config?.footerSocials &&
-            Array.isArray(config.footerSocials) &&
-            config.footerSocials.map((social) => (
+          {mintConfig?.footerSocials &&
+            Array.isArray(mintConfig.footerSocials) &&
+            mintConfig.footerSocials.map((social) => (
               <Social key={social.url} url={social.url} type={social?.type} />
             ))}
-          {config?.footerSocials &&
-            typeof config.footerSocials === 'object' &&
-            Object.entries(config.footerSocials).map(([socialType, socialUrl]) => (
+          {mintConfig?.footerSocials &&
+            typeof mintConfig.footerSocials === 'object' &&
+            Object.entries(mintConfig.footerSocials).map(([socialType, socialUrl]) => (
               <Social key={socialUrl} url={socialUrl} type={socialType} />
             ))}
         </div>

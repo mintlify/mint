@@ -98,11 +98,11 @@ export function GeneratedRequestExamples({
   apiBaseIndex: number;
   endpointStr?: string;
 }) {
-  const { config, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApi } = useContext(ConfigContext);
 
   return generateRequestExamples(
     endpointStr,
-    config?.api?.baseUrl,
+    mintConfig?.api?.baseUrl,
     apiBaseIndex,
     paramGroupDict,
     apiPlaygroundInputs,

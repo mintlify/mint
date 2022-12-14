@@ -4,28 +4,28 @@ import { useContext } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 
 export function Logo() {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   const className = 'w-auto h-7 relative';
-  if (typeof config?.logo === 'object' && config.logo !== null) {
+  if (typeof mintConfig?.logo === 'object' && mintConfig.logo !== null) {
     return (
       <>
         <img
           className={clsx(className, 'block dark:hidden')}
-          src={config?.logo.light}
+          src={mintConfig?.logo.light}
           alt="light logo"
         />
         <img
           className={clsx(className, 'hidden dark:block')}
-          src={config?.logo.dark}
+          src={mintConfig?.logo.dark}
           alt="dark logo"
         />
       </>
     );
   }
-  if (config?.logo) {
-    return <img className={clsx(className)} src={config?.logo} alt="logo" />;
+  if (mintConfig?.logo) {
+    return <img className={clsx(className)} src={mintConfig?.logo} alt="logo" />;
   }
-  if (config?.name) {
+  if (mintConfig?.name) {
     return (
       <div
         className={clsx(
@@ -33,7 +33,7 @@ export function Logo() {
           className
         )}
       >
-        {config?.name}
+        {mintConfig?.name}
       </div>
     );
   }

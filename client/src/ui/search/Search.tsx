@@ -228,7 +228,7 @@ function SearchHit({
 
 export function SearchProvider({ subdomain, children }: { subdomain: string; children: any }) {
   const router = useRouter();
-  const { config, navWithMetadata } = useContext(ConfigContext);
+  const { mintConfig: config, navWithMetadata } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
   const pathToVersion = pathToVersionDict(navWithMetadata ?? [], config ?? { name: '' });
   const [isOpen, setIsOpen] = useState(false);

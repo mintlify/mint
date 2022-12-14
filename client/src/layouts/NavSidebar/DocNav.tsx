@@ -167,7 +167,7 @@ const GroupDropdown = ({
 };
 
 export function DocNav({ nav, mobile }: { nav: any; mobile: boolean }) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   let numPages = 0;
   if (nav) {
@@ -187,7 +187,7 @@ export function DocNav({ nav, mobile }: { nav: any; mobile: boolean }) {
                 key={i}
                 className={clsx({
                   'mt-12 lg:mt-8': !Boolean(
-                    i === 0 && (config?.anchors == null || config.anchors?.length === 0)
+                    i === 0 && (mintConfig?.anchors == null || mintConfig.anchors?.length === 0)
                   ),
                 })}
               >

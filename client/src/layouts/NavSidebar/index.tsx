@@ -48,10 +48,10 @@ export function SidebarLayout({
   pageMetadata: PageMetaTags;
   children: ReactNode;
 }) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
 
-  const navForDivision = getNavForDivision(navWithMetadata, config, useCurrentPath());
+  const navForDivision = getNavForDivision(navWithMetadata, mintConfig, useCurrentPath());
   const navForDivisionInVersion = getGroupsInVersion(navForDivision, selectedVersion);
 
   return (
@@ -95,10 +95,10 @@ export function SidebarLayout({
   );
 }
 
-function getNavForDivision(nav: Groups, config: Config | undefined, currentPath: string) {
+function getNavForDivision(nav: Groups, mintConfig: Config | undefined, currentPath: string) {
   const currentPathNoLeadingSlash = optionallyRemoveLeadingSlash(currentPath);
 
-  const currentDivision = config?.anchors?.find((anchor: Anchor) =>
+  const currentDivision = mintConfig?.anchors?.find((anchor: Anchor) =>
     currentPathNoLeadingSlash.startsWith(anchor.url)
   );
 
@@ -106,7 +106,8 @@ function getNavForDivision(nav: Groups, config: Config | undefined, currentPath:
 
   if (navForDivision.length === 0) {
     // Base docs include everything NOT in an anchor
-    const divisions = config?.anchors?.filter((anchor: Anchor) => !isAbsoluteUrl(anchor.url)) || [];
+    const divisions =
+      mintConfig?.anchors?.filter((anchor: Anchor) => !isAbsoluteUrl(anchor.url)) || [];
     navForDivision = getGroupsNotInDivision(
       nav,
       divisions.map((division: Anchor) => division.url)

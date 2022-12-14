@@ -1,4 +1,3 @@
-import { stringify, parse } from 'flatted';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 
@@ -10,40 +9,29 @@ import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+import { prepareToSerialize } from '@/utils/prepareToSerialize';
 
 interface PageProps {
-  stringifiedMdxSource: string;
-  stringifiedData: string;
-  stringifiedFavicons: string;
+  mdxSource: string;
+  pageData: PageDataProps;
+  favicons: FaviconsProps;
   subdomain: string;
 }
 
-interface ParsedDataProps {
+export interface PageDataProps {
   navWithMetadata: Groups;
   pageMetadata: PageMetaTags;
   title: string;
-  stringifiedConfig: string;
-  stringifiedOpenApi?: string;
+  mintConfig: Config;
+  openApi?: any;
 }
 
-export default function Page({
-  stringifiedMdxSource,
-  stringifiedData,
-  stringifiedFavicons,
-  subdomain,
-}: PageProps) {
+export default function Page({ mdxSource, pageData, favicons, subdomain }: PageProps) {
   try {
-    const mdxSource = parse(stringifiedMdxSource);
-    const parsedData = parse(stringifiedData) as ParsedDataProps;
-    const config = JSON.parse(parsedData.stringifiedConfig) as Config;
-    const openApi = parsedData.stringifiedOpenApi ? JSON.parse(parsedData.stringifiedOpenApi) : {};
-    const favicons = parse(stringifiedFavicons);
     return (
       <SupremePageLayout
         mdxSource={mdxSource}
-        parsedData={parsedData}
-        config={config}
-        openApi={openApi}
+        pageData={pageData}
         favicons={favicons}
         subdomain={subdomain}
       />
@@ -132,15 +120,15 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
 
     return {
       props: {
-        stringifiedMdxSource: stringify(mdxSource),
-        stringifiedData: stringify({
+        mdxSource,
+        pageData: prepareToSerialize({
           navWithMetadata,
           pageMetadata,
           title,
           mintConfig,
           openApi,
         }),
-        stringifiedFavicons: stringify(favicons),
+        favicons: prepareToSerialize(favicons),
         subdomain,
       },
     };
