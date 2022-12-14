@@ -42,7 +42,6 @@
     "eslint-config-next": "^13.0.6",
     "fathom-client": "^3.5.0",
     "file-loader": "^6.0.0",
-    "flatted": "^3.2.7",
     "focus-visible": "^5.1.0",
     "fs-extra": "^10.1.0",
     "github-url-to-object": "^4.0.6",

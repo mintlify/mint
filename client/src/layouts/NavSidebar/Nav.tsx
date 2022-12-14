@@ -38,7 +38,7 @@ function nearestScrollableContainer(el: any) {
 
 function TopLevelNav({ mobile }: { mobile: boolean }) {
   const currentPath = useCurrentPath();
-  const { config } = useContext(ConfigContext);
+  const { mintConfig: config } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
   const colors = useColors();
 
@@ -106,7 +106,7 @@ export function Nav({
   mobile?: boolean;
 }) {
   const currentPath = useCurrentPath();
-  const { config } = useContext(ConfigContext);
+  const { mintConfig: config } = useContext(ConfigContext);
   const activeItemRef: any = useRef();
   const previousActiveItemRef: any = useRef();
   const scrollRef: any = useRef();

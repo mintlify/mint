@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ConfigContext } from '@/context/ConfigContext';
 
 export function ThemeToggle() {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   function toggleMode() {
     let darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -17,7 +17,7 @@ export function ThemeToggle() {
     }
   }
 
-  if (config?.modeToggle?.isHidden) {
+  if (mintConfig?.modeToggle?.isHidden) {
     return null;
   }
 
