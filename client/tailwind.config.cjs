@@ -302,12 +302,7 @@ module.exports = {
         { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
       );
 
-      matchUtilities(
-        {
-          highlight: (value) => ({ boxShadow: `inset 0 1px 0 0 ${value}` }),
-        },
-        { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
-      );
+      matchUtilities({ values: flattenColorPalette(theme('backgroundColor')), type: 'color' });
     },
   ],
   safelist: [

@@ -178,7 +178,7 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
       <Link
         href={button.url ?? '/'}
         target="_blank"
-        className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5"
+        className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark"
       >
         <span>{button.name}</span>
         <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">

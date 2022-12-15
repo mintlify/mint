@@ -54,7 +54,7 @@ const Anchor = forwardRef(
             `mr-4 rounded-md p-1`,
             !color && 'group-hover:bg-primary',
             isActive
-              ? [color ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
+              ? [color ? '' : 'bg-primary']
               : 'zinc-box group-hover:brightness-100 group-hover:ring-0'
           )}
         >
