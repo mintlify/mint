@@ -51,11 +51,11 @@ const Anchor = forwardRef(
               : {}
           }
           className={clsx(
-            `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10 p-1`,
+            `mr-4 rounded-md p-1`,
             !color && 'group-hover:bg-primary',
             isActive
               ? [color ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
-              : 'bg-slate-300 highlight-slate-700/5 dark:bg-slate-800 dark:highlight-white/5'
+              : 'zinc-box'
           )}
         >
           {icon}
@@ -102,8 +102,8 @@ export function StyledAnchorLink({
         icon={icon.toLowerCase()}
         iconType="duotone"
         className={clsx(
-          `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
-          isActive ? 'dark:bg-white' : 'dark:bg-slate-500'
+          `h-4 w-4 secondary-opacity group-hover:fill-primary-dark group-hover:bg-white`,
+          isActive ? 'bg-white' : 'bg-zinc-400 dark:bg-zinc-500'
         )}
       />
     );
