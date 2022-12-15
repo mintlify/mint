@@ -1,6 +1,6 @@
 import { MDXRemote } from 'next-mdx-remote';
 import Head from 'next/head';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import Script from 'next/script';
 import { useState, useEffect } from 'react';
 
@@ -48,7 +48,6 @@ export default function SupremePageLayout({
   let [navIsOpen, setNavIsOpen] = useState(false);
   const analyticsConfig = getAnalyticsConfig(config);
   const analyticsMediator = useAnalytics(analyticsConfig);
-  const router = useRouter();
 
   useEffect(() => {
     if (!navIsOpen) return;
@@ -60,11 +59,6 @@ export default function SupremePageLayout({
       Router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [navIsOpen]);
-
-  if (meta.redirect) {
-    router.push(meta.redirect);
-    return;
-  }
 
   return (
     <Intercom appId={config.integrations?.intercom} autoBoot>
