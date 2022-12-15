@@ -8,19 +8,21 @@ export default class AmplitudeAnalytics extends AbstractAnalyticsImplementation 
   track: any;
 
   init(implementationConfig: ConfigInterface) {
-    if (implementationConfig?.apiKey && process.env.NODE_ENV === 'production') {
-      import('@amplitude/analytics-browser')
-        .then((_amplitude) => {
-          if (!this.initialized) {
-            _amplitude.init(implementationConfig.apiKey!);
-            this.track = _amplitude.track;
-            this.initialized = true;
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    if (!implementationConfig?.apiKey || process.env.NODE_ENV !== 'production') {
+      return;
     }
+
+    import('@amplitude/analytics-browser')
+      .then((_amplitude) => {
+        if (!this.initialized) {
+          _amplitude.init(implementationConfig.apiKey!);
+          this.track = _amplitude.track;
+          this.initialized = true;
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   createEventListener(eventName: string) {

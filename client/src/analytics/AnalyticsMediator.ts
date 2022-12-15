@@ -10,6 +10,7 @@ import {
   LogrocketConfigInterface,
   PirschConfigInterface,
   GoogleTagManagerConfigInterface,
+  PlausibleInterface,
 } from '@/analytics/AbstractAnalyticsImplementation';
 import PostHogAnalytics from '@/analytics/implementations/posthog';
 
@@ -31,6 +32,7 @@ export type AnalyticsMediatorConstructorInterface = {
   mixpanel?: MixpanelConfigInterface;
   pirsch?: PirschConfigInterface;
   posthog?: PostHogConfigInterface;
+  plausible?: PlausibleInterface;
 };
 
 export default class AnalyticsMediator implements AnalyticsMediatorInterface {

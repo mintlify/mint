@@ -36,6 +36,11 @@ export type PostHogConfigInterface = {
   apiHost?: string;
 };
 
+export type PlausibleInterface = {
+  domain?: string;
+};
+
+
 // We can use & instead of | because all keys are optional
 export type ConfigInterface = AmplitudeConfigInterface &
   FathomConfigInterface &
@@ -45,7 +50,8 @@ export type ConfigInterface = AmplitudeConfigInterface &
   LogrocketConfigInterface &
   MixpanelConfigInterface &
   PirschConfigInterface &
-  PostHogConfigInterface;
+  PostHogConfigInterface &
+  PlausibleInterface;
 
 // TypeScript doesn't recommend setting interfaces on constructors.
 // How an object is constructed should not matter because an interface
