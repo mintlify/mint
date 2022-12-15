@@ -7,6 +7,6 @@ export default function PlausibleScript({ plausible }: { plausible?: PlausibleIn
   }
 
   return (
-    <Script strategy="afterInteractive" defer data-domain={plausible.domain} src="https://plausible.io/js/script.js" />
+    <Script strategy="afterInteractive" data-domain={plausible.domain} src="https://plausible.io/js/script.js" />
   );
 }
