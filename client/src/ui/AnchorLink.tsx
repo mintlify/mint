@@ -55,7 +55,7 @@ const Anchor = forwardRef(
             !color && 'group-hover:bg-primary',
             isActive
               ? [color ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
-              : 'zinc-box'
+              : 'zinc-box group-hover:brightness-100 group-hover:ring-0'
           )}
         >
           {icon}
