@@ -82,7 +82,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     };
   }
   if (status === 308) {
-    const { redirect }: { redirect: { destination: string; permanent: boolean } } = data;
+    const redirect: { destination: string; permanent: boolean } = data;
     return { redirect };
   }
   if (status === 200) {
