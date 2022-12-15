@@ -175,22 +175,21 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
 
   return (
     <li>
-      <Link href={button.url ?? '/'}>
-        <a
-          target="_blank"
-          className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5"
-        >
-          <span>{button.name}</span>
-          <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">
-            <path
-              d="M0 0L3 3L6 0"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </a>
+      <Link
+        href={button.url ?? '/'}
+        target="_blank"
+        className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5"
+      >
+        <span>{button.name}</span>
+        <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">
+          <path
+            d="M0 0L3 3L6 0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
       </Link>
     </li>
   );
@@ -218,10 +217,11 @@ export function NavItems() {
         } else {
           return (
             <li key={topbarLink.name}>
-              <Link href={topbarLink.url ?? '/'} passHref={true}>
-                <a className="font-medium hover:text-primary dark:hover:text-primary-light">
-                  {topbarLink.name}
-                </a>
+              <Link
+                href={topbarLink.url ?? '/'}
+                className="font-medium hover:text-primary dark:hover:text-primary-light"
+              >
+                {topbarLink.name}
               </Link>
             </li>
           );
@@ -283,16 +283,15 @@ export function Header({
           >
             <div className="relative flex items-center">
               <div className="flex-1 flex items-center space-x-3">
-                <Link href={getLogoHref(config!)}>
-                  <a
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      Router.push(getLogoHref(config!));
-                    }}
-                  >
-                    <span className="sr-only">{config?.name} home page</span>
-                    <Logo />
-                  </a>
+                <Link
+                  href={getLogoHref(config!)}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    Router.push(getLogoHref(config!));
+                  }}
+                >
+                  <span className="sr-only">{config?.name} home page</span>
+                  <Logo />
                 </Link>
                 <VersionSelect />
               </div>

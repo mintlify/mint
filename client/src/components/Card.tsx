@@ -54,7 +54,7 @@ export function Card({
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
   if (href && (href.startsWith('/') || href.startsWith('#'))) {
     return (
-      <Link href={href} passHref>
+      <Link href={href} passHref legacyBehavior>
         <CardComponent />
       </Link>
     );
