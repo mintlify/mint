@@ -49,6 +49,10 @@ const postHogConfigInterfaceSchema = z.object({
     .optional(),
 });
 
+const plausibleConfigInterfaceSchema = z.object({
+  domain: z.string({ required_error: "Plausible domain is missing" }),
+});
+
 export const analyticsSchema = z
   .object({
     amplitude: amplitudeConfigInterfaceSchema.optional(),
@@ -60,5 +64,6 @@ export const analyticsSchema = z
     mixpanel: mixpanelConfigInterfaceSchema.optional(),
     pirsch: pirschConfigInterfaceSchema.optional(),
     posthog: postHogConfigInterfaceSchema.optional(),
+    plausible: plausibleConfigInterfaceSchema.optional(),
   })
   .optional();
