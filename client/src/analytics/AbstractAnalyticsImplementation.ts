@@ -40,7 +40,6 @@ export type PlausibleInterface = {
   domain?: string;
 };
 
-
 // We can use & instead of | because all keys are optional
 export type ConfigInterface = AmplitudeConfigInterface &
   FathomConfigInterface &
