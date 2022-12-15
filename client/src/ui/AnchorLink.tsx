@@ -24,7 +24,7 @@ const Anchor = forwardRef(
     const usePrimaryColorForText = color == null || color.includes('linear-gradient');
 
     return (
-      <div
+      <a
         ref={ref}
         href={href}
         onClick={onClick}
@@ -61,7 +61,7 @@ const Anchor = forwardRef(
           {icon}
         </div>
         {children}
-      </div>
+      </a>
     );
   }
 );
@@ -78,7 +78,7 @@ export function AnchorLink({ ...props }: TopLevelProps) {
 
   return (
     <li>
-      <Link href={href ?? '/'}>
+      <Link href={href ?? '/'} legacyBehavior>
         <Anchor {...props} />
       </Link>
     </li>
