@@ -53,7 +53,7 @@ const NavItem = forwardRef(
     return (
       <li ref={ref}>
         <Link
-          href={href || '/'}
+          href={groupPage.redirect || href || '/'}
           className={clsx(
             'flex border-l -ml-px',
             isActive

@@ -25,6 +25,7 @@ export type PageMetaTags = {
   createdDate?: string;
   hideFooterPagination?: boolean;
   hideApiMarker?: boolean; // Undocumented
+  redirect?: string;
 };
 
 export type Groups = Group[];
