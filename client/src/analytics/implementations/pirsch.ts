@@ -15,28 +15,29 @@ export default class PirschAnalytics extends AbstractAnalyticsImplementation {
   } as any;
 
   init(implementationConfig: ConfigInterface) {
-    if (implementationConfig?.id && process.env.NODE_ENV === 'production') {
-      const pirschId = implementationConfig.id;
-      import('pirsch-sdk/web')
-        .then((_pirsch) => {
-          if (!this.initialized) {
-            // Get default module export
-            this.pirsch = new _pirsch.Pirsch({
-              identificationCode: pirschId,
-            });
-
-            this.initialized = true;
-
-            this.waitTracking.forEach((event) => {
-              const [eventName, eventProperties] = event;
-              this.pirsch.event(eventName, eventProperties);
-            });
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    if (!implementationConfig?.id || process.env.NODE_ENV !== 'production') {
+      return;
     }
+    const pirschId = implementationConfig.id;
+    import('pirsch-sdk/web')
+      .then((_pirsch) => {
+        if (!this.initialized) {
+          // Get default module export
+          this.pirsch = new _pirsch.Pirsch({
+            identificationCode: pirschId,
+          });
+
+          this.initialized = true;
+
+          this.waitTracking.forEach((event) => {
+            const [eventName, eventProperties] = event;
+            this.pirsch.event(eventName, eventProperties);
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   createEventListener(eventName: string) {

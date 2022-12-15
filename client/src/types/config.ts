@@ -1,14 +1,4 @@
-import {
-  AmplitudeConfigInterface,
-  FathomConfigInterface,
-  GoogleAnalyticsConfigInterface,
-  GoogleTagManagerConfigInterface,
-  HotjarConfigInterface,
-  LogrocketConfigInterface,
-  MixpanelConfigInterface,
-  PirschConfigInterface,
-  PostHogConfigInterface,
-} from '../analytics/AbstractAnalyticsImplementation';
+import { AnalyticsMediatorConstructorInterface } from '@/analytics/AnalyticsMediator';
 import { Gradient } from './gradient';
 
 export type NavigationEntry = string | Navigation;
@@ -48,18 +38,6 @@ export type Anchor = {
 type FooterSocial = {
   type: string;
   url: string;
-};
-
-type Analytics = {
-  amplitude?: AmplitudeConfigInterface;
-  fathom?: FathomConfigInterface;
-  ga4?: GoogleAnalyticsConfigInterface;
-  gtm?: GoogleTagManagerConfigInterface;
-  logrocket?: LogrocketConfigInterface;
-  hotjar?: HotjarConfigInterface;
-  mixpanel?: MixpanelConfigInterface;
-  pirsch?: PirschConfigInterface;
-  posthog?: PostHogConfigInterface;
 };
 
 type Integrations = {
@@ -110,10 +88,10 @@ export type Config = {
   footerSocials?: FooterSocial[] | FooterSocials;
   backgroundImage?: string;
   hideFeedbackButtons?: boolean;
-  analytics?: Analytics;
+  analytics?: AnalyticsMediatorConstructorInterface;
   integrations?: Integrations;
   __injected?: {
-    analytics?: Analytics;
+    analytics?: AnalyticsMediatorConstructorInterface;
   };
 };
 

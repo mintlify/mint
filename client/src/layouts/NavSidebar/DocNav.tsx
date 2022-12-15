@@ -52,26 +52,25 @@ const NavItem = forwardRef(
 
     return (
       <li ref={ref}>
-        <Link href={href || '/'}>
-          <a
-            className={clsx(
-              'flex border-l -ml-px',
-              isActive
-                ? 'text-primary border-current font-semibold dark:text-primary-light'
-                : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
-              getPaddingByLevel(level)
-            )}
-          >
-            {endpointStr && groupPage?.hideApiMarker !== true && (
-              <div
-                className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
-                  'bg-primary dark:bg-primary-light': isActive,
-                  [getMethodDotsColor(extractMethodAndEndpoint(endpointStr).method)]: !isActive,
-                })}
-              />
-            )}
-            <div className="flex-1">{title}</div>
-          </a>
+        <Link
+          href={href || '/'}
+          className={clsx(
+            'flex border-l -ml-px',
+            isActive
+              ? 'text-primary border-current font-semibold dark:text-primary-light'
+              : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
+            getPaddingByLevel(level)
+          )}
+        >
+          {endpointStr && groupPage?.hideApiMarker !== true && (
+            <div
+              className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
+                'bg-primary dark:bg-primary-light': isActive,
+                [getMethodDotsColor(extractMethodAndEndpoint(endpointStr).method)]: !isActive,
+              })}
+            />
+          )}
+          <div className="flex-1">{title}</div>
         </Link>
       </li>
     );

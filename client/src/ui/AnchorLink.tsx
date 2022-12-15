@@ -78,7 +78,7 @@ export function AnchorLink({ ...props }: TopLevelProps) {
 
   return (
     <li>
-      <Link href={href ?? '/'} passHref>
+      <Link href={href ?? '/'} legacyBehavior>
         <Anchor {...props} />
       </Link>
     </li>

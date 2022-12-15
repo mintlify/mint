@@ -14,30 +14,31 @@ export default class HotjarAnalytics extends AbstractAnalyticsImplementation {
 
   init(implementationConfig: ConfigInterface) {
     if (
-      implementationConfig?.hjid &&
-      implementationConfig?.hjsv &&
-      process.env.NODE_ENV === 'production'
+      !implementationConfig?.hjid ||
+      !implementationConfig?.hjsv ||
+      process.env.NODE_ENV !== 'production'
     ) {
-      const hjid = parseInt(implementationConfig.hjid, 10);
-      const hjsv = parseInt(implementationConfig.hjsv, 10);
-
-      import('react-hotjar')
-        .then((_hotjar) => {
-          if (!this.initialized) {
-            // Get default module export
-            this.hotjar = _hotjar;
-            this.hotjar.initialize(hjid, hjsv);
-            this.initialized = true;
-
-            this.waitTracking.forEach((eventName) => {
-              this.hotjar.event(eventName);
-            });
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+      return;
     }
+    const hjid = parseInt(implementationConfig.hjid, 10);
+    const hjsv = parseInt(implementationConfig.hjsv, 10);
+
+    import('react-hotjar')
+      .then((_hotjar) => {
+        if (!this.initialized) {
+          // Get default module export
+          this.hotjar = _hotjar;
+          this.hotjar.initialize(hjid, hjsv);
+          this.initialized = true;
+
+          this.waitTracking.forEach((eventName) => {
+            this.hotjar.event(eventName);
+          });
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   createEventListener(eventName: string) {

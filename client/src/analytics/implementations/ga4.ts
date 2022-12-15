@@ -9,9 +9,11 @@ export default class GA4Analytics extends AbstractAnalyticsImplementation {
   init(implementationConfig: ConfigInterface) {
     // GA4 setup happens by placing GA4Script.
     // This implementation only exists to send custom events using window.gtag.
-    if (process.env.NODE_ENV === 'production') {
-      this.measurementId = implementationConfig.measurementId;
+    if (process.env.NODE_ENV !== 'production') {
+      return;
     }
+    
+    this.measurementId = implementationConfig.measurementId;
   }
 
   createEventListener(eventName: string) {

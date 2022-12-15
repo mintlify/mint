@@ -13,5 +13,6 @@ export function getAnalyticsConfig(config: Config) {
     mixpanel: config.analytics?.mixpanel || config.__injected?.analytics?.mixpanel,
     pirsch: config.analytics?.pirsch || config.__injected?.analytics?.pirsch,
     posthog: config.analytics?.posthog || config.__injected?.analytics?.posthog,
+    plausible: config.analytics?.plausible || config.__injected?.analytics?.plausible,
   };
 }

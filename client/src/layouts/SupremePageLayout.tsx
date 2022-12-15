@@ -21,6 +21,7 @@ import { FeedbackProvider } from '@/ui/Feedback';
 import { SearchProvider } from '@/ui/search/Search';
 import { getAllMetaTags } from '@/utils/getAllMetaTags';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
+import PlausibleScript from '@/analytics/PlausibleScript';
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
@@ -112,6 +113,7 @@ export default function SupremePageLayout({
             />
             <GA4Script ga4={analyticsConfig.ga4} />
             <GTMScript gtm={analyticsConfig.gtm} />
+            <PlausibleScript plausible={analyticsConfig.plausible} />
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div className="relative antialiased text-slate-500 dark:text-slate-400">

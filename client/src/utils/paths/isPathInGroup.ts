@@ -1,7 +1,7 @@
 import { Group, isGroup } from '@/types/metadata';
 
 export function isPathInGroup(path: string, group: Group): boolean {
-  if (!path || !group.pages) {
+  if (!path || !Array.isArray(group.pages)) {
     return false;
   }
 
