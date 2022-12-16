@@ -5,8 +5,14 @@ import ErrorBoundary from '@/ui/ErrorBoundary';
 
 import '../css/main.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({
+  display: 'swap',
+  fallback: ['arial'],
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 const firaCode = Fira_Code({
+  display: 'swap',
   subsets: ['latin'],
   variable: '--font-fira-code',
 });
@@ -16,7 +22,12 @@ export default function App(props: any) {
 
   return (
     <ErrorBoundary>
-      <main className={`${inter.variable} ${firaCode.variable} font-sans`}>
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
+      <main className={`${inter.variable} ${firaCode.variable}`}>
         <Component {...pageProps} />
       </main>
     </ErrorBoundary>

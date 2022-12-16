@@ -1,0 +1,7 @@
+@import 'tailwindcss/components';
+
+@layer components {
+  .zinc-box {
+    @apply shadow-sm text-zinc-400 dark:text-white/50 bg-zinc-50 dark:bg-background-dark dark:brightness-[1.35] dark:ring-1 dark:hover:brightness-150;
+  }
+}

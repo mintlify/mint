@@ -100,7 +100,7 @@ export function Footer({ previous, next, hasBottomPadding = true }: FooterProps)
       )}
       <div
         className={clsx(
-          'pt-10 border-t border-slate-200 sm:flex justify-between text-slate-500 dark:border-slate-200/5',
+          'pt-10 border-t border-zinc-200 sm:flex justify-between text-zinc-500 dark:border-zinc-200/5',
           { 'pb-28': hasBottomPadding }
         )}
       >
@@ -109,7 +109,7 @@ export function Footer({ previous, next, hasBottomPadding = true }: FooterProps)
             href="https://mintlify.com"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-slate-900 dark:hover:text-slate-400"
+            className="hover:text-zinc-900 dark:hover:text-zinc-400"
           >
             Powered by Mintlify
           </a>
