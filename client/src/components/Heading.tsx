@@ -66,7 +66,7 @@ export function Heading({
           aria-label="Navigate to header"
         >
           &#8203;
-          <div className="w-6 h-6 text-slate-400 ring-1 ring-slate-900/5 rounded-md shadow-sm flex items-center justify-center hover:ring-slate-900/10 hover:shadow hover:text-slate-700 dark:bg-slate-700 dark:text-slate-300 dark:shadow-none dark:ring-0">
+          <div className="w-6 h-6 text-zinc-400 rounded-md flex items-center justify-center zinc-box">
             <svg
               className="h-4 w-4"
               fill="currentColor"
