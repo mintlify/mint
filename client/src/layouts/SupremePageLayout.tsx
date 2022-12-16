@@ -98,7 +98,7 @@ export default function SupremePageLayout({
               dangerouslySetInnerHTML={{
                 __html: `
                 try {
-                  if (localStorage.isDarkMode === true || (${(
+                  if (localStorage.isDarkMode === 'true' || (${(
                     config.modeToggle?.default == null
                   ).toString()} && !('isDarkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
                   config.modeToggle?.default === 'dark'
