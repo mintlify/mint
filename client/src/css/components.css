@@ -2,6 +2,6 @@
 
 @layer components {
   .zinc-box {
-    @apply shadow-sm text-zinc-400 dark:text-white/50 ring-1 ring-slate-500/10 bg-zinc-50 hover:ring-slate-900/20 dark:hover:ring-white/10 dark:bg-background-dark dark:brightness-[1.35] dark:ring-1 dark:hover:brightness-150;
+    @apply shadow-sm text-zinc-400 dark:text-white/50 ring-1 ring-slate-500/30 bg-zinc-50 hover:ring-slate-900/50 dark:hover:ring-white/10 dark:bg-background-dark dark:brightness-[1.35] dark:ring-1 dark:hover:brightness-150;
   }
 }

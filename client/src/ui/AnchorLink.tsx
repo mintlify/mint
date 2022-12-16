@@ -50,7 +50,7 @@ const Anchor = forwardRef(
               : {}
           }
           className={clsx(
-            `mr-4 rounded-md p-1`,
+            'mr-4 rounded-md p-1',
             !color && 'group-hover:bg-primary',
             isActive
               ? [color ? '' : 'bg-primary']
@@ -107,14 +107,7 @@ export function StyledAnchorLink({
       />
     );
   return (
-    <AnchorLink
-      {...props}
-      as={as}
-      href={href}
-      icon={AnchorIcon}
-      isActive={isActive}
-      color={color}
-    >
+    <AnchorLink {...props} as={as} href={href} icon={AnchorIcon} isActive={isActive} color={color}>
       {name ?? href}
     </AnchorLink>
   );
