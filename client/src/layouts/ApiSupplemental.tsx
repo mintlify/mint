@@ -98,7 +98,7 @@ export function GeneratedRequestExamples({
   apiBaseIndex: number;
   endpointStr?: string;
 }) {
-  const { mintConfig, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApiFiles } = useContext(ConfigContext);
 
   return generateRequestExamples(
     endpointStr,
@@ -106,17 +106,17 @@ export function GeneratedRequestExamples({
     apiBaseIndex,
     paramGroupDict,
     apiPlaygroundInputs,
-    openApi
+    openApiFiles
   );
 }
 
 export function OpenApiResponseExample({ openapi }: { openapi?: string }) {
-  const { openApi } = useContext(ConfigContext);
+  const { openApiFiles } = useContext(ConfigContext);
   const [openApiResponseExamples, setOpenApiResponseExamples] = useState<string[]>([]);
 
   const { operation } =
-    openapi != null && openApi != null
-      ? getOpenApiOperationMethodAndEndpoint(openapi, openApi)
+    openapi != null && openApiFiles != null
+      ? getOpenApiOperationMethodAndEndpoint(openapi, openApiFiles)
       : { operation: undefined };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export function OpenApiResponseExample({ openapi }: { openapi?: string }) {
         setOpenApiResponseExamples(responseExamplesOpenApi);
       }
     }
-  }, [openapi, openApi, operation?.responses]);
+  }, [openapi, openApiFiles, operation?.responses]);
 
   let responseChildren = [] as any;
 

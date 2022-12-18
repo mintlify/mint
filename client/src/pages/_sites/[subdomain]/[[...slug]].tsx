@@ -8,7 +8,12 @@ import { ErrorPage } from '@/pages/404';
 import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+import {
+  getRelevantOpenApiSpec,
+  getOpenApiTitleAndDescription,
+} from '@/utils/openApi/getOpenApiContext';
 import { prepareToSerialize } from '@/utils/prepareToSerialize';
 
 interface PageProps {
@@ -23,7 +28,7 @@ export interface PageDataProps {
   pageMetadata: PageMetaTags;
   title: string;
   mintConfig: Config;
-  openApi?: any;
+  openApiFiles?: OpenApiFile[];
 }
 
 export default function Page({ mdxSource, pageData, favicons, subdomain }: PageProps) {
@@ -86,23 +91,33 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     return { redirect };
   }
   if (status === 200) {
-    const {
+    let {
       content,
       mintConfig,
       navWithMetadata,
       pageMetadata,
-      title,
-      openApi,
+      openApiFiles,
       favicons,
     }: {
       content: string;
       mintConfig: string;
       navWithMetadata: Groups;
       pageMetadata: PageMetaTags;
-      title: string;
-      openApi?: string;
+      openApiFiles?: OpenApiFile[];
       favicons: FaviconsProps;
     } = data;
+    const prunedOpenApiFiles = getRelevantOpenApiSpec(pageMetadata, openApiFiles);
+    if (prunedOpenApiFiles && prunedOpenApiFiles?.length > 0) {
+      const { title, description } = getOpenApiTitleAndDescription(
+        pageMetadata?.openapi,
+        prunedOpenApiFiles
+      );
+      pageMetadata = {
+        title,
+        description,
+        ...pageMetadata,
+      };
+    }
     let mdxSource: any = '';
 
     try {
@@ -124,9 +139,8 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         pageData: prepareToSerialize({
           navWithMetadata,
           pageMetadata,
-          title,
           mintConfig,
-          openApi,
+          openApiFiles: prunedOpenApiFiles,
         }),
         favicons: prepareToSerialize(favicons),
         subdomain,

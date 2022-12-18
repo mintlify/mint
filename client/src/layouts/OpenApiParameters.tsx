@@ -161,8 +161,8 @@ function ExpandableFields({ schema }: any) {
 }
 
 export function OpenApiParameters({ endpointStr }: OpenApiContentProps) {
-  const { openApi } = useContext(ConfigContext);
-  const { operation, path } = getOpenApiOperationMethodAndEndpoint(endpointStr, openApi);
+  const { openApiFiles } = useContext(ConfigContext);
+  const { operation, path } = getOpenApiOperationMethodAndEndpoint(endpointStr, openApiFiles);
 
   if (operation == null) {
     return null;

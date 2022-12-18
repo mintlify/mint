@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { forwardRef, Fragment, useContext, useEffect, useState } from 'react';
+import { forwardRef, useContext, useEffect, useState } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';

@@ -42,14 +42,14 @@ export function ApiPlayground({
   onApiBaseIndexChange?: (apiBaseIndex: number) => void;
 }) {
   const { basePath } = useRouter();
-  const { mintConfig, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApiFiles } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
   const { base, path } = extractBaseAndPath(
     endpoint,
     apiBaseIndex,
     mintConfig?.api?.baseUrl,
-    openApi
+    openApiFiles
   );
 
   const [apiBase, setApiBase] = useState<string>(base);

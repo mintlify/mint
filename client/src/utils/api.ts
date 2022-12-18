@@ -4,6 +4,7 @@ import isAbsoluteUrl from 'is-absolute-url';
 import { ParamProps } from '@/components/Param';
 import { Component } from '@/enums/components';
 import { ApiConfig } from '@/types/config';
+import { OpenApiFile } from '@/types/openApi';
 import { ApiComponent } from '@/ui/ApiPlayground';
 
 export type Child = {
@@ -147,12 +148,14 @@ export const extractBaseAndPath = (
   endpoint: string,
   apiBaseIndex = 0,
   baseUrl: string | string[] | undefined,
-  openApi: any
+  openApiFiles?: OpenApiFile[]
 ) => {
   let fullEndpoint;
-  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
-    return acc.concat(file.openapi.servers);
-  }, []);
+  const openApiServers =
+    openApiFiles &&
+    openApiFiles.reduce((acc: any, file: any) => {
+      return acc.concat(file.openapi.servers);
+    }, []);
   baseUrl = baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
   if (isAbsoluteUrl(endpoint)) {
     fullEndpoint = endpoint;

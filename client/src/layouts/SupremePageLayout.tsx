@@ -35,7 +35,7 @@ export default function SupremePageLayout({
   favicons: FaviconsProps;
   subdomain: string;
 }) {
-  const { mintConfig, navWithMetadata, pageMetadata } = pageData;
+  const { mintConfig, navWithMetadata, pageMetadata, openApiFiles } = pageData;
 
   useProgressBar(mintConfig?.colors?.primary);
   let [navIsOpen, setNavIsOpen] = useState(false);
@@ -59,7 +59,7 @@ export default function SupremePageLayout({
     <Intercom appId={mintConfig.integrations?.intercom} autoBoot>
       <VersionContextController versionOptions={mintConfig?.versions}>
         <ConfigContext.Provider
-          value={{ mintConfig, navWithMetadata, openApi: pageData?.openApi || {}, subdomain }}
+          value={{ mintConfig, navWithMetadata, openApiFiles: openApiFiles ?? [], subdomain }}
         >
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />

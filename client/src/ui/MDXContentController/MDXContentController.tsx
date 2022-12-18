@@ -11,6 +11,7 @@ import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
 import { PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import { ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
 import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
@@ -41,7 +42,7 @@ export function MDXContentController({
   tableOfContents,
   apiComponents,
 }: MDXContentControllerProps) {
-  const { mintConfig, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApiFiles } = useContext(ConfigContext);
   const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const currentPath = useCurrentPath();
@@ -54,7 +55,7 @@ export function MDXContentController({
   const openApiPlaygroundProps = getOpenApiPlaygroundProps(
     apiBaseIndex,
     mintConfig,
-    openApi,
+    openApiFiles,
     pageMetadata.openapi
   );
   const isApi =
@@ -163,17 +164,17 @@ export function MDXContentController({
 function getOpenApiPlaygroundProps(
   apiBaseIndex: number,
   mintConfig: Config | undefined,
-  openApi: any,
+  openApiFiles: OpenApiFile[],
   openApiEndpoint: string | undefined
 ) {
   // Detect when OpenAPI is missing
-  if (!openApiEndpoint || !openApi) {
+  if (!openApiEndpoint || !openApiFiles) {
     return {};
   }
 
   const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(
     openApiEndpoint,
-    openApi
+    openApiFiles
   );
 
   // Detect when OpenAPI string is missing the operation (eg. GET)
@@ -183,7 +184,7 @@ function getOpenApiPlaygroundProps(
 
   // Get the api string with the correct baseUrl
   // endpoint in OpenAPI refers to the path
-  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
+  const openApiServers = openApiFiles?.reduce((acc: any, file: any) => {
     return acc.concat(file.openapi.servers);
   }, []);
   const configBaseUrl =
