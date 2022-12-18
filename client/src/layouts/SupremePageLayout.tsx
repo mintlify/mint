@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
 import GTMScript from '@/analytics/GTMScript';
+import PlausibleScript from '@/analytics/PlausibleScript';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
@@ -21,7 +22,6 @@ import { FeedbackProvider } from '@/ui/Feedback';
 import { SearchProvider } from '@/ui/search/Search';
 import { getAllMetaTags } from '@/utils/getAllMetaTags';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
-import PlausibleScript from '@/analytics/PlausibleScript';
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
@@ -96,15 +96,13 @@ export default function SupremePageLayout({
               dangerouslySetInnerHTML={{
                 __html: `
                 try {
-                  if (localStorage.isDarkMode === 'dark' || (${(
+                  if (localStorage.isDarkMode === 'true' || (${(
                     mintConfig.modeToggle?.default == null
                   ).toString()} && !('isDarkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
                   mintConfig.modeToggle?.default === 'dark'
                 ).toString()}) {
                     document.documentElement.classList.add('dark')
-                  }
-                  
-                  else {
+                  } else {
                     document.documentElement.classList.remove('dark')
                   }
                 } catch (_) {}

@@ -6,8 +6,7 @@ import ErrorBoundary from '@/ui/ErrorBoundary';
 import '../css/main.css';
 
 const inter = Inter({
-  display: 'swap',
-  fallback: ['arial'],
+  display: 'block',
   subsets: ['latin'],
   variable: '--font-inter',
 });
