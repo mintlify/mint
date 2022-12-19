@@ -31,7 +31,8 @@ const Social = ({ type, url }: SocialProps) => {
     icon !== 'instagram' &&
     icon !== 'youtube' &&
     icon !== 'medium' &&
-    icon !== 'hacker-news'
+    icon !== 'hacker-news' &&
+    icon !== 'telegram'
   ) {
     return null;
   }
