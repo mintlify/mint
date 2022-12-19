@@ -184,8 +184,8 @@ function getOpenApiPlaygroundProps(
 
   // Get the api string with the correct baseUrl
   // endpoint in OpenAPI refers to the path
-  const openApiServers = openApiFiles?.reduce((acc: any, file: any) => {
-    return acc.concat(file.openapi.servers);
+  const openApiServers = openApiFiles?.reduce((acc: any, file: OpenApiFile) => {
+    return acc.concat(file.spec?.servers);
   }, []);
   const configBaseUrl =
     mintConfig?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
