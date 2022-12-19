@@ -10,10 +10,7 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import {
-  getRelevantOpenApiSpec,
-  getOpenApiTitleAndDescription,
-} from '@/utils/openApi/getOpenApiContext';
+import { getOpenApiTitleAndDescription } from '@/utils/openApi/getOpenApiContext';
 import { prepareToSerialize } from '@/utils/prepareToSerialize';
 
 interface PageProps {
@@ -106,11 +103,10 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       openApiFiles?: OpenApiFile[];
       favicons: FaviconsProps;
     } = data;
-    const prunedOpenApiFiles = getRelevantOpenApiSpec(pageMetadata, openApiFiles);
-    if (prunedOpenApiFiles && prunedOpenApiFiles?.length > 0) {
+    if (openApiFiles && openApiFiles?.length > 0) {
       const { title, description } = getOpenApiTitleAndDescription(
         pageMetadata?.openapi,
-        prunedOpenApiFiles
+        openApiFiles
       );
       pageMetadata = {
         title,
@@ -140,7 +136,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           navWithMetadata,
           pageMetadata,
           mintConfig,
-          openApiFiles: prunedOpenApiFiles,
+          openApiFiles,
         }),
         favicons: prepareToSerialize(favicons),
         subdomain,

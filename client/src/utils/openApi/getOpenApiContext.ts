@@ -1,4 +1,3 @@
-import { PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 
 import { extractMethodAndEndpoint } from '../api';
@@ -15,6 +14,7 @@ export const getOpenApiOperationMethodAndEndpoint = (
     const openApiFile = file.spec;
     const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
     const isFilenameOrNone = !filename || filename === file.filename;
+    console.log({ isFilename: filename === file.filename, filename: file.filename });
     if (openApiPath && isFilenameOrNone) {
       path = openApiPath;
     }
@@ -58,28 +58,4 @@ export const getOpenApiTitleAndDescription = (
     title: operation.summary,
     description: operation.description,
   };
-};
-
-// TODO - refactor to return a single OpenApiFile
-export const getRelevantOpenApiSpec = (
-  pageMetadata: PageMetaTags,
-  openApiFiles?: OpenApiFile[]
-): OpenApiFile[] | undefined => {
-  if (!openApiFiles) {
-    return undefined;
-  }
-  if (pageMetadata?.openapi) {
-    const { filename } = extractMethodAndEndpoint(pageMetadata.openapi);
-    if (!filename) {
-      // if no filename is defined return all files
-      return openApiFiles;
-    } else {
-      openApiFiles.forEach((file) => {
-        if (file.filename === filename) {
-          return [file];
-        }
-      });
-    }
-  }
-  return undefined;
 };
