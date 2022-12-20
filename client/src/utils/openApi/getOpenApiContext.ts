@@ -14,7 +14,6 @@ export const getOpenApiOperationMethodAndEndpoint = (
     const openApiFile = file.spec;
     const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
     const isFilenameOrNone = !filename || filename === file.filename;
-    console.log({ isFilename: filename === file.filename, filename: file.filename });
     if (openApiPath && isFilenameOrNone) {
       path = openApiPath;
     }
