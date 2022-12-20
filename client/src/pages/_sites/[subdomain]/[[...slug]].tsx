@@ -10,7 +10,6 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import { getOpenApiTitleAndDescription } from '@/utils/openApi/getOpenApiContext';
 import { prepareToSerialize } from '@/utils/prepareToSerialize';
 
 interface PageProps {
@@ -103,17 +102,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       openApiFiles?: OpenApiFile[];
       favicons: FaviconsProps;
     } = data;
-    if (openApiFiles && openApiFiles?.length > 0) {
-      const { title, description } = getOpenApiTitleAndDescription(
-        pageMetadata?.openapi,
-        openApiFiles
-      );
-      pageMetadata = {
-        title,
-        description,
-        ...pageMetadata,
-      };
-    }
     let mdxSource: any = '';
 
     try {

@@ -38,23 +38,3 @@ export const getOpenApiOperationMethodAndEndpoint = (
     endpoint,
   };
 };
-
-export const getOpenApiTitleAndDescription = (
-  openApiMetaField?: string,
-  openApiFiles?: OpenApiFile[]
-) => {
-  if (openApiFiles == null || !openApiMetaField || openApiMetaField == null) {
-    return {};
-  }
-
-  const { operation } = getOpenApiOperationMethodAndEndpoint(openApiMetaField, openApiFiles);
-
-  if (operation == null) {
-    return {};
-  }
-
-  return {
-    title: operation.summary,
-    description: operation.description,
-  };
-};
