@@ -40,6 +40,12 @@ export type Group = {
 
 export type GroupPage = PageMetaTags | Group;
 
+export const isPage = (page: GroupPage): page is PageMetaTags => {
+  // Used in if-statements to case GroupPage into either PageMetaTags or Group
+  // The return type "group is Group" is the cast
+  return page && page.hasOwnProperty('href');
+};
+
 export const isGroup = (group: GroupPage): group is Group => {
   // Used in if-statements to case GroupPage into either PageMetaTags or Group
   // The return type "group is Group" is the cast

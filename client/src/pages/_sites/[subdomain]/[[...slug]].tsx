@@ -10,7 +10,8 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import { prepareToSerialize } from '@/utils/prepareToSerialize';
+import { pickRedirect } from '@/utils/staticProps/pickRedirect';
+import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
 interface PageProps {
   mdxSource: string;
@@ -68,6 +69,8 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { subdomain, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
+  console.log(path);
+
   // The entire build will fail when data is undefined
   const { data, status } = await getPage(subdomain, path);
   if (data == null) {
@@ -77,15 +80,30 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     };
   }
 
+  if (status === 308) {
+    const { navWithMetadata }: { navWithMetadata: Groups } = data;
+    if (Array.isArray(navWithMetadata) && navWithMetadata.length > 0) {
+      const redirect = pickRedirect(navWithMetadata, path);
+      if (redirect) {
+        return redirect;
+      }
+    }
+
+    console.warn('Could not find a page to redirect to.');
+    return {
+      notFound: true,
+    };
+  }
+
+  // The server providing data to static props only sends 404s when there is no data at all
+  // for the subdomain. Most not found pages are the result of broken mint.json files
+  // preventing the 308 redirect above from finding a page to redirect to.
   if (status === 404) {
     return {
       notFound: true,
     };
   }
-  if (status === 308) {
-    const redirect: { destination: string; permanent: boolean } = data;
-    return { redirect };
-  }
+
   if (status === 200) {
     let {
       content,
@@ -96,7 +114,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       favicons,
     }: {
       content: string;
-      mintConfig: string;
+      mintConfig: Config;
       navWithMetadata: Groups;
       pageMetadata: PageMetaTags;
       openApiFiles?: OpenApiFile[];

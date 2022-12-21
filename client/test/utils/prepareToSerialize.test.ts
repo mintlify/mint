@@ -1,4 +1,4 @@
-import { prepareToSerialize } from '@/utils/prepareToSerialize';
+import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
 describe('prepareToSerialize', () => {
   test('gets tags from file before reading config and includes default values', () => {
