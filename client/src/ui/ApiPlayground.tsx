@@ -26,6 +26,8 @@ export type ApiComponent = {
 
 export const APIBASE_CONFIG_STORAGE = 'apiBaseIndex';
 
+// Be careful changing the prop types. The parameter is exported. In those cases,
+// users set api and paramGroups but not the other fields.
 export function ApiPlayground({
   api,
   paramGroups,
@@ -37,23 +39,31 @@ export function ApiPlayground({
   paramGroups: ParamGroup[];
   contentType?: string;
   onInputDataChange?: (newInputData: Record<string, Record<string, any>>) => void;
-  onApiBaseIndexChange: (apiBaseIndex: number) => void;
+  onApiBaseIndexChange?: (apiBaseIndex: number) => void;
 }) {
   const { basePath } = useRouter();
-  const { config, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApiFiles } = useContext(ConfigContext);
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
   const { method, endpoint } = extractMethodAndEndpoint(api);
-  const { base, path } = extractBaseAndPath(endpoint, apiBaseIndex, config?.api?.baseUrl, openApi);
+  const { base, path } = extractBaseAndPath(
+    endpoint,
+    apiBaseIndex,
+    mintConfig?.api?.baseUrl,
+    openApiFiles
+  );
 
   const [apiBase, setApiBase] = useState<string>(base);
   const [isSendingRequest, setIsSendingResponse] = useState<boolean>(false);
-  const authParamName = getAuthParamName(config?.api?.auth?.name, config?.api?.auth?.method);
-  const setAuthPrefix = config?.api?.auth?.inputPrefix && authParamName;
+  const authParamName = getAuthParamName(
+    mintConfig?.api?.auth?.name,
+    mintConfig?.api?.auth?.method
+  );
+  const setAuthPrefix = mintConfig?.api?.auth?.inputPrefix && authParamName;
   const [inputData, setInputData] = useState<Record<string, any>>(
     setAuthPrefix
       ? {
           Authorization: {
-            [authParamName]: config.api?.auth?.inputPrefix,
+            [authParamName]: mintConfig.api?.auth?.inputPrefix,
           },
         }
       : {}
@@ -65,27 +75,31 @@ export function ApiPlayground({
     if (configuredApiBaseIndex != null) {
       const storedApiBaseIndex = parseInt(configuredApiBaseIndex, 10);
       setApiBaseIndex(storedApiBaseIndex);
-      onApiBaseIndexChange(storedApiBaseIndex);
+      if (onApiBaseIndexChange) {
+        onApiBaseIndexChange(storedApiBaseIndex);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
 
   const onChangeApiBaseSelection = (base: string) => {
-    if (config?.api == null || !Array.isArray(config.api?.baseUrl)) {
+    if (mintConfig?.api == null || !Array.isArray(mintConfig.api?.baseUrl)) {
       return;
     }
-    const index = config.api.baseUrl.indexOf(base);
+    const index = mintConfig.api.baseUrl.indexOf(base);
     if (index >= 0) {
       window.localStorage.setItem(APIBASE_CONFIG_STORAGE, index.toString());
       setApiBase(base);
-      onApiBaseIndexChange(index);
+      if (onApiBaseIndexChange) {
+        onApiBaseIndexChange(index);
+      }
     }
   };
 
   const makeApiRequest = async () => {
     setIsSendingResponse(true);
     try {
-      const apiContext = getApiContext(apiBase, path, inputData, contentType, config?.api);
+      const apiContext = getApiContext(apiBase, path, inputData, contentType, mintConfig?.api);
       const { data } = await axios.post(`${basePath || ''}/api/request`, {
         method,
         ...apiContext,
@@ -118,8 +132,10 @@ export function ApiPlayground({
       header={
         <RequestPathHeader
           method={method as RequestMethods}
-          baseUrls={Array.isArray(config?.api?.baseUrl) ? config?.api?.baseUrl : undefined}
-          defaultBaseUrl={Array.isArray(config?.api?.baseUrl) ? config?.api?.baseUrl[0] : undefined}
+          baseUrls={Array.isArray(mintConfig?.api?.baseUrl) ? mintConfig?.api?.baseUrl : undefined}
+          defaultBaseUrl={
+            Array.isArray(mintConfig?.api?.baseUrl) ? mintConfig?.api?.baseUrl[0] : undefined
+          }
           onBaseUrlChange={onChangeApiBaseSelection}
           path={path}
         />

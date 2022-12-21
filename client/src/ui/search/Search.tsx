@@ -87,7 +87,7 @@ function SearchHit({
       <>
         <div
           className={clsx(
-            'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none dark:group-hover:highlight-white/10',
+            'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
             active ? 'bg-white dark:bg-primary' : 'dark:bg-slate-800'
           )}
         >
@@ -136,7 +136,7 @@ function SearchHit({
       <>
         <div
           className={clsx(
-            'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none dark:group-hover:highlight-white/10',
+            'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
             active ? 'bg-white dark:bg-primary' : 'dark:bg-slate-800'
           )}
         >
@@ -184,7 +184,7 @@ function SearchHit({
     <>
       <div
         className={clsx(
-          'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none dark:group-hover:highlight-white/10',
+          'rounded-md ring-1 ring-slate-900/5 shadow-sm group-hover:shadow group-hover:ring-slate-900/10 dark:ring-0 dark:shadow-none dark:group-hover:shadow-none',
           active ? 'bg-white dark:bg-primary' : 'dark:bg-slate-800'
         )}
       >
@@ -228,9 +228,9 @@ function SearchHit({
 
 export function SearchProvider({ subdomain, children }: { subdomain: string; children: any }) {
   const router = useRouter();
-  const { config, nav } = useContext(ConfigContext);
+  const { mintConfig: config, navWithMetadata } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
-  const pathToVersion = pathToVersionDict(nav ?? [], config ?? { name: '' });
+  const pathToVersion = pathToVersionDict(navWithMetadata ?? [], config ?? { name: '' });
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [hits, setHits] = useState<Hit[]>([]);

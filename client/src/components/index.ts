@@ -10,6 +10,7 @@ import {
   Tooltip,
   Frame,
 } from '@mintlify/components';
+import { ApiPlayground } from '@mintlify/components';
 import Link from 'next/link';
 
 import { Accordion, AccordionGroup } from '@/components/Accordion';
@@ -24,6 +25,7 @@ import { ResponseField } from '@/components/ResponseField';
 import { MDXContentController } from '@/ui/MDXContentController/MDXContentController';
 
 const components: any = {
+  ApiPlayground,
   Accordion,
   AccordionGroup,
   Heading,
@@ -52,6 +54,7 @@ const components: any = {
 };
 
 export const allowedComponents = [
+  'ApiPlayground',
   'Accordion',
   'AccordionGroup',
   'Heading',

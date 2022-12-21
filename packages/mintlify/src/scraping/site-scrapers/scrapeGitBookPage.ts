@@ -36,7 +36,7 @@ export async function scrapeGitBookPage(
     modifyFileName
   );
 
-  const nhm = new NodeHtmlMarkdown();
+  const nhm = new NodeHtmlMarkdown({ useInlineLinks: false });
   let markdown = nhm.translate(contentHtml);
 
   // Keep headers on one line and increase their depth by one

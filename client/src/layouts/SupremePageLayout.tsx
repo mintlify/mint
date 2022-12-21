@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import AnalyticsContext from '@/analytics/AnalyticsContext';
 import GA4Script from '@/analytics/GA4Script';
 import GTMScript from '@/analytics/GTMScript';
+import PlausibleScript from '@/analytics/PlausibleScript';
 import { useAnalytics } from '@/analytics/useAnalytics';
 import components from '@/components';
 import { ConfigContext } from '@/context/ConfigContext';
@@ -14,40 +15,31 @@ import { VersionContextController } from '@/context/VersionContext';
 import useProgressBar from '@/hooks/useProgressBar';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { Config } from '@/types/config';
+import { PageDataProps } from '@/pages/_sites/[subdomain]/[[...slug]]';
 import { FaviconsProps } from '@/types/favicons';
-import { Groups, PageMetaTags } from '@/types/metadata';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { FeedbackProvider } from '@/ui/Feedback';
-import { Header } from '@/ui/Header';
 import { SearchProvider } from '@/ui/search/Search';
+import { getAllMetaTags } from '@/utils/getAllMetaTags';
 import { getAnalyticsConfig } from '@/utils/getAnalyticsConfig';
 
 // First Layout used by every page inside [[..slug]]
 export default function SupremePageLayout({
   mdxSource,
-  parsedData,
-  config,
-  openApi,
+  pageData,
   favicons,
   subdomain,
 }: {
   mdxSource: any;
-  parsedData: {
-    nav: Groups;
-    meta: PageMetaTags;
-    section: string | undefined;
-    metaTagsForSeo: PageMetaTags;
-  };
-  config: Config;
-  openApi: any;
+  pageData: PageDataProps;
   favicons: FaviconsProps;
   subdomain: string;
 }) {
-  useProgressBar(config?.colors?.primary);
-  const { meta, section, metaTagsForSeo, nav } = parsedData;
+  const { mintConfig, navWithMetadata, pageMetadata, openApiFiles } = pageData;
+
+  useProgressBar(mintConfig?.colors?.primary);
   let [navIsOpen, setNavIsOpen] = useState(false);
-  const analyticsConfig = getAnalyticsConfig(config);
+  const analyticsConfig = getAnalyticsConfig(mintConfig);
   const analyticsMediator = useAnalytics(analyticsConfig);
 
   useEffect(() => {
@@ -61,10 +53,14 @@ export default function SupremePageLayout({
     };
   }, [navIsOpen]);
 
+  const metaTagsDict = getAllMetaTags(pageMetadata, mintConfig.metadata || {});
+
   return (
-    <Intercom appId={config.integrations?.intercom} autoBoot>
-      <VersionContextController versionOptions={config?.versions}>
-        <ConfigContext.Provider value={{ config, nav, openApi, subdomain }}>
+    <Intercom appId={mintConfig.integrations?.intercom} autoBoot>
+      <VersionContextController versionOptions={mintConfig?.versions}>
+        <ConfigContext.Provider
+          value={{ mintConfig, navWithMetadata, openApiFiles: openApiFiles ?? [], subdomain }}
+        >
           <AnalyticsContext.Provider value={analyticsMediator}>
             <ColorVariables />
             <Head>
@@ -78,19 +74,20 @@ export default function SupremePageLayout({
                 />
               ))}
               <meta name="msapplication-config" content={favicons.browserconfig} />
-              <meta name="apple-mobile-web-app-title" content={config.name} />
-              <meta name="application-name" content={config.name} />
+              <meta name="apple-mobile-web-app-title" content={mintConfig.name} />
+              <meta name="application-name" content={mintConfig.name} />
               <meta name="theme-color" content="#ffffff" />
-              <meta name="msapplication-TileColor" content={config.colors?.primary} />
+              <meta name="msapplication-TileColor" content={mintConfig.colors?.primary} />
               <meta name="theme-color" content="#ffffff" />
-              {config?.metadata &&
-                Object.entries(config?.metadata).map(([key, value]) => {
+              {mintConfig?.metadata &&
+                Object.entries(mintConfig?.metadata).map(([key, value]) => {
                   if (!value) {
                     return null;
                   }
                   return <meta key={key} name={key} content={value as any} />;
                 })}
-              {Object.entries(metaTagsForSeo).map(([key, value]) => (
+              <title>{metaTagsDict['og:title']}</title>
+              {Object.entries(metaTagsDict).map(([key, value]) => (
                 <meta key={key} name={key} content={value as any} />
               ))}
             </Head>
@@ -99,15 +96,13 @@ export default function SupremePageLayout({
               dangerouslySetInnerHTML={{
                 __html: `
                 try {
-                  if (localStorage.theme === 'dark' || (${(
-                    config.modeToggle?.default == null
-                  ).toString()} && !('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
-                  config.modeToggle?.default === 'dark'
+                  if (localStorage.isDarkMode === 'true' || (${(
+                    mintConfig.modeToggle?.default == null
+                  ).toString()} && !('isDarkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) || ${(
+                  mintConfig.modeToggle?.default === 'dark'
                 ).toString()}) {
                     document.documentElement.classList.add('dark')
-                  }
-                  
-                  else {
+                  } else {
                     document.documentElement.classList.remove('dark')
                   }
                 } catch (_) {}
@@ -116,33 +111,27 @@ export default function SupremePageLayout({
             />
             <GA4Script ga4={analyticsConfig.ga4} />
             <GTMScript gtm={analyticsConfig.gtm} />
+            <PlausibleScript plausible={analyticsConfig.plausible} />
             <FeedbackProvider subdomain={subdomain}>
               <SearchProvider subdomain={subdomain}>
                 <div className="relative antialiased text-slate-500 dark:text-slate-400">
                   <span className="fixed inset-0 bg-background-light dark:bg-background-dark"></span>
                   <span
                     className="z-0 fixed inset-0"
-                    {...(config.backgroundImage && {
+                    {...(mintConfig.backgroundImage && {
                       style: {
-                        backgroundImage: `url('${config.backgroundImage}')`,
+                        backgroundImage: `url('${mintConfig.backgroundImage}')`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'top right',
                         backgroundAttachment: 'fixed',
                       },
                     })}
                   ></span>
-                  <Header
-                    hasNav={Boolean(config.navigation?.length)}
-                    navIsOpen={navIsOpen}
-                    onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
-                    title={meta?.title}
-                    section={section}
-                  />
                   <DocumentationLayout
-                    nav={nav}
+                    navWithMetadata={navWithMetadata}
                     navIsOpen={navIsOpen}
                     setNavIsOpen={setNavIsOpen}
-                    meta={meta}
+                    pageMetadata={pageMetadata}
                   >
                     <MDXRemote components={components} {...mdxSource} />
                   </DocumentationLayout>

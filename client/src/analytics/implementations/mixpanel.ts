@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
-
 import {
   AbstractAnalyticsImplementation,
   ConfigInterface,
@@ -35,7 +33,7 @@ export default class MixpanelAnalytics extends AbstractAnalyticsImplementation {
           }
         })
         .catch((e) => {
-          Sentry.captureException(e);
+          console.error(e);
         });
     } else {
       // Stop storing events, we don't need them because the library will not be loaded.

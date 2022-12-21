@@ -52,9 +52,9 @@ export function Card({
 
   // We don't use DynamicLink because we cannot wrap the Card in an extra <a> tag without
   // messing with the Card's styling. The Card already sets an <a> tag when href is passed to it.
-  if ((href && href?.startsWith('/')) || href?.startsWith('#')) {
+  if (href && (href.startsWith('/') || href.startsWith('#'))) {
     return (
-      <Link href={href} passHref>
+      <Link href={href} passHref legacyBehavior>
         <CardComponent />
       </Link>
     );

@@ -4,18 +4,18 @@ import { ConfigContext } from '@/context/ConfigContext';
 import { Gradient } from '@/types/gradient';
 
 export function useColors(): Colors {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
-  const primaryColor = config?.colors?.primary ?? '#16A34A';
+  const primaryColor = mintConfig?.colors?.primary ?? '#16A34A';
 
-  const globalAnchorColor = colorToBackground(config?.colors?.anchors);
-  const firstAnchorColor = colorToBackground(config?.topAnchor?.color) ?? globalAnchorColor;
+  const globalAnchorColor = colorToBackground(mintConfig?.colors?.anchors);
+  const firstAnchorColor = colorToBackground(mintConfig?.topAnchor?.color) ?? globalAnchorColor;
 
   // Include the color for the first anchor even though the config object
   // doesn't define it explicitly
   const anchors = [firstAnchorColor];
 
-  config?.anchors?.forEach((anchor) => {
+  mintConfig?.anchors?.forEach((anchor) => {
     const anchorColor = colorToBackground(anchor.color) ?? globalAnchorColor;
     if (!anchorColor) return;
 
@@ -24,12 +24,12 @@ export function useColors(): Colors {
 
   return {
     primary: primaryColor,
-    primaryLight: config?.colors?.light ?? '#4ADE80',
-    primaryDark: config?.colors?.dark ?? '#166534',
-    primaryUltraLight: config?.colors?.ultraLight ?? '#DCFCE7',
-    primaryUltraDark: config?.colors?.ultraDark ?? '#14532D',
-    backgroundLight: config?.colors?.background?.light ?? '#ffffff',
-    backgroundDark: config?.colors?.background?.dark ?? '#0C1322',
+    primaryLight: mintConfig?.colors?.light ?? '#4ADE80',
+    primaryDark: mintConfig?.colors?.dark ?? '#166534',
+    primaryUltraLight: mintConfig?.colors?.ultraLight ?? '#DCFCE7',
+    primaryUltraDark: mintConfig?.colors?.ultraDark ?? '#14532D',
+    backgroundLight: mintConfig?.colors?.background?.light ?? '#ffffff',
+    backgroundDark: mintConfig?.colors?.background?.dark ?? '#0f1117',
     anchors,
   };
 }

@@ -109,6 +109,7 @@ function GitHubCta({ button }: { button: TopbarCta }) {
     axios.get(`https://api.github.com/repos/${github.user}/${github.repo}`).then(({ data }) => {
       setRepoData(data);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [github?.user, github?.repo]);
 
   if (github == null) {
@@ -172,12 +173,13 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
     return <GitHubCta button={button} />;
   }
 
-  return (
-    <li>
-      <Link href={button.url}>
-        <a
+  if (button.url && button.name) {
+    return (
+      <li>
+        <Link
+          href={button.url ?? '/'}
           target="_blank"
-          className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark dark:highlight-white/5"
+          className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark"
         >
           <span>{button.name}</span>
           <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">
@@ -189,18 +191,20 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
               strokeLinecap="round"
             />
           </svg>
-        </a>
-      </Link>
-    </li>
-  );
+        </Link>
+      </li>
+    );
+  }
+
+  return null;
 }
 
 export function NavItems() {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   return (
     <>
-      {config?.topbarLinks?.map((topbarLink) => {
+      {mintConfig?.topbarLinks?.map((topbarLink) => {
         const isAbsolute = isAbsoluteUrl(topbarLink.url);
 
         if (isAbsolute) {
@@ -217,16 +221,17 @@ export function NavItems() {
         } else {
           return (
             <li key={topbarLink.name}>
-              <Link href={topbarLink.url} passHref={true}>
-                <a className="font-medium hover:text-primary dark:hover:text-primary-light">
-                  {topbarLink.name}
-                </a>
+              <Link
+                href={topbarLink.url ?? '/'}
+                className="font-medium hover:text-primary dark:hover:text-primary-light"
+              >
+                {topbarLink.name}
               </Link>
             </li>
           );
         }
       })}
-      {config?.topbarCtaButton && <TopBarCtaButton button={config.topbarCtaButton} />}
+      {mintConfig?.topbarCtaButton && <TopBarCtaButton button={mintConfig.topbarCtaButton} />}
     </>
   );
 }
@@ -244,7 +249,7 @@ export function Header({
   title?: string;
   section?: string;
 }) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
   let [isOpaque, setIsOpaque] = useState(false);
 
   useEffect(() => {
@@ -282,21 +287,20 @@ export function Header({
           >
             <div className="relative flex items-center">
               <div className="flex-1 flex items-center space-x-3">
-                <Link href={getLogoHref(config!)}>
-                  <a
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      Router.push(getLogoHref(config!));
-                    }}
-                  >
-                    <span className="sr-only">{config?.name} home page</span>
-                    <Logo />
-                  </a>
+                <Link
+                  href={getLogoHref(mintConfig!)}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    Router.push(getLogoHref(mintConfig!));
+                  }}
+                >
+                  <span className="sr-only">{mintConfig?.name} home page</span>
+                  <Logo />
                 </Link>
                 <VersionSelect />
               </div>
               <div className="relative flex-none bg-white lg:w-64 xl:w-80 dark:bg-slate-900 pointer-events-auto rounded-md">
-                <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 text-zinc-400 dark:text-white/50 rounded-md ring-1 ring-slate-500/10 shadow-sm py-1.5 pl-2 pr-3 bg-zinc-50 hover:ring-slate-900/20 dark:hover:ring-white/10 dark:bg-background-dark dark:brightness-[1.35] dark:ring-1 dark:hover:brightness-150">
+                <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 rounded-md py-1.5 pl-2 pr-3 zinc-box bg-white ring-1 ring-zinc-400/20 hover:ring-zinc-600/25 dark:ring-zinc-600/30 dark:hover:ring-zinc-500/30">
                   {({ actionKey }: any) => (
                     <>
                       <Icon
@@ -320,7 +324,10 @@ export function Header({
                     <NavItems />
                   </ul>
                 </nav>
-                <div className="flex items-center border-l border-slate-100 ml-6 pl-6 dark:border-background-dark dark:brightness-150">
+                {!mintConfig?.modeToggle?.isHidden && (
+                  <div className="flex border-l border-slate-100 ml-6 pl-6 dark:border-background-dark dark:brightness-200 h-6"></div>
+                )}
+                <div className="flex items-center">
                   <ThemeToggle />
                 </div>
               </div>

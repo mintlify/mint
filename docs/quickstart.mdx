@@ -43,10 +43,6 @@ Now, when you make changes to the docs and push them to the main branch, it will
 
 <Tab title="GitLab Setup Guide">
 
-### API Authentication
-
-Our endpoints use bearer token authentication. We will send you your token when you sign up with Mintlify. Please contact us if you need more tokens or need to delete one.
-
 ### Generate a GitLab access token
 
 You can use a [Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens) if you are on GitLab's free tier or a Project Access Token if you are on their paid tier.
@@ -59,25 +55,15 @@ The token needs `read_api` and `read_repository` permissions. We recommend setti
 
 <img className="rounded" src="/docs/img/project-id.png" />
 
-### Send us your GitLab access token
+### Send us your details
 
-Make a `PUT` request to `https://docs.mintlify.com/api/v1/sites/integrations/gitlab` with your bearer token in the header.
+We need your `accessToken`, `projectId`, and `deployBranch`.
 
-The body should be a JSON object of the form:
-
-```json
-{
-  "accessToken": your gitlab access token,
-  "projectId": your project ID,
-  "deployBranch": 'main' or 'master' depending on your repository's default
-}
-```
-
-You can always update your access token by making `PUT` requests to the endpoint. You can also verify you set it correctly by making a `GET` request. Lastly, you can delete your token with a `DELETE` request.
+Please use [Password Link](https://password.link/) to send the information securely. You don't need an account to use Password Link
 
 ### Create a GitLab webhook
 
-On your project page go to Settings > Webhooks. Enter `https://docs.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.
+On your project page go to Settings > Webhooks. Enter `https://server.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.
 
 </Tab>
 </Tabs>

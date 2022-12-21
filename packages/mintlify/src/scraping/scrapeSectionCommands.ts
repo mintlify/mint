@@ -11,7 +11,7 @@ import { startBrowser } from "../browser.js";
 
 export async function scrapeSectionAxiosWrapper(argv: any, scrapeFunc: any) {
   const href = getHrefFromArgs(argv);
-  const res = await axios.default.get(href);
+  const res = await axios.get(href);
   const html = res.data;
   await scrapeSection(
     scrapeFunc,
@@ -71,7 +71,7 @@ async function scrapeSectionOpeningAllNested(
 
 export async function scrapeSectionAutomatically(argv: any) {
   const href = getHrefFromArgs(argv);
-  const res = await axios.default.get(href);
+  const res = await axios.get(href);
   const html = res.data;
   const { framework, version } = detectFramework(html);
 

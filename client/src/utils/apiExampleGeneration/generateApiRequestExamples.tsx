@@ -4,6 +4,7 @@ import 'prismjs/components/prism-python';
 
 import { RequestExample } from '@/components/ApiExample';
 import { CodeBlock } from '@/components/CodeBlock';
+import { OpenApiFile } from '@/types/openApi';
 
 import { extractBaseAndPath, extractMethodAndEndpoint, Param } from '../api';
 import { bodyParamsToObjectString } from './bodyParamToObjectString';
@@ -15,7 +16,7 @@ export function generateRequestExamples(
   apiBaseIndex: number,
   params: Record<string, Param[]>,
   apiPlaygroundInputs: Record<string, Record<string, any>>,
-  openApi: any
+  openApiFiles?: OpenApiFile[]
 ): JSX.Element | null {
   if (endpointStr == null) {
     return null;
@@ -26,7 +27,7 @@ export function generateRequestExamples(
     endpoint,
     apiBaseIndex,
     baseUrlConfig,
-    openApi
+    openApiFiles
   );
 
   // Generate body parameters

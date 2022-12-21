@@ -99,6 +99,23 @@ Example: `mintlify`
   </Expandable>
 </ResponseField>
 
+<ResponseField name="topbarCta" type="Call to Action">
+  <Expandable title="Topbar Call to Action">
+    <ResponseField name="type" type={'"link" or "github"'} default="link">
+    Link shows a button. GitHub shows the repo information at the url provided including the number of GitHub stars.
+    </ResponseField>
+    <ResponseField name="url" type="string">
+    If `link`: What the button links to.
+    
+    If `github`: Link to the repository to load GitHub information from.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+    Text inside the button. Only required if `type` is a `link`.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
 <ResponseField name="versions" type="string[]">
   Array of version names. Only use this if you want to show different versions
   of docs with a dropdown in the navigation bar.
@@ -230,7 +247,7 @@ Example: `mintlify`
       "url": "mailto:hi@mintlify.com"
     }
   ],
-  "topbarCtaButton": {
+  "topbarCta": {
     "name": "Get Started",
     "url": "https://1tc7vihvbit.typeform.com/to/pZJ31XZB"
   },

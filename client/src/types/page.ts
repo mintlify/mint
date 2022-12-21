@@ -1,17 +1,19 @@
-import { Groups, PageMetaTags } from './metadata';
+import type { Config } from '@/types/config';
+import { FaviconsProps } from '@/types/favicons';
+import { Groups, PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 
 export interface PageProps {
-  stringifiedMdxSource: string;
-  stringifiedData: string;
-  stringifiedFavicons: string;
+  mdxSource: string;
+  pageData: PageDataProps;
+  favicons: FaviconsProps;
   subdomain: string;
 }
 
-export interface ParsedDataProps {
-  nav: Groups;
-  meta: PageMetaTags;
-  section: string | undefined;
-  metaTagsForSeo: PageMetaTags;
-  stringifiedConfig: string;
-  stringifiedOpenApi?: string;
+export interface PageDataProps {
+  navWithMetadata: Groups;
+  pageMetadata: PageMetaTags;
+  title: string;
+  mintConfig: Config;
+  openApiFiles?: OpenApiFile[];
 }

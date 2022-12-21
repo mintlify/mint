@@ -4,6 +4,7 @@ import isAbsoluteUrl from 'is-absolute-url';
 import { ParamProps } from '@/components/Param';
 import { Component } from '@/enums/components';
 import { ApiConfig } from '@/types/config';
+import { OpenApiFile } from '@/types/openApi';
 import { ApiComponent } from '@/ui/ApiPlayground';
 
 export type Child = {
@@ -74,10 +75,9 @@ const getBody = (obj: Object, _: string) => {
 };
 
 const getHeaders = (obj: AxiosRequestHeaders, contentType: string): AxiosRequestHeaders => {
-  return {
-    ...obj,
-    'Content-Type': contentType,
-  };
+  const newObj = Object.assign({}, obj);
+  newObj['Content-Type'] = contentType;
+  return newObj;
 };
 
 export const getApiContext = (
@@ -148,12 +148,14 @@ export const extractBaseAndPath = (
   endpoint: string,
   apiBaseIndex = 0,
   baseUrl: string | string[] | undefined,
-  openApi: any
+  openApiFiles?: OpenApiFile[]
 ) => {
   let fullEndpoint;
-  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
-    return acc.concat(file.openapi.servers);
-  }, []);
+  const openApiServers =
+    openApiFiles &&
+    openApiFiles.reduce((acc: any, file: OpenApiFile) => {
+      return acc.concat(file.spec?.servers);
+    }, []);
   baseUrl = baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
   if (isAbsoluteUrl(endpoint)) {
     fullEndpoint = endpoint;

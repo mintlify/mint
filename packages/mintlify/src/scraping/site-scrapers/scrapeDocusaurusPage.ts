@@ -38,7 +38,7 @@ export async function scrapeDocusaurusPage(
 
   const markdownHtml = markdownContent.html();
 
-  const nhm = new NodeHtmlMarkdown();
+  const nhm = new NodeHtmlMarkdown({ useInlineLinks: false });
   let markdown = nhm.translate(markdownHtml);
 
   if (markdown == null) {

@@ -5,11 +5,13 @@ import { createContext, useContext, useState } from 'react';
 import { DynamicLink } from '@/components/DynamicLink';
 import { Heading } from '@/components/Heading';
 import { ConfigContext } from '@/context/ConfigContext';
+import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { usePrevNext } from '@/hooks/usePrevNext';
 import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { ContentSideLayout } from '@/layouts/ContentSideLayout';
 import { Config } from '@/types/config';
 import { PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import { ApiComponent, ApiPlayground } from '@/ui/ApiPlayground';
 import { Footer } from '@/ui/MDXContentController/Footer';
 import { BlogHeader, PageHeader } from '@/ui/MDXContentController/PageHeader';
@@ -18,6 +20,7 @@ import { getParamGroupsFromApiComponents } from '@/utils/api';
 import { getOpenApiOperationMethodAndEndpoint } from '@/utils/openApi/getOpenApiContext';
 import { getParameterType } from '@/utils/openApi/getParameterType';
 import { createExpandable, createParamField, getProperties } from '@/utils/openapi';
+import { getSectionTitle } from '@/utils/paths/getSectionTitle';
 
 import { GeneratedRequestExamples, OpenApiResponseExample } from '../../layouts/ApiSupplemental';
 import { getAllOpenApiParameters, OpenApiParameters } from '../../layouts/OpenApiParameters';
@@ -28,52 +31,53 @@ export const ContentsContext = createContext(undefined);
 
 type MDXContentControllerProps = {
   children: any;
-  meta: PageMetaTags;
+  pageMetadata: PageMetaTags;
   tableOfContents: any;
-  section: string;
   apiComponents: any;
 };
 
 export function MDXContentController({
   children,
-  meta,
+  pageMetadata,
   tableOfContents,
-  section,
   apiComponents,
 }: MDXContentControllerProps) {
-  const { config, openApi } = useContext(ConfigContext);
+  const { mintConfig, openApiFiles } = useContext(ConfigContext);
   const [apiPlaygroundInputs, setApiPlaygroundInputs] = useState<Record<string, any>>({});
   const [apiBaseIndex, setApiBaseIndex] = useState(0);
+  const currentPath = useCurrentPath();
   const toc = [...tableOfContents];
 
-  const { currentSection, registerHeading, unregisterHeading } = useTableOfContents(toc);
+  const { currentTableOfContentsSection, registerHeading, unregisterHeading } =
+    useTableOfContents(toc);
   let { prev, next } = usePrevNext();
 
   const openApiPlaygroundProps = getOpenApiPlaygroundProps(
     apiBaseIndex,
-    config,
-    openApi,
-    meta.openapi
+    mintConfig,
+    openApiFiles,
+    pageMetadata.openapi
   );
-  const isApi = (meta.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
-  const isBlogMode = meta.mode === 'blog';
+  const isApi =
+    (pageMetadata.api?.length ?? 0) > 0 || (openApiPlaygroundProps.api?.length ?? 0) > 0;
+  const isBlogMode = pageMetadata.mode === 'blog';
   const { requestExample, responseExample } = createUserDefinedExamples(apiComponents);
 
   // The user can hide the table of contents by marking the size as wide, but the API
   // overrides that to show request and response examples on the side.
   // TODO: Remove meta.size
-  const isWideSize = meta.mode === 'wide' || meta.size === 'wide';
-  let contentWidth = 'max-w-3xl xl:max-w-[43rem]';
+  const isWideSize = pageMetadata.mode === 'wide' || pageMetadata.size === 'wide';
+  let contentWidth = 'max-w-3xl xl:max-w-[49rem]';
   if (isApi || requestExample || responseExample) {
-    contentWidth = 'max-w-3xl xl:max-w-[min(100% - 31rem, 43rem)]';
+    contentWidth = 'max-w-3xl xl:max-w-[min(100% - 31rem, 44rem)]';
   } else if (isWideSize) {
     contentWidth = 'max-w-3xl';
   }
 
   const paramGroupDict = getParamGroupsFromApiComponents(
     openApiPlaygroundProps.apiComponents ?? apiComponents,
-    meta.auth,
-    config?.api
+    pageMetadata.auth,
+    mintConfig?.api
   );
   const paramGroups = Object.entries(paramGroupDict).map(([groupName, params]) => {
     return {
@@ -81,18 +85,30 @@ export function MDXContentController({
       params,
     };
   });
-
-  const api = openApiPlaygroundProps.api ?? meta.api ?? '';
+  // TODO - make this undefined when nothing exists
+  const api = openApiPlaygroundProps.api ?? pageMetadata.api ?? '';
 
   return (
     <div className="flex flex-row pt-9 gap-12 items-stretch">
-      <div className={clsx('relative grow mx-auto xl:-mx-1 overflow-auto px-1', contentWidth)}>
-        {isBlogMode ? <BlogHeader meta={meta} /> : <PageHeader meta={meta} section={section} />}
+      <div
+        className={clsx(
+          'relative grow mx-auto xl:-ml-12 overflow-auto xl:pr-1 xl:pl-12',
+          contentWidth
+        )}
+      >
+        {isBlogMode ? (
+          <BlogHeader pageMetadata={pageMetadata} />
+        ) : (
+          <PageHeader
+            pageMetadata={pageMetadata}
+            section={getSectionTitle(currentPath, mintConfig?.navigation ?? [])}
+          />
+        )}
         {isApi ? (
           <ApiPlayground
             api={api}
             paramGroups={paramGroups}
-            contentType={openApiPlaygroundProps.contentType ?? meta.contentType}
+            contentType={openApiPlaygroundProps.contentType ?? pageMetadata.contentType}
             onInputDataChange={setApiPlaygroundInputs}
             onApiBaseIndexChange={setApiBaseIndex}
           />
@@ -103,12 +119,14 @@ export function MDXContentController({
           <ContentsContext.Provider value={{ registerHeading, unregisterHeading } as any}>
             <MDXProvider components={{ a: DynamicLink, Heading }}>{children}</MDXProvider>
           </ContentsContext.Provider>
-          {meta.openapi && <OpenApiParameters endpointStr={meta.openapi} auth={meta.auth} />}
+          {pageMetadata.openapi && (
+            <OpenApiParameters endpointStr={pageMetadata.openapi} auth={pageMetadata.auth} />
+          )}
         </div>
 
         <Footer
-          previous={meta.hideFooterPagination ? null : prev}
-          next={meta.hideFooterPagination ? null : next}
+          previous={pageMetadata.hideFooterPagination ? null : prev}
+          next={pageMetadata.hideFooterPagination ? null : next}
           hasBottomPadding={!isApi}
         />
       </div>
@@ -118,7 +136,7 @@ export function MDXContentController({
           <ContentSideLayout sticky>
             <div className="space-y-6 pb-6 w-[28rem]">
               {requestExample}
-              {!requestExample && (
+              {!requestExample && api !== '' && (
                 <GeneratedRequestExamples
                   paramGroupDict={paramGroupDict}
                   apiPlaygroundInputs={apiPlaygroundInputs}
@@ -127,13 +145,19 @@ export function MDXContentController({
                 />
               )}
               {responseExample}
-              {!responseExample && <OpenApiResponseExample openapi={meta.openapi} />}
+              {!responseExample && pageMetadata.openapi && (
+                <OpenApiResponseExample openapi={pageMetadata.openapi} />
+              )}
             </div>
           </ContentSideLayout>
         ) : isBlogMode ? (
           <BlogContext />
         ) : (
-          <TableOfContents tableOfContents={toc} currentSection={currentSection} meta={meta} />
+          <TableOfContents
+            tableOfContents={toc}
+            currentSection={currentTableOfContentsSection}
+            meta={pageMetadata}
+          />
         ))}
     </div>
   );
@@ -141,18 +165,18 @@ export function MDXContentController({
 
 function getOpenApiPlaygroundProps(
   apiBaseIndex: number,
-  config: Config | undefined,
-  openApi: any,
+  mintConfig: Config | undefined,
+  openApiFiles: OpenApiFile[],
   openApiEndpoint: string | undefined
 ) {
   // Detect when OpenAPI is missing
-  if (!openApiEndpoint || !openApi) {
+  if (!openApiEndpoint || !openApiFiles) {
     return {};
   }
 
   const { method, endpoint, operation, path } = getOpenApiOperationMethodAndEndpoint(
     openApiEndpoint,
-    openApi
+    openApiFiles
   );
 
   // Detect when OpenAPI string is missing the operation (eg. GET)
@@ -162,11 +186,11 @@ function getOpenApiPlaygroundProps(
 
   // Get the api string with the correct baseUrl
   // endpoint in OpenAPI refers to the path
-  const openApiServers = openApi?.files?.reduce((acc: any, file: any) => {
-    return acc.concat(file.openapi.servers);
+  const openApiServers = openApiFiles?.reduce((acc: any, file: OpenApiFile) => {
+    return acc.concat(file.spec?.servers);
   }, []);
   const configBaseUrl =
-    config?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
+    mintConfig?.api?.baseUrl ?? openApiServers?.map((server: { url: string }) => server.url);
   const baseUrl =
     configBaseUrl && Array.isArray(configBaseUrl) ? configBaseUrl[apiBaseIndex] : configBaseUrl;
   const api = `${method} ${baseUrl}${endpoint}`;

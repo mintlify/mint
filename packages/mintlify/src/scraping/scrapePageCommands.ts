@@ -29,7 +29,7 @@ export async function scrapePageWrapper(
   if (options.puppeteer) {
     html = await getHtmlWithPuppeteer(href);
   } else {
-    const res = await axios.default.get(href);
+    const res = await axios.get(href);
     html = res.data;
   }
   await scrapePage(scrapeFunc, href, html, argv.overwrite, options.version);
@@ -38,7 +38,7 @@ export async function scrapePageWrapper(
 
 export async function scrapePageAutomatically(argv: any) {
   const href = getHrefFromArgs(argv);
-  const res = await axios.default.get(href);
+  const res = await axios.get(href);
   const html = res.data;
   const { framework, version } = detectFramework(html);
 

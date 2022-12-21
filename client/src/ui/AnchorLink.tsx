@@ -32,8 +32,7 @@ const Anchor = forwardRef(
         onMouseLeave={() => setHovering(false)}
         style={isActive && !usePrimaryColorForText ? { color: color } : {}}
         className={clsx(
-          'group flex items-center lg:text-sm lg:leading-6',
-          className,
+          'group flex items-center lg:text-sm lg:leading-6 mb-5 sm:mb-4',
           isActive
             ? [
                 'font-semibold',
@@ -51,11 +50,11 @@ const Anchor = forwardRef(
               : {}
           }
           className={clsx(
-            `mr-4 rounded-md ring-slate-900/5 group-hover:ring-slate-900/10 dark:group-hover:highlight-white/10 p-1`,
+            'mr-4 rounded-md p-1',
             !color && 'group-hover:bg-primary',
             isActive
-              ? [color ? '' : 'bg-primary', 'highlight-slate-700/10 dark:highlight-white/10']
-              : 'bg-slate-300 highlight-slate-700/5 dark:bg-slate-800 dark:highlight-white/5'
+              ? [color ? '' : 'bg-primary']
+              : 'zinc-box group-hover:brightness-100 group-hover:ring-0 ring-1 ring-zinc-400/25 dark:ring-zinc-700/40'
           )}
         >
           {icon}
@@ -78,7 +77,7 @@ export function AnchorLink({ ...props }: TopLevelProps) {
 
   return (
     <li>
-      <Link href={href} passHref>
+      <Link href={href ?? '/'} legacyBehavior>
         <Anchor {...props} />
       </Link>
     </li>
@@ -102,21 +101,13 @@ export function StyledAnchorLink({
         icon={icon.toLowerCase()}
         iconType="duotone"
         className={clsx(
-          `h-4 w-4 bg-white secondary-opacity group-hover:fill-primary-dark dark:group-hover:bg-white`,
-          isActive ? 'dark:bg-white' : 'dark:bg-slate-500'
+          `h-4 w-4 secondary-opacity group-hover:fill-primary-dark group-hover:bg-white`,
+          isActive ? 'bg-white' : 'bg-zinc-400 dark:bg-zinc-500'
         )}
       />
     );
   return (
-    <AnchorLink
-      {...props}
-      as={as}
-      href={href}
-      className="mb-4"
-      icon={AnchorIcon}
-      isActive={isActive}
-      color={color}
-    >
+    <AnchorLink {...props} as={as} href={href} icon={AnchorIcon} isActive={isActive} color={color}>
       {name ?? href}
     </AnchorLink>
   );

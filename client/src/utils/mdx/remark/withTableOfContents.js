@@ -2,6 +2,23 @@ import { slugifyWithCounter } from '@sindresorhus/slugify';
 
 import { addExport, createMdxJsxAttribute } from './utils.js';
 
+const getTOCTitle = (node, i = 1, a = []) => {
+  if ((node.type === 'text' && (a[i - 1]?.type !== 'mdxJsxFlowElement' || !a[i - 1]?.value.startsWith('<small'))) || node.type === 'inlineCode') {
+    return node.value;
+  }
+
+  if (node.children) {
+    let title = '';
+    node.children.forEach((node, i, a) => {
+      title += getTOCTitle(node, i, a);
+    });
+  
+    return title;
+  }
+
+  return '';
+}
+
 const withTableOfContents = () => {
   // slugifyWithCounter adds a counter (eg. slug, slug-2, slug-3) to the end of the slug if the header
   // already exists. No counter is added for the first occurence.
@@ -15,16 +32,7 @@ const withTableOfContents = () => {
 
       if (node.type === 'heading' && [1, 2, 3, 4].includes(node.depth)) {
         let level = node.depth;
-        let title = node.children
-          .filter(
-            (node, i, a) =>
-              (node.type === 'text' &&
-                (a[i - 1]?.type !== 'mdxJsxFlowElement' ||
-                  !a[i - 1]?.value.startsWith('<small'))) ||
-              node.type === 'inlineCode'
-          )
-          .map((node) => node.value)
-          .join('');
+        let title = getTOCTitle(node);
 
         const slug = slugify(title, { decamelize: false });
 

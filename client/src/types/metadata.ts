@@ -25,6 +25,9 @@ export type PageMetaTags = {
   createdDate?: string;
   hideFooterPagination?: boolean;
   hideApiMarker?: boolean; // Undocumented
+
+  // Arbitrary number of SEO tags. See getAllMetaTags
+  [key: string]: any;
 };
 
 export type Groups = Group[];
@@ -40,7 +43,6 @@ export type GroupPage = PageMetaTags | Group;
 export const isGroup = (group: GroupPage): group is Group => {
   // Used in if-statements to case GroupPage into either PageMetaTags or Group
   // The return type "group is Group" is the cast
-
   return group && group.hasOwnProperty('group') && group.hasOwnProperty('pages');
 };
 

@@ -63,16 +63,22 @@ export function Heading({
         <a
           href={`#${id}`}
           className="absolute -ml-10 flex items-center opacity-0 border-0 group-hover:opacity-100"
-          aria-label="Anchor"
+          aria-label="Navigate to header"
         >
           &#8203;
-          <div className="w-6 h-6 text-slate-400 ring-1 ring-slate-900/5 rounded-md shadow-sm flex items-center justify-center hover:ring-slate-900/10 hover:shadow hover:text-slate-700 dark:bg-slate-700 dark:text-slate-300 dark:shadow-none dark:ring-0">
-            <svg width="12" height="12" fill="none" aria-hidden="true">
+          <div className="w-6 h-6 text-zinc-400 rounded-md flex items-center justify-center zinc-box bg-white ring-1 ring-zinc-400/30 dark:ring-zinc-700/25 hover:ring-zinc-400/60 dark:hover:ring-white/20">
+            <svg
+              className="h-4 w-4"
+              fill="currentColor"
+              height="512"
+              viewBox="0 0 24 24"
+              width="512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
-                d="M3.75 1v10M8.25 1v10M1 3.75h10M1 8.25h10"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
+                clipRule="evenodd"
+                d="m9 4c.55228 0 1 .44772 1 1v3h4v-3c0-.55228.4477-1 1-1s1 .44772 1 1v3h3c.5523 0 1 .44772 1 1s-.4477 1-1 1h-3v4h3c.5523 0 1 .4477 1 1s-.4477 1-1 1h-3v3c0 .5523-.4477 1-1 1s-1-.4477-1-1v-3h-4v3c0 .5523-.44772 1-1 1s-1-.4477-1-1v-3h-3c-.55228 0-1-.4477-1-1s.44772-1 1-1h3v-4h-3c-.55228 0-1-.44772-1-1s.44772-1 1-1h3v-3c0-.55228.44772-1 1-1zm5 10v-4h-4v4z"
+                fillRule="evenodd"
               />
             </svg>
           </div>

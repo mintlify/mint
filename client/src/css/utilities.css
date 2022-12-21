@@ -1,5 +1,9 @@
 @tailwind utilities;
 
+.font-mono {
+  font-variant-ligatures: none;
+}
+
 .scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {

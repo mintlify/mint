@@ -5,35 +5,45 @@ import { VersionContext } from '@/context/VersionContext';
 import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { SidebarLayout } from '@/layouts/NavSidebar';
 import { Groups, PageMetaTags } from '@/types/metadata';
-import { Title } from '@/ui/Title';
-import { slugToTitle } from '@/utils/titleText/slugToTitle';
+import { Header } from '@/ui/Header';
+import { getSectionTitle } from '@/utils/paths/getSectionTitle';
 
 export function DocumentationLayout({
   navIsOpen,
   setNavIsOpen,
-  meta,
+  pageMetadata,
   children,
-  nav,
+  navWithMetadata,
 }: {
   navIsOpen: boolean;
   setNavIsOpen: any;
-  meta: PageMetaTags;
+  pageMetadata: PageMetaTags;
   children: ReactNode;
-  nav: Groups;
+  navWithMetadata: Groups;
 }) {
   const currentPath = useCurrentPath();
   const { setSelectedVersion } = useContext(VersionContext);
-  const { config } = useContext(ConfigContext);
-  if (meta.version) {
-    setSelectedVersion(meta.version);
-  }
+  const { mintConfig } = useContext(ConfigContext);
 
-  const title = meta.sidebarTitle || meta.title || slugToTitle(meta.href || '');
+  if (pageMetadata.version) {
+    setSelectedVersion(pageMetadata.version);
+  }
 
   return (
     <>
-      <Title suffix={currentPath === '/' ? '' : config?.name ?? ''}>{title}</Title>
-      <SidebarLayout nav={nav} navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} meta={meta}>
+      <Header
+        hasNav={Boolean(mintConfig?.navigation?.length)}
+        navIsOpen={navIsOpen}
+        onNavToggle={(isOpen: boolean) => setNavIsOpen(isOpen)}
+        title={pageMetadata?.title}
+        section={getSectionTitle(currentPath, mintConfig?.navigation ?? [])}
+      />
+      <SidebarLayout
+        navWithMetadata={navWithMetadata}
+        navIsOpen={navIsOpen}
+        setNavIsOpen={setNavIsOpen}
+        pageMetadata={pageMetadata}
+      >
         {children}
       </SidebarLayout>
     </>

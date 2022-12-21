@@ -3,6 +3,9 @@ import { useContext } from 'react';
 
 import { ConfigContext } from '@/context/ConfigContext';
 
+/**
+ * @returns Path with a leading slash, after removing the /_sites/{subdomain} the middleware rewrites.
+ */
 export function useCurrentPath() {
   const router = useRouter();
   const { subdomain } = useContext(ConfigContext);

@@ -8,8 +8,8 @@ import { useCurrentPath } from '@/hooks/useCurrentPath';
 import { getVersionOfPage } from '@/utils/nav';
 
 export function VersionSelect() {
-  const { config } = useContext(ConfigContext);
-  const versions = config?.versions?.filter(Boolean) || [];
+  const { mintConfig } = useContext(ConfigContext);
+  const versions = mintConfig?.versions?.filter(Boolean) || [];
   const { selectedVersion, setSelectedVersion } = useContext(VersionContext);
   const router = useRouter();
   const path = useCurrentPath();
@@ -17,7 +17,7 @@ export function VersionSelect() {
   // Only run when the page loads. Otherwise, users could never change the API version
   // because the page would keep changing it back to its own version.
   useEffect(() => {
-    const version = getVersionOfPage(config?.navigation ?? [], config?.anchors ?? [], path);
+    const version = getVersionOfPage(mintConfig?.navigation ?? [], mintConfig?.anchors ?? [], path);
     if (version) {
       setSelectedVersion(version);
     }

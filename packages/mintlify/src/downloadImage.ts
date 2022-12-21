@@ -18,7 +18,7 @@ export default async function downloadImage(
 
   const writer = createWriteStream(writePath);
 
-  const response = await axios.default.get(imageSrc, {
+  const response = await axios.get(imageSrc, {
     responseType: "stream",
   });
 

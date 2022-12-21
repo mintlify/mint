@@ -1,14 +1,19 @@
+import { OpenApiFile } from '@/types/openApi';
+
 import { extractMethodAndEndpoint } from '../api';
 
-export const getOpenApiOperationMethodAndEndpoint = (endpointStr: string, openApi?: any) => {
+export const getOpenApiOperationMethodAndEndpoint = (
+  endpointStr: string,
+  openApiFiles: OpenApiFile[]
+) => {
   const { endpoint, method, filename } = extractMethodAndEndpoint(endpointStr);
 
   let path;
 
-  openApi.files?.forEach((file: any) => {
-    const openApiFile = file.openapi;
+  openApiFiles.forEach((file) => {
+    const openApiFile = file.spec;
     const openApiPath = openApiFile.paths && openApiFile.paths[endpoint];
-    const isFilenameOrNone = !filename || filename === file.name;
+    const isFilenameOrNone = !filename || filename === file.filename;
     if (openApiPath && isFilenameOrNone) {
       path = openApiPath;
     }

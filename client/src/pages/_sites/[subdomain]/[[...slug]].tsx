@@ -1,8 +1,3 @@
-import { ResizeObserver } from '@juggle/resize-observer';
-import * as Sentry from '@sentry/nextjs';
-import { stringify } from 'flatted';
-import 'focus-visible';
-import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 
@@ -10,13 +5,11 @@ import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-
-if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
-  window.ResizeObserver = ResizeObserver;
-}
+import { prepareToSerialize } from '@/utils/prepareToSerialize';
 
 interface PathProps extends ParsedUrlQuery {
   subdomain: string;
@@ -44,15 +37,10 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const { subdomain, slug } = params;
   const path = slug ? slug.join('/') : 'index';
 
-  Sentry.setContext('site', {
-    subdomain,
-    slug,
-  });
-
   // The entire build will fail when data is undefined
   const { data, status } = await getPage(subdomain, path);
   if (data == null) {
-    Sentry.captureException('Page data is missing');
+    console.error('Page data is missing');
     return {
       notFound: true,
     };
@@ -64,60 +52,52 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     };
   }
   if (status === 308) {
-    const { redirect }: { redirect: { destination: string; permanent: boolean } } = data;
+    const redirect: { destination: string; permanent: boolean } = data;
     return { redirect };
   }
   if (status === 200) {
-    const {
+    let {
       content,
-      stringifiedConfig,
-      nav,
-      section,
-      meta,
-      metaTagsForSeo,
-      stringifiedOpenApi,
+      mintConfig,
+      navWithMetadata,
+      pageMetadata,
+      openApiFiles,
       favicons,
     }: {
       content: string;
-      stringifiedConfig: string;
-      nav: Groups;
-      section: string;
-      meta: PageMetaTags;
-      metaTagsForSeo: PageMetaTags;
-      stringifiedOpenApi?: string;
+      mintConfig: string;
+      navWithMetadata: Groups;
+      pageMetadata: PageMetaTags;
+      openApiFiles?: OpenApiFile[];
       favicons: FaviconsProps;
     } = data;
     let mdxSource: any = '';
 
     try {
       const response = await getMdxSource(content, {
-        section,
-        meta,
+        pageMetadata,
       });
       mdxSource = response;
     } catch (err) {
       mdxSource = await getMdxSource(
         '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
-        { section, meta }
+        { pageMetadata }
       ); // placeholder content for when there is a syntax error.
       console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
     }
 
     return {
-      props: {
-        stringifiedMdxSource: stringify(mdxSource),
-        stringifiedData: stringify({
-          nav,
-          meta,
-          section,
-          metaTagsForSeo,
-          stringifiedConfig,
-          stringifiedOpenApi,
-        }),
-        stringifiedFavicons: stringify(favicons),
+      props: prepareToSerialize({
+        mdxSource,
+        pageData: {
+          navWithMetadata,
+          pageMetadata,
+          mintConfig,
+          openApiFiles,
+        },
+        favicons,
         subdomain,
-      },
-      revalidate: 60,
+      }),
     };
   }
   return {

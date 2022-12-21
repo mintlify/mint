@@ -1,4 +1,4 @@
-// Used by Docusaurus, GitBook, and ReadMe section scrapers
+// Used by Docusaurus and ReadMe section scrapers
 export default function getLinksRecursively(linkSections: any, $: any) {
   if (linkSections == null || linkSections.length === 0) {
     return [];

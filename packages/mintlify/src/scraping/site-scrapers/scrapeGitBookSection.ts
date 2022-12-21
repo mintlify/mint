@@ -3,7 +3,7 @@ import { NavigationEntry } from "../../navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import { scrapeGitBookPage } from "./scrapeGitBookPage.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
-import getLinksRecursively from "./links-per-group/getLinksRecursively.js";
+import getLinksRecursivelyGitBook from "./links-per-group/getLinksRecursivelyGitBook.js";
 import alternateGroupTitle from "./alternateGroupTitle.js";
 
 export async function scrapeGitBookSection(
@@ -41,7 +41,7 @@ export async function scrapeGitBookSection(
       const firstHref = firstLink.attr("href");
 
       const linkSections = section.children().eq(1).children();
-      const pages = getLinksRecursively(linkSections, $);
+      const pages = getLinksRecursivelyGitBook(linkSections, $);
 
       return {
         group: sectionTitle || alternateGroupTitle(firstLink, pages),

@@ -10,20 +10,22 @@ export default class PostHogAnalytics extends AbstractAnalyticsImplementation {
   initialized = false;
 
   init(implementationConfig: ConfigInterface) {
-    if (implementationConfig.apiKey && !this.initialized) {
-      this.initialized = true;
-      // apiHost only has to be passed in if the user is self-hosting PostHog
-      posthog.init(implementationConfig.apiKey, {
-        api_host: implementationConfig.apiHost || 'https://app.posthog.com',
-        loaded: (posthogInstance) => {
-          if (process.env.NODE_ENV !== 'production') posthogInstance.opt_out_capturing();
-        },
-      });
-
-      // Track page views
-      const handleRouteChange = () => posthog.capture('$pageview');
-      Router.events.on('routeChangeComplete', handleRouteChange);
+    if (!implementationConfig.apiKey || process.env.NODE_ENV !== 'production') {
+      return;
     }
+
+    this.initialized = true;
+    // apiHost only has to be passed in if the user is self-hosting PostHog
+    posthog.init(implementationConfig.apiKey, {
+      api_host: implementationConfig.apiHost || 'https://app.posthog.com',
+      loaded: (posthogInstance) => {
+        if (process.env.NODE_ENV !== 'production') posthogInstance.opt_out_capturing();
+      },
+    });
+
+    // Track page views
+    const handleRouteChange = () => posthog.capture('$pageview');
+    Router.events.on('routeChangeComplete', handleRouteChange);
   }
 
   createEventListener(eventName: string) {

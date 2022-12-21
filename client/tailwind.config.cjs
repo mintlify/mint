@@ -246,17 +246,15 @@ module.exports = {
         },
       }),
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-        mono: ['Fira Code VF', ...defaultTheme.fontFamily.mono],
-        source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
-        'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],
+        sans: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        mono: ['var(--font-fira-code)', ...defaultTheme.fontFamily.mono],
       },
       spacing: {
         18: '4.5rem',
         full: '100%',
       },
       maxWidth: {
-        '8xl': '90rem',
+        '8xl': '92rem',
       },
       keyframes: {
         'flash-code': {
@@ -293,32 +291,27 @@ module.exports = {
       addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb');
     },
     function ({ matchUtilities, theme }) {
-      matchUtilities(
-        {
-          'bg-grid': (value) => ({
-            backgroundImage: `url("${svgToDataUri(
-              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
-            )}")`,
-          }),
-        },
-        { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
-      );
-
-      matchUtilities(
-        {
-          highlight: (value) => ({ boxShadow: `inset 0 1px 0 0 ${value}` }),
-        },
-        { values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
-      );
+      matchUtilities({ values: flattenColorPalette(theme('backgroundColor')), type: 'color' });
     },
   ],
   safelist: [
-    'm-0', 'my-0.5', 'ml-8', 'ml-12', 'ml-16',
+    'm-0',
+    'my-0.5',
+    'ml-8',
+    'ml-12',
+    'ml-16',
     'aspect-video',
     'w-7',
-    'h-6', 'h-7', 'h-8', 'h-32', 'h-80', 'h-96',
-    'w-10', 'w-6/12',
+    'h-6',
+    'h-7',
+    'h-8',
+    'h-32',
+    'h-80',
+    'h-96',
+    'w-10',
+    'w-6/12',
     'space-x-1',
     'flex-wrap',
-    'border-none'],
+    'border-none',
+  ],
 };

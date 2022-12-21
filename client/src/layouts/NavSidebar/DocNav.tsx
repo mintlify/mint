@@ -52,26 +52,25 @@ const NavItem = forwardRef(
 
     return (
       <li ref={ref}>
-        <Link href={href || '/'}>
-          <a
-            className={clsx(
-              'flex border-l -ml-px',
-              isActive
-                ? 'text-primary border-current font-semibold dark:text-primary-light'
-                : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
-              getPaddingByLevel(level)
-            )}
-          >
-            {endpointStr && groupPage?.hideApiMarker !== true && (
-              <div
-                className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
-                  'bg-primary dark:bg-primary-light': isActive,
-                  [getMethodDotsColor(extractMethodAndEndpoint(endpointStr).method)]: !isActive,
-                })}
-              />
-            )}
-            <div className="flex-1">{title}</div>
-          </a>
+        <Link
+          href={href || '/'}
+          className={clsx(
+            'flex border-l -ml-px',
+            isActive
+              ? 'text-primary border-current font-semibold dark:text-primary-light'
+              : 'border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
+            getPaddingByLevel(level)
+          )}
+        >
+          {endpointStr && groupPage?.hideApiMarker !== true && (
+            <div
+              className={clsx('mt-[0.5rem] mr-2 h-2 w-2 rounded-sm', {
+                'bg-primary dark:bg-primary-light': isActive,
+                [getMethodDotsColor(extractMethodAndEndpoint(endpointStr).method)]: !isActive,
+              })}
+            />
+          )}
+          <div className="flex-1">{title}</div>
         </Link>
       </li>
     );
@@ -89,7 +88,7 @@ const GroupDropdown = ({
 }) => {
   const router = useRouter();
   const currentPath = useCurrentPath();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(Boolean(isPathInGroup(currentPath, group)));
   const { group: name, pages } = group;
 
   // Open the menu when we navigate to a page in the group.
@@ -126,43 +125,48 @@ const GroupDropdown = ({
 
   return (
     <>
-      <span
-        className={clsx(
-          'group flex items-center border-l -ml-px cursor-pointer space-x-3 border-transparent hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
-          getPaddingByLevel(level)
-        )}
-        onClick={onClick}
-      >
-        <div>{name}</div>
-        <svg
-          width="3"
-          height="24"
-          viewBox="0 -9 3 24"
+      <li className="border-l -ml-px border-transparent">
+        <div
           className={clsx(
-            'text-slate-400 overflow-visible group-hover:text-slate-600 dark:text-slate-600 dark:group-hover:text-slate-500',
-            isOpen && 'rotate-90'
+            'group flex items-center space-x-3 cursor-pointer hover:border-slate-400 dark:hover:border-slate-500 text-slate-700 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-300',
+            getPaddingByLevel(level)
           )}
+          onClick={onClick}
         >
-          <path
-            d="M0 0L3 3L0 6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          ></path>
-        </svg>
-      </span>
-      {isOpen &&
-        pages.map((subpage) => {
-          const key = isGroup(subpage) ? subpage.group : subpage.sidebarTitle || subpage.title;
-          return <NavItem groupPage={subpage} level={level + 1} mobile={mobile} key={key} />;
-        })}
+          <p>{name}</p>
+          <svg
+            width="3"
+            height="24"
+            viewBox="0 -9 3 24"
+            className={clsx(
+              'transition-all text-slate-400 overflow-visible group-hover:text-slate-600 dark:text-slate-600 dark:group-hover:text-slate-500',
+              isOpen && 'duration-75 rotate-90'
+            )}
+          >
+            <path
+              d="M0 0L3 3L0 6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            ></path>
+          </svg>
+        </div>
+        {isOpen && (
+          <ul className="-ml-px children:mt-6 children:lg:mt-2 children:children:ml-0">
+            {pages.map((subpage) => {
+              const key = isGroup(subpage) ? subpage.group : subpage.sidebarTitle || subpage.title;
+              return <NavItem groupPage={subpage} level={level + 1} mobile={mobile} key={key} />;
+            })}
+          </ul>
+        )}
+      </li>
     </>
   );
 };
 
 export function DocNav({ nav, mobile }: { nav: any; mobile: boolean }) {
-  const { config } = useContext(ConfigContext);
+  const { mintConfig } = useContext(ConfigContext);
 
   let numPages = 0;
   if (nav) {
@@ -182,7 +186,7 @@ export function DocNav({ nav, mobile }: { nav: any; mobile: boolean }) {
                 key={i}
                 className={clsx({
                   'mt-12 lg:mt-8': !Boolean(
-                    i === 0 && (config?.anchors == null || config.anchors?.length === 0)
+                    i === 0 && (mintConfig?.anchors == null || mintConfig.anchors?.length === 0)
                   ),
                 })}
               >

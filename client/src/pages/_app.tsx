@@ -1,22 +1,34 @@
-import { ResizeObserver } from '@juggle/resize-observer';
+import { Inter, Fira_Code } from '@next/font/google';
 import 'focus-visible';
-import 'intersection-observer';
 
 import ErrorBoundary from '@/ui/ErrorBoundary';
 
-import '../css/fonts.css';
 import '../css/main.css';
 
-if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
-  window.ResizeObserver = ResizeObserver;
-}
+const inter = Inter({
+  display: 'block',
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+const firaCode = Fira_Code({
+  display: 'swap',
+  subsets: ['latin'],
+  variable: '--font-fira-code',
+});
 
 export default function App(props: any) {
   const { Component, pageProps } = props;
 
   return (
     <ErrorBoundary>
-      <Component {...pageProps} />
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
+      <main className={`${inter.variable} ${firaCode.variable}`}>
+        <Component {...pageProps} />
+      </main>
     </ErrorBoundary>
   );
 }

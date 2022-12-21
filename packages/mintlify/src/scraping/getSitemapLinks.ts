@@ -7,7 +7,7 @@ export const getSitemapLinks = async (url: URL) => {
   const regex = new RegExp(`https?:\/\/${hostname}.+?(?=<\/loc>)`, "gmi");
 
   try {
-    const indexData = (await axios.default.get(url.href)).data as string;
+    const indexData = (await axios.get(url.href)).data as string;
     const array = indexData.match(regex) as string[] | null;
     return array || [];
   } catch (err) {

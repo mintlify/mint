@@ -1,0 +1,54 @@
+---
+title: "Search Engine Optimization"
+description: "Mintlify automatically generates most meta tags. If you want to customize them, you can set default values in mint.json or change them per page."
+---
+
+<Accordion title="Supported Meta tags">
+
+- og:site_name
+- og:title
+- og:description
+- og:url
+- og:image
+- og:locale
+- article:publisher
+- twitter:title
+- twitter:description
+- twitter:url
+- twitter:image
+- twitter:site
+- og:image:width
+- og:image:height
+
+</Accordion>
+
+## Default meta tags
+
+You can set default meta tags by adding the `metadata` field to your `mint.json`.
+
+```json mint.json
+"metadata": {
+    "og:image": "link to your default meta tag image"
+}
+```
+
+## Changing meta tags on one page
+
+Add your meta tags to the page's metadata like so:
+
+```md Top of your page
+---
+title: "Your Example Page Title"
+"og:image": "link to your meta tag image"
+---
+```
+
+<Warning>
+
+Meta tags with colons need to be typed with quotes around them when you put them in the page metadata.
+
+</Warning>
+
+## Sitemaps
+
+Mintlify does not automatically generate sitemaps yet. We are launching sitemaps in February 2023.

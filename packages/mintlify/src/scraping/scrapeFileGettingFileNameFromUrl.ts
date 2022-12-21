@@ -47,7 +47,7 @@ export async function scrapeFileGettingFileNameFromUrl(
   if (puppeteer) {
     html = await getHtmlWithPuppeteer(href);
   } else {
-    const res = await axios.default.get(href);
+    const res = await axios.get(href);
     html = res.data;
   }
 

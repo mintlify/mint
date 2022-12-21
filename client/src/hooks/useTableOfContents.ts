@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { TableOfContentsSection } from '@/types/tableOfContentsSection';
 
 export function useTableOfContents(tableOfContents: TableOfContentsSection[]) {
-  let [currentSection, setCurrentSection] = useState(tableOfContents[0]?.slug);
+  let [currentTableOfContentsSection, setCurrentSection] = useState(tableOfContents[0]?.slug);
   let [headings, setHeadings] = useState<any[]>([]);
 
   const registerHeading = useCallback((id: string, top: string) => {
@@ -48,5 +48,5 @@ export function useTableOfContents(tableOfContents: TableOfContentsSection[]) {
     };
   }, [headings, tableOfContents]);
 
-  return { currentSection, registerHeading, unregisterHeading };
+  return { currentTableOfContentsSection, registerHeading, unregisterHeading };
 }
