@@ -10,7 +10,6 @@ export function pickRedirect(
 ): {
   redirect: { destination: string; permanent: boolean };
 } | null {
-  console.log(path);
   // Allow linking to a folder and redirecting to the first page in it.
   // Eg. The path "updates/changelog" can redirect to "updates/changelog/2022" but not "updates/changelog-page"
   const firstPageInSubdir = getFirstPageStartingWith(navWithMetadata, '/' + path + '/');
