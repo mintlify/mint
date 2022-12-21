@@ -1,4 +1,3 @@
-import { ResizeObserver } from '@juggle/resize-observer';
 import { stringify } from 'flatted';
 import 'focus-visible';
 import fs from 'fs';
@@ -13,10 +12,6 @@ import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
 import { getPaths } from '@/utils/local/getPaths';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-
-if (typeof window !== 'undefined' && !('ResizeObserver' in window)) {
-  window.ResizeObserver = ResizeObserver;
-}
 
 interface PathProps extends ParsedUrlQuery {
   slug: string[];
