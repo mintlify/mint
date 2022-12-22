@@ -9,7 +9,8 @@ import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
 import getMdxSource from '@/utils/mdx/getMdxSource';
-import { prepareToSerialize } from '@/utils/prepareToSerialize';
+import { pickRedirect } from '@/utils/staticProps/pickRedirect';
+import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
 interface PathProps extends ParsedUrlQuery {
   subdomain: string;
@@ -46,15 +47,30 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     };
   }
 
+  if (status === 308) {
+    const { navWithMetadata }: { navWithMetadata: Groups } = data;
+    if (Array.isArray(navWithMetadata) && navWithMetadata.length > 0) {
+      const redirect = pickRedirect(navWithMetadata, path);
+      if (redirect) {
+        return redirect;
+      }
+    }
+
+    console.warn('Could not find a page to redirect to.');
+    return {
+      notFound: true,
+    };
+  }
+
+  // The server providing data to static props only sends 404s when there is no data at all
+  // for the subdomain. Most not found pages are the result of broken mint.json files
+  // preventing the 308 redirect above from finding a page to redirect to.
   if (status === 404) {
     return {
       notFound: true,
     };
   }
-  if (status === 308) {
-    const redirect: { destination: string; permanent: boolean } = data;
-    return { redirect };
-  }
+
   if (status === 200) {
     let {
       content,
@@ -65,7 +81,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       favicons,
     }: {
       content: string;
-      mintConfig: string;
+      mintConfig: Config;
       navWithMetadata: Groups;
       pageMetadata: PageMetaTags;
       openApiFiles?: OpenApiFile[];
