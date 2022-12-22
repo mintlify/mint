@@ -93,7 +93,13 @@ export function UserFeedback() {
   );
 }
 
-export function FeedbackProvider({ subdomain, children }: { subdomain: string; children: any }) {
+export function FeedbackProvider({ subdomain, children }: { subdomain?: string; children: any }) {
+  if (!subdomain) {
+    // TODO: Refactor to work with no subdomain
+    // Stop calling backend for feedback provider & send this data through getStaticProps
+    // For self-host/CLI/single-tenant use env variable
+    return children;
+  }
   const createSuggestHref = (path: string) => {
     return `https://server.mintlify.com/api/v1/app/suggest/${subdomain}?path=${path}.mdx`;
   };

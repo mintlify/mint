@@ -249,7 +249,7 @@ export function Header({
   title?: string;
   section?: string;
 }) {
-  const { mintConfig } = useContext(ConfigContext);
+  const { mintConfig, subdomain } = useContext(ConfigContext);
   let [isOpaque, setIsOpaque] = useState(false);
 
   useEffect(() => {
@@ -300,23 +300,26 @@ export function Header({
                 <VersionSelect />
               </div>
               <div className="relative flex-none bg-white lg:w-64 xl:w-80 dark:bg-slate-900 pointer-events-auto rounded-md">
-                <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 rounded-md py-1.5 pl-2 pr-3 zinc-box bg-white ring-1 ring-zinc-400/20 hover:ring-zinc-600/25 dark:ring-zinc-600/30 dark:hover:ring-zinc-500/30">
-                  {({ actionKey }: any) => (
-                    <>
-                      <Icon
-                        icon="magnifying-glass"
-                        iconType="solid"
-                        className="h-4 w-4 ml-1 mr-3 flex-none bg-zinc-500 hover:bg-slate-600 dark:bg-white/50 dark:hover:bg-white/70"
-                      />
-                      Search...
-                      {actionKey && (
-                        <span className="ml-auto flex-none text-xs font-semibold">
-                          {actionKey[0]}K
-                        </span>
-                      )}
-                    </>
-                  )}
-                </SearchButton>
+                {/* TODO: Make search work in single-tenant */}
+                {subdomain && (
+                  <SearchButton className="hidden w-full lg:flex items-center text-sm leading-6 rounded-md py-1.5 pl-2 pr-3 zinc-box bg-white ring-1 ring-zinc-400/20 hover:ring-zinc-600/25 dark:ring-zinc-600/30 dark:hover:ring-zinc-500/30">
+                    {({ actionKey }: any) => (
+                      <>
+                        <Icon
+                          icon="magnifying-glass"
+                          iconType="solid"
+                          className="h-4 w-4 ml-1 mr-3 flex-none bg-zinc-500 hover:bg-slate-600 dark:bg-white/50 dark:hover:bg-white/70"
+                        />
+                        Search...
+                        {actionKey && (
+                          <span className="ml-auto flex-none text-xs font-semibold">
+                            {actionKey[0]}K
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </SearchButton>
+                )}
               </div>
               <div className="flex-1 relative hidden lg:flex items-center ml-auto justify-end">
                 <nav className="text-sm leading-6 font-semibold text-slate-700 dark:text-slate-200">
@@ -331,15 +334,20 @@ export function Header({
                   <ThemeToggle />
                 </div>
               </div>
-              <SearchButton className="ml-auto text-slate-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-slate-600 lg:hidden dark:text-slate-400 dark:hover:text-slate-300">
-                <span className="sr-only">Search</span>
-                <Icon
-                  icon="magnifying-glass"
-                  iconType="solid"
-                  className="h-4 w-4 bg-slate-500 dark:bg-slate-400 hover:bg-slate-600 dark:hover:bg-slate-300"
-                />
-              </SearchButton>
-              <NavPopover className="ml-2 -my-1" display="lg:hidden" />
+              {/* TODO: Make search work in single-tenant */}
+              {subdomain && (
+                <>
+                  <SearchButton className="ml-auto text-slate-500 w-8 h-8 -my-1 flex items-center justify-center hover:text-slate-600 lg:hidden dark:text-slate-400 dark:hover:text-slate-300">
+                    <span className="sr-only">Search</span>
+                    <Icon
+                      icon="magnifying-glass"
+                      iconType="solid"
+                      className="h-4 w-4 bg-slate-500 dark:bg-slate-400 hover:bg-slate-600 dark:hover:bg-slate-300"
+                    />
+                  </SearchButton>
+                  <NavPopover className="ml-2 -my-1" display="lg:hidden" />
+                </>
+              )}
             </div>
           </div>
           {hasNav && (

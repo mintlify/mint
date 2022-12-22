@@ -1,17 +1,17 @@
-import { stringify } from 'flatted';
-import 'focus-visible';
 import fs from 'fs';
-import 'intersection-observer';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { join } from 'path';
 import type { ParsedUrlQuery } from 'querystring';
 
+import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
 import { getPaths } from '@/utils/local/getPaths';
 import getMdxSource from '@/utils/mdx/getMdxSource';
+import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
 interface PathProps extends ParsedUrlQuery {
   slug: string[];
@@ -24,7 +24,7 @@ export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
     paths: [
       {
         params: {
-          slug: ['api-reference', 'home-feeds', 'items'],
+          slug: ['quickstart'],
         },
       },
     ],
@@ -39,195 +39,472 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
   const path = slug ? slug.join('/') : 'index'; // TODO index logic
   // TODO: look for md
   // error handling
-  const markdownWithMeta = fs.readFileSync(join('content', path + '.mdx'), 'utf-8');
-  console.log(markdownWithMeta);
+  // const markdownWithMeta = fs.readFileSync(join('content', path + '.mdx'), 'utf-8');
+  // console.log(markdownWithMeta);
   const {
     content,
-    stringifiedConfig,
-    nav,
-    section,
-    meta,
-    metaTagsForSeo,
-    stringifiedOpenApi,
+    mintConfig,
+    navWithMetadata,
+    pageMetadata,
+    openApiFiles,
     favicons,
   }: {
     content: string;
-    stringifiedConfig: string;
-    nav: Groups;
-    section: string;
-    meta: PageMetaTags;
-    metaTagsForSeo: PageMetaTags;
-    stringifiedOpenApi?: string;
+    mintConfig: Config;
+    navWithMetadata: Groups;
+    pageMetadata: PageMetaTags;
+    openApiFiles?: OpenApiFile[];
     favicons: FaviconsProps;
   } = {
     content:
-      '## 반가워요 👋\n\n안녕하세요 당근마켓 미니앱팀이에요. 당근미니에 관심을 두시고 방문해주신 여러분께 먼저 환영의 인사를 보내고 싶어요! 지금부터 당근미니를 만드는 방법을 하나하나 설명드릴게요\n\n## 당근미니란?\n\n당근미니는 설치 없이 당근마켓에서 바로 사용할 수 있는 웹 기반의 프로그램이에요.\n\n## [당근미니 콘솔](https://console.karrotmini.com/)이란?\n\n여러분들이 WebApp으로 만든 제품을 당근마켓 유저들에게 공개하기 위해 필요한 모든 것을 제공하는 공간이에요.\n',
-    stringifiedConfig:
-      '{"name":"Karrotmini","logo":{"light":"https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/logo.svg","dark":"https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/logo.svg","href":"https://www.daangn.com/"},"favicon":"/logo.svg","colors":{"primary":"#FF7E36","light":"#F09F6D","dark":"#E8661D","ultraLight":"#F5BFA1","ultraDark":"#D25006"},"modeToggle":{"default":"light","isHidden":true},"api":{"baseUrl":"https://mini.kr.karrotmarket.com","auth":{"method":"key","name":"X-API-KEY"}},"anchors":[{"name":"API Reference","icon":"rectangle-terminal","url":"api-reference"},{"name":"GitHub","icon":"github","url":"https://github.com/daangn/create-karrotmini"}],"footerSocials":{"github":"https://github.com/daangn","website":"https://www.daangn.com/","facebook":"https://www.facebook.com/daangn","instagram":"https://www.instagram.com/daangnmarket/"},"navigation":[{"group":"Documentation","pages":["getting-started","javascript-sdk","server-to-server-api-guide","design-guide","home-feed-guide","local-preview-for-dev"]},{"group":"홈 피드","pages":["api-reference/home-feeds/contents","api-reference/home-feeds/items"]},{"group":"미니앱","pages":["api-reference/miniapps/deeplinks"]},{"group":"결제","pages":["api-reference/payments/by-period","api-reference/payments/by-id","api-reference/payments/cancel"]},{"group":"지역","pages":["api-reference/regions/by-coordinates","api-reference/regions/by-ids","api-reference/regions/neighbor"]}],"__injected":{"analytics":{}}}',
-    nav: [
+      '![Hero Image](https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/hero.png)\n\n## Basic Configuration\n\nEvery Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at [global settings guide](/settings/customization).\n\n## Deployments\n\nOnce the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.\n\n<Tabs>\n  <Tab title="GitHub Setup Guide">\n    ### Open a Public Repo\n\n    Create a public repo where you would like to host the documentation.\n\n    <Tip>\n      You can also use a private repo but it prevents users from suggesting changes\n      and raising issues.\n    </Tip>\n\n    ## Add Files\n\n    The onboarding team will provide a zip file with the contents of the documentation. Unzip the file and add the contents into a `/docs` directory of the repo.\n\n    The result should look something like this.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/docs-repo.png" />\n\n    ## Install the GitHub Bot\n\n    Install the Mintlify GitHub Bot using request link provided by the onboarding team. Make sure it\'s granted access to the repo with the documentation.\n\n    Now, when you make changes to the docs and push them to the main branch, it will automatically deploy to your documentation page!\n  </Tab>\n\n  <Tab title="GitLab Setup Guide">\n    ### Generate a GitLab access token\n\n    You can use a [Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens) if you are on GitLab\'s free tier or a Project Access Token if you are on their paid tier.\n\n    The token needs `read_api` and `read_repository` permissions. We recommend setting an expiration at least one year in the future.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/token-permissions.png" />\n\n    ### Get your Project ID from your project\'s home page\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/project-id.png" />\n\n    ### Send us your details\n\n    We need your `accessToken`, `projectId`, and `deployBranch`.\n\n    Please use [Password Link](https://password.link/) to send the information securely. You don\'t need an account to use Password Link\n\n    ### Create a GitLab webhook\n\n    On your project page go to Settings > Webhooks. Enter `https://server.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.\n  </Tab>\n</Tabs>\n',
+    mintConfig: {
+      api: {
+        auth: {},
+      },
+      modeToggle: {},
+      colors: {
+        background: {},
+        primary: '#2AB673',
+        light: '#55D799',
+        dark: '#117866',
+        ultraLight: '#CCEFE9',
+        ultraDark: '#0D5E4F',
+        anchors: {
+          from: '#117866',
+          to: '#2AB673',
+        },
+      },
+      topbarCtaButton: {
+        name: 'Request Access',
+        url: 'https://mintlify.com/start',
+      },
+      topAnchor: {},
+      classes: {},
+      analytics: {
+        amplitude: {},
+        fathom: {
+          siteId: 'YSVUHCAK',
+        },
+        ga4: {},
+        gtm: {},
+        logrocket: {},
+        hotjar: {},
+        mixpanel: {},
+        pirsch: {},
+        posthog: {},
+        plausible: {},
+      },
+      integrations: {},
+      __injected: {
+        analytics: {
+          amplitude: {},
+          fathom: {},
+          ga4: {},
+          gtm: {},
+          logrocket: {},
+          hotjar: {},
+          mixpanel: {},
+          pirsch: {},
+          posthog: {},
+          plausible: {},
+        },
+      },
+      versions: [],
+      name: 'Mintlify',
+      logo: {
+        light: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/logo/light.svg',
+        dark: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/logo/dark.svg',
+        href: 'https://mintlify.com',
+      },
+      favicon: '/favicon.svg',
+      topbarLinks: [
+        {
+          url: 'https://mintlify.com/community',
+          name: 'Community',
+          _id: '63a4c09821e279d02eee463d',
+        },
+      ],
+      anchors: [
+        {
+          name: 'Showcase',
+          url: 'https://mintlify.com/showcase',
+          icon: 'trophy-star',
+          _id: '63a4c09821e279d02eee463a',
+        },
+        {
+          name: 'Community',
+          url: 'https://mintlify.com/community',
+          icon: 'discord',
+          _id: '63a4c09821e279d02eee463b',
+        },
+        {
+          name: 'GitHub',
+          url: 'https://github.com/mintlify/mint',
+          icon: 'github',
+          _id: '63a4c09821e279d02eee463c',
+        },
+      ],
+      navigation: [
+        {
+          group: 'Getting Started',
+          pages: ['quickstart', 'development'],
+        },
+        {
+          group: 'Settings',
+          pages: [
+            'settings/customization',
+            'settings/page',
+            'settings/versioning',
+            'settings/subdirectory-hosting',
+            'settings/seo',
+          ],
+        },
+        {
+          group: 'Components',
+          pages: [
+            'components/overview',
+            'components/text',
+            'components/image',
+            'components/list',
+            'components/code',
+            'components/callout',
+            'components/embed',
+            'components/table',
+          ],
+        },
+        {
+          group: 'Advanced Components',
+          pages: [
+            'components/advanced/accordion',
+            'components/advanced/card',
+            'components/advanced/frame',
+            'components/advanced/tabs',
+            'components/advanced/tooltip',
+          ],
+        },
+        {
+          group: 'API Components',
+          pages: [
+            'api-components/overview',
+            'api-components/param',
+            'api-components/response',
+            'api-components/expandable',
+            'api-components/examples',
+            'api-components/openapi',
+          ],
+        },
+        {
+          group: 'Analytics',
+          pages: [
+            'site-stats/supported-integrations',
+            {
+              group: 'Set Up Analytics',
+              pages: [
+                'site-stats/set-up/amplitude',
+                'site-stats/set-up/fathom',
+                'site-stats/set-up/google-analytics',
+                'site-stats/set-up/google-tag-manager',
+                'site-stats/set-up/hotjar',
+                'site-stats/set-up/logrocket',
+                'site-stats/set-up/mixpanel',
+                'site-stats/set-up/pirsch',
+                'site-stats/set-up/posthog',
+              ],
+            },
+          ],
+        },
+      ],
+      footerSocials: {
+        github: 'https://github.com/mintlify',
+        discord: 'https://discord.gg/MPNgtSZkgK',
+        twitter: 'https://twitter.com/mintlify',
+      },
+    },
+    navWithMetadata: [
       {
-        group: 'Documentation',
+        group: 'Getting Started',
         pages: [
           {
-            title: 'Welcome to 당근미니 콘솔!',
-            href: '/getting-started',
+            title: 'Quickstart',
+            description: 'Build beautiful documentation that converts users',
+            href: '/quickstart',
           },
           {
-            title: '당근미니 JavaScript SDK',
-            href: '/javascript-sdk',
-          },
-          {
-            title: 'Server to Server API 사용하기',
-            href: '/server-to-server-api-guide',
-          },
-          {
-            title: '디자인 가이드',
-            href: '/design-guide',
-          },
-          {
-            title: '홈 피드 200% 활용하기',
-            href: '/home-feed-guide',
-          },
-          {
-            title: '어떻게 동작할지 보면서 개발하기',
-            href: '/local-preview-for-dev',
+            title: 'Development',
+            description: 'Run Mintlify on your computer to see changes locally',
+            href: '/development',
           },
         ],
       },
       {
-        group: '홈 피드',
+        group: 'Settings',
         pages: [
           {
-            title: '홈 피드에 발행할 컨텐츠를 등록해요',
+            title: 'Global Settings (mint.json)',
             description:
-              '등록된 컨텐츠는 홈피드 컨텐츠 발행 API를 이용하여 여러 유저에게 발행할 수 있어요 Request 시 home_feed_contents[].id 값을 넣어도 해당 값은 무시되고, 서버에서 생성한 값을 반환해요 Requset로 온 home_feed_contents의 순서가 Response에도 유지되는 것을 보장해요',
-            openapi: 'POST /api/v1/home-feeds/contents',
-            href: '/api-reference/home-feeds/contents',
+              'Mintlify gives you complete control over the look and feel of your documentation using the mint.json file',
+            href: '/settings/customization',
           },
           {
-            title: '홈 피드 컨텐츠를 발행해요',
-            api: 'POST /api/v1/home-feeds/items',
-            href: '/api-reference/home-feeds/items',
-          },
-        ],
-      },
-      {
-        group: '미니앱',
-        pages: [
-          {
-            title: '미니앱 내 상세 페이지로 이동할 수 있는 딥링크를 생성해요',
-            openapi: 'POST /api/v1/miniapps/deeplinks',
-            href: '/api-reference/miniapps/deeplinks',
-          },
-        ],
-      },
-      {
-        group: '결제',
-        pages: [
-          {
-            title: '기간으로 결제 내역을 조회해요',
-            description: '조회 범위 조건: start_time_ms <= 결제내역 생성 시각 <= end_time_ms',
-            openapi: 'GET /api/v1/payments/transactions',
-            href: '/api-reference/payments/by-period',
+            title: 'Page Titles and Metadata',
+            description: 'Metadata is important for API pages and SEO optimization.',
+            href: '/settings/page',
           },
           {
-            title: '단건 결제 내역을 조회해요',
-            openapi: 'GET /api/v1/payments/transactions/{transaction_id}',
-            href: '/api-reference/payments/by-id',
+            title: 'Versioning',
+            description:
+              'Optionally, you can have separate versions for your docs. Mintlify lets you toggle content based on your docs version.',
+            href: '/settings/versioning',
           },
           {
-            title: '결제 내역을 취소해요',
-            openapi: 'POST /api/v1/payments/transactions/{transaction_id}/cancel',
-            href: '/api-reference/payments/cancel',
+            title: 'Subdirectory Hosting',
+            description: null,
+            href: '/settings/subdirectory-hosting',
+          },
+          {
+            title: 'Search Engine Optimization',
+            description:
+              'Mintlify automatically generates most meta tags. If you want to customize them, you can set default values in mint.json or change them per page.',
+            href: '/settings/seo',
           },
         ],
       },
       {
-        group: '지역',
+        group: 'Components',
         pages: [
           {
-            title: '지역 ID 목록으로 지역 정보를 조회해요',
-            openapi: 'GET /api/v1/regions/by-ids',
-            href: '/api-reference/regions/by-ids',
+            title: 'Writing Content',
+            description: 'How components work',
+            href: '/components/overview',
           },
           {
-            title: '지역 ID로 주변 지역 정보를 조회해요',
-            openapi: 'GET /api/v1/regions/{region_id}/neighbor',
-            href: '/api-reference/regions/neighbor',
+            title: 'Rich Text',
+            description: 'Text, title, and styling in standard markdown',
+            href: '/components/text',
+          },
+          {
+            title: 'Images',
+            description: 'Create images using markdown or embeds',
+            href: '/components/image',
+          },
+          {
+            title: 'Lists',
+            description: 'Create ordered and unordered lists',
+            href: '/components/list',
+          },
+          {
+            title: 'Code Blocks',
+            description: 'Display inline code and code blocks',
+            href: '/components/code',
+          },
+          {
+            title: 'Callout Boxes',
+            description: 'Use callouts to create add eye-catching context to your content',
+            href: '/components/callout',
+          },
+          {
+            title: 'Custom Embeds',
+            description: 'Images, videos, and any HTML elements',
+            href: '/components/embed',
+          },
+          {
+            title: 'Tables',
+            description: 'Display an arrangement of data in rows and columns',
+            href: '/components/table',
+          },
+        ],
+      },
+      {
+        group: 'Advanced Components',
+        pages: [
+          {
+            title: 'Accordions',
+            description: 'Using the Accordion component',
+            href: '/components/advanced/accordion',
+          },
+          {
+            title: 'Cards',
+            description: 'Highlight main points or links with customizable icons',
+            href: '/components/advanced/card',
+          },
+          {
+            title: 'Image Container',
+            description:
+              'Use the Frame component to wrap images or other components in a container',
+            href: '/components/advanced/frame',
+          },
+          {
+            title: 'Tabs',
+            description: 'Toggle content using the Tabs component',
+            href: '/components/advanced/tabs',
+          },
+          {
+            title: 'Tooltips',
+            description: 'Show a definition when you hover over text.',
+            href: '/components/advanced/tooltip',
+          },
+        ],
+      },
+      {
+        group: 'API Components',
+        pages: [
+          {
+            title: 'Playground',
+            description: 'Enable users interact with your API',
+            api: 'GET https://server.mintlify.com/api/v1/demo',
+            hideApiMarker: true,
+            href: '/api-components/overview',
+          },
+          {
+            title: 'Parameters',
+            description: 'Set path, query, and body parameters',
+            href: '/api-components/param',
+          },
+          {
+            title: 'Responses',
+            description: 'Display API response values',
+            href: '/api-components/response',
+          },
+          {
+            title: 'Expand Objects',
+            description: 'Toggle to display nested properties',
+            href: '/api-components/expandable',
+          },
+          {
+            title: 'API Examples',
+            description: 'Display the request and response on the right sidebar',
+            href: '/api-components/examples',
+          },
+          {
+            title: 'OpenAPI Support',
+            description: 'Reference OpenAPI endpoints for the API playground',
+            href: '/api-components/openapi',
+          },
+        ],
+      },
+      {
+        group: 'Analytics',
+        pages: [
+          {
+            title: 'Supported Integrations',
+            description: 'Mintlify integrates with a variety of analytics platforms.',
+            href: '/site-stats/supported-integrations',
+          },
+          {
+            group: 'Set Up Analytics',
+            pages: [
+              {
+                title: 'Amplitude',
+                description: null,
+                href: '/site-stats/set-up/amplitude',
+              },
+              {
+                title: 'Fathom',
+                description: null,
+                href: '/site-stats/set-up/fathom',
+              },
+              {
+                title: 'Google Analytics 4',
+                description: 'Also known as GA4',
+                href: '/site-stats/set-up/google-analytics',
+              },
+              {
+                title: 'Google Tag Manager',
+                description: null,
+                href: '/site-stats/set-up/google-tag-manager',
+              },
+              {
+                title: 'HotJar',
+                description: null,
+                href: '/site-stats/set-up/hotjar',
+              },
+              {
+                title: 'Logrocket',
+                description: null,
+                href: '/site-stats/set-up/logrocket',
+              },
+              {
+                title: 'Mixpanel',
+                description: null,
+                href: '/site-stats/set-up/mixpanel',
+              },
+              {
+                title: 'Pirsch',
+                description: null,
+                href: '/site-stats/set-up/pirsch',
+              },
+              {
+                title: 'PostHog',
+                description: null,
+                href: '/site-stats/set-up/posthog',
+              },
+            ],
           },
         ],
       },
     ],
-    stringifiedOpenApi: '{"files":[]}',
-    section: 'Documentation',
-    meta: {
-      title: 'Welcome to 당근미니 콘솔!',
-      href: '/getting-started',
-    },
-    metaTagsForSeo: {
-      title: 'Welcome to 당근미니 콘솔!',
+    openApiFiles: [],
+    pageMetadata: {
+      title: 'Quickstart',
+      description: 'Build beautiful documentation that converts users',
+      href: '/quickstart',
     },
     favicons: {
       icons: [
         {
           rel: 'apple-touch-icon',
           sizes: '180x180',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/_generated/favicon/apple-touch-icon.png?v=3',
+          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/apple-touch-icon.png?v=3',
           type: 'image/png',
         },
         {
           rel: 'icon',
           sizes: '32x32',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/_generated/favicon/favicon-32x32.png?v=3',
+          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon-32x32.png?v=3',
           type: 'image/png',
         },
         {
           rel: 'icon',
           sizes: '16x16',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/_generated/favicon/favicon-16x16.png?v=3',
+          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon-16x16.png?v=3',
           type: 'image/png',
         },
         {
           rel: 'shortcut icon',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/_generated/favicon/favicon.ico?v=3',
+          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon.ico?v=3',
           type: 'image/x-icon',
         },
       ],
       browserconfig:
-        'https://mintlify.s3-us-west-1.amazonaws.com/karrotmini/_generated/favicon/browserconfig.xml?v=3',
+        'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/browserconfig.xml?v=3',
     },
   };
   let mdxSource: any = '';
 
   try {
     const response = await getMdxSource(content, {
-      section,
-      meta,
+      pageMetadata,
     });
     mdxSource = response;
   } catch (err) {
     mdxSource = await getMdxSource(
       '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
-      { section, meta }
+      { pageMetadata }
     ); // placeholder content for when there is a syntax error.
     console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
   }
-
   return {
-    props: {
-      stringifiedMdxSource: stringify(mdxSource),
-      stringifiedData: stringify({
-        nav,
-        meta,
-        section,
-        metaTagsForSeo,
-        stringifiedConfig,
-        stringifiedOpenApi,
-      }),
-      stringifiedFavicons: stringify(favicons),
-      subdomain: process.env.SUBDOMAIN ?? '',
-    },
-    revalidate: 60,
+    props: prepareToSerialize({
+      mdxSource,
+      pageData: {
+        navWithMetadata,
+        pageMetadata,
+        mintConfig,
+        openApiFiles,
+      },
+      favicons,
+    }),
   };
 };
 

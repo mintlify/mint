@@ -226,7 +226,7 @@ function SearchHit({
   );
 }
 
-export function SearchProvider({ subdomain, children }: { subdomain: string; children: any }) {
+export function SearchProvider({ subdomain, children }: { subdomain?: string; children: any }) {
   const router = useRouter();
   const { mintConfig: config, navWithMetadata } = useContext(ConfigContext);
   const { selectedVersion } = useContext(VersionContext);
@@ -285,6 +285,10 @@ export function SearchProvider({ subdomain, children }: { subdomain: string; chi
     router.push(`/${hit.slug}${sectionSlug}`);
     setHits([]);
   };
+  if (!subdomain) {
+    // TODO: Make search work in single-tenant
+    return children;
+  }
 
   return (
     <>

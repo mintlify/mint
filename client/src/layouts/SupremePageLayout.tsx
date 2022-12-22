@@ -15,8 +15,8 @@ import { VersionContextController } from '@/context/VersionContext';
 import useProgressBar from '@/hooks/useProgressBar';
 import Intercom from '@/integrations/Intercom';
 import { DocumentationLayout } from '@/layouts/DocumentationLayout';
-import { PageDataProps } from '@/pages/_sites/[subdomain]/[[...slug]]';
 import { FaviconsProps } from '@/types/favicons';
+import { PageDataProps } from '@/types/page';
 import { ColorVariables } from '@/ui/ColorVariables';
 import { FeedbackProvider } from '@/ui/Feedback';
 import { SearchProvider } from '@/ui/search/Search';
@@ -33,7 +33,7 @@ export default function SupremePageLayout({
   mdxSource: any;
   pageData: PageDataProps;
   favicons: FaviconsProps;
-  subdomain: string;
+  subdomain?: string;
 }) {
   const { mintConfig, navWithMetadata, pageMetadata, openApiFiles } = pageData;
 

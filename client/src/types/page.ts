@@ -7,7 +7,7 @@ export interface PageProps {
   mdxSource: string;
   pageData: PageDataProps;
   favicons: FaviconsProps;
-  subdomain: string;
+  subdomain?: string;
 }
 
 export interface PageDataProps {
