@@ -2,7 +2,6 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import initCommand from "./init-command/index.js";
 import generatePageTemplate from "./pageTemplate.js";
 import {
   scrapePageAutomatically,
@@ -35,7 +34,6 @@ yargs(hideBin(process.argv))
     () => {},
     installDepsCommand
   )
-  .command("init", "Generate a mintlify template", () => {}, initCommand)
   .command("page", "Generate a new page", () => {}, generatePageTemplate)
   .command(
     "scrape-page [url]",
