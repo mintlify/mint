@@ -3,6 +3,7 @@ import type { ParsedUrlQuery } from 'querystring';
 
 import { getPage } from '@/lib/page';
 import { getPaths } from '@/lib/paths';
+import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
