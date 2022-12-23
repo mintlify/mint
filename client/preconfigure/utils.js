@@ -14,3 +14,32 @@ export const openApiCheck = async (path) => {
   }
   return { spec, isOpenApi };
 };
+
+export const filterOutNullInGroup = (group) => {
+  const newPages = filterOutNullInPages(group.pages);
+  const newGroup = {
+    ...group,
+    pages: newPages,
+  };
+  return newGroup;
+};
+
+const filterOutNullInPages = (pages) => {
+  if (!Array.isArray(pages)) {
+    return [];
+  }
+  const newPages = [];
+  pages.forEach((page) => {
+    if (page == null) {
+      return;
+    }
+    if (page.hasOwnProperty('pages')) {
+      const newGroup = filterOutNullInGroup(page);
+      newPages.push(newGroup);
+    } else {
+      newPages.push(page);
+    }
+  });
+
+  return newPages;
+};
