@@ -47,14 +47,12 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     navWithMetadata,
     pageMetadata,
     openApiFiles,
-    favicons,
   }: {
     content: string;
     mintConfig: Config;
     navWithMetadata: Groups;
     pageMetadata: PageMetaTags;
     openApiFiles?: OpenApiFile[];
-    favicons: FaviconsProps;
   } = {
     content:
       '![Hero Image](https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/hero.png)\n\n## Basic Configuration\n\nEvery Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at [global settings guide](/settings/customization).\n\n## Deployments\n\nOnce the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.\n\n<Tabs>\n  <Tab title="GitHub Setup Guide">\n    ### Open a Public Repo\n\n    Create a public repo where you would like to host the documentation.\n\n    <Tip>\n      You can also use a private repo but it prevents users from suggesting changes\n      and raising issues.\n    </Tip>\n\n    ## Add Files\n\n    The onboarding team will provide a zip file with the contents of the documentation. Unzip the file and add the contents into a `/docs` directory of the repo.\n\n    The result should look something like this.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/docs-repo.png" />\n\n    ## Install the GitHub Bot\n\n    Install the Mintlify GitHub Bot using request link provided by the onboarding team. Make sure it\'s granted access to the repo with the documentation.\n\n    Now, when you make changes to the docs and push them to the main branch, it will automatically deploy to your documentation page!\n  </Tab>\n\n  <Tab title="GitLab Setup Guide">\n    ### Generate a GitLab access token\n\n    You can use a [Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens) if you are on GitLab\'s free tier or a Project Access Token if you are on their paid tier.\n\n    The token needs `read_api` and `read_repository` permissions. We recommend setting an expiration at least one year in the future.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/token-permissions.png" />\n\n    ### Get your Project ID from your project\'s home page\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/project-id.png" />\n\n    ### Send us your details\n\n    We need your `accessToken`, `projectId`, and `deployBranch`.\n\n    Please use [Password Link](https://password.link/) to send the information securely. You don\'t need an account to use Password Link\n\n    ### Create a GitLab webhook\n\n    On your project page go to Settings > Webhooks. Enter `https://server.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.\n  </Tab>\n</Tabs>\n',
@@ -450,35 +448,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       description: 'Build beautiful documentation that converts users',
       href: '/quickstart',
     },
-    favicons: {
-      icons: [
-        {
-          rel: 'apple-touch-icon',
-          sizes: '180x180',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/apple-touch-icon.png?v=3',
-          type: 'image/png',
-        },
-        {
-          rel: 'icon',
-          sizes: '32x32',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon-32x32.png?v=3',
-          type: 'image/png',
-        },
-        {
-          rel: 'icon',
-          sizes: '16x16',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon-16x16.png?v=3',
-          type: 'image/png',
-        },
-        {
-          rel: 'shortcut icon',
-          href: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/favicon.ico?v=3',
-          type: 'image/x-icon',
-        },
-      ],
-      browserconfig:
-        'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/_generated/favicon/browserconfig.xml?v=3',
-    },
   };
   let mdxSource: any = '';
 
@@ -494,6 +463,34 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     ); // placeholder content for when there is a syntax error.
     console.log(`⚠️ Warning: MDX failed to parse page ${path}: `, err);
   }
+  const favicons: FaviconsProps = {
+    icons: [
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/favicons/apple-touch-icon.png',
+        type: 'image/png',
+      },
+      {
+        rel: 'icon',
+        sizes: '32x32',
+        href: '/favicons/favicon-32x32.png',
+        type: 'image/png',
+      },
+      {
+        rel: 'icon',
+        sizes: '16x16',
+        href: '/favicons/favicon-16x16.png',
+        type: 'image/png',
+      },
+      {
+        rel: 'shortcut icon',
+        href: '/favicons/favicon.ico',
+        type: 'image/x-icon',
+      },
+    ],
+    browserconfig: '/favicons/browserconfig.xml',
+  };
   return {
     props: prepareToSerialize({
       mdxSource,
