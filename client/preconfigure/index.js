@@ -9,14 +9,12 @@ const preconfigure = async () => {
     contentDirectoryPath
   );
   // generateFavicon
-  const mintConfig = await update(contentDirectoryPath, staticFilenames, openApiFiles);
+  await update(contentDirectoryPath, staticFilenames, openApiFiles, contentFilenames);
   // generateNav
-  console.log({ contentFilenames, staticFilenames, openApiFiles, mintConfig });
 };
 
 (async function () {
   try {
-    console.log('🔍  Fetching config settings');
     await preconfigure();
   } catch (error) {
     console.log(error);

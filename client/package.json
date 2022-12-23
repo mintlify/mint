@@ -41,6 +41,7 @@
     "date-and-time": "^2.4.1",
     "eslint-config-next": "^13.0.6",
     "fathom-client": "^3.5.0",
+    "favicons": "^7.0.2",
     "file-loader": "^6.0.0",
     "focus-visible": "^5.1.0",
     "fs-extra": "^10.1.0",

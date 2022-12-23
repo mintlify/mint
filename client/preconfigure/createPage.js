@@ -16,12 +16,16 @@ const createPage = async (pagePath, pageContent, contentDirectoryPath, openApiFi
 
   // Replace .mdx so we can pass file paths into this function
   const slug = pagePath.replace(/\.mdx?$/, '');
-
+  let defaultTitle = slugToTitle(slug);
   // Append data from OpenAPI if it exists
   const { title, description } = getOpenApiTitleAndDescription(openApiFiles, metadata?.openapi);
 
+  if (title) {
+    defaultTitle = title;
+  }
+
   const pageMetadata = {
-    title,
+    title: defaultTitle,
     description,
     ...metadata,
     href: optionallyAddLeadingSlash(slug),
@@ -164,5 +168,13 @@ function optionallyAddLeadingSlash(path) {
   }
   return '/' + path;
 }
+
+export const slugToTitle = (slug) => {
+  const slugArr = slug.split('/');
+  let defaultTitle = slugArr[slugArr.length - 1].split('-').join(' '); //replace all dashes
+  defaultTitle = defaultTitle.split('_').join(' '); //replace all underscores
+  defaultTitle = defaultTitle.charAt(0).toUpperCase() + defaultTitle.slice(1); //capitalize first letter
+  return defaultTitle;
+};
 
 export default createPage;

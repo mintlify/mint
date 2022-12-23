@@ -2,8 +2,8 @@ import { promises as _promises } from 'fs';
 import fse, { pathExists, outputFile } from 'fs-extra';
 import path from 'path';
 
-import createPage from './createPage';
-import { generateFavicons, generateNavFromPages } from './generate';
+import createPage from './createPage.js';
+import { generateFavicons, generateNavFromPages } from './generate.js';
 
 const { readFile } = _promises;
 
@@ -115,15 +115,19 @@ export const update = async (
         const sourcePath = path.join(contentDirectoryPath, filename);
         const targetPath = path.join('src', '_props', filename);
 
-        await fse.remove(targetPath);
-        await fse.copy(sourcePath, targetPath);
-
-        const fileContent = await readFile(sourcePath);
-        const contentStr = fileContent.toString();
-        const page = createPage(filename, contentStr, contentDirectoryPath, openApiFiles);
+        const contentStr = (await readFile(sourcePath)).toString();
+        const { slug, pageMetadata, fileContent } = await createPage(
+          filename,
+          contentStr,
+          contentDirectoryPath,
+          openApiFiles
+        );
+        await outputFile(targetPath, fileContent, {
+          flag: 'w',
+        });
         pagesAcc = {
           ...pagesAcc,
-          ...page,
+          [slug]: pageMetadata,
         };
       })()
     );
@@ -134,8 +138,11 @@ export const update = async (
     ...updateStaticFiles(contentDirectoryPath, staticFilenames),
     updateOpenApiFiles(openApiFiles),
   ]);
-  const config = initialFileUploadResponses[0];
-  await generateNavFromPages(pagesAcc, config?.navigation);
-  // generateFavicon(config);
-  return config;
+  console.log({ pagesAcc });
+  const mintConfig = initialFileUploadResponses[0];
+  // await Promise.all([
+  //   updateGeneratedNav(pagesAcc, mintConfig.nav),
+  //   updateFavicons(mintConfig, contentDirectoryPath),
+  // ]);
+  return mintConfig;
 };
