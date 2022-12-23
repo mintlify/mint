@@ -1,10 +1,12 @@
 import categorizeFiles from './categorizeFiles.js';
+import { updateConfigFile } from './mintConfig.js';
 
-const path = process.argv[2] ?? 'content';
+const contentDirPath = process.argv[2] ?? 'content';
 
 const preconfigure = async () => {
-  const { markdownFiles, staticFiles, openApiFiles } = await categorizeFiles(path);
-  console.log({ markdownFiles, staticFiles, openApiFiles });
+  const { markdownFiles, staticFiles, openApiFiles } = await categorizeFiles(contentDirPath);
+  const config = await updateConfigFile(contentDirPath);
+  console.log({ markdownFiles, staticFiles, openApiFiles, config });
 };
 
 (async function () {

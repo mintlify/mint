@@ -22,8 +22,8 @@ const getFileList = async (dirName, og = dirName) => {
   return files;
 };
 
-const categorizeFiles = async (filePath) => {
-  const allFilesInCmdExecutionPath = await getFileList(filePath);
+const categorizeFiles = async (contentDirPath) => {
+  const allFilesInCmdExecutionPath = await getFileList(contentDirPath);
   const markdownFiles = [];
   const staticFiles = [];
   const promises = [];
@@ -39,7 +39,7 @@ const categorizeFiles = async (filePath) => {
           extension &&
           (extension === 'json' || extension === 'yaml' || extension === 'yml')
         ) {
-          const openApiInfo = await openApiCheck(path.join(filePath, filename));
+          const openApiInfo = await openApiCheck(path.join(contentDirPath, filename));
           isOpenApi = openApiInfo.isOpenApi;
           if (isOpenApi) {
             const fileName = path.parse(filename).base;

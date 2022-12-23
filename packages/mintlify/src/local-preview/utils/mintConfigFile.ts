@@ -23,7 +23,7 @@ export const getConfigObj = async (): Promise<object | null> => {
   let configObj = null;
   if (configPath) {
     const configContents = await readFile(configPath);
-    configObj = JSON.parse(configContents.toString());
+    configObj = JSON.parse(JSON.stringify(configContents));
   }
   return configObj;
 };
