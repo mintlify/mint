@@ -42,3 +42,35 @@ export const updateConfigFile = async (contentDirPath) => {
   }
   return configObj;
 };
+
+export const updateOpenApiFiles = async (openApiFiles) => {
+  const openApiTargetPath = 'src/_props/openApiFiles.json';
+  await fse.remove(openApiTargetPath);
+  await fse.outputFile(openApiTargetPath, JSON.stringify(openApiFiles), {
+    flag: 'w',
+  });
+};
+
+export const updateStaticFiles = (contentDirPath, staticFilenames) => {
+  const staticFilePromises = [];
+  staticFilenames.forEach((filename) => {
+    staticFilePromises.push(
+      (async () => {
+        const sourcePath = path.join(contentDirPath, filename);
+        const targetPath = path.join('public', filename);
+        await fse.remove(targetPath);
+        await fse.copy(sourcePath, targetPath);
+      })()
+    );
+  });
+  return staticFilePromises;
+};
+
+export const updateAndReturnMintConfig = async (contentDirPath, staticFilenames, openApiFiles) => {
+  const response = await Promise.all([
+    updateConfigFile(contentDirPath),
+    ...updateStaticFiles(contentDirPath, staticFilenames),
+    updateOpenApiFiles(openApiFiles),
+  ]);
+  return response[0];
+};
