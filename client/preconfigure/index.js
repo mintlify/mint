@@ -1,17 +1,17 @@
 // TODO - rename to prebuild after legacy-components-imports is merged
 import categorizeFiles from './categorizeFiles.js';
-import { updateAndReturnMintConfig } from './update.js';
+import { update } from './update.js';
 
-const contentDirPath = process.argv[2] ?? 'content';
+const contentDirectoryPath = process.argv[2] ?? 'content';
 
 const preconfigure = async () => {
-  const { markdownFilenames, staticFilenames, openApiFiles } = await categorizeFiles(
-    contentDirPath
+  const { contentFilenames, staticFilenames, openApiFiles } = await categorizeFiles(
+    contentDirectoryPath
   );
-  const mintConfig = await updateAndReturnMintConfig(contentDirPath, staticFilenames, openApiFiles);
-  // generateNav
   // generateFavicon
-  console.log({ markdownFilenames, staticFilenames, openApiFiles, mintConfig });
+  const mintConfig = await update(contentDirectoryPath, staticFilenames, openApiFiles);
+  // generateNav
+  console.log({ contentFilenames, staticFilenames, openApiFiles, mintConfig });
 };
 
 (async function () {

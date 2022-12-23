@@ -22,9 +22,9 @@ const getFileList = async (dirName, og = dirName) => {
   return files;
 };
 
-const categorizeFiles = async (contentDirPath) => {
-  const allFilesInCmdExecutionPath = await getFileList(contentDirPath);
-  const markdownFilenames = [];
+const categorizeFiles = async (contentDirectoryPath) => {
+  const allFilesInCmdExecutionPath = await getFileList(contentDirectoryPath);
+  const contentFilenames = [];
   const staticFilenames = [];
   const promises = [];
   const openApiFiles = [];
@@ -34,12 +34,12 @@ const categorizeFiles = async (contentDirPath) => {
         const extension = getFileExtension(filename);
         let isOpenApi = false;
         if (extension && (extension === 'mdx' || extension === 'md' || extension === 'tsx')) {
-          markdownFilenames.push(filename);
+          contentFilenames.push(filename);
         } else if (
           extension &&
           (extension === 'json' || extension === 'yaml' || extension === 'yml')
         ) {
-          const openApiInfo = await openApiCheck(path.join(contentDirPath, filename));
+          const openApiInfo = await openApiCheck(path.join(contentDirectoryPath, filename));
           isOpenApi = openApiInfo.isOpenApi;
           if (isOpenApi) {
             const fileName = path.parse(filename).base;
@@ -60,7 +60,7 @@ const categorizeFiles = async (contentDirPath) => {
   });
   await Promise.all(promises);
 
-  return { markdownFilenames, staticFilenames, openApiFiles };
+  return { contentFilenames, staticFilenames, openApiFiles };
 };
 
 export default categorizeFiles;

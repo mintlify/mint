@@ -4,14 +4,14 @@ import path from 'path';
 
 const { readFile } = _promises;
 
-const getConfigPath = async (contentDirPath) => {
+const getConfigPath = async (contentDirectoryPath) => {
   let configPath = null;
-  if (await pathExists(path.join(contentDirPath, 'mint.config.json'))) {
-    configPath = path.join(contentDirPath, 'mint.config.json');
+  if (await pathExists(path.join(contentDirectoryPath, 'mint.config.json'))) {
+    configPath = path.join(contentDirectoryPath, 'mint.config.json');
   }
 
-  if (await pathExists(path.join(contentDirPath, 'mint.json'))) {
-    configPath = path.join(contentDirPath, 'mint.json');
+  if (await pathExists(path.join(contentDirectoryPath, 'mint.json'))) {
+    configPath = path.join(contentDirectoryPath, 'mint.json');
   }
   return configPath;
 };
@@ -26,11 +26,11 @@ export const getConfigObj = async () => {
   return configObj;
 };
 
-export const updateConfigFile = async (contentDirPath) => {
+export const updateConfigFile = async (contentDirectoryPath) => {
   const configTargetPath = 'src/_props/mint.json';
   await fse.remove(configTargetPath);
   let configObj = null;
-  const configPath = await getConfigPath(contentDirPath);
+  const configPath = await getConfigPath(contentDirectoryPath);
 
   if (configPath) {
     await fse.remove(configTargetPath);
@@ -51,12 +51,12 @@ export const updateOpenApiFiles = async (openApiFiles) => {
   });
 };
 
-export const updateStaticFiles = (contentDirPath, staticFilenames) => {
+export const updateStaticFiles = (contentDirectoryPath, staticFilenames) => {
   const staticFilePromises = [];
   staticFilenames.forEach((filename) => {
     staticFilePromises.push(
       (async () => {
-        const sourcePath = path.join(contentDirPath, filename);
+        const sourcePath = path.join(contentDirectoryPath, filename);
         const targetPath = path.join('public', filename);
         await fse.remove(targetPath);
         await fse.copy(sourcePath, targetPath);
@@ -66,10 +66,38 @@ export const updateStaticFiles = (contentDirPath, staticFilenames) => {
   return staticFilePromises;
 };
 
-export const updateAndReturnMintConfig = async (contentDirPath, staticFilenames, openApiFiles) => {
+export const updateContentFiles = async (contentDirectoryPath, contentFiles) => {};
+
+export const update = async (
+  contentDirectoryPath,
+  staticFilenames,
+  openApiFiles,
+  contentFilenames
+) => {
+  let pages = {};
+  const contentPromises = [];
+  contentFilenames.forEach((filename) => {
+    contentPromises.push(
+      (async () => {
+        const sourcePath = path.join(contentDirectoryPath, filename);
+        const targetPath = path.join('src', '_props', filename);
+
+        await fse.remove(targetPath);
+        await fse.copy(sourcePath, targetPath);
+
+        const fileContent = await readFile(sourcePath);
+        const contentStr = fileContent.toString();
+        const page = createPage(filename, contentStr, openApiFiles);
+        pages = {
+          ...pages,
+          ...page,
+        };
+      })()
+    );
+  });
   const response = await Promise.all([
-    updateConfigFile(contentDirPath),
-    ...updateStaticFiles(contentDirPath, staticFilenames),
+    updateConfigFile(contentDirectoryPath),
+    ...updateStaticFiles(contentDirectoryPath, staticFilenames),
     updateOpenApiFiles(openApiFiles),
   ]);
   return response[0];
