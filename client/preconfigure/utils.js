@@ -9,6 +9,7 @@ export const openApiCheck = async (path) => {
   let isOpenApi = false;
   try {
     spec = await SwaggerParser.validate(path);
+    isOpenApi = true;
   } catch {
     // not valid openApi
   }
