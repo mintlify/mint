@@ -1,3 +1,4 @@
+// TODO: Delete after legacy-components-imports is merged
 import axios from 'axios';
 import fs from 'fs-extra';
 import { dirname } from 'path';
