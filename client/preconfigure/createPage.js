@@ -34,7 +34,7 @@ const createPage = async (pagePath, pageContent, contentDirectoryPath, openApiFi
   return {
     pageMetadata,
     fileContent,
-    slug,
+    slug: removeLeadingSlash(slug),
   };
 };
 // TODO - test if this works properly
@@ -87,6 +87,11 @@ const preParseMdx = async (fileContent, contentDirectoryPath) => {
     .use(removeContentDirectoryPaths)
     .process(fileContent);
   return String(file);
+};
+
+const removeLeadingSlash = (str) => {
+  const path = createPathArr(str);
+  return path.join('/');
 };
 
 const createPathArr = (path) => {

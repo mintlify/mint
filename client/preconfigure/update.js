@@ -138,11 +138,10 @@ export const update = async (
     ...updateStaticFiles(contentDirectoryPath, staticFilenames),
     updateOpenApiFiles(openApiFiles),
   ]);
-  console.log({ pagesAcc });
   const mintConfig = initialFileUploadResponses[0];
-  // await Promise.all([
-  //   updateGeneratedNav(pagesAcc, mintConfig.nav),
-  //   updateFavicons(mintConfig, contentDirectoryPath),
-  // ]);
+  await Promise.all([
+    updateGeneratedNav(pagesAcc, mintConfig.navigation),
+    updateFavicons(mintConfig, contentDirectoryPath),
+  ]);
   return mintConfig;
 };
