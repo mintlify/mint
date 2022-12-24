@@ -1,4 +1,4 @@
-import { getFileList, removeExtension, getPathsByExtension } from '@/utils/local/files';
+import { getFileList, removeExtension, getPathsByExtension } from '@/utils/localDataProvider/files';
 
 export const getPaths = async (dirName: string) => {
   const files = await getFileList(dirName);

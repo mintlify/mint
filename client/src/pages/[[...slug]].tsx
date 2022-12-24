@@ -9,7 +9,7 @@ import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
-import { getPaths } from '@/utils/local/getPaths';
+import { getPaths } from '@/utils/localDataProvider/getPaths';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
@@ -57,12 +57,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     content:
       '![Hero Image](https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/hero.png)\n\n## Basic Configuration\n\nEvery Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at [global settings guide](/settings/customization).\n\n## Deployments\n\nOnce the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.\n\n<Tabs>\n  <Tab title="GitHub Setup Guide">\n    ### Open a Public Repo\n\n    Create a public repo where you would like to host the documentation.\n\n    <Tip>\n      You can also use a private repo but it prevents users from suggesting changes\n      and raising issues.\n    </Tip>\n\n    ## Add Files\n\n    The onboarding team will provide a zip file with the contents of the documentation. Unzip the file and add the contents into a `/docs` directory of the repo.\n\n    The result should look something like this.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/docs-repo.png" />\n\n    ## Install the GitHub Bot\n\n    Install the Mintlify GitHub Bot using request link provided by the onboarding team. Make sure it\'s granted access to the repo with the documentation.\n\n    Now, when you make changes to the docs and push them to the main branch, it will automatically deploy to your documentation page!\n  </Tab>\n\n  <Tab title="GitLab Setup Guide">\n    ### Generate a GitLab access token\n\n    You can use a [Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens) if you are on GitLab\'s free tier or a Project Access Token if you are on their paid tier.\n\n    The token needs `read_api` and `read_repository` permissions. We recommend setting an expiration at least one year in the future.\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/token-permissions.png" />\n\n    ### Get your Project ID from your project\'s home page\n\n    <img className="rounded" src="https://mintlify.s3-us-west-1.amazonaws.com/mintlify/img/project-id.png" />\n\n    ### Send us your details\n\n    We need your `accessToken`, `projectId`, and `deployBranch`.\n\n    Please use [Password Link](https://password.link/) to send the information securely. You don\'t need an account to use Password Link\n\n    ### Create a GitLab webhook\n\n    On your project page go to Settings > Webhooks. Enter `https://server.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.\n  </Tab>\n</Tabs>\n',
     mintConfig: {
-      api: {
-        auth: {},
-      },
-      modeToggle: {},
       colors: {
-        background: {},
         primary: '#2AB673',
         light: '#55D799',
         dark: '#117866',
@@ -77,38 +72,11 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         name: 'Request Access',
         url: 'https://mintlify.com/start',
       },
-      topAnchor: {},
-      classes: {},
       analytics: {
-        amplitude: {},
         fathom: {
           siteId: 'YSVUHCAK',
         },
-        ga4: {},
-        gtm: {},
-        logrocket: {},
-        hotjar: {},
-        mixpanel: {},
-        pirsch: {},
-        posthog: {},
-        plausible: {},
       },
-      integrations: {},
-      __injected: {
-        analytics: {
-          amplitude: {},
-          fathom: {},
-          ga4: {},
-          gtm: {},
-          logrocket: {},
-          hotjar: {},
-          mixpanel: {},
-          pirsch: {},
-          posthog: {},
-          plausible: {},
-        },
-      },
-      versions: [],
       name: 'Mintlify',
       logo: {
         light: 'https://mintlify.s3-us-west-1.amazonaws.com/mintlify/logo/light.svg',
@@ -120,7 +88,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         {
           url: 'https://mintlify.com/community',
           name: 'Community',
-          _id: '63a4c09821e279d02eee463d',
         },
       ],
       anchors: [
@@ -128,19 +95,16 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           name: 'Showcase',
           url: 'https://mintlify.com/showcase',
           icon: 'trophy-star',
-          _id: '63a4c09821e279d02eee463a',
         },
         {
           name: 'Community',
           url: 'https://mintlify.com/community',
           icon: 'discord',
-          _id: '63a4c09821e279d02eee463b',
         },
         {
           name: 'GitHub',
           url: 'https://github.com/mintlify/mint',
           icon: 'github',
-          _id: '63a4c09821e279d02eee463c',
         },
       ],
       navigation: [
