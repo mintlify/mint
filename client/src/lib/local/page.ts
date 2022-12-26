@@ -1,5 +1,7 @@
 import type { Config } from '@/types/config';
+import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags, findPageInGroup } from '@/types/metadata';
+import { OpenApiFile } from '@/types/openApi';
 import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
 import {
@@ -9,15 +11,36 @@ import {
   confirmFaviconsWereGenerated,
 } from './utils';
 
-// Try catches are purposefully empty because it isn't the end
-// of the world if some of these prebuilt variables are not existent.
-// We just fall back to the empty value, but we will want to do
-// better error handling.
-export const getPageProps = async (slug: string) => {
+/**
+ * @returns All props needed for getStaticProps | Only navWithMetadata if page is not found
+ */
+export const getPageProps = async (
+  slug: string
+): Promise<
+  | {
+      navWithMetadata: Groups;
+    }
+  | { notFound: boolean }
+  | {
+      content: string;
+      pageData: {
+        mintConfig: Config;
+        navWithMetadata: Groups;
+        openApiFiles: OpenApiFile[];
+        pageMetadata: PageMetaTags;
+      };
+      favicons?: FaviconsProps;
+    }
+> => {
   let navWithMetadata: Groups = [];
   try {
     navWithMetadata = await getPrebuiltData('generatedNav');
-  } catch {}
+  } catch {
+    // Try catches are purposefully empty because it isn't the end
+    // of the world if some of these prebuilt variables are not existent.
+    // We just fall back to the empty value, but we will want to do
+    // better error handling.
+  }
   const pagePath = await getPagePath(slug);
   let content = '';
   if (pagePath) {
@@ -43,9 +66,9 @@ export const getPageProps = async (slug: string) => {
       notFound: true,
     };
   }
-  const favicons =
+  const favicons: FaviconsProps | undefined =
     mintConfig?.favicon && (await confirmFaviconsWereGenerated()) ? defaultFavicons : undefined;
-  let openApiFiles = [];
+  let openApiFiles: OpenApiFile[] = [];
   try {
     openApiFiles = await getPrebuiltData('openApiFiles');
   } catch {}
@@ -57,7 +80,7 @@ export const getPageProps = async (slug: string) => {
   };
 };
 
-const defaultFavicons = {
+const defaultFavicons: FaviconsProps = {
   icons: [
     {
       rel: 'apple-touch-icon',
