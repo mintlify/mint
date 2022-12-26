@@ -1,15 +1,14 @@
-import fs from 'fs';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { join } from 'path';
 import type { ParsedUrlQuery } from 'querystring';
 
+import { getPaths } from '@/lib/local/paths';
 import type { Config } from '@/types/config';
 import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
 import Page from '@/ui/Page';
-import { getPaths } from '@/utils/localDataProvider/getPaths';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
 
@@ -18,16 +17,9 @@ interface PathProps extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<PathProps> = async () => {
-  const files = await getPaths(join('content'));
-  console.log(files);
+  const paths = await getPaths(join('src/_props'));
   return {
-    paths: [
-      {
-        params: {
-          slug: ['quickstart'],
-        },
-      },
-    ],
+    paths,
     fallback: 'blocking',
   };
 };
@@ -221,7 +213,6 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           },
           {
             title: 'Subdirectory Hosting',
-            description: null,
             href: '/settings/subdirectory-hosting',
           },
           {
