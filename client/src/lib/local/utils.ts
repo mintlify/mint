@@ -1,6 +1,5 @@
 import { promises as _promises } from 'fs';
 import { pathExists } from 'fs-extra';
-import { join } from 'path';
 
 const { readdir, readFile } = _promises;
 
@@ -37,11 +36,13 @@ export const getPathsByExtension = (files: string[], ...extensions: string[]): s
 };
 
 export const getPagePath = async (slug: string) => {
-  if (await pathExists(join('src', '_props', slug + '.mdx'))) {
-    return slug + '.mdx';
+  const mdxPath = `src/_props/${slug}.mdx`;
+  if (await pathExists(mdxPath)) {
+    return mdxPath;
   }
-  if (await pathExists(join('src', '_props', slug + '.md'))) {
-    return slug + '.md';
+  const mdPath = `src/_props/${slug}.mdx`;
+  if (await pathExists(mdPath)) {
+    return mdPath;
   }
   return null;
 };
@@ -51,7 +52,7 @@ export const getFileContents = async (path: string) => {
 };
 
 export const getFileContentsAsObject = async (path: string) => {
-  return JSON.parse(JSON.stringify(await readFile(path)));
+  return JSON.parse(await getFileContents(path));
 };
 
 export const getPrebuiltData = async (name: string) => {
