@@ -42,7 +42,7 @@ When `status === "error"` you should stop trying to build `mint`, your `mint.jso
 
 ## Documentation
 
-Additional documentation on mint.json is available on [Mintlify's website](https://mintlify.com/docs/settings/customization).
+Additional documentation on `mint.json` is available on [Mintlify's website](https://mintlify.com/docs/settings/global).
 
 # Community
 

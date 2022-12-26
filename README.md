@@ -36,7 +36,7 @@
   <p>
     <a href="https://mintlify.com" target="_blank">
       <img
-        src="https://res.cloudinary.com/mintlify/image/upload/v1665198043/hero_miudcf.svg"
+        src="https://mintlify-assets.b-cdn.net/website/mintlify-preview.png"
         alt="Mintlify"
         width="100%"
       />

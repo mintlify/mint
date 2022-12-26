@@ -3,67 +3,72 @@ title: "Quickstart"
 description: "Build beautiful documentation that converts users"
 ---
 
-![Hero Image](/docs/img/hero.png)
-
-## Basic Configuration
-
-Every Mintlify site needs a `mint.json` file with the core configuration settings added. You can learn more about the structure of the config file at [global settings guide](/settings/customization).
-
-## Deployments
-
-Once the files are ready for deployment, you can choose to host your docs from your source control provider. Follow one of the following guides to set up deployment.
-
-<Tabs>
-<Tab title="GitHub Setup Guide">
-
-### Open a Public Repo
-
-Create a public repo where you would like to host the documentation.
+![Hero Image](https://mintlify-assets.b-cdn.net/hero.png)
 
 <Tip>
-  You can also use a private repo but it prevents users from suggesting changes
-  and raising issues.
+  See how other companies are building high-converting documentation on our [showcase](https://mintlify.com/showcase).
 </Tip>
 
-## Add Files
+## Getting Started
 
-The onboarding team will provide a zip file with the contents of the documentation. Unzip the file and add the contents into a `/docs` directory of the repo.
+The following section assumes that you have completed the [Get Started](https://mintlify.com/start) form.
 
-The result should look something like this.
+### Install the GitHub Bot
 
-<img className="rounded" src="/docs/img/docs-repo.png" />
+After you have completed the onboarding form, you should have received an email with the get started instructions.
 
-## Install the GitHub Bot
+Install the Mintlify GitHub Bot using the link provided by the email, making sure it's granted access to the repo with the documentation.
 
-Install the Mintlify GitHub Bot using request link provided by the onboarding team. Make sure it's granted access to the repo with the documentation.
+<img src="https://mintlify-assets.b-cdn.net/install-email.png" style={{borderRadius: "0.5rem", width: '28rem'}} />
 
-Now, when you make changes to the docs and push them to the main branch, it will automatically deploy to your documentation page!
+Now, when you make changes to the docs and push them to the main branch, it will automatically update your documentation page! It's that simple
 
-</Tab>
+## Learn More
 
-<Tab title="GitLab Setup Guide">
+### Common Guides
 
-### Generate a GitLab access token
+Select from the following guides to learn more about how Mintlify can best suit your documentation.
 
-You can use a [Personal Access Tokens](https://gitlab.com/-/profile/personal_access_tokens) if you are on GitLab's free tier or a Project Access Token if you are on their paid tier.
+<CardGroup>
 
-The token needs `read_api` and `read_repository` permissions. We recommend setting an expiration at least one year in the future.
+<Card title="Development" icon="rectangle-terminal" href="/development">
+  Run Mintlify on your computer to see changes locally
+</Card>
 
-<img className="rounded" src="/docs/img/token-permissions.png" />
+<Card title="Global Settings" icon="sliders" href="/settings/global">
+  Customizing the theme, branding, and other global configurations
+</Card>
 
-### Get your Project ID from your project's home page
+<Card title="Page Titles and Metadata" icon="heading" href="/settings/page">
+  Setting the title and metadata for navigation and SEO
+</Card>
 
-<img className="rounded" src="/docs/img/project-id.png" />
+<Card title="Writing Content" icon="pen-nib" href="/components/overview">
+  Introduction on how to add and edit content
+</Card>
 
-### Send us your details
+</CardGroup>
 
-We need your `accessToken`, `projectId`, and `deployBranch`.
+### Advanced Topics
 
-Please use [Password Link](https://password.link/) to send the information securely. You don't need an account to use Password Link
+Dive deeper into advanced guides to take your documentation to the next level.
 
-### Create a GitLab webhook
+<CardGroup>
 
-On your project page go to Settings > Webhooks. Enter `https://server.mintlify.com/api/v1/sites/deploys/gitlab-listener` as the webhook URL. Enter your bearer token as the secret. Make the trigger run on push events to your deploy branch, likely "main" or "master" depending on your repository.
+<Card title="Custom Domains" icon="browser" href="/settings/custom-domain/subdomain">
+  Get the documentation hosted at your custom domain
+</Card>
 
-</Tab>
-</Tabs>
+<Card title="Advanced Components" icon="paintbrush-pencil" href="/components/advanced/accordion">
+  Advanced components built for specific communication mediums
+</Card>
+
+<Card title="API Components" icon="square-code" href="/api-components/overview">
+  Add an API playground into your documentation
+</Card>
+
+<Card title="Analytics" icon="chart-mixed" href="/analytics/supported-integrations">
+  Learn how users are interacting with your documentation
+</Card>
+
+</CardGroup>

@@ -43,7 +43,7 @@ const Social = ({ type, url }: SocialProps) => {
       <Icon
         icon={icon}
         iconType="solid"
-        className="h-5 w-5 bg-slate-400 dark:bg-slate-500 hover:bg-slate-500 dark:hover:bg-slate-400"
+        className="h-5 w-5 bg-zinc-400 dark:bg-zinc-500 hover:bg-zinc-500 dark:hover:bg-zinc-400"
       />
     </a>
   );

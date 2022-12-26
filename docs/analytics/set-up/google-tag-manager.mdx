@@ -1,0 +1,27 @@
+---
+title: "Google Tag Manager"
+---
+
+Add your tag ID to `mint.json` file and we'll inject the Google Tag Manager script to all your pages.
+
+You are responsible for setting up cookie consent banners with Google Tag Manager if you need them.
+
+<CodeGroup>
+
+```json Analytics options in mint.json
+"analytics": {
+    "gtm": {
+        "tagId": "required"
+    },
+}
+```
+
+```json Example
+"analytics": {
+    "gtm": {
+        "tagId": "GTM-MGBL4PW"
+    },
+}
+```
+
+</CodeGroup>

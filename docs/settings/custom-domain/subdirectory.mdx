@@ -1,0 +1,71 @@
+---
+title: "Subdirectory"
+description: "Host documentation at a /docs subdirectory"
+---
+
+<Tip>
+  Custom subdirectory is available as part of the [Enterprise Plan](https://mintlify.com/pricing)
+</Tip>
+
+## Set up Cloudflare
+
+Sign up for an account and [add your site to Cloudflare](https://developers.cloudflare.com/fundamentals/get-started/setup/add-site/).
+
+## Create Cloudflare Worker
+
+Navigate to the `Workers > Create a service`. You should be able to presented with the following screen where you can create a new Cloudlfare worker.
+
+<img alt="Create a Cloudflare worker" src="https://mintlify-assets.b-cdn.net/cloudflare-worker.png" style={{borderRadius: "0.5rem"}} />
+
+### Add custom domain
+
+Once the worker is created, navigate to the worker settings and then `Triggers > Custom Domains`. Click on `Add Custom Domain` to then add your following domains into the list.
+
+<img alt="Cloudflare worker custom domain" src="https://mintlify-assets.b-cdn.net/cloudflare-worker-custom-domain.png" style={{borderRadius: "0.5rem"}} />
+
+If you have trouble setting up custom subdirectory, [contact our support team](mailto:hi@mintlify.com) and we'll walk you through upgrading your hosting with us.
+
+### Edit Worker Script
+
+Click on `Quick edit` and add the following script into the worker's code.
+
+<Tip>
+  Edit `DOCS_URL` by replacing [SUBDOMAIN] with your unique subdomain and `CUSTOM_URL` with your website's base URL.
+</Tip>
+
+```javascript
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  try {
+    const urlObject = new URL(request.url);
+    // If the request is to the docs subdirectory
+    if (/^\/docs/.test(urlObject.pathname)) {
+      // Then Proxy to Mintlify
+      const DOCS_URL = "[SUBDOMAIN].mintlify.dev";
+      const CUSTOM_URL = "polybase.xyz";
+
+      let url = new URL(request.url);
+      url.hostname = DOCS_URL;
+
+      let proxyRequest = new Request(url, request);
+
+      proxyRequest.headers.set('Host', DOCS_URL);
+      proxyRequest.headers.set("X-Forwarded-Host", CUSTOM_URL);
+      proxyRequest.headers.set("X-Forwarded-Proto", "https");
+
+      return await fetch(proxyRequest);
+    }
+
+  } catch (error) {
+    // if no action found, play the regular request
+    return await fetch(request);
+  }
+
+  return await fetch(request);
+}
+```
+
+Click on `Save and deploy` and wait for the changes to propagate (it can take up to a few hours).
