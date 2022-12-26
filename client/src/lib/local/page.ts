@@ -44,36 +44,7 @@ export const getPageProps = async (slug: string) => {
     };
   }
   const favicons =
-    mintConfig?.favicon && (await confirmFaviconsWereGenerated())
-      ? {
-          icons: [
-            {
-              rel: 'apple-touch-icon',
-              sizes: '180x180',
-              href: '/favicons/apple-touch-icon.png',
-              type: 'image/png',
-            },
-            {
-              rel: 'icon',
-              sizes: '32x32',
-              href: '/favicons/favicon-32x32.png',
-              type: 'image/png',
-            },
-            {
-              rel: 'icon',
-              sizes: '16x16',
-              href: '/favicons/favicon-16x16.png',
-              type: 'image/png',
-            },
-            {
-              rel: 'shortcut icon',
-              href: '/favicons/favicon.ico',
-              type: 'image/x-icon',
-            },
-          ],
-          browserconfig: '/favicons/browserconfig.xml',
-        }
-      : undefined;
+    mintConfig?.favicon && (await confirmFaviconsWereGenerated()) ? defaultFavicons : undefined;
   let openApiFiles = [];
   try {
     openApiFiles = await getPrebuiltData('openApiFiles');
@@ -84,4 +55,33 @@ export const getPageProps = async (slug: string) => {
     pageData: prepareToSerialize({ mintConfig, navWithMetadata, openApiFiles, pageMetadata }),
     favicons,
   };
+};
+
+const defaultFavicons = {
+  icons: [
+    {
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      href: '/favicons/apple-touch-icon.png',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      sizes: '32x32',
+      href: '/favicons/favicon-32x32.png',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      sizes: '16x16',
+      href: '/favicons/favicon-16x16.png',
+      type: 'image/png',
+    },
+    {
+      rel: 'shortcut icon',
+      href: '/favicons/favicon.ico',
+      type: 'image/x-icon',
+    },
+  ],
+  browserconfig: '/favicons/browserconfig.xml',
 };
