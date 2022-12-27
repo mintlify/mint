@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import Link from 'next/link';
-import { forwardRef, useState } from 'react';
+import { ForwardedRef, forwardRef, useState } from 'react';
+
+import { DynamicLink } from '@/components/DynamicLink';
 
 import Icon from './Icon';
 
@@ -19,12 +20,12 @@ type TopLevelProps = {
 };
 
 const Anchor = forwardRef(
-  ({ children, href, className, icon, isActive, onClick, color }: TopLevelProps, ref: any) => {
+  ({ children, href, icon, isActive, onClick, color }: TopLevelProps, ref: ForwardedRef<any>) => {
     const [hovering, setHovering] = useState(false);
     const usePrimaryColorForText = color == null || color.includes('linear-gradient');
 
     return (
-      <a
+      <DynamicLink
         ref={ref}
         href={href}
         onClick={onClick}
@@ -60,29 +61,10 @@ const Anchor = forwardRef(
           {icon}
         </div>
         {children}
-      </a>
+      </DynamicLink>
     );
   }
 );
-
-export function AnchorLink({ ...props }: TopLevelProps) {
-  const { href } = props;
-  if (/^https?:\/\//.test(href)) {
-    return (
-      <li>
-        <Anchor {...props} />
-      </li>
-    );
-  }
-
-  return (
-    <li>
-      <Link href={href ?? '/'} legacyBehavior>
-        <Anchor {...props} />
-      </Link>
-    </li>
-  );
-}
 
 export function StyledAnchorLink({
   href,
@@ -107,8 +89,17 @@ export function StyledAnchorLink({
       />
     );
   return (
-    <AnchorLink {...props} as={as} href={href} icon={AnchorIcon} isActive={isActive} color={color}>
-      {name ?? href}
-    </AnchorLink>
+    <li>
+      <Anchor
+        {...props}
+        as={as}
+        href={href ?? '/'}
+        icon={AnchorIcon}
+        isActive={isActive}
+        color={color}
+      >
+        {name ?? href}
+      </Anchor>
+    </li>
   );
 }
