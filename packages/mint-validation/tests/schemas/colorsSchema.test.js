@@ -40,7 +40,7 @@ describe("colorsSchema", () => {
     expect(data.success).toEqual(false);
   });
 
-  test("returns works for uppercase and lowercase hexadecimals", () => {
+  test("works for uppercase and lowercase hexadecimals", () => {
     const data = colorsSchema.safeParse({
       primary: "#EFEFEF",
       secondary: "#efefef",

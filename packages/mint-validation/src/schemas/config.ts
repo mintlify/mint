@@ -50,18 +50,24 @@ const modeToggleSchema = z
   })
   .optional();
 
-const CtaButtonSchema = z.object({
-  url: z
-    .string({
-      required_error: "topbarCtaButton.url is missing",
-      invalid_type_error: "topbarCtaButton.url must be a string",
-    })
-    .url("topbarCtaButton.url must be a valid URL"),
-  type: z
-    .union([z.literal("github"), z.literal("link"), z.string()])
-    .optional(),
-  name: z.string().optional(),
-});
+const createCtaButtonSchema = (invalidTypeErrorMessage: string) =>
+  z.object(
+    {
+      url: z
+        .string({
+          required_error: "topbarCtaButton.url is missing",
+          invalid_type_error: "topbarCtaButton.url must be a string",
+        })
+        .url("topbarCtaButton.url must be a valid URL"),
+      type: z
+        .union([z.literal("github"), z.literal("link"), z.string()])
+        .optional(),
+      name: z.string().optional(),
+    },
+    {
+      invalid_type_error: invalidTypeErrorMessage,
+    }
+  );
 
 const footerSocialsSchema = z
   .union(
@@ -124,10 +130,25 @@ export const configSchema = z.object({
   api: apiSchema,
   modeToggle: modeToggleSchema,
   versions: versionsSchema,
-  metadata: z.any(),
+  metadata: z
+    .record(
+      z.string({ invalid_type_error: "metadata keys must be strings" }),
+      z
+        .string({ invalid_type_error: "metadata values must be strings" })
+        .min(1, "metadata values must not be empty")
+    )
+    .optional(),
   colors: colorsSchema,
-  topbarCtaButton: CtaButtonSchema,
-  topbarLinks: z.array(CtaButtonSchema).optional(),
+  topbarCtaButton: createCtaButtonSchema(
+    "topbarCtaButton must be an object with a url and name property. Optionally, you can also add a type property."
+  ).optional(),
+  topbarLinks: z
+    .array(
+      createCtaButtonSchema(
+        "topbarLinks array entries must be an object with a url property. Optionally, you can also add a type and name property."
+      )
+    )
+    .optional(),
   navigation: navigationConfigSchema,
   topAnchor: z.object({
     name: z.string({

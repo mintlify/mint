@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isHexadecimal } from "../utils/isHexadecimal";
+import { anchorColorSchema } from "./anchorColors";
 
 export const anchorsSchema = z
   .object({
@@ -17,48 +17,17 @@ export const anchorsSchema = z
       })
       .trim()
       .min(1, "Anchor URL is missing."),
-    icon: z.string().optional(),
-    color: z
-      .union([
-        z
-          .string({ invalid_type_error: "Anchor color must be a string." })
-          .refine(
-            (val) => isHexadecimal(val),
-            "Anchor color must be a hexadecimal color."
-          ),
-        z
-          .object({
-            from: z
-              .string({
-                invalid_type_error: "Anchor color.from must be a string.",
-              })
-              .refine(
-                (val) => isHexadecimal(val),
-                "Anchor color.from must be a hexadecimal color."
-              ),
-            via: z
-              .string({
-                invalid_type_error: "Anchor color.via must be a string.",
-              })
-              .refine(
-                (val) => isHexadecimal(val),
-                "Anchor color.via must be undefined or a hexadecimal color."
-              )
-              .optional(),
-            to: z
-              .string({
-                invalid_type_error: "Anchor color.to must be a string.",
-              })
-              .refine(
-                (val) => isHexadecimal(val),
-                "Anchor color.to must be a hexadecimal color."
-              ),
-          })
-          .strict(
-            "Anchors with gradient colors can only have properties from, via, and to with valid hexadecimal colors."
-          ),
-      ])
+    icon: z
+      .string({
+        invalid_type_error:
+          "Anchor icon must be the name of a Font Awesome icon. Visit this link to see all the available icons: https://fontawesome.com/icons",
+      })
+      .refine(
+        (iconStr) => !iconStr.startsWith("fa-"),
+        'icon does not need to start with "fa-". Please delete "fa-" and keep the rest of the icon name.'
+      )
       .optional(),
+    color: anchorColorSchema.optional(),
     isDefaultHidden: z
       .boolean({
         invalid_type_error:

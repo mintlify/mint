@@ -1,41 +1,42 @@
 import { z } from "zod";
-import { isHexadecimal } from "../utils/isHexadecimal";
+import { anchorColorSchema } from "./anchorColors";
+import { hexadecimalPattern } from "../utils/hexadecimalPattern";
 
 export const colorsSchema = z
   .object({
     primary: z
       .string({ invalid_type_error: "Primary color must be a string." })
       .min(1, "Color primary is missing.")
-      .refine(
-        (val) => isHexadecimal(val),
-        "Primary color must be a hexadecimal color."
+      .regex(
+        hexadecimalPattern,
+        "Primary color must be a hexadecimal color including the # at the start."
       ),
     light: z
       .string({ invalid_type_error: "Light color must be a string." })
-      .refine(
-        (val) => isHexadecimal(val),
-        "Light color must be a hexadecimal color."
+      .regex(
+        hexadecimalPattern,
+        "Light color must be a hexadecimal color including the # at the start."
       )
       .optional(),
     dark: z
       .string({ invalid_type_error: "Dark color must be a string." })
-      .refine(
-        (val) => isHexadecimal(val),
-        "Dark color must be a hexadecimal color."
+      .regex(
+        hexadecimalPattern,
+        "Dark color must be a hexadecimal color including the # at the start."
       )
       .optional(),
     ultraLight: z
       .string({ invalid_type_error: "UltraLight color must be a string." })
-      .refine(
-        (val) => isHexadecimal(val),
-        "UltraLight color must be a hexadecimal color."
+      .regex(
+        hexadecimalPattern,
+        "UltraLight color must be a hexadecimal color including the # at the start."
       )
       .optional(),
     ultraDark: z
       .string({ invalid_type_error: "UltraDark color must be a string." })
-      .refine(
-        (val) => isHexadecimal(val),
-        "UltraDark color must be a hexadecimal color."
+      .regex(
+        hexadecimalPattern,
+        "UltraDark color must be a hexadecimal color including the # at the start."
       )
       .optional(),
     background: z
@@ -44,21 +45,22 @@ export const colorsSchema = z
           .string({
             invalid_type_error: "Background light color must be a string.",
           })
-          .refine(
-            (val) => isHexadecimal(val),
-            "Background light color must be a hexadecimal color."
+          .regex(
+            hexadecimalPattern,
+            "Background light color must be a hexadecimal color including the # at the start."
           )
           .optional(),
         dark: z
           .string({
             invalid_type_error: "Background dark color must be a string.",
           })
-          .refine(
-            (val) => isHexadecimal(val),
-            "Background dark color must be a hexadecimal color."
+          .regex(
+            hexadecimalPattern,
+            "Background dark color must be a hexadecimal color including the # at the start."
           )
           .optional(),
       })
       .optional(),
+    anchors: anchorColorSchema.optional(),
   })
   .strict("Some of the colors in mint.json are invalid.");
