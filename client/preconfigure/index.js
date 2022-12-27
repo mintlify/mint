@@ -2,7 +2,7 @@
 import categorizeFiles from './categorizeFiles.js';
 import { update } from './update.js';
 
-const contentDirectoryPath = process.argv[2] ?? 'content';
+const contentDirectoryPath = process.argv[2] ?? '../docs'; // TODO - change default folder to something more generic for self-serve
 
 const preconfigure = async () => {
   const { contentFilenames, staticFilenames, openApiFiles } = await categorizeFiles(
