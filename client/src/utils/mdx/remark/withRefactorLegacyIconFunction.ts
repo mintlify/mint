@@ -1,7 +1,7 @@
 import type { Root } from 'mdast';
 import visit from 'unist-util-visit';
 
-// TODO - remove this once we change everybody's format
+// TODO - remove this once we deprecate legacy format i.e. icon("house")
 const withRefactorLegacyIconFunction = () => {
   return (tree: Root) => {
     visit(
