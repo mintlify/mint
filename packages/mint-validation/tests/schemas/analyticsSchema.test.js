@@ -6,11 +6,6 @@ describe("analyticsSchema", () => {
     expect(data.success).toEqual(true);
   });
 
-  test("works fine when analytics object is undefined", () => {
-    const data = analyticsSchema.safeParse(undefined);
-    expect(data.success).toEqual(true);
-  });
-
   test("works fine when one of the keys is set and all the values are there", () => {
     const data = analyticsSchema.safeParse({
       amplitude: { apiKey: "randomApiKey" },

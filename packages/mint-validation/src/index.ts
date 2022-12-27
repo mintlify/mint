@@ -24,7 +24,7 @@ export function validateMintConfig(config: ConfigType): MintValidationResults {
   ];
   const validateVersionsInNavigationResult = validateVersionsInNavigation(
     config.navigation,
-    config.versions
+    config.versions ?? []
   );
   results.errors = [
     ...results.errors,
@@ -36,7 +36,14 @@ export function validateMintConfig(config: ConfigType): MintValidationResults {
   if (validateConfigResult.success == false) {
     const errors = validateConfigResult.error.issues;
     errors.forEach((e) => {
-      results.errors = [...results.errors, e.message];
+      let message = e.message;
+
+      // Fallback if we forget to set a required_error
+      if (message === "Required") {
+        message = "Missing required field: " + e.path.join(".");
+      }
+
+      results.errors = [...results.errors, message];
     });
   }
   results.status = results.errors.length ? "error" : "success";

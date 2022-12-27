@@ -162,5 +162,4 @@ export const analyticsSchema = z
   })
   .strict(
     "Mintlify only supports analytics integrations from: amplitude, fathom, ga4, gtm, hotjar, logrocket, mixpanel, pirsch, posthog, and plausible."
-  )
-  .optional();
+  );

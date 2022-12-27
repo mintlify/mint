@@ -7,5 +7,4 @@ export const versionsSchema = z
   .min(
     1,
     "Versions array cannot be empty. Either delete the property or add strings to the array."
-  )
-  .optional();
+  );

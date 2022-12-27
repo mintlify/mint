@@ -40,5 +40,4 @@ export const anchorsSchema = z
       })
       .optional(),
   })
-  .array()
-  .optional();
+  .array();

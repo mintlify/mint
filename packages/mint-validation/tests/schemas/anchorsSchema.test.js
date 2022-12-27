@@ -1,17 +1,5 @@
 import { anchorsSchema } from "../../src/schemas/anchors";
 
-// test("validateAnchorsWarning returns a warning when anchors is empty", () => {
-//   const data = analyticsSchema.safeParse([]);
-//   expect(validationResults.warnings.length).toEqual(1);
-//   expect(validationResults.errors.length).toEqual(0);
-// });
-
-// test("validateAnchors returns a warning when anchors is undefined", () => {
-//   const validationResults = validateAnchors();
-//   expect(validationResults.warnings.length).toEqual(1);
-//   expect(validationResults.errors.length).toEqual(0);
-// });
-
 describe("anchorsSchema", () => {
   test("accepts gradient color syntax", () => {
     const data = anchorsSchema.safeParse([
