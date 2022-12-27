@@ -3,13 +3,25 @@ import { isHexadecimal } from "../utils/isHexadecimal";
 
 export const anchorsSchema = z
   .object({
-    name: z.string().trim().min(1, "Anchor name is missing."),
-    url: z.string().trim().min(1, "Anchor URL is missing."),
+    name: z
+      .string({
+        required_error: "Every anchor must have a name.",
+        invalid_type_error: "Anchor name must be a string.",
+      })
+      .trim()
+      .min(1, "Anchor name is empty."),
+    url: z
+      .string({
+        required_error: "Every anchor must have a url",
+        invalid_type_error: "Anchor url must be a string.",
+      })
+      .trim()
+      .min(1, "Anchor URL is missing."),
     icon: z.string().optional(),
     color: z
       .union([
         z
-          .string()
+          .string({ invalid_type_error: "Anchor color must be a string." })
           .refine(
             (val) => isHexadecimal(val),
             "Anchor color must be a hexadecimal color."
@@ -17,20 +29,26 @@ export const anchorsSchema = z
         z
           .object({
             from: z
-              .string()
+              .string({
+                invalid_type_error: "Anchor color.from must be a string.",
+              })
               .refine(
                 (val) => isHexadecimal(val),
                 "Anchor color.from must be a hexadecimal color."
               ),
             via: z
-              .string()
+              .string({
+                invalid_type_error: "Anchor color.via must be a string.",
+              })
               .refine(
                 (val) => isHexadecimal(val),
                 "Anchor color.via must be undefined or a hexadecimal color."
               )
               .optional(),
             to: z
-              .string()
+              .string({
+                invalid_type_error: "Anchor color.to must be a string.",
+              })
               .refine(
                 (val) => isHexadecimal(val),
                 "Anchor color.to must be a hexadecimal color."
@@ -41,8 +59,17 @@ export const anchorsSchema = z
           ),
       ])
       .optional(),
-    isDefaultHidden: z.boolean().optional(),
-    version: z.string().optional(),
+    isDefaultHidden: z
+      .boolean({
+        invalid_type_error:
+          "Anchor isDefaultHidden must be a boolean. Try writing true or false without quotes around them.",
+      })
+      .optional(),
+    version: z
+      .string({
+        invalid_type_error: "Version must be a string in the versions array.",
+      })
+      .optional(),
   })
   .array()
   .optional();

@@ -21,7 +21,7 @@ describe("analyticsSchema", () => {
   test("works fine when one ore more of the keys is set and all the values are there", () => {
     const data = analyticsSchema.safeParse({
       amplitude: { apiKey: "randomApiKey" },
-      ga4: { measurementId: "randomId" },
+      ga4: { measurementId: "G-1234" },
     });
     expect(data.success).toEqual(true);
   });
@@ -36,5 +36,15 @@ describe("analyticsSchema", () => {
       posthog: { apiKey: "randomKey", apiHost: "notHttp" },
     });
     expect(data.success).toEqual(false);
+  });
+
+  test("returns error when plausible site starts with http", () => {
+    const data = analyticsSchema.safeParse({
+      plausible: { domain: "https://site.com" },
+    });
+    expect(data.success).toEqual(false);
+    expect(data.error.errors[0].message).toEqual(
+      "Plausible domain must not start with http:// or https://"
+    );
   });
 });
