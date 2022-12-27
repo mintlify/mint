@@ -9,7 +9,6 @@
     "declaration": true,
     "allowJs": true,
     "esModuleInterop": true,
-    "emitDeclarationOnly": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
