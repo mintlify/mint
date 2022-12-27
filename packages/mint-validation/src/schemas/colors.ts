@@ -63,4 +63,6 @@ export const colorsSchema = z
       .optional(),
     anchors: anchorColorSchema.optional(),
   })
-  .strict("Some of the colors in mint.json are invalid.");
+  .strict(
+    "Some of the colors in mint.json are invalid. We only accept primary, light, dark, ultraLight, ultraDark, background, and anchors."
+  );
