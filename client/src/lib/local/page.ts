@@ -51,7 +51,7 @@ export const getPageProps = async (
   }
   let pageMetadata: PageMetaTags = {};
   navWithMetadata.forEach((group) => {
-    const foundPage = findPageInGroup(group, pagePath);
+    const foundPage = findPageInGroup(group, '/' + slug);
     if (foundPage) {
       pageMetadata = foundPage.page;
       return false;
