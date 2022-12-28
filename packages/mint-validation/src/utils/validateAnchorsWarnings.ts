@@ -1,4 +1,4 @@
-import { AnchorsType } from "@/types/anchors";
+import { AnchorsType } from "../types/anchors";
 import { MintValidationResults } from "./common";
 
 export function validateAnchorsWarnings(anchors?: AnchorsType) {

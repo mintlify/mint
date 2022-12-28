@@ -9,11 +9,11 @@
 # Usage
 
 ```
-import { validateMintConfig } from "mint-validation"
+import mintValidation from "mint-validation"
 
 const configObject = { name: "Site Name", navigation: [] }
 
-validateMintConfig(configObject)
+mintValidation.validateMintConfig(configObject)
 ```
 
 This package assumes you have already loaded a config object into a JavaScript object.

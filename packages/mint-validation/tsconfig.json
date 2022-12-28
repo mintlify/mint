@@ -1,21 +1,14 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "node16",
+    "target": "es5",
     "moduleResolution": "node",
-    "target": "es2020",
-    "lib": ["ES2020"],
-    "outDir": "bin",
+    "outDir": "dist",
     "declaration": true,
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/utils/*": ["src/utils/*"],
-      "@/types/*": ["src/types/*"],
-      "@/schemas/*": ["src/schemas/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["src/**/*"]
 }

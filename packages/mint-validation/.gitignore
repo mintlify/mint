@@ -6,4 +6,5 @@ yarn.lock
 # Output
 lib
 bin/
+dist/
 .vscode/

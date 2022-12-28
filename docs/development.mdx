@@ -1,17 +1,27 @@
 ---
 title: "Development"
-description: "Run Mintlify on your computer to see changes locally"
+description: "Install the Mintlify CLI to preview changes locally"
 ---
 
-## Installing
+<Tabs>
+  <Tab title="npm">
 
-Download the Mintlify <Tooltip tip="Command-line Interface">CLI</Tooltip> using the following command.
+  Using the [npm](https://www.npmjs.com) package manager
 
-```bash Terminal
-npm i -g mintlify
-```
+  ```bash
+  npm i -g mintlify
+  ```
+  </Tab>
+  <Tab title="yarn">
+  Using the [yarn](https://yarnpkg.com) package manager
 
-## Previewing Docs Locally
+  ```bash
+  yarn global add mintlify
+  ```
+  </Tab>
+</Tabs>
+
+## Previewing Changes Locally
 
 Run the following command at the root of your documentation where `mint.json` is located. Mintlify will open at `localhost:3000`.
 
@@ -19,25 +29,22 @@ Run the following command at the root of your documentation where `mint.json` is
 mintlify dev
 ```
 
-<Tip>
-
-The Mintlify CLI will automatically move to the next port if you were already running something at `localhost:3000`. For example, if you were running two documentation sites, they would be at `localhost:3000` and `localhost:3001`.
-
-</Tip>
-
 ## Troubleshooting
 
 Here's how to solve some common problems when working with the CLI.
 
 <AccordionGroup>
-  <Accordion title="Mintlify is not loading" icon="circle-exclamation">
+  <Accordion title="Mintlify is not loading">
     Update to Node v18 and the latest version of Git.
   </Accordion>
-
   <Accordion
     title="Mintlify is not loading after updating Node and Git"
-    icon="circle-exclamation"
   >
     Run `mintlify install` and try again.
+  </Accordion>
+  <Accordion
+    title="Port 3000 is already taken"
+  >
+    The Mintlify CLI will automatically move to the next port if you were already running something at `localhost:3000`. For example, if you were running two documentation sites, they would be at `localhost:3000` and `localhost:3001`.
   </Accordion>
 </AccordionGroup>
