@@ -287,6 +287,7 @@ export function SearchProvider({ subdomain, children }: { subdomain?: string; ch
   };
   if (!subdomain) {
     // TODO: Make search work in single-tenant
+    // https://github.com/mintlify/mint/issues/119
     return children;
   }
 

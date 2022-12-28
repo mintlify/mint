@@ -82,10 +82,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
         });
         mdxSource = response;
       } catch (err) {
-        mdxSource = await getMdxSource(
-          '🚧 A parsing error occured. Please contact the owner of this website. They can use the Mintlify CLI to test this website locally and see the errors that occur.',
-          { pageMetadata }
-        ); // placeholder content for when there is a syntax error.
+        mdxSource = await getMdxSource('🚧 A parsing error occured.', { pageMetadata }); // placeholder content for when there is a syntax error.
         console.log(`⚠️ Warning: MDX failed to parse page ${slugStr}: `, err);
       }
       return {

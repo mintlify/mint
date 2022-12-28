@@ -21,7 +21,7 @@ export default function middleware(req: NextRequest) {
     : hostname.replace('.localhost:3000', '');
 
   // rewrite root application to main folder
-  if (hostname === 'localhost:3000' || hostname === 'platformize.vercel.app') {
+  if (hostname === 'localhost:3000') {
     // TODO: change so it detects if it's at a subdomain or not
     return NextResponse.rewrite(url);
   }

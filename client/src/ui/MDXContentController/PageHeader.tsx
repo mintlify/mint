@@ -68,6 +68,8 @@ export function PageHeader({ section, pageMetadata }: PageHeaderProps) {
               </p>
             )}
           </div>
+          {/* TODO: Make UserFeedback work in self-hosting
+          https://github.com/mintlify/mint/issues/118 */}
           {subdomain && <UserFeedback />}
         </div>
         <div className="flex items-center">

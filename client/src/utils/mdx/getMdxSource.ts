@@ -10,7 +10,6 @@ import withRawComponents from './rehype/withRawComponents.js';
 import withRemoveUnknownJsx from './rehype/withRemoveUnknownJsx';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
 import withFrames from './remark/withFrames.js';
-import withRefactorLegacyIconFunction from './remark/withRefactorLegacyIconFunction';
 import withRemoveImports from './remark/withRemoveImports';
 import withRemoveJavascript from './remark/withRemoveJavascript';
 import withTableOfContents from './remark/withTableOfContents.js';
@@ -22,7 +21,6 @@ const getMdxSource = async (pageContents: string, data: Record<string, unknown>)
       remarkPlugins: [
         remarkGfm,
         withRemoveJavascript,
-        withRefactorLegacyIconFunction,
         withFrames,
         withTableOfContents,
         withSmartypants,
