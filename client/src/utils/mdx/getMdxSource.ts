@@ -1,3 +1,4 @@
+import type { Root } from 'mdast';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 import withSmartypants from 'remark-smartypants';
@@ -14,7 +15,11 @@ import withRemoveImports from './remark/withRemoveImports';
 import withRemoveJavascript from './remark/withRemoveJavascript';
 import withTableOfContents from './remark/withTableOfContents.js';
 
-const getMdxSource = async (pageContents: string, data: Record<string, unknown>) => {
+const getMdxSource = async (
+  pageContents: string,
+  data: Record<string, unknown>,
+  snippetTreeMap: Record<string, Root> = {}
+) => {
   return serialize(pageContents, {
     scope: data,
     mdxOptions: {
