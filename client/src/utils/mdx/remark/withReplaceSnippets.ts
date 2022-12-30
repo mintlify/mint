@@ -5,11 +5,12 @@ const withReplaceSnippets = (snippetTreeMap: Record<string, Root>) => {
   return (tree: Root) => {
     visit(tree, ['mdxJsxFlowElement', (node: any) => node.name === 'Snippet'], (node: any) => {
       if (!node?.attributes) return;
-      const fileValue = node.attributes.find((attr: any) => attr.name === 'file')?.value?.value;
+      const fileValue = node.attributes.find((attr: any) => attr.name === 'file')?.value;
       if (!fileValue) return;
       const desiredSnippetTree = snippetTreeMap[fileValue];
-      console.log({ node, desiredSnippetTree });
-      node = desiredSnippetTree;
+      node.name = undefined;
+      node.type = desiredSnippetTree.type;
+      node.children = desiredSnippetTree.children;
     });
   };
 };
