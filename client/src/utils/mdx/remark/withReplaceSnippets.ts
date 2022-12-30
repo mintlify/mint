@@ -11,6 +11,9 @@ const withReplaceSnippets = (snippetTreeMap: Record<string, Root>) => {
       node.name = undefined;
       node.type = desiredSnippetTree.type;
       node.children = desiredSnippetTree.children;
+      node.position = undefined;
+      node.data = undefined;
+      node.attributes = undefined;
     });
   };
 };

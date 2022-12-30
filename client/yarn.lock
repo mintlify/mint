@@ -6436,7 +6436,7 @@ mdast-util-gfm-task-list-item@^1.0.0:
     "@types/mdast" "^3.0.0"
     mdast-util-to-markdown "^1.3.0"
 
-mdast-util-gfm@^2.0.0:
+mdast-util-gfm@^2.0.0, mdast-util-gfm@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/mdast-util-gfm/-/mdast-util-gfm-2.0.1.tgz#16fcf70110ae689a06d77e8f4e346223b64a0ea6"
   integrity sha512-42yHBbfWIFisaAfV1eixlabbsa6q7vHeSPY+cg+BBjX51M8xhgMacqH9g6TftB/9+YkcI0ooV4ncfrJslzm/RQ==
@@ -6637,7 +6637,7 @@ micromark-extension-gfm-task-list-item@^1.0.0:
     micromark-util-types "^1.0.0"
     uvu "^0.5.0"
 
-micromark-extension-gfm@^2.0.0:
+micromark-extension-gfm@^2.0.0, micromark-extension-gfm@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/micromark-extension-gfm/-/micromark-extension-gfm-2.0.1.tgz#40f3209216127a96297c54c67f5edc7ef2d1a2a2"
   integrity sha512-p2sGjajLa0iYiGQdT0oelahRYtMWvLjy8J9LOCxzIQsllMCGLbsLW+Nc+N4vi02jcRJvedVJ68cjelKIO6bpDA==
