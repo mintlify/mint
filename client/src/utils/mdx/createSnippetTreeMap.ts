@@ -5,21 +5,33 @@ import { mdxFromMarkdown } from 'mdast-util-mdx';
 import { gfm } from 'micromark-extension-gfm';
 import { mdxjs } from 'micromark-extension-mdxjs';
 
-const createSnippetTreeMap = (snippets: Record<string, string>) => {
+import { Snippet } from '@/types/snippet';
+
+const createSnippetTreeMap = (snippets: Snippet[]) => {
+  const orderedSnippets = orderSnippetsByNumberOfSnippetsInContent(snippets);
   let treeMap: Record<string, Root> = {};
-  for (const property in snippets) {
+  orderedSnippets.forEach((snippet) => {
     try {
-      const tree = fromMarkdown(snippets[property], {
+      const tree = fromMarkdown(snippet.content, {
         extensions: [gfm(), mdxjs()],
         mdastExtensions: [gfmFromMarkdown(), mdxFromMarkdown()],
       });
       treeMap = {
         ...treeMap,
-        [property]: tree,
+        [snippet.snippetFileLocation]: tree,
       };
     } catch {}
-  }
+  });
   return treeMap;
+};
+
+const orderSnippetsByNumberOfSnippetsInContent = (snippets: Snippet[]) => {
+  snippets.sort(function (first, second) {
+    const firstNumSnippets = (first.content.match(/<Snippet/g) || []).length;
+    const secondNumSnippets = (second.content.match(/<Snippet/g) || []).length;
+    return firstNumSnippets - secondNumSnippets;
+  });
+  return snippets;
 };
 
 export default createSnippetTreeMap;
