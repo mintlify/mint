@@ -92,7 +92,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
       favicons: FaviconsProps;
       snippets: Snippet[];
     } = data;
-    const snippetTreeMap = createSnippetTreeMap(snippets);
+    const snippetTreeMap = await createSnippetTreeMap(snippets);
     let mdxSource: any = '';
 
     try {

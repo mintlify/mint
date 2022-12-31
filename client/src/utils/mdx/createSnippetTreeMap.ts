@@ -17,6 +17,9 @@ type SnippetWithNumSnippets = Snippet & {
 };
 
 const createSnippetTreeMap = async (snippets: Snippet[]) => {
+  if (snippets.length === 0) {
+    return {};
+  }
   const orderedSnippets = orderSnippetsByNumberOfSnippetsInContent(snippets);
   console.log({ orderedSnippets });
   let treeMap: Record<string, Root> = {};

@@ -85,6 +85,7 @@
     "unist-util-map": "^3.1.2",
     "unist-util-remove": "^3.1.0",
     "unist-util-remove-position": "^4.0.1",
+    "vfile": "^5.3.6",
     "webpack": "^5.74.0"
   },
   "devDependencies": {
