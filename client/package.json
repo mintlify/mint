@@ -22,7 +22,7 @@
     "@mdx-js/loader": "^2.1.3",
     "@mdx-js/mdx": "^2.1.5",
     "@mdx-js/react": "^2.1.3",
-    "@mintlify/components": "^0.2.4",
+    "@mintlify/components": "^0.2.6",
     "@next/font": "^13.0.6",
     "@next/mdx": "^12.3.0",
     "@sentry/nextjs": "^7.18.0",

@@ -26,8 +26,6 @@ export function useColors(): Colors {
     primary: primaryColor,
     primaryLight: mintConfig?.colors?.light ?? '#4ADE80',
     primaryDark: mintConfig?.colors?.dark ?? '#166534',
-    primaryUltraLight: mintConfig?.colors?.ultraLight ?? '#DCFCE7',
-    primaryUltraDark: mintConfig?.colors?.ultraDark ?? '#14532D',
     backgroundLight: mintConfig?.colors?.background?.light ?? '#ffffff',
     backgroundDark: mintConfig?.colors?.background?.dark ?? '#0f1117',
     anchors,
@@ -61,8 +59,6 @@ export type Colors = {
   primary: string;
   primaryLight: string;
   primaryDark: string;
-  primaryUltraLight: string;
-  primaryUltraDark: string;
   backgroundLight: string;
   backgroundDark: string;
   anchors: (string | undefined)[];

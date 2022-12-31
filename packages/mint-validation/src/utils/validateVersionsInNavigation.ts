@@ -11,7 +11,7 @@ export function flattenNavigationVersions(
   }
 
   nav.forEach((val) => {
-    if (typeof val === "string") {
+    if (val == null || typeof val === "string") {
       return versions;
     }
 
@@ -19,7 +19,7 @@ export function flattenNavigationVersions(
       versions.push(val.version);
     }
 
-    if (typeof val.pages === "string") {
+    if (!Array.isArray(val.pages)) {
       return versions;
     }
 
@@ -31,12 +31,8 @@ export function flattenNavigationVersions(
 
 export function validateVersionsInNavigation(
   navigation: NavigationType[] | undefined,
-  versions: VersionsType | undefined
+  versions: VersionsType | undefined = []
 ) {
-  if (versions == null) {
-    versions = [];
-  }
-
   let results = new MintValidationResults();
 
   const versionsFromNavigation = flattenNavigationVersions(navigation);

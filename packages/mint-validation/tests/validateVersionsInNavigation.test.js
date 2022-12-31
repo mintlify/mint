@@ -45,28 +45,28 @@ describe("validateVersionsInNavigation", () => {
 
 describe("flattenNavigationVersions", () => {
   test("returns the correct values", () => {
-    const data = flattenNavigationVersions([
+    const results = flattenNavigationVersions([
       {
         group: "1",
         pages: [""],
         version: "1",
       },
     ]);
-    expect(data).toEqual(["1"]);
+    expect(results).toEqual(["1"]);
   });
 
   test("returns empty when there's no versions", () => {
-    const data = flattenNavigationVersions([
+    const results = flattenNavigationVersions([
       {
         group: "1",
         pages: [""],
       },
     ]);
-    expect(data).toEqual([]);
+    expect(results).toEqual([]);
   });
 
   test("returns recursive version values", () => {
-    const data = flattenNavigationVersions([
+    const results = flattenNavigationVersions([
       {
         group: "1",
         pages: [
@@ -85,6 +85,17 @@ describe("flattenNavigationVersions", () => {
         version: "1",
       },
     ]);
-    expect(data).toEqual(["1", "3", "2"]);
+    expect(results).toEqual(["1", "3", "2"]);
+  });
+
+  test("skips over null values in pages array", () => {
+    const results = flattenNavigationVersions([
+      {
+        group: "1",
+        pages: [null, "", undefined],
+        version: "1",
+      },
+    ]);
+    expect(results).toEqual(["1"]);
   });
 });

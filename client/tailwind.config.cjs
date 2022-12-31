@@ -47,8 +47,6 @@ module.exports = {
         primary: 'var(--primary)',
         'primary-light': 'var(--primary-light)',
         'primary-dark': 'var(--primary-dark)',
-        'primary-ultralight': 'var(--primary-ultra-light)',
-        'primary-ultradark': 'var(--primary-ultra-dark)',
         'background-light': 'var(--background-light)',
         'background-dark': 'var(--background-dark)',
       },

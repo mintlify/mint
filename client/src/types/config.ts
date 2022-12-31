@@ -72,8 +72,6 @@ export type Config = {
     primary: string;
     light?: string;
     dark?: string;
-    ultraLight?: string;
-    ultraDark?: string;
     background?: {
       light?: string;
       dark?: string;

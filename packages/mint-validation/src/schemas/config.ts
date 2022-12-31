@@ -56,22 +56,52 @@ const modeToggleSchema = z.object({
     .optional(),
 });
 
-const createCtaButtonSchema = (invalidTypeErrorMessage: string) =>
-  z.object(
-    {
-      url: z
-        .string({
-          required_error: "topbarCtaButton.url is missing",
-          invalid_type_error: "topbarCtaButton.url must be a string",
+const createCtaButtonSchema = (ctaButtonName: string) =>
+  z.union(
+    [
+      z
+        .object({
+          type: z.literal("link").optional(),
+          name: z.string({
+            required_error: "Name must be defined when using a CTA button",
+            invalid_type_error: "Name must be a string",
+          }),
+          url: z
+            .string({
+              required_error: ctaButtonName + ".url is missing",
+              invalid_type_error: ctaButtonName + ".url must be a string",
+            })
+            .min(1, ctaButtonName + ".url cannot be empty"),
         })
-        .url("topbarCtaButton.url must be a valid URL"),
-      type: z
-        .union([z.literal("github"), z.literal("link"), z.string()])
-        .optional(),
-      name: z.string().optional(),
-    },
+        .strict(
+          "CTA button can only contain name, url, and type properties. Set a different type if you need to set other fields."
+        ),
+      z
+        .object({
+          type: z.literal("github"),
+          url: z
+            .string({
+              required_error:
+                ctaButtonName +
+                ".url is missing. Please set the url to a link to your GitHub repository.",
+              invalid_type_error:
+                ctaButtonName +
+                ".url must be a string. Specifically, set the url to a link to your GitHub repository.",
+            })
+            .url(
+              ctaButtonName +
+                ".url must be a valid url pointing to your GitHub repository."
+            ),
+        })
+        .strict(
+          ctaButtonName +
+            ' can only contain url and type properties when type="github". Please delete any other properties you have set.'
+        ),
+    ],
     {
-      invalid_type_error: invalidTypeErrorMessage,
+      invalid_type_error:
+        ctaButtonName +
+        ' must be an object. The object can have type="link" (the default) if you define a url and a name. You can also have type="github" if you define a url pointing to your GitHub repo and set the type in the object.',
     }
   );
 
@@ -135,16 +165,8 @@ export const configSchema = z.object({
     )
     .optional(),
   colors: colorsSchema,
-  topbarCtaButton: createCtaButtonSchema(
-    "topbarCtaButton must be an object with a url and name property. Optionally, you can also add a type property."
-  ).optional(),
-  topbarLinks: z
-    .array(
-      createCtaButtonSchema(
-        "topbarLinks array entries must be an object with a url property. Optionally, you can also add a type and name property."
-      )
-    )
-    .optional(),
+  topbarCtaButton: createCtaButtonSchema("topbarCtaButton").optional(),
+  topbarLinks: z.array(createCtaButtonSchema("topbarLinks")).optional(),
   navigation: navigationConfigSchema,
   topAnchor: z
     .object(

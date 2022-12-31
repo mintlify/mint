@@ -179,10 +179,11 @@ function TopBarCtaButton({ button }: { button: TopbarCta }) {
         <Link
           href={button.url ?? '/'}
           target="_blank"
-          className="relative inline-flex items-center space-x-2 px-4 py-1.5 shadow-sm text-sm font-medium rounded-full text-white bg-primary-dark hover:bg-primary-ultradark"
+          className="group px-4 py-1.5 relative inline-flex items-center rounded-full shadow-sm text-sm font-medium"
         >
-          <span>{button.name}</span>
-          <svg width="6" height="3" className="h-2 overflow-visible -rotate-90" aria-hidden="true">
+          <span className="absolute z-0 inset-0 bg-primary-dark rounded-full group-hover:opacity-[0.9]"></span>
+          <span className="z-10 mr-2 text-white">{button.name}</span>
+          <svg width="6" height="3" className="h-2 overflow-visible -rotate-90 text-white" aria-hidden="true">
             <path
               d="M0 0L3 3L6 0"
               fill="none"

@@ -1,6 +1,7 @@
 import { configSchema } from "./schemas/config";
 import { ConfigType } from "./types/config";
 import { MintValidationResults } from "./utils/common";
+import { flattenUnionErrorMessages } from "./utils/flattenUnionErrorMessages";
 import { validateAnchorsWarnings } from "./utils/validateAnchorsWarnings";
 import { validateVersionsInNavigation } from "./utils/validateVersionsInNavigation";
 
@@ -40,14 +41,20 @@ export function validateMintConfig(config: ConfigType): MintValidationResults {
   if (validateConfigResult.success == false) {
     const errors = validateConfigResult.error.issues;
     errors.forEach((e) => {
-      let message = e.message;
+      if (e.code === "invalid_union" && e.unionErrors?.length > 0) {
+        results.errors.push(
+          ...flattenUnionErrorMessages(e.unionErrors as any[])
+        );
+      } else {
+        let message = e.message;
 
-      // Fallback if we forget to set a required_error
-      if (message === "Required") {
-        message = "Missing required field: " + e.path.join(".");
+        // Fallback if we forget to set a required_error
+        if (message === "Required") {
+          message = "Missing required field: " + e.path.join(".");
+        }
+
+        results.errors.push(message);
       }
-
-      results.errors = [...results.errors, message];
     });
   }
   results.status = results.errors.length ? "error" : "success";
