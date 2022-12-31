@@ -10,10 +10,10 @@ import withListRoles from './rehype/withListRoles.js';
 import withRawComponents from './rehype/withRawComponents.js';
 import withRemoveUnknownJsx from './rehype/withRemoveUnknownJsx';
 import withSyntaxHighlighting from './rehype/withSyntaxHighlighting.js';
+import remarkMdxInjectSnippets from './remark/remarkMdxInjectSnippets';
 import withFrames from './remark/withFrames.js';
 import withRemoveImports from './remark/withRemoveImports';
 import withRemoveJavascript from './remark/withRemoveJavascript';
-import withReplaceSnippets from './remark/withReplaceSnippets';
 import withTableOfContents from './remark/withTableOfContents.js';
 
 const getMdxSource = async (
@@ -25,7 +25,7 @@ const getMdxSource = async (
     scope: data,
     mdxOptions: {
       remarkPlugins: [
-        [withReplaceSnippets, snippetTreeMap],
+        [remarkMdxInjectSnippets, snippetTreeMap],
         remarkGfm,
         withRemoveJavascript,
         withFrames,
