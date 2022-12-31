@@ -21,7 +21,6 @@ const createSnippetTreeMap = async (snippets: Snippet[]) => {
     return {};
   }
   const orderedSnippets = orderSnippetsByNumberOfSnippetsInContent(snippets);
-  console.log({ orderedSnippets });
   let treeMap: Record<string, Root> = {};
 
   // If the lowest number of references is greater than 0, then there will be cyclical references that will never resolve.
@@ -31,7 +30,6 @@ const createSnippetTreeMap = async (snippets: Snippet[]) => {
     orderedSnippets.forEach((snippet) => {
       treeMap = addSnippetTreeToMap(snippet, treeMap);
     });
-    console.log({ treeMap });
     return treeMap;
   }
   let prevNumSnippets = 0;
@@ -67,7 +65,6 @@ const createSnippetTreeMap = async (snippets: Snippet[]) => {
     }
     prevNumSnippets = snippet.numSnippetsInContent;
   });
-  console.log({ treeMap });
   return treeMap;
 };
 
