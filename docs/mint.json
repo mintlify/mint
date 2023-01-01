@@ -56,7 +56,10 @@
         "settings/versioning",
         {
           "group": "Custom Domain",
-          "pages": ["settings/custom-domain/subdomain", "settings/custom-domain/subdirectory"]
+          "pages": [
+            "settings/custom-domain/subdomain",
+            "settings/custom-domain/subdirectory"
+          ]
         }
       ]
     },
@@ -80,7 +83,8 @@
         "components/advanced/card",
         "components/advanced/frame",
         "components/advanced/tabs",
-        "components/advanced/tooltip"
+        "components/advanced/tooltip",
+        "components/advanced/custom-snippets"
       ]
     },
     {
