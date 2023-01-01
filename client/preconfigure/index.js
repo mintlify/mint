@@ -5,9 +5,10 @@ import { update } from './update.js';
 const contentDirectoryPath = process.argv[2] ?? '../docs'; // TODO - change default folder to something more generic for self-serve
 
 const preconfigure = async () => {
-  const { contentFilenames, staticFilenames, openApiFiles } = await categorizeFiles(
+  const { contentFilenames, staticFilenames, openApiFiles, snippets } = await categorizeFiles(
     contentDirectoryPath
   );
+  console.log({ snippets });
   // generateFavicon
   await update(contentDirectoryPath, staticFilenames, openApiFiles, contentFilenames);
   // generateNav
