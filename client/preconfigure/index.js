@@ -8,10 +8,7 @@ const preconfigure = async () => {
   const { contentFilenames, staticFilenames, openApiFiles, snippets } = await categorizeFiles(
     contentDirectoryPath
   );
-  console.log({ snippets });
-  // generateFavicon
-  await update(contentDirectoryPath, staticFilenames, openApiFiles, contentFilenames);
-  // generateNav
+  await update(contentDirectoryPath, staticFilenames, openApiFiles, contentFilenames, snippets);
 };
 
 (async function () {

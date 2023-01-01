@@ -54,19 +54,19 @@ export const updateOpenApiFiles = async (openApiFiles) => {
   });
 };
 
-export const updateStaticFiles = (contentDirectoryPath, staticFilenames) => {
-  const staticFilePromises = [];
-  staticFilenames.forEach((filename) => {
-    staticFilePromises.push(
+export const updateFiles = (contentDirectoryPath, targetDirectoryPath, filenames) => {
+  const filePromises = [];
+  filenames.forEach((filename) => {
+    filePromises.push(
       (async () => {
         const sourcePath = path.join(contentDirectoryPath, filename);
-        const targetPath = path.join('public', filename);
+        const targetPath = path.join(targetDirectoryPath, filename);
         await fse.remove(targetPath);
         await fse.copy(sourcePath, targetPath);
       })()
     );
   });
-  return staticFilePromises;
+  return filePromises;
 };
 
 export const updateFavicons = async (mintConfig, contentDirectoryPath) => {
@@ -105,7 +105,8 @@ export const update = async (
   contentDirectoryPath,
   staticFilenames,
   openApiFiles,
-  contentFilenames
+  contentFilenames,
+  snippets
 ) => {
   let pagesAcc = {};
   const contentPromises = [];
@@ -135,7 +136,8 @@ export const update = async (
   const initialFileUploadResponses = await Promise.all([
     updateConfigFile(contentDirectoryPath),
     ...contentPromises,
-    ...updateStaticFiles(contentDirectoryPath, staticFilenames),
+    ...updateFiles(contentDirectoryPath, 'public', staticFilenames),
+    ...updateFiles(contentDirectoryPath, 'src/_props', snippets),
     updateOpenApiFiles(openApiFiles),
   ]);
   const mintConfig = initialFileUploadResponses[0];
