@@ -32,15 +32,13 @@ const createSnippetTreeMap = async (snippets: Snippet[]) => {
     });
     return treeMap;
   }
-  let prevNumSnippets = 0;
   let failedParseArr: SnippetWithNumSnippets[] = [];
-  orderedSnippets.forEach(async (snippet, i) => {
+  orderedSnippets.forEach(async (snippet) => {
     if (snippet.numSnippetsInContent === 0) {
       // No need to remove references if none exist
       treeMap = addSnippetTreeToMap(snippet, treeMap);
     }
-    if (snippet.numSnippetsInContent > prevNumSnippets && failedParseArr.length > 0) {
-      // If we've moved on to the next level try resolving failedParses
+    if (failedParseArr.length > 0) {
       let prevArrLength = failedParseArr.length + 1;
       // We try to resolve the failed snippets which likely failed because it was referencing
       // another snippet that has not been resolved yet.
@@ -63,7 +61,6 @@ const createSnippetTreeMap = async (snippets: Snippet[]) => {
       // TODO - find exact error message for when inner snippet doesn't exist
       failedParseArr.push(snippet);
     }
-    prevNumSnippets = snippet.numSnippetsInContent;
   });
   return treeMap;
 };
