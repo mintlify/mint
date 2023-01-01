@@ -9,7 +9,9 @@ import { FaviconsProps } from '@/types/favicons';
 import { Groups, PageMetaTags } from '@/types/metadata';
 import { OpenApiFile } from '@/types/openApi';
 import { PageProps } from '@/types/page';
+import { Snippet } from '@/types/snippet';
 import Page from '@/ui/Page';
+import createSnippetTreeMap from '@/utils/mdx/createSnippetTreeMap';
 import getMdxSource from '@/utils/mdx/getMdxSource';
 import { pickRedirect } from '@/utils/staticProps/pickRedirect';
 import { prepareToSerialize } from '@/utils/staticProps/prepareToSerialize';
@@ -64,7 +66,7 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
     data.hasOwnProperty('favicons')
   ) {
     try {
-      const { content, pageData, favicons } = data as {
+      const { content, pageData, favicons, snippets } = data as {
         content: string;
         pageData: {
           mintConfig: Config;
@@ -72,14 +74,20 @@ export const getStaticProps: GetStaticProps<PageProps, PathProps> = async ({ par
           pageMetadata: PageMetaTags;
           openApiFiles?: OpenApiFile[];
         };
+        snippets: Snippet[];
         favicons: FaviconsProps;
       };
       let mdxSource: any = '';
       const { pageMetadata } = pageData;
+      const snippetTreeMap = await createSnippetTreeMap(snippets ?? []);
       try {
-        const response = await getMdxSource(content, {
-          pageMetadata,
-        });
+        const response = await getMdxSource(
+          content,
+          {
+            pageMetadata,
+          },
+          snippetTreeMap
+        );
         mdxSource = response;
       } catch (err) {
         mdxSource = await getMdxSource('🚧 A parsing error occured.', { pageMetadata }); // placeholder content for when there is a syntax error.
