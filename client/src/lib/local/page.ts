@@ -9,6 +9,7 @@ import {
   getFileContents,
   getPrebuiltData,
   confirmFaviconsWereGenerated,
+  getSnippets,
 } from './utils';
 
 /**
@@ -72,10 +73,16 @@ export const getPageProps = async (
   try {
     openApiFiles = await getPrebuiltData('openApiFiles');
   } catch {}
-
+  const snippets = await getSnippets();
   return {
     content,
-    pageData: prepareToSerialize({ mintConfig, navWithMetadata, openApiFiles, pageMetadata }),
+    pageData: prepareToSerialize({
+      mintConfig,
+      navWithMetadata,
+      openApiFiles,
+      pageMetadata,
+      snippets,
+    }),
     favicons,
   };
 };

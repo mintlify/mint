@@ -1,6 +1,8 @@
 import { promises as _promises } from 'fs';
 import { pathExists } from 'fs-extra';
 
+import { Snippet } from '@/types/snippet';
+
 const { readdir, readFile } = _promises;
 
 export const getFileList = async (dirName: string, og = dirName) => {
@@ -69,4 +71,26 @@ export const confirmFaviconsWereGenerated = async () => {
     (await pathExists('public/favicons/favicon-16x16.png')) &&
     (await pathExists('public/favicons/favicon.ico'))
   );
+};
+
+function optionallyRemoveLeadingSlash(path: string) {
+  if (!path || path.startsWith('/')) {
+    return path.substring(1);
+  }
+  return path;
+}
+
+export const getSnippets = async (): Promise<Snippet[]> => {
+  const snippetPath = 'src/_props/_snippets';
+  const snippetFilenames = await getFileList(snippetPath);
+  const snippetArr: Snippet[] = await Promise.all(
+    snippetFilenames.map(async (filename) => {
+      const content = await getFileContents(`${snippetPath}${filename}`);
+      return {
+        snippetFileLocation: optionallyRemoveLeadingSlash(filename),
+        content,
+      };
+    })
+  );
+  return snippetArr;
 };
