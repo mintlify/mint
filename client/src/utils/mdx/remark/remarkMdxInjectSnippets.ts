@@ -1,12 +1,11 @@
+/**
+ * @typedef {import('remark-mdx')}
+ */
 import type { Root } from 'mdast';
 import { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import { removePosition } from 'unist-util-remove-position';
 import visit, { SKIP } from 'unist-util-visit';
 import { VFile } from 'vfile';
-
-/**
- * @typedef {import('remark-mdx')}
- */
 
 const remarkMdxInjectSnippets = (snippetTreeMap: Record<string, Root>) => {
   return (tree: Root, file: VFile) => {
