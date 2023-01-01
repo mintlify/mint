@@ -36,7 +36,7 @@ const apiSchema = z.object(
     ]),
     auth: z
       .object({
-        method: z.string(),
+        method: z.string().optional(),
         name: z.string().optional(),
         inputPrefix: z.string().optional(),
       })
