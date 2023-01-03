@@ -84,6 +84,7 @@ export type Config = {
   navigation?: Navigation[];
   topAnchor?: {
     name: string;
+    icon?: string;
   };
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
