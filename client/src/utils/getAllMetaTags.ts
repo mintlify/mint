@@ -26,6 +26,7 @@ export function getAllMetaTags(pageMeta: PageMetaTags, configMetadata: { [key: s
     'og:type': 'website',
     'og:title': defaultTitle(pageMeta, configMetadata.name),
     'twitter:title': defaultTitle(pageMeta, configMetadata.name),
+    'og:description': pageMeta.description,
   } as { [key: string]: any };
   SEO_META_TAGS.forEach((tagName) => {
     const metaValue = pageMeta[tagName] ?? configMetadata[tagName];
