@@ -1,4 +1,5 @@
 import { AnalyticsMediatorConstructorInterface } from '@/analytics/AnalyticsMediator';
+
 import { Gradient } from './gradient';
 
 export type NavigationEntry = string | Navigation;
@@ -81,7 +82,9 @@ export type Config = {
   topbarCtaButton?: NavbarLink;
   topbarLinks?: NavbarLink[];
   navigation?: Navigation[];
-  topAnchor?: Anchor;
+  topAnchor?: {
+    name: string;
+  };
   anchors?: Anchor[];
   footerSocials?: FooterSocial[] | FooterSocials;
   backgroundImage?: string;
