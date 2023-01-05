@@ -82,6 +82,9 @@ function optionallyRemoveLeadingSlash(path: string) {
 
 export const getSnippets = async (): Promise<Snippet[]> => {
   const snippetPath = 'src/_props/_snippets';
+  if (!(await pathExists(snippetPath))) {
+    return [];
+  }
   const snippetFilenames = await getFileList(snippetPath);
   const snippetArr: Snippet[] = await Promise.all(
     snippetFilenames.map(async (filename) => {
