@@ -2,6 +2,12 @@
 
 Docker packages the client so the CLI can run the Next.js app. `dockerfile` defines the image. `docker-compose.yml` defines the container that runs the image. You can have multiple containers per image.
 
+## Prerequisites
+
+Install docker: [https://docs.docker.com/desktop/install/mac-install/](https://docs.docker.com/desktop/install/mac-install/)
+
+## Building the Mint image
+
 Building the docker image:
 
 `docker build -t mint-dev .`
