@@ -1338,10 +1338,17 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@headlessui/react@^1.7.4", "@headlessui/react@^1.7.5":
+"@headlessui/react@^1.7.5":
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.5.tgz#c8864b0731d95dbb34aa6b3a60d0ee9ae6f8a7ca"
   integrity sha512-UZSxOfA0CYKO7QDT5OGlFvesvlR1SKkawwSjwQJwt7XQItpzRKdE3ZUQxHcg4LEz3C0Wler2s9psdb872ynwrQ==
+  dependencies:
+    client-only "^0.0.1"
+
+"@headlessui/react@^1.7.7":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.7.tgz#d6f8708d8943ae8ebb1a6929108234e4515ac7e8"
+  integrity sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==
   dependencies:
     client-only "^0.0.1"
 
@@ -1672,12 +1679,12 @@
     "@types/mdx" "^2.0.0"
     "@types/react" ">=16"
 
-"@mintlify/components@^0.2.6":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.2.6.tgz#76b68e2135020e930e74a6890f084d27a592f2b7"
-  integrity sha512-6yQALDV/fhITxosS+0RkRYhGnvgdTYaSnejgcgxiGHFyJ1caJdjZQoBqRB+ArccQGFehFh8Hzj0MbFWaAiQy6Q==
+"@mintlify/components@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@mintlify/components/-/components-0.2.7.tgz#8ba5d1dfe17f1395bfa190d91101021feebd5e52"
+  integrity sha512-GZKe3ivjo2pAphdqGmjEKbF/oKLbOIT/Ml+B4N4M460YdwpGeh00ni/R5zlqvkWtrx1SLSWqMiBLqbJY7ugdEg==
   dependencies:
-    "@headlessui/react" "^1.7.4"
+    "@headlessui/react" "^1.7.7"
     assert "^2.0.0"
     clsx "^1.1.1"
     is-absolute-url "^4.0.1"
