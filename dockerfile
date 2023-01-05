@@ -24,4 +24,4 @@ ENV PORT 3000
 
 # By default, run the web service on container startup.
 # This command can be overriden by changing it in the docker run command.
-CMD [ "yarn", "run", "dev" ]
+CMD ["sh", "-c", "yarn run dev"]
