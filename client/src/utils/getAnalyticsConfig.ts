@@ -14,7 +14,6 @@ export function getAnalyticsConfig(config: Config) {
       ...constructAnalytics(config.analytics),
     };
   }
-  console.log({ analyticsConfig });
   return analyticsConfig;
 }
 // Note: It's really bad we have to do this because the data we were sending was not clean.
