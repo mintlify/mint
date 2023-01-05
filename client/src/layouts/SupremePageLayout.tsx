@@ -53,7 +53,7 @@ export default function SupremePageLayout({
     };
   }, [navIsOpen]);
 
-  const metaTagsDict = getAllMetaTags(pageMetadata, mintConfig.metadata || {});
+  const metaTagsDict = getAllMetaTags(pageMetadata, mintConfig);
 
   return (
     <Intercom appId={mintConfig.integrations?.intercom} autoBoot>

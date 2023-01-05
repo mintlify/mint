@@ -21,13 +21,14 @@ const SEO_META_TAGS = [
   'og:image:height',
 ];
 
-export function getAllMetaTags(pageMeta: PageMetaTags, configMetadata: { [key: string]: any }) {
+export function getAllMetaTags(pageMeta: PageMetaTags, config: { [key: string]: any }) {
+  const configMetadata = config.metadata || {};
   const allMeta = {
     charset: 'utf-8',
     'description': pageMeta.description,
     'og:type': 'website',
-    'og:title': defaultTitle(pageMeta, configMetadata.name),
-    'twitter:title': defaultTitle(pageMeta, configMetadata.name),
+    'og:title': defaultTitle(pageMeta, config.name),
+    'twitter:title': defaultTitle(pageMeta, config.name),
     'og:description': pageMeta.description,
   } as { [key: string]: any };
   SEO_META_TAGS.forEach((tagName) => {
