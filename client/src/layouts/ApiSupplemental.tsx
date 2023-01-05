@@ -55,7 +55,7 @@ const recursivelyConstructExample = (schema: any, result = {}): any => {
 };
 
 const recursivelyCheckIfHasExample = (schema: any) => {
-  if (schema.example || schema.type) {
+  if (schema.example) {
     return true;
   }
 
