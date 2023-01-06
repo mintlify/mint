@@ -1,5 +1,7 @@
 name: Validation Package Unit Tests
+
 on: push
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,3 +11,7 @@ jobs:
         run: yarn
       - name: Run tests
         run: yarn test
+
+defaults:
+  run:
+    working-directory: packages/validation
