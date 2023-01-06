@@ -56,7 +56,7 @@
 
 📊 **Analytical:** Logging is built in to help you understand how users interact with your docs
 
-⚡️ **Fast:** Interactions are <100ms and deployments are instanteous
+⚡️ **Fast:** Interactions are <100ms and deployments are instantaneous
 
 #### 🌈 Make it yours
 
