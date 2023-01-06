@@ -23,20 +23,25 @@ const SEO_META_TAGS = [
 
 export function getAllMetaTags(pageMeta: PageMetaTags, config: { [key: string]: any }) {
   const configMetadata = config.metadata || {};
+
   const allMeta = {
     charset: 'utf-8',
-    'description': pageMeta.description,
     'og:type': 'website',
+    'og:site_name': config.name,
+    'og:description': pageMeta.description,
     'og:title': defaultTitle(pageMeta, config.name),
     'twitter:title': defaultTitle(pageMeta, config.name),
-    'og:description': pageMeta.description,
   } as { [key: string]: any };
+
+  console.log(config);
+
   SEO_META_TAGS.forEach((tagName) => {
     const metaValue = pageMeta[tagName] ?? configMetadata[tagName];
     if (metaValue) {
       allMeta[tagName] = metaValue;
     }
   });
+
   return allMeta;
 }
 

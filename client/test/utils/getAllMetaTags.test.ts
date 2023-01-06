@@ -6,15 +6,16 @@ describe('getAllMetaTags', () => {
       getAllMetaTags(
         { 'og:title': 'My Title' },
         {
-          'og:title': 'Config Title',
-          'og:site_name': 'Config Site Name',
+          name: 'Site Name',
+          metadata: { 'og:title': 'Config Title', 'og:site_name': 'Meta Site Name' },
         }
       )
     ).toEqual({
       'og:title': 'My Title',
-      'og:site_name': 'Config Site Name',
+      'og:site_name': 'Meta Site Name',
+      'og:description': undefined,
       'og:type': 'website',
-      'twitter:title': '', // Default title when title is not set in page meta and name is not set in config
+      'twitter:title': 'Site Name', // Default title when "title" is undefined in the page metadata
       charset: 'utf-8',
     });
   });
@@ -22,13 +23,17 @@ describe('getAllMetaTags', () => {
   test('generates default title from site name', () => {
     expect(
       getAllMetaTags(
-        { title: 'My Title' },
+        { title: 'My Title', description: 'Description' },
         {
           name: 'Site Name',
+          metadata: {},
         }
       )
     ).toEqual({
       'og:title': 'My Title - Site Name',
+      description: 'Description',
+      'og:description': 'Description',
+      'og:site_name': 'Site Name',
       'twitter:title': 'My Title - Site Name',
       'og:type': 'website',
       charset: 'utf-8',
