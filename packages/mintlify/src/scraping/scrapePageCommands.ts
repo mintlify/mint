@@ -26,7 +26,7 @@ export async function scrapePageWrapper(
 ) {
   const href = getHrefFromArgs(argv);
   let html: string;
-  if (options.puppeteer) {
+  if (options?.puppeteer) {
     html = await getHtmlWithPuppeteer(href);
   } else {
     const res = await axios.get(href);
