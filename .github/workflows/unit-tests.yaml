@@ -1,0 +1,25 @@
+name: Validation Package Unit Tests
+
+on: pull_request
+
+jobs:
+  validation-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install modules
+        run: yarn
+        working-directory: packages/validation
+      - name: Run tests
+        run: yarn test
+        working-directory: packages/validation
+  client-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install modules
+        run: yarn
+        working-directory: client
+      - name: Run tests
+        run: yarn test
+        working-directory: client
