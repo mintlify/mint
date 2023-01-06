@@ -33,8 +33,6 @@ export function getAllMetaTags(pageMeta: PageMetaTags, config: { [key: string]: 
     'twitter:title': defaultTitle(pageMeta, config.name),
   } as { [key: string]: any };
 
-  console.log(config);
-
   SEO_META_TAGS.forEach((tagName) => {
     const metaValue = pageMeta[tagName] ?? configMetadata[tagName];
     if (metaValue) {
