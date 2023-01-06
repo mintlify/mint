@@ -151,6 +151,9 @@ function ExpandableFields({ schema }: any) {
                         </Expandable>
                       </div>
                     )}
+                    {value.enum && Array.isArray(value.enum) && <div className="whitespace-pre-wrap">
+                      Available options: {value.enum.map((enumValue: string, i: number) => <><code>{enumValue}</code>{i !== value.enum.length - 1 && ','} </>)}
+                    </div>}
                   </>
                 )}
               </ResponseField>
