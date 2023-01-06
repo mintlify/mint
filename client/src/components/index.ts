@@ -105,6 +105,7 @@ export const allowedComponents = [
   'link',
   'svg',
   'path',
+  'button',
   // Custom tags
   'zapier-zap-templates',
 ];
