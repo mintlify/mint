@@ -1,5 +1,4 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const svgToDataUri = require('mini-svg-data-uri');
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 module.exports = {
@@ -23,20 +22,7 @@ module.exports = {
       square: '1 / 1',
       video: '16 / 9',
       1: '1',
-      2: '2',
-      3: '3',
-      4: '4',
-      5: '5',
-      6: '6',
-      7: '7',
-      8: '8',
       9: '9',
-      10: '10',
-      11: '11',
-      12: '12',
-      13: '13',
-      14: '14',
-      15: '15',
       16: '16',
     },
     extend: {
@@ -132,18 +118,6 @@ module.exports = {
               color: 'inherit',
               fontWeight: 'inherit',
             },
-            kbd: {
-              background: theme('colors.slate.100'),
-              borderWidth: '1px',
-              borderColor: theme('colors.slate.200'),
-              padding: '0.125em 0.25em',
-              color: theme('colors.slate.700'),
-              fontWeight: 500,
-              fontSize: '0.875em',
-              fontVariantLigatures: 'none',
-              borderRadius: '4px',
-              margin: '0 1px',
-            },
             code: {
               fontWeight: theme('fontWeight.medium'),
               fontVariantLigatures: 'none',
@@ -190,13 +164,10 @@ module.exports = {
             'tbody code': {
               fontSize: theme('fontSize.xs')[0],
             },
-            'figure figcaption': {
-              textAlign: 'center',
-              fontStyle: 'italic',
-            },
-            'figure > figcaption': {
-              marginTop: `${12 / 14}em`,
-            },
+
+            // Hide quotes in blockquotes added by tailwind-typography
+            'blockquote p:first-of-type::before': { content: 'none' },
+            'blockquote p:first-of-type::after': { content: 'none' },
           },
         },
         dark: {
@@ -207,11 +178,6 @@ module.exports = {
             },
             'h1 small, h2 small, h3 small, h4 small': {
               color: theme('colors.slate.400'),
-            },
-            kbd: {
-              background: theme('colors.slate.700'),
-              borderColor: theme('colors.slate.600'),
-              color: theme('colors.slate.200'),
             },
             code: {
               color: theme('colors.slate.200'),
@@ -254,39 +220,13 @@ module.exports = {
       maxWidth: {
         '8xl': '92rem',
       },
-      keyframes: {
-        'flash-code': {
-          '0%': { backgroundColor: 'rgb(125 211 252 / 0.1)' },
-          '100%': { backgroundColor: 'transparent' },
-        },
-      },
-      animation: {
-        'flash-code': 'flash-code 1s forwards',
-        'flash-code-slow': 'flash-code 2s forwards',
-      },
-      backgroundImage: (theme) => ({
-        squiggle: `url("${svgToDataUri(
-          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6 3" enable-background="new 0 0 6 3" width="6" height="3" fill="${theme(
-            'colors.yellow.400'
-          )}"><polygon points="5.5,0 2.5,3 1.1,3 4.1,0"/><polygon points="4,0 6,2 6,0.6 5.4,0"/><polygon points="0,2 1,3 2.4,3 0,0.6"/></svg>`
-        )}")`,
-      }),
     },
   },
   plugins: [
-    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
     function ({ addVariant }) {
-      addVariant(
-        'supports-backdrop-blur',
-        '@supports (backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0))'
-      );
-      addVariant('supports-scrollbars', '@supports selector(::-webkit-scrollbar)');
       addVariant('children', '& > *');
-      addVariant('scrollbar', '&::-webkit-scrollbar');
-      addVariant('scrollbar-track', '&::-webkit-scrollbar-track');
-      addVariant('scrollbar-thumb', '&::-webkit-scrollbar-thumb');
     },
     function ({ matchUtilities, theme }) {
       matchUtilities({ values: flattenColorPalette(theme('backgroundColor')), type: 'color' });
@@ -298,7 +238,6 @@ module.exports = {
     'ml-8',
     'ml-12',
     'ml-16',
-    'aspect-video',
     'w-7',
     'h-6',
     'h-7',
@@ -311,5 +250,6 @@ module.exports = {
     'space-x-1',
     'flex-wrap',
     'border-none',
+    'aspect-video',
   ],
 };
