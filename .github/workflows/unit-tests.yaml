@@ -3,7 +3,7 @@ name: Unit Tests
 on: pull_request
 
 jobs:
-  validation-unit-tests:
+  validation-package-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,7 +13,7 @@ jobs:
       - name: Run tests
         run: yarn test
         working-directory: packages/validation
-  client-unit-tests:
+  client-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
