@@ -16,7 +16,7 @@
   </p>
   <p>
     <b>
-      Open source docs builder that's beautiful, fast, and easy to work
+      Open source docs builder that's beautiful, fast, and easy to work with.
     </b>
   </p>
   <p>
@@ -52,7 +52,7 @@
 
 ❤️ **Developer-First:** Powered by MDX and lives alongside the code
 
-💪 **Flexible:** Opinionated when you're lazy, but infinitely flexible when you need it to be
+💪 **Flexible:** Opinionated when you're busy, but infinitely flexible when you need it to be
 
 📊 **Analytical:** Logging is built in to help you understand how users interact with your docs
 
