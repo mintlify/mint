@@ -1,5 +1,4 @@
 import cheerio from "cheerio";
-import { NavigationEntry } from "../../navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import { scrapeGitBookPage } from "./scrapeGitBookPage.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
@@ -10,6 +9,7 @@ export async function scrapeGitBookSection(
   html: string,
   origin: string,
   cliDir: string,
+  imageBaseDir: string,
   overwrite: boolean,
   version: string | undefined
 ) {
@@ -28,7 +28,7 @@ export async function scrapeGitBookSection(
     .children();
 
   // Get all links per group
-  const groupsConfig = navigationSections
+  const groupsConfig: MintNavigation[] = navigationSections
     .map((i, s) => {
       const section = $(s);
       const sectionTitle = $(section)
@@ -56,7 +56,7 @@ export async function scrapeGitBookSection(
 
   // Scrape each link in the navigation.
   const groupsConfigCleanPaths = await Promise.all(
-    reducedGroupsConfig.map(async (navEntry: NavigationEntry) => {
+    reducedGroupsConfig.map(async (navEntry: MintNavigationEntry) => {
       return await scrapeGettingFileNameFromUrl(
         navEntry,
         cliDir,

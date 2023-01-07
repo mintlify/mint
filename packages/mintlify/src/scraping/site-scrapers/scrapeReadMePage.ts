@@ -8,6 +8,7 @@ export async function scrapeReadMePage(
   origin: string,
   cliDir: string,
   imageBaseDir: string,
+  overwrite: boolean,
   _: string | undefined // version
 ) {
   const $ = cheerio.load(html);
@@ -31,7 +32,8 @@ export async function scrapeReadMePage(
     $,
     content,
     origin,
-    imageBaseDir
+    imageBaseDir,
+    overwrite
   );
 
   const nhm = new NodeHtmlMarkdown({ useInlineLinks: false });

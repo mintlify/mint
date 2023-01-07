@@ -1,9 +1,9 @@
-import { Navigation } from "../navigation.js";
-
-export default function combineNavWithEmptyGroupTitles(navArray: Navigation[]) {
+export default function combineNavWithEmptyGroupTitles(
+  navArray: MintNavigation[]
+): MintNavigation[] {
   let newNavArray = [];
 
-  navArray.forEach((nav: Navigation) => {
+  navArray.forEach((nav: MintNavigation) => {
     // The first run through the loop will always have -1 as the index.
     // JavaScript returns undefined when we look for an index outside the size of the array.
     const prev = newNavArray[newNavArray.length - 1];

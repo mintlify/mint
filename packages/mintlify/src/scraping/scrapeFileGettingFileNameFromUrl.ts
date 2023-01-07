@@ -13,6 +13,7 @@ export async function scrapeFileGettingFileNameFromUrl(
     origin: string,
     cliDir: string,
     imageBaseDir: string,
+    overwrite: boolean,
     version: string | undefined
   ) => Promise<{
     title?: string;
@@ -22,7 +23,7 @@ export async function scrapeFileGettingFileNameFromUrl(
   puppeteer = false,
   version: string | undefined,
   baseToRemove?: string
-) {
+): Promise<MintNavigationEntry> {
   // Skip scraping external links
   if (pathname.startsWith("https://") || pathname.startsWith("http://")) {
     return pathname;
@@ -56,6 +57,7 @@ export async function scrapeFileGettingFileNameFromUrl(
     origin,
     cliDir,
     imageBaseDir,
+    overwrite,
     version
   );
 

@@ -8,6 +8,7 @@ export async function scrapeGitBookPage(
   origin: string,
   cliDir: string,
   imageBaseDir: string,
+  overwrite: boolean,
   _: string | undefined // version
 ) {
   const $ = cheerio.load(html);
@@ -33,6 +34,7 @@ export async function scrapeGitBookPage(
     content,
     origin,
     imageBaseDir,
+    overwrite,
     modifyFileName
   );
 

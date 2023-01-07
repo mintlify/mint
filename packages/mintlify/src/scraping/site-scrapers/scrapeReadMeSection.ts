@@ -1,17 +1,23 @@
+import path from "path";
 import cheerio from "cheerio";
 import { scrapeReadMePage } from "./scrapeReadMePage.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import getLinksRecursively from "./links-per-group/getLinksRecursively.js";
-import { NavigationEntry } from "../../navigation.js";
+import downloadImage from "../../downloadImage.js";
 
 export async function scrapeReadMeSection(
   html: string,
   origin: string,
   cliDir: string,
+  imageBaseDir: string,
   overwrite: boolean,
   version: string | undefined
 ) {
   const $ = cheerio.load(html);
+
+  const logoSrc = $(".rm-Logo-img").first().attr("src");
+  const logoPath = path.join(imageBaseDir, "logo", "logo-light-mode.png");
+  await downloadImage(logoSrc, logoPath, overwrite);
 
   // Get all the navigation sections, but only from the first
   // sidebar found. There are multiple in the HTML for mobile
@@ -20,7 +26,7 @@ export async function scrapeReadMeSection(
     .first()
     .find(".rm-Sidebar-section");
 
-  const groupsConfig = navigationSections
+  const groupsConfig: MintNavigation[] = navigationSections
     .map((i, s) => {
       const section = $(s);
       const sectionTitle = section.find("h3").first().text();
@@ -43,10 +49,11 @@ export async function scrapeReadMeSection(
     })
     .toArray();
 
-  return await Promise.all(
-    groupsConfig.map(async (navEntry: NavigationEntry) => {
+  // Scrape each link in the navigation.
+  const groupsConfigCleanPaths = await Promise.all(
+    groupsConfig.map(async (navEntry: MintNavigationEntry) => {
       return await scrapeGettingFileNameFromUrl(
-        // ReadMe requires a directory on all sections wheras we use root.
+        // ReadMe requires a directory on all sections whereas we use root.
         // /docs is their default directory so we remove it
         navEntry,
         cliDir,
@@ -59,4 +66,6 @@ export async function scrapeReadMeSection(
       );
     })
   );
+
+  return groupsConfigCleanPaths;
 }

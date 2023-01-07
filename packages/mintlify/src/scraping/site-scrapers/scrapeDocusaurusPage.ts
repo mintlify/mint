@@ -8,6 +8,7 @@ export async function scrapeDocusaurusPage(
   origin: string,
   cliDir: string,
   imageBaseDir: string,
+  overwrite: boolean,
   version: string | undefined // expects "2", or "3". Have not written support for "1" yet
 ) {
   const $ = cheerio.load(html);
@@ -33,7 +34,8 @@ export async function scrapeDocusaurusPage(
     $,
     markdownContent,
     origin,
-    imageBaseDir
+    imageBaseDir,
+    overwrite
   );
 
   const markdownHtml = markdownContent.html();

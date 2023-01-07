@@ -21,7 +21,7 @@ function validateFramework(framework) {
 
 export async function scrapePageWrapper(
   argv: any,
-  scrapeFunc: any,
+  scrapeFunc: ScrapePageFn,
   options?: { version?: string; puppeteer?: boolean }
 ) {
   const href = getHrefFromArgs(argv);
@@ -32,7 +32,7 @@ export async function scrapePageWrapper(
     const res = await axios.get(href);
     html = res.data;
   }
-  await scrapePage(scrapeFunc, href, html, argv.overwrite, options?.version);
+  await scrapePage(scrapeFunc, href, html, !!argv.overwrite, options?.version);
   process.exit(0);
 }
 
