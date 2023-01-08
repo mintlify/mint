@@ -8,7 +8,8 @@
   "scripts": {
     "prepare": "tsc",
     "build": "tsc",
-    "local": "tsc && npm uninstall -g mintlify && npm i -g .",
+    "watch": "tsc --watch",
+    "local": "yarn link",
     "publish-package": "npm run build && npm publish --access public"
   },
   "author": "Mintlify, Inc.",
