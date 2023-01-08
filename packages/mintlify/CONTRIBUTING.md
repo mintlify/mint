@@ -4,6 +4,6 @@ Note - contributing requires `yarn` and it's recommended you install it as a glo
 
 Run `yarn` or `yarn install` to install dependencies. Then, run `yarn local` once to link to your local version of the CLI in the npm global namespace (`npm ls --global`).
 
-Build the CLI using `yarn build` or `yarn watch`. Any local changes you make will be reflected in the CLI.
+Build the CLI using `yarn build` or `yarn watch`. Any local changes you make in this directory will be reflected in the CLI.
 
-To unlink, run `npm uninstall --global mintlify`.
+To unlink, run `yarn unlink` in this directory.
