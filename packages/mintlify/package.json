@@ -9,7 +9,6 @@
     "prepare": "tsc",
     "build": "tsc",
     "watch": "tsc --watch",
-    "local": "yarn link",
     "publish-package": "npm run build && npm publish --access public"
   },
   "author": "Mintlify, Inc.",
