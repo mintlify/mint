@@ -132,10 +132,12 @@ export const buildLogger = (startText: string = "") => {
 };
 
 export const getFileExtension = (filename: string) => {
-  return (
-    filename.substring(filename.lastIndexOf(".") + 1, filename.length) ||
-    filename
+  const ext = filename.substring(
+    filename.lastIndexOf(".") + 1,
+    filename.length
   );
+  if (filename === ext) return undefined;
+  return ext;
 };
 
 export const fileBelongsInPagesFolder = (filename: string) => {

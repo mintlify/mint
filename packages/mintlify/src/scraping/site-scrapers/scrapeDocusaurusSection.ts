@@ -3,6 +3,7 @@ import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
 import { scrapeDocusaurusPage } from "./scrapeDocusaurusPage.js";
 import { getDocusaurusLinksPerGroup } from "./links-per-group/getDocusaurusLinksPerGroup.js";
+import downloadLogoImage from "../downloadLogoImage.js";
 
 export async function scrapeDocusaurusSection(
   html: string,
@@ -11,8 +12,12 @@ export async function scrapeDocusaurusSection(
   imageBaseDir: string,
   overwrite: boolean,
   version: string
-) {
+): Promise<MintNavigation[]> {
   const $ = cheerio.load(html);
+
+  // Download the logo
+  const logoSrc = $(".navbar__logo").children().first().attr("src");
+  downloadLogoImage(logoSrc, imageBaseDir, origin, overwrite);
 
   // Get all the navigation sections
   const navigationSections = $(".theme-doc-sidebar-menu").first().children();
