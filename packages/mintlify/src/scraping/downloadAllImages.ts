@@ -7,6 +7,7 @@ export default async function downloadAllImages(
   content: any,
   origin: string,
   baseDir: string,
+  overwrite: boolean,
   modifyFileName?: any
 ) {
   if (!baseDir) {
@@ -50,17 +51,7 @@ export default async function downloadAllImages(
 
       const writePath = path.join(baseDir, fileName);
 
-      await downloadImage(imageHref, writePath)
-        .then(() => {
-          console.log("🖼️ - " + writePath);
-        })
-        .catch((e) => {
-          if (e.code === "EEXIST") {
-            console.log(`❌ Skipping existing image ${writePath}`);
-          } else {
-            console.error(e);
-          }
-        });
+      await downloadImage(imageHref, writePath, overwrite);
 
       return { [origImageSrc]: writePath };
     })

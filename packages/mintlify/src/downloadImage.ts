@@ -2,12 +2,13 @@ import { existsSync, mkdirSync, createWriteStream } from "fs";
 import path from "path";
 import axios from "axios";
 
-export default async function downloadImage(
+async function downloadImageToFile(
   imageSrc: string,
-  writePath: string
+  writePath: string,
+  overwrite: boolean
 ) {
   // Avoid unnecessary downloads
-  if (existsSync(writePath)) {
+  if (existsSync(writePath) && !overwrite) {
     return Promise.reject({
       code: "EEXIST",
     });
@@ -32,4 +33,22 @@ export default async function downloadImage(
     writer.on("finish", resolve);
     writer.on("error", reject);
   });
+}
+
+export default async function downloadImage(
+  imageSrc: string,
+  writePath: string,
+  overwrite: boolean = false
+) {
+  await downloadImageToFile(imageSrc, writePath, overwrite)
+    .then(() => {
+      console.log("🖼️ - " + writePath);
+    })
+    .catch((e) => {
+      if (e.code === "EEXIST") {
+        console.log(`❌ Skipping existing image ${writePath}`);
+      } else {
+        console.error(e);
+      }
+    });
 }

@@ -9,7 +9,10 @@ import openNestedGitbookMenus from "./site-scrapers/openNestedGitbookMenus.js";
 import { scrapeReadMeSection } from "./site-scrapers/scrapeReadMeSection.js";
 import { startBrowser } from "../browser.js";
 
-export async function scrapeSectionAxiosWrapper(argv: any, scrapeFunc: any) {
+export async function scrapeSectionAxiosWrapper(
+  argv: any,
+  scrapeFunc: ScrapeSectionFn
+) {
   const href = getHrefFromArgs(argv);
   const res = await axios.get(href);
   const html = res.data;
@@ -17,7 +20,7 @@ export async function scrapeSectionAxiosWrapper(argv: any, scrapeFunc: any) {
     scrapeFunc,
     html,
     getOrigin(href),
-    argv.overwrite,
+    !!argv.overwrite,
     undefined
   );
   process.exit(0);
@@ -46,7 +49,7 @@ export async function scrapeGitbookSectionCommand(argv: any) {
 async function scrapeSectionOpeningAllNested(
   argv: any,
   openLinks: any,
-  scrapeFunc: any,
+  scrapeFunc: ScrapeSectionFn,
   version?: string
 ) {
   const href = getHrefFromArgs(argv);
@@ -63,7 +66,7 @@ async function scrapeSectionOpeningAllNested(
     scrapeFunc,
     html,
     getOrigin(href),
-    argv.overwrite,
+    !!argv.overwrite,
     version
   );
   process.exit(0);

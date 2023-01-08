@@ -1,5 +1,4 @@
 import cheerio from "cheerio";
-import { NavigationEntry } from "../..//navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
 import { scrapeDocusaurusPage } from "./scrapeDocusaurusPage.js";
@@ -9,6 +8,7 @@ export async function scrapeDocusaurusSection(
   html: string,
   origin: string,
   cliDir: string,
+  imageBaseDir: string,
   overwrite: boolean,
   version: string
 ) {
@@ -18,7 +18,7 @@ export async function scrapeDocusaurusSection(
   const navigationSections = $(".theme-doc-sidebar-menu").first().children();
 
   // Get all links per group
-  const groupsConfig = getDocusaurusLinksPerGroup(
+  const groupsConfig: MintNavigation[] = getDocusaurusLinksPerGroup(
     navigationSections,
     $,
     version
@@ -32,7 +32,7 @@ export async function scrapeDocusaurusSection(
     reducedGroupsConfig.map(async (groupConfig) => {
       groupConfig.pages = (
         await Promise.all(
-          groupConfig.pages.map(async (navEntry: NavigationEntry) =>
+          groupConfig.pages.map(async (navEntry: MintNavigationEntry) =>
             // Docusaurus requires a directory on all sections wheras we use root.
             // /docs is their default directory so we remove it
             scrapeGettingFileNameFromUrl(
