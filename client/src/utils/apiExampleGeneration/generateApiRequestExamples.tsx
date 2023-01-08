@@ -127,22 +127,23 @@ function assembleUserInputHeaders(
   // These two loops should be the same
   if (params.Authorization) {
     for (const headerParam of params.Authorization) {
-      let headerName = headerParam.name;
       const isDefined =
         apiPlaygroundInputs.Authorization && apiPlaygroundInputs.Authorization[headerParam.name];
 
-      // Empty strings get replaced with AUTH_VALUE placeholder
-      let headerValue = isDefined
-        ? apiPlaygroundInputs.Authorization[headerParam.name]
-        : 'AUTH_VALUE';
-
-      // Special case for Bearer tokens
-      if (headerParam.name === 'Bearer') {
-        headerName = 'Authorization';
-        headerValue = 'Bearer ' + headerValue;
-      }
-
       if (isDefined || headerParam.required) {
+        let headerName = headerParam.name;
+
+        // Empty strings get replaced with AUTH_VALUE placeholder
+        let headerValue = isDefined
+          ? apiPlaygroundInputs.Authorization[headerParam.name]
+          : 'AUTH_VALUE';
+
+        // Special case for Bearer tokens
+        if (headerParam.name === 'Bearer') {
+          headerName = 'Authorization';
+          headerValue = 'Bearer ' + headerValue;
+        }
+
         headers.push([headerName, headerValue]);
       }
     }
