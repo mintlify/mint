@@ -1,9 +1,13 @@
 import cheerio from "cheerio";
+import path from "path";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import { scrapeGitBookPage } from "./scrapeGitBookPage.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
 import getLinksRecursivelyGitBook from "./links-per-group/getLinksRecursivelyGitBook.js";
 import alternateGroupTitle from "./alternateGroupTitle.js";
+import downloadImage from "../../downloadImage.js";
+import { getFileExtension } from "../../util.js";
+import downloadLogoImage from "../downloadLogoImage.js";
 
 export async function scrapeGitBookSection(
   html: string,
@@ -12,8 +16,12 @@ export async function scrapeGitBookSection(
   imageBaseDir: string,
   overwrite: boolean,
   version: string | undefined
-) {
+): Promise<MintNavigationEntry[]> {
   const $ = cheerio.load(html);
+
+  // Download the logo
+  const logoSrc = $("img").first().attr("src");
+  downloadLogoImage(logoSrc, imageBaseDir, origin, overwrite);
 
   // Get all the navigation sections
   // Some variants of the GitBook UI show the logo and search base in the side navigation bar,

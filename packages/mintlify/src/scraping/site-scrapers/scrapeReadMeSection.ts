@@ -1,9 +1,8 @@
-import path from "path";
 import cheerio from "cheerio";
 import { scrapeReadMePage } from "./scrapeReadMePage.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import getLinksRecursively from "./links-per-group/getLinksRecursively.js";
-import downloadImage from "../../downloadImage.js";
+import downloadLogoImage from "../downloadLogoImage.js";
 
 export async function scrapeReadMeSection(
   html: string,
@@ -12,12 +11,12 @@ export async function scrapeReadMeSection(
   imageBaseDir: string,
   overwrite: boolean,
   version: string | undefined
-) {
+): Promise<MintNavigationEntry[]> {
   const $ = cheerio.load(html);
 
+  // Download the logo
   const logoSrc = $(".rm-Logo-img").first().attr("src");
-  const logoPath = path.join(imageBaseDir, "logo", "logo-light-mode.png");
-  await downloadImage(logoSrc, logoPath, overwrite);
+  downloadLogoImage(logoSrc, imageBaseDir, origin, overwrite);
 
   // Get all the navigation sections, but only from the first
   // sidebar found. There are multiple in the HTML for mobile
