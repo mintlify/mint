@@ -10,11 +10,11 @@ Install docker: [https://docs.docker.com/desktop/install/mac-install/](https://d
 
 Building the docker image:
 
-`docker build -t mint-dev .`
+`docker build -t mint .`
 
 Running the docker container, change 3020 to the port you want to run on:
 
-`docker run -it --rm -p 3000:3020 mint-dev`
+`docker run -it --rm -p 3000:3020 mint`
 
 ## Security
 
