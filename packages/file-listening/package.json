@@ -1,0 +1,32 @@
+{
+  "name": "file-listening",
+  "private": true,
+  "version": "0.0.1",
+  "description": "File listening code used by mint's Docker image.",
+  "scripts": {
+    "prepare": "tsc",
+    "build": "tsc",
+    "local": "tsc && npm uninstall -g mintlify && npm i -g .",
+    "publish-package": "npm run build && npm publish --access public"
+  },
+  "author": "Mintlify, Inc.",
+  "exports": "./bin/index.js",
+  "bin": {
+    "mintlify": "bin/index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "^10.1.0",
+    "chokidar": "^3.5.3",
+    "favicons": "^7.0.1",
+    "fs-extra": "^10.1.0",
+    "gray-matter": "^4.0.3",
+    "minimist-lite": "^2.2.1",
+    "openapi-types": "^12.0.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^18.7.13",
+    "typescript": "^4.8.2"
+  }
+}

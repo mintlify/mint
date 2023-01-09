@@ -25,5 +25,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# build output
+bin/
+dist/
+
 # Sentry
 .sentryclirc
