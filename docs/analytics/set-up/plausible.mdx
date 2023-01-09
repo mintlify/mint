@@ -1,0 +1,27 @@
+---
+title: "Plausible"
+---
+
+Add your site's domain to `mint.json` to send analytics to Plausible.
+
+Do not include `http://` or `https://` with your domain.
+
+<CodeGroup>
+
+```json Analytics options in mint.json
+"analytics": {
+    "plausible": {
+        "domain": "required"
+    },
+}
+```
+
+```json Example
+"analytics": {
+    "plausible": {
+        "domain": "docs.domain.com"
+    },
+}
+```
+
+</CodeGroup>
