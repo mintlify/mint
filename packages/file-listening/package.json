@@ -4,10 +4,7 @@
   "version": "0.0.1",
   "description": "File listening code used by mint's Docker image.",
   "scripts": {
-    "prepare": "tsc",
-    "build": "tsc",
-    "local": "tsc && npm uninstall -g mintlify && npm i -g .",
-    "publish-package": "npm run build && npm publish --access public"
+    "listen-for-changes": "tsc && node bin/index.js"
   },
   "author": "Mintlify, Inc.",
   "exports": "./bin/index.js",

@@ -1,9 +1,14 @@
-import { getFileExtension } from "./getFileExtension.js";
+import pathUtil from "path";
 
 export const fileBelongsInPagesFolder = (filename: string) => {
-  const extension = getFileExtension(filename);
-  return (
-    extension &&
-    (extension === "mdx" || extension === "md" || extension === "tsx")
-  );
+  try {
+    const extension = pathUtil.parse(filename).ext;
+    return (
+      extension &&
+      (extension === ".mdx" || extension === ".md" || extension === ".tsx")
+    );
+  } catch (e) {
+    // TypeError when filename is not a string
+    return false;
+  }
 };

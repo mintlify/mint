@@ -2,8 +2,8 @@ import chokidar from "chokidar";
 import fse from "fs-extra";
 import pathUtil from "path";
 import { fileBelongsInPagesFolder } from "./utils/fileBelongsInPagesFolder.js";
+import openApiCheck from "./utils/openApiCheck.js";
 import { createMetadataFile } from "./metadata.js";
-import openApiCheck from "./openApiCheck.js";
 import { CLIENT_PATH, CMD_EXEC_PATH } from "./constants.js";
 
 const listener = () => {

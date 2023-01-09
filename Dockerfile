@@ -9,9 +9,11 @@ WORKDIR /usr/src/app
 
 # Copy local code to the container image.
 COPY ./client ./client/
+COPY ./packages/file-listening ./file-listening
 
 # Install production dependencies.
 RUN yarn --cwd client install
+RUN yarn --cwd file-listening install
 
 # Expose the app's port. The user can map this to a different port
 # when running by adding 3000:3020 to the docker run command where
