@@ -113,6 +113,7 @@
             "analytics/set-up/logrocket",
             "analytics/set-up/mixpanel",
             "analytics/set-up/pirsch",
+            "analytics/set-up/plausible",
             "analytics/set-up/posthog"
           ]
         }
