@@ -5,7 +5,7 @@
 FROM node:19
 
 # Create and change to the app directory.
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy local code to the container image.
 COPY ./client ./client/

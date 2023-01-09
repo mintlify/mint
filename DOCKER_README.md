@@ -16,6 +16,8 @@ Use this command to create and run a docker container with our image. Change 302
 
 `docker run -it --rm -p 3000:3020 mint`
 
+You can add `--entrypoint /bin/bash` to the command to run in an interactive bash session.
+
 ## Security
 
 We can only access files in the same root as `Dockerfile` when building the docker image. We keep `Dockerfile` at the root of `mint` because we need `client` and file listener code.
