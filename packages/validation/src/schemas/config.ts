@@ -30,10 +30,14 @@ const logoSchema = z.union(
 
 const apiSchema = z.object(
   {
-    baseUrl: z.union([
-      z.string().url("api.baseUrl must be a valid URL."),
-      z.array(z.string().url("api.baseUrl array entries must be valid URLs.")),
-    ]),
+    baseUrl: z
+      .union([
+        z.string().url("api.baseUrl must be a valid URL."),
+        z.array(
+          z.string().url("api.baseUrl array entries must be valid URLs.")
+        ),
+      ])
+      .optional(),
     auth: z
       .object({
         method: z.string().optional(),
