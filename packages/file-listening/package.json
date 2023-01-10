@@ -1,5 +1,5 @@
 {
-  "name": "file-listening",
+  "name": "@mintlify/file-listening",
   "private": true,
   "version": "0.0.1",
   "description": "File listening code used by mint's Docker image.",
