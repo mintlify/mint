@@ -45,11 +45,12 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["quickstart", "development", "navigation"]
+      "pages": ["quickstart", "development"]
     },
     {
       "group": "Settings",
       "pages": [
+        "settings/navigation",
         "settings/global",
         "settings/page",
         "settings/seo",
