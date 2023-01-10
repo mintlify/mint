@@ -28,27 +28,32 @@ const logoSchema = z.union(
   }
 );
 
-const apiSchema = z.object(
-  {
-    baseUrl: z
-      .union([
-        z.string().url("api.baseUrl must be a valid URL."),
-        z.array(
-          z.string().url("api.baseUrl array entries must be valid URLs.")
-        ),
-      ])
-      .optional(),
-    auth: z
-      .object({
-        method: z.string().optional(),
-        name: z.string().optional(),
-        inputPrefix: z.string().optional(),
-      })
-      .strict("api.auth can only contain method, name, and inputPrefix.")
-      .optional(),
-  },
-  { invalid_type_error: "api must be an object with a baseUrl property." }
-);
+const apiSchema = z
+  .object(
+    {
+      baseUrl: z
+        .union([
+          z.string().url("api.baseUrl must be a valid URL."),
+          z.array(
+            z.string().url("api.baseUrl array entries must be valid URLs.")
+          ),
+        ])
+        .optional(),
+      auth: z
+        .object({
+          method: z.string().optional(),
+          name: z.string().optional(),
+          inputPrefix: z.string().optional(),
+        })
+        .strict("api.auth can only contain method, name, and inputPrefix.")
+        .optional(),
+    },
+    {
+      invalid_type_error:
+        "api must be an object. The object can have baseUrl and auth as properties.",
+    }
+  )
+  .strict("api can only contain baseUrl and auth as properties.");
 
 const modeToggleSchema = z.object({
   default: z.string().optional(),
