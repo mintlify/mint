@@ -45,7 +45,7 @@
   "navigation": [
     {
       "group": "Getting Started",
-      "pages": ["quickstart", "development"]
+      "pages": ["quickstart", "development", "navigation"]
     },
     {
       "group": "Settings",
