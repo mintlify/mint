@@ -2,8 +2,8 @@ import chokidar from "chokidar";
 import fse from "fs-extra";
 import pathUtil from "path";
 import { fileIsMdxOrMd } from "./utils/fileIsMdxOrMd.js";
-import openApiCheck from "./utils/openApiCheck.js";
-import { createMetadataFile } from "./metadata.js";
+import { openApiCheck } from "./utils.js";
+import { updateGeneratedNav } from "./update.js";
 import { CLIENT_PATH, CMD_EXEC_PATH } from "./constants.js";
 import { promises as _promises } from "fs";
 import createPage from "./utils/createPage.js";
@@ -106,7 +106,7 @@ const listener = () => {
             if (isOpenApi) {
               await fse.outputFile(
                 pathUtil.join(CLIENT_PATH, "src", "openapi.json"),
-                JSON.stringify(openApiInfo.openapi),
+                JSON.stringify(openApiInfo.spec),
                 {
                   flag: "w",
                 }
@@ -138,7 +138,8 @@ const listener = () => {
           }
         }
         if (updateMetadata) {
-          await createMetadataFile();
+          // TODO: Instead of re-generating the entire nav, optimize by just updating the specific page that changed.
+          await updateGeneratedNav();
         }
       }
     });
