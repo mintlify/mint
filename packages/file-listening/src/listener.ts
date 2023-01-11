@@ -3,7 +3,11 @@ import fse from "fs-extra";
 import pathUtil from "path";
 import { fileIsMdxOrMd } from "./utils/fileIsMdxOrMd.js";
 import { openApiCheck } from "./utils.js";
-import { updateGeneratedNav, updateFile } from "./update.js";
+import {
+  updateGeneratedNav,
+  updateFile,
+  updateOpenApiFiles,
+} from "./update.js";
 import { CLIENT_PATH, CMD_EXEC_PATH } from "./constants.js";
 import { promises as _promises } from "fs";
 import createPage from "./utils/createPage.js";
@@ -27,7 +31,12 @@ const listener = () => {
             filename
           );
           await fse.remove(targetPath);
-          console.log("Page deleted: ", filename);
+          console.log(
+            `${
+              filename.startsWith("_snippets") ? "Snippet" : "Page"
+            } deleted: `,
+            filename
+          );
         } else if (filename === "mint.json") {
           const targetPath = pathUtil.join(
             CLIENT_PATH,
@@ -41,7 +50,15 @@ const listener = () => {
           );
           process.exit(1);
         } else {
-          // TODO: Account for openapi.json, snippets
+          const extension = pathUtil.parse(filename).ext.slice(1);
+          if (
+            extension &&
+            (extension === "json" ||
+              extension === "yaml" ||
+              extension === "yml")
+          ) {
+            await updateOpenApiFiles();
+          }
           // all other files
           const targetPath = pathUtil.join(CLIENT_PATH, "public", filename);
           await fse.remove(targetPath);
@@ -49,7 +66,7 @@ const listener = () => {
         }
       } else {
         const filePath = pathUtil.join(CMD_EXEC_PATH, filename);
-        let updateMetadata = false;
+        let regenerateNav = false;
         if (fileIsMdxOrMd(filename)) {
           const targetPath = pathUtil.join(
             CLIENT_PATH,
@@ -61,7 +78,7 @@ const listener = () => {
             await updateFile(CMD_EXEC_PATH, targetPath, filename);
             return;
           }
-          updateMetadata = true;
+          regenerateNav = true;
 
           const contentStr = (await readFile(filePath)).toString();
           const { fileContent } = await createPage(
@@ -83,7 +100,7 @@ const listener = () => {
               break;
           }
         } else if (filename === "mint.json") {
-          updateMetadata = true;
+          regenerateNav = true;
           const targetPath = pathUtil.join(
             CLIENT_PATH,
             "src",
@@ -114,14 +131,8 @@ const listener = () => {
             );
             isOpenApi = openApiInfo.isOpenApi;
             if (isOpenApi) {
-              await fse.outputFile(
-                pathUtil.join(CLIENT_PATH, "src", "openapi.json"),
-                JSON.stringify(openApiInfo.spec),
-                {
-                  flag: "w",
-                }
-              );
-              updateMetadata = true;
+              await updateOpenApiFiles();
+              regenerateNav = true;
             }
           }
           if (!isOpenApi) {
@@ -147,7 +158,7 @@ const listener = () => {
               break;
           }
         }
-        if (updateMetadata) {
+        if (regenerateNav) {
           // TODO: Instead of re-generating the entire nav, optimize by just updating the specific page that changed.
           await updateGeneratedNav();
         }
