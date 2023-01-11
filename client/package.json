@@ -8,7 +8,8 @@
     "start": "next start",
     "export": "next build && next export",
     "format": "prettier '{src,remark,scripts}/**/*.{css,js,mdx}' --write",
-    "test": "jest"
+    "test": "jest",
+    "dev-watch": "next-remote-watch ./src/_props ./public"
   },
   "browserslist": [
     "> 1%"
@@ -121,6 +122,7 @@
     "jest": "^29.2.2",
     "jest-environment-jsdom": "^29.2.2",
     "mdast": "^3.0.0",
+    "next-remote-watch": "^2.0.0",
     "prettier": "^2.8.1",
     "refractor": "^4.8.0",
     "ts-node": "^10.9.1",
