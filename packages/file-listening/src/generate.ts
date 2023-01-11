@@ -106,6 +106,5 @@ export const generateNav = async () => {
     createPagesAcc(CMD_EXEC_PATH, contentFilenames, openApiFiles),
     getConfigObj(CMD_EXEC_PATH),
   ]);
-  console.log({ configObj });
   return generateNavFromPages(pageAcc, configObj?.navigation);
 };

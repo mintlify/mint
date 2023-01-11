@@ -27,7 +27,6 @@ export const updateConfigFile = async (contentDirectoryPath: string) => {
 
 export const updateGeneratedNav = async () => {
   const generatedNav = await generateNav();
-  console.log({ generatedNav });
   const targetPath = join(CLIENT_PATH, "src", "_props", "generatedNav.json");
   await fse.outputFile(targetPath, JSON.stringify(generatedNav, null, 2), {
     flag: "w",
