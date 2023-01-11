@@ -58,6 +58,8 @@ const listener = () => {
               extension === "yml")
           ) {
             await updateOpenApiFiles();
+            await updateGeneratedNav();
+            return;
           }
           // all other files
           const targetPath = pathUtil.join(CLIENT_PATH, "public", filename);
