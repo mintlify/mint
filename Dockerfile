@@ -23,4 +23,5 @@ ENV PORT 3000
 
 # By default, run the web service on container startup.
 # This command can be overriden by changing it in the docker run command.
-CMD ["sh", "-c", "yarn --cwd client run dev"]
+# The single & will run both commands in parallel. && would be used for sequential execution.
+CMD ["sh", "-c", "yarn --cwd file-listening listen-for-changes & yarn --cwd client dev-watch"]
