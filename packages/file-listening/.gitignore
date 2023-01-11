@@ -5,3 +5,5 @@ package-lock.json
 # Output
 lib
 bin/
+
+yarn-error.log
