@@ -2,16 +2,18 @@
   "compilerOptions": {
     "module": "node16",
     "moduleResolution": "node16",
-    "target": "es2017",
-    "lib": ["es2016", "dom", "ES2021.String"],
+    "target": "es2020",
+    "lib": ["es2020"],
     "sourceMap": false,
     "outDir": "bin",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "declaration": true /* Generates corresponding '.d.ts' file. */,
+    // TODO: Enable these options to improve type safety
+    // "strict": true /* Enable all strict type-checking options. */,
+    // "noUnusedLocals": true /* Report errors on unused locals. */,
+    // "noUnusedParameters": true /* Report errors on unused parameters. */,
+    // "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+    // "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
+    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
   },
-  "include": ["src/**/*"]
+  "include": ["src/"]
 }
