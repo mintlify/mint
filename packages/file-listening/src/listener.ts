@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import pathUtil from "path";
 import { fileIsMdxOrMd } from "./utils/fileIsMdxOrMd.js";
 import { openApiCheck } from "./utils.js";
-import { updateGeneratedNav } from "./update.js";
+import { updateGeneratedNav, updateFile } from "./update.js";
 import { CLIENT_PATH, CMD_EXEC_PATH } from "./constants.js";
 import { promises as _promises } from "fs";
 import createPage from "./utils/createPage.js";
@@ -51,13 +51,18 @@ const listener = () => {
         const filePath = pathUtil.join(CMD_EXEC_PATH, filename);
         let updateMetadata = false;
         if (fileIsMdxOrMd(filename)) {
-          updateMetadata = true;
           const targetPath = pathUtil.join(
             CLIENT_PATH,
             "src",
             "_props",
             filename
           );
+          if (filename.startsWith("_snippets")) {
+            await updateFile(CMD_EXEC_PATH, targetPath, filename);
+            return;
+          }
+          updateMetadata = true;
+
           const contentStr = (await readFile(filePath)).toString();
           const { fileContent } = await createPage(
             filename,
@@ -79,7 +84,12 @@ const listener = () => {
           }
         } else if (filename === "mint.json") {
           updateMetadata = true;
-          const targetPath = pathUtil.join(CLIENT_PATH, "src", "mint.json");
+          const targetPath = pathUtil.join(
+            CLIENT_PATH,
+            "src",
+            "_props",
+            "mint.json"
+          );
           await fse.copy(filePath, targetPath);
           switch (event) {
             case "add":

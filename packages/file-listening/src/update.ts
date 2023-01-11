@@ -32,3 +32,15 @@ export const updateGeneratedNav = async () => {
     flag: "w",
   });
 };
+
+// TODO: Put in prebuild package
+export const updateFile = async (
+  contentDirectoryPath: string,
+  targetDirectoryPath: string,
+  filename: string
+) => {
+  const sourcePath = join(contentDirectoryPath, filename);
+  const targetPath = join(targetDirectoryPath, filename);
+  await fse.remove(targetPath);
+  await fse.copy(sourcePath, targetPath);
+};
