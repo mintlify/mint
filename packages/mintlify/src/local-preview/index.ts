@@ -6,80 +6,9 @@ import inquirer from "inquirer";
 import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
-import categorizeFiles from "./utils/categorizeFiles.js";
-import {
-  CMD_EXEC_PATH,
-  CLIENT_PATH,
-  HOME_DIR,
-  DOT_MINTLIFY,
-} from "../constants.js";
-import { injectFavicons } from "./utils/injectFavicons.js";
+import { CLIENT_PATH, HOME_DIR, DOT_MINTLIFY } from "../constants.js";
 import listener from "./utils/listener.js";
-import { createPage, createMetadataFileFromPages } from "./utils/metadata.js";
-import { updateConfigFile } from "./utils/mintConfigFile.js";
 import { buildLogger, ensureYarn } from "../util.js";
-
-const { readFile } = _promises;
-
-const copyFiles = async (logger: any) => {
-  logger.start("Syncing doc files...");
-  shell.cd(CMD_EXEC_PATH);
-  const { markdownFiles, staticFiles, openApi } = await categorizeFiles();
-
-  const configObj = await updateConfigFile(logger);
-
-  const openApiTargetPath = path.join(CLIENT_PATH, "src", "openapi.json");
-  if (openApi) {
-    logger.succeed("OpenApi file synced");
-    await fse.outputFile(openApiTargetPath, JSON.stringify(openApi), {
-      flag: "w",
-    });
-  } else {
-    await fse.outputFile(openApiTargetPath, "{}", { flag: "w" });
-  }
-  let pages = {};
-  const mdPromises = [];
-  markdownFiles.forEach((filename) => {
-    mdPromises.push(
-      (async () => {
-        const sourcePath = path.join(CMD_EXEC_PATH, filename);
-        const pagesDir = path.join(CLIENT_PATH, "src", "pages");
-        const targetPath = path.join(pagesDir, filename);
-
-        await fse.remove(targetPath);
-        await fse.copy(sourcePath, targetPath);
-
-        const fileContent = await readFile(sourcePath);
-        const contentStr = fileContent.toString();
-        const page = createPage(filename, contentStr, openApi);
-        pages = {
-          ...pages,
-          ...page,
-        };
-      })()
-    );
-  });
-  const staticFilePromises = [];
-  staticFiles.forEach((filename) => {
-    staticFilePromises.push(
-      (async () => {
-        const sourcePath = path.join(CMD_EXEC_PATH, filename);
-        const publicDir = path.join(CLIENT_PATH, "public");
-        const targetPath = path.join(publicDir, filename);
-
-        await fse.remove(targetPath);
-        await fse.copy(sourcePath, targetPath);
-      })()
-    );
-  });
-  await Promise.all([
-    ...mdPromises,
-    ...staticFilePromises,
-    await injectFavicons(configObj, logger),
-  ]);
-  createMetadataFileFromPages(pages, configObj);
-  logger.succeed("All files synced");
-};
 
 const shellExec = (cmd: string) => {
   return shell.exec(cmd, { silent: true });
@@ -144,9 +73,11 @@ const dev = async () => {
   if (internet && gitInstalled) {
     shellExec("git config core.sparseCheckout true");
     shellExec('echo "client/" >> .git/info/sparse-checkout');
-    pullOutput = shellExec(
-      "git pull mint-origin legacy-components-import"
-    ).stdout;
+    const output = shellExec("git show").stdout;
+    if (output.startsWith("commit 78d764335877932a0dc305d615411dedd18bd18a")) {
+      await fse.remove("client");
+    }
+    pullOutput = shellExec("git pull mint-origin main").stdout;
     shellExec("git config core.sparseCheckout false");
     shellExec("rm .git/info/sparse-checkout");
   }
@@ -176,7 +107,9 @@ const dev = async () => {
     `);
     process.exit(1);
   }
-  await copyFiles(logger);
+  // await copyFiles(logger);
+  // TODO: yarn preconfigure <insert-path>
+  // TODO: get path
   run();
 };
 
