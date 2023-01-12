@@ -12,7 +12,6 @@ import {
   DOT_MINTLIFY,
   CMD_EXEC_PATH,
 } from "../constants.js";
-import listener from "./utils/listener.js";
 import { buildLogger, ensureYarn } from "../util.js";
 
 const shellExec = (cmd: string) => {
@@ -126,9 +125,9 @@ const run = () => {
       "Navigate to your local preview at http://localhost:3000"
     )}`
   );
-  shell.exec("npm run dev", { async: true });
+  shell.exec("npm run dev-watch", { async: true });
   open("http://localhost:3000");
-  listener();
+  shell.exec("npm run mintlify-file-listener");
 };
 
 export default dev;

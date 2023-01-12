@@ -1897,10 +1897,10 @@ minimist@^1.2.0, minimist@^1.2.3:
   resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.7.tgz"
   integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
-mintlify-file-listening@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/mintlify-file-listening/-/mintlify-file-listening-0.0.1.tgz#24b3abe19e9bd6273d5765a8e3392b07c0709435"
-  integrity sha512-R+KAzx4/tC5MvApprUldYisBfxb4btuBJvTw1ja8ICgNyU5Q0PsxsMH1I4JZpUO9g7drx9ElakoHhaKs9GZgLQ==
+mintlify-file-listening@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/mintlify-file-listening/-/mintlify-file-listening-0.0.3.tgz#6cf0374a4c30d27510df9a5871ba7fcac06daa19"
+  integrity sha512-x8StEjU+uLnQ3HWv3HAOBDJGvv2MxNE/OfpJhScXGhDu66VypbSXVctOBPZCowF32wlC7IjkLq7lIMVvZ444Bw==
   dependencies:
     "@apidevtools/swagger-parser" "^10.1.0"
     chokidar "^3.5.3"
