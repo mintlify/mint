@@ -115,6 +115,7 @@ const dev = async () => {
     process.exit(1);
   }
   shellExec(`yarn preconfigure ../../../../..${CMD_EXEC_PATH}`);
+  logger.succeed("Local Mintlify instance initialized");
   run();
 };
 
