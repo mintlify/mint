@@ -20,6 +20,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 3000
 ENV PORT 3000
 
-# The single & will run both commands in parallel.The double && is used for sequential execution.
+# The single & will run both commands in parallel. The double && is used for sequential execution.
 # We pipe the output of the client to /dev/null to prevent it from filling up the docker logs.
 CMD ["sh", "-c", "yarn --cwd client preconfigure /app/user-working-directory && (yarn --cwd file-listening listen-for-changes & yarn --cwd client dev-watch > /dev/null)"]
