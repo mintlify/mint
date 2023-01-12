@@ -6,7 +6,12 @@ import inquirer from "inquirer";
 import { isInternetAvailable } from "is-internet-available";
 import path from "path";
 import shell from "shelljs";
-import { CLIENT_PATH, HOME_DIR, DOT_MINTLIFY } from "../constants.js";
+import {
+  CLIENT_PATH,
+  HOME_DIR,
+  DOT_MINTLIFY,
+  CMD_EXEC_PATH,
+} from "../constants.js";
 import listener from "./utils/listener.js";
 import { buildLogger, ensureYarn } from "../util.js";
 
@@ -45,7 +50,14 @@ const dev = async () => {
   await promptForYarn();
   const logger = buildLogger("Starting a local Mintlify instance...");
   await fse.ensureDir(path.join(DOT_MINTLIFY, "mint"));
-  shell.cd(path.join(HOME_DIR, ".mintlify", "mint"));
+  const MINT_PATH = path.join(DOT_MINTLIFY, "mint");
+  shell.cd(MINT_PATH);
+  const gitPullStatus = shellExec("git show").stdout;
+  if (
+    gitPullStatus.startsWith("commit 78d764335877932a0dc305d615411dedd18bd18a")
+  ) {
+    await fse.emptyDir(MINT_PATH);
+  }
   let runYarn = true;
   const gitInstalled = shell.which("git");
   let firstInstallation = false;
@@ -73,10 +85,6 @@ const dev = async () => {
   if (internet && gitInstalled) {
     shellExec("git config core.sparseCheckout true");
     shellExec('echo "client/" >> .git/info/sparse-checkout');
-    const output = shellExec("git show").stdout;
-    if (output.startsWith("commit 78d764335877932a0dc305d615411dedd18bd18a")) {
-      await fse.remove("client");
-    }
     pullOutput = shellExec("git pull mint-origin main").stdout;
     shellExec("git config core.sparseCheckout false");
     shellExec("rm .git/info/sparse-checkout");
@@ -107,9 +115,7 @@ const dev = async () => {
     `);
     process.exit(1);
   }
-  // await copyFiles(logger);
-  // TODO: yarn preconfigure <insert-path>
-  // TODO: get path
+  shellExec(`yarn preconfigure ../../../../..${CMD_EXEC_PATH}`);
   run();
 };
 
