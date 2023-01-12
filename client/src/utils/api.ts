@@ -16,6 +16,7 @@ export type Children = Child[];
 export type Param = {
   name: string;
   placeholder?: string;
+  default?: string;
   required?: boolean;
   type?: string;
   enum?: string[];
@@ -242,9 +243,8 @@ const getParams = (apiComponents?: ApiComponent[]): Param[] => {
 
     params.push({
       name,
-      placeholder:
-        getPlaceholderFromObjectOrString(placeholder) ||
-        getPlaceholderFromObjectOrString(defaultValue),
+      placeholder: getPlaceholderFromObjectOrString(placeholder),
+      default: defaultValue,
       required: required === null || required === true, // intentionally check for just null or true
       type,
       enum: enumValues,
