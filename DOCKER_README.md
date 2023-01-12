@@ -14,7 +14,7 @@ Building the docker image:
 
 ## Running the Mint Image
 
-Use the command below command to create and run a docker container with our image in development mode. The `--rm` flag deletes the container when we are done. Docker keeps all containers even after you disconnect if you don't add the `--rm` flag. The `-v` flag mounts the folder where you run the command to `/app/user-working-directory` so Docker can read files as you edit them. Change 3333 to the port you want to run on.
+Use the command below to create and run a docker container with our image in development mode. The `--rm` flag deletes the container when we are done. Docker keeps all containers even after you disconnect if you don't add the `--rm` flag. The `-v` flag mounts the folder where you run the command to `/app/user-working-directory` so Docker can read files as you edit them. Change 3333 to the port you want to run on.
 
 `` docker run -it --rm -p 3333:3000 -v `pwd`:/app/user-working-directory mint ``
 
