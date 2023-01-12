@@ -57,14 +57,13 @@ export const Page = (
   return `---\ntitle: ${title}${optionalDescription}\n---\n\n${markdown}`;
 };
 
-
 export function getOrigin(url: string) {
   // eg. https://google.com -> https://google.com
   // https://google.com/page -> https://google.com
   return new URL(url).origin;
 }
 
-export function objToReadableString(objs: Object[]) {
+export function objToReadableString(objs: MintNavigationEntry[]) {
   // Two spaces as indentation
   return objs.map((obj) => JSON.stringify(obj, null, 2)).join(",\n");
 }
@@ -133,10 +132,12 @@ export const buildLogger = (startText: string = "") => {
 };
 
 export const getFileExtension = (filename: string) => {
-  return (
-    filename.substring(filename.lastIndexOf(".") + 1, filename.length) ||
-    filename
+  const ext = filename.substring(
+    filename.lastIndexOf(".") + 1,
+    filename.length
   );
+  if (filename === ext) return undefined;
+  return ext;
 };
 
 export const fileBelongsInPagesFolder = (filename: string) => {

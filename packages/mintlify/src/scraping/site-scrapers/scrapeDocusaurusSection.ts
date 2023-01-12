@@ -1,24 +1,29 @@
 import cheerio from "cheerio";
-import { NavigationEntry } from "../..//navigation.js";
 import { scrapeGettingFileNameFromUrl } from "../scrapeGettingFileNameFromUrl.js";
 import combineNavWithEmptyGroupTitles from "../combineNavWithEmptyGroupTitles.js";
 import { scrapeDocusaurusPage } from "./scrapeDocusaurusPage.js";
 import { getDocusaurusLinksPerGroup } from "./links-per-group/getDocusaurusLinksPerGroup.js";
+import downloadLogoImage from "../downloadLogoImage.js";
 
 export async function scrapeDocusaurusSection(
   html: string,
   origin: string,
   cliDir: string,
+  imageBaseDir: string,
   overwrite: boolean,
   version: string
-) {
+): Promise<MintNavigation[]> {
   const $ = cheerio.load(html);
+
+  // Download the logo
+  const logoSrc = $(".navbar__logo").children().first().attr("src");
+  downloadLogoImage(logoSrc, imageBaseDir, origin, overwrite);
 
   // Get all the navigation sections
   const navigationSections = $(".theme-doc-sidebar-menu").first().children();
 
   // Get all links per group
-  const groupsConfig = getDocusaurusLinksPerGroup(
+  const groupsConfig: MintNavigation[] = getDocusaurusLinksPerGroup(
     navigationSections,
     $,
     version
@@ -32,7 +37,7 @@ export async function scrapeDocusaurusSection(
     reducedGroupsConfig.map(async (groupConfig) => {
       groupConfig.pages = (
         await Promise.all(
-          groupConfig.pages.map(async (navEntry: NavigationEntry) =>
+          groupConfig.pages.map(async (navEntry: MintNavigationEntry) =>
             // Docusaurus requires a directory on all sections wheras we use root.
             // /docs is their default directory so we remove it
             scrapeGettingFileNameFromUrl(

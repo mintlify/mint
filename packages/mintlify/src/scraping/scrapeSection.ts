@@ -1,7 +1,8 @@
+import path from "path";
 import { objToReadableString } from "../util.js";
 
 export async function scrapeSection(
-  scrapeFunc: any,
+  scrapeFunc: ScrapeSectionFn,
   html: string,
   origin: string,
   overwrite: boolean,
@@ -10,10 +11,14 @@ export async function scrapeSection(
   console.log(
     `Started scraping${overwrite ? ", overwrite mode is on" : ""}...`
   );
+  const cwd = process.cwd();
+  const imageBaseDir = path.join(cwd, "images");
+
   const groupsConfig = await scrapeFunc(
     html,
     origin,
-    process.cwd(),
+    cwd,
+    imageBaseDir,
     overwrite,
     version
   );

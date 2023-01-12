@@ -1,5 +1,9 @@
 import path from "path";
-import downloadImage from "../downloadImage.js";
+import downloadImage, {
+  cleanImageSrc,
+  isValidImageSrc,
+  removeMetadataFromImageSrc,
+} from "../downloadImage.js";
 
 // To Do: Use CheerioElement instead of any when we bump the cheerio version
 export default async function downloadAllImages(
@@ -7,6 +11,7 @@ export default async function downloadAllImages(
   content: any,
   origin: string,
   baseDir: string,
+  overwrite: boolean,
   modifyFileName?: any
 ) {
   if (!baseDir) {
@@ -27,42 +32,21 @@ export default async function downloadAllImages(
 
   // Wait to all images to download before continuing
   const origToNewArray = await Promise.all(
-    imageSrcs.map(async (origImageSrc: string) => {
-      // We do not support downloading base64 in-line images.
-      if (origImageSrc.startsWith("data:")) {
-        return undefined;
-      }
+    imageSrcs.map(async (imageSrc: string) => {
+      if (!isValidImageSrc(imageSrc)) return;
 
-      // Add origin if the image tags are using relative sources
-      const imageHref = origImageSrc.startsWith("http")
-        ? origImageSrc
-        : new URL(origImageSrc, origin).href;
+      const imageHref = cleanImageSrc(imageSrc, origin);
 
-      let fileName = removeMetadataFromExtension(path.basename(imageHref));
+      let fileName = removeMetadataFromImageSrc(path.basename(imageHref));
       if (modifyFileName) {
         fileName = modifyFileName(fileName);
       }
 
-      if (!fileName) {
-        console.error("Invalid image path " + imageHref);
-        return;
-      }
-
       const writePath = path.join(baseDir, fileName);
 
-      await downloadImage(imageHref, writePath)
-        .then(() => {
-          console.log("🖼️ - " + writePath);
-        })
-        .catch((e) => {
-          if (e.code === "EEXIST") {
-            console.log(`❌ Skipping existing image ${writePath}`);
-          } else {
-            console.error(e);
-          }
-        });
+      await downloadImage(imageHref, writePath, overwrite);
 
-      return { [origImageSrc]: writePath };
+      return { [imageSrc]: writePath };
     })
   );
 
@@ -70,15 +54,4 @@ export default async function downloadAllImages(
     (result, current) => Object.assign(result, current),
     {}
   );
-}
-
-function removeMetadataFromExtension(src: string) {
-  // Part of the URL standard
-  const metadataSymbols = ["?", "#"];
-
-  metadataSymbols.forEach((dividerSymbol) => {
-    // Some frameworks add metadata after the file extension, we need to remove that.
-    src = src.split(dividerSymbol)[0];
-  });
-  return src;
 }

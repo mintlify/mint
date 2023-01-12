@@ -1,8 +1,7 @@
-import { NavigationEntry, isNavigation } from "../navigation.js";
 import { scrapeFileGettingFileNameFromUrl } from "./scrapeFileGettingFileNameFromUrl.js";
 
 export async function scrapeGettingFileNameFromUrl(
-  navEntry: NavigationEntry,
+  navEntry: MintNavigationEntry,
   cliDir: string,
   origin: string,
   overwrite: boolean,
@@ -11,6 +10,7 @@ export async function scrapeGettingFileNameFromUrl(
     origin: string,
     cliDir: string,
     imageBaseDir: string,
+    overwrite: boolean,
     version: string | undefined
   ) => Promise<{
     title?: string;
@@ -20,8 +20,8 @@ export async function scrapeGettingFileNameFromUrl(
   puppeteer = false,
   version: string | undefined,
   baseToRemove?: string
-): Promise<NavigationEntry> {
-  if (isNavigation(navEntry)) {
+): Promise<MintNavigationEntry> {
+  if (typeof navEntry !== "string") {
     const newPages = [];
     for (const nestedNavEntry of navEntry.pages) {
       newPages.push(
