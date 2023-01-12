@@ -1,6 +1,6 @@
 {
   "name": "mintlify-file-listening",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "File listening code used by mint's Docker image.",
   "scripts": {
     "listen-for-changes": "tsc && node bin/index.js"
@@ -8,7 +8,7 @@
   "author": "Mintlify, Inc.",
   "exports": "./bin/index.js",
   "bin": {
-    "mintlify": "bin/index.js"
+    "mintlify-file-listening": "bin/index.js"
   },
   "type": "module",
   "dependencies": {
