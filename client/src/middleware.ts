@@ -18,10 +18,10 @@ export default function middleware(req: NextRequest) {
   const currentHost = isProd
     ? // Replace both mintlify.app and mintlify.dev because both domains are used for hosting by Mintlify
       hostname.replace('.' + process.env.HOST_NAME, '')
-    : hostname.replace('.localhost:3000', '');
+    : hostname.replace(/\.localhost:\d{4}/, '');
 
   // rewrite root application to main folder
-  if (hostname === 'localhost:3000') {
+  if (hostname.match(/localhost:\d{4}/)) {
     // TODO: change so it detects if it's at a subdomain or not
     return NextResponse.rewrite(url);
   }

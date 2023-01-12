@@ -26,7 +26,7 @@ yarn dev
 ### Debugging in VS Code
 
 Navigate to the VS Code debugger and select "Next.js: debug full stack"
-![Next.js debugger in VS Code](./static/debugging-next.png)
+![Next.js debugger in VS Code](../debugging-next.png)
 
 Use the debugger to place breakpoints in your code to see your variable values. This is particularly useful for debugging the remark/rehype plugins because you can utilize it to see the abstract syntax tree (AST).
 

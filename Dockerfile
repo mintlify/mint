@@ -1,8 +1,6 @@
 # A docker file to run the client.
 
-# Use the official node image
-# https://hub.docker.com/_/node
-FROM node:19
+FROM node:alpine
 
 # Create and change to the app directory.
 WORKDIR /app
@@ -15,12 +13,13 @@ COPY ./packages/file-listening ./file-listening
 RUN yarn --cwd client install
 RUN yarn --cwd file-listening install
 
-# Expose the app's port. The user can map this to a different port
-# when running by adding 3000:3020 to the docker run command where
-# 3020 is the port to map to.
+# Disable Next.js telemetry
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Expose the app's port.
 EXPOSE 3000
 ENV PORT 3000
 
-# By default, run the web service on container startup.
-# This command can be overriden by changing it in the docker run command.
-CMD ["sh", "-c", "yarn --cwd client run dev"]
+# The single & will run both commands in parallel. The double && is used for sequential execution.
+# We pipe the output of the client to /dev/null to prevent it from filling up the docker logs.
+CMD ["sh", "-c", "yarn --cwd client preconfigure /app/user-working-directory && (yarn --cwd file-listening listen-for-changes & yarn --cwd client dev-watch > /dev/null)"]
